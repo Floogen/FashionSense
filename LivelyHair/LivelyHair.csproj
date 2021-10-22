@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Version>1.0.0</Version>
+    <TargetFramework>net5.0</TargetFramework>
+    <EnableHarmony>true</EnableHarmony>
+    <EnableModZip>false</EnableModZip>
+    <EnableModDeploy>false</EnableModDeploy>
+    <GameModsPath>E:\SteamLibrary\steamapps\common\Stardew Valley\Mods</GameModsPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="releases\**" />
+    <EmbeddedResource Remove="releases\**" />
+    <None Remove="releases\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Framework\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.0.0-beta.20210916" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="manifest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+
+  <PropertyGroup>
+    <PostBuildEventDependsOn>
+      $(PostBuildEventDependsOn);
+      PostBuildMacros;
+    </PostBuildEventDependsOn>
+    <PostBuildEvent>
+      powershell -Command "(ls *manifest.json -rec | foreach-object { $f=$_.FullName; (gc -LiteralPath \"$f\") -replace 'REPLACE_ME_WITH_VERSION',  '$(Version)' | sc -LiteralPath \"$f\" })"
+
+      powershell Remove-Item -Path 'C:\Users\Floogen\Documents\GitHub Repos\LivelyHair\LivelyHair\releases\latest\LivelyHair"' -Recurse -Force
+      xcopy /s /y /i "C:\Users\Floogen\Documents\GitHub Repos\LivelyHair\LivelyHair\bin\Debug\net5.0" "C:\Users\Floogen\Documents\GitHub Repos\LivelyHair\LivelyHair\releases\latest\LivelyHair"
+      7z a -tzip "C:\Users\Floogen\Documents\GitHub Repos\LivelyHair\LivelyHair\releases\LivelyHair-$(Version).zip" "C:\Users\Floogen\Documents\GitHub Repos\LivelyHair\LivelyHair\releases\latest\LivelyHair"
+
+      powershell Remove-Item -Path '$(GameModsPath)\LivelyHair' -Recurse -Force
+
+      xcopy /s /y /i "C:\Users\Floogen\Documents\GitHub Repos\LivelyHair\LivelyHair\releases\latest\LivelyHair" "$(GameModsPath)\LivelyHair"
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
