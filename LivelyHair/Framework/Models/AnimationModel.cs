@@ -16,6 +16,7 @@ namespace LivelyHair.Framework.Models
         }
 
         public int Frame { get; set; }
+        public bool OverrideStartingIndex { get; set; }
         public int RequiredMovementSpeed { get; set; } = -1;
         public int RequiredElapsedMovementMilliseconds { get; set; } = -1;
         public int Duration { get; set; } = 1000;
