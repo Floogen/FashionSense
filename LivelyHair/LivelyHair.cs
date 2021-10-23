@@ -2,6 +2,7 @@ using HarmonyLib;
 using LivelyHair.Framework.Managers;
 using LivelyHair.Framework.Models;
 using LivelyHair.Framework.Patches.Entities;
+using LivelyHair.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
@@ -22,6 +23,12 @@ namespace LivelyHair
         // Managers
         internal static TextureManager textureManager;
 
+        // Utilities
+        internal static MovementData movementData;
+
+        // Debugging flags
+        private bool _displayMovementData = false;
+
         public override void Entry(IModHelper helper)
         {
             // Set up the monitor, helper and multiplayer
@@ -30,6 +37,9 @@ namespace LivelyHair
 
             // Load managers
             textureManager = new TextureManager(monitor, modHelper);
+
+            // Setup our utilities
+            movementData = new MovementData();
 
             // Load our Harmony patches
             try
@@ -46,10 +56,28 @@ namespace LivelyHair
             }
 
             // Add in our debug commands
+            helper.ConsoleCommands.Add("lh_display_movement", "Displays debug info related to player movement. Use again to disable. \n\nUsage: lh_display_movement", delegate { _displayMovementData = !_displayMovementData; });
             helper.ConsoleCommands.Add("lh_reload", "Reloads all Lively Hair content packs.\n\nUsage: lh_reload", delegate { this.LoadContentPacks(); });
 
             modHelper.Events.GameLoop.GameLaunched += OnGameLaunched;
             modHelper.Events.GameLoop.DayStarted += OnDayStarted;
+            modHelper.Events.GameLoop.UpdateTicked += OnUpdateTicked;
+            modHelper.Events.Display.Rendered += OnRendered;
+        }
+
+        private void OnRendered(object sender, StardewModdingAPI.Events.RenderedEventArgs e)
+        {
+            movementData.OnRendered(sender, e);
+        }
+
+        private void OnUpdateTicked(object sender, StardewModdingAPI.Events.UpdateTickedEventArgs e)
+        {
+            if (!Context.IsWorldReady)
+            {
+                return;
+            }
+
+            movementData.Update(Game1.player, Game1.currentGameTime);
         }
 
         private void OnGameLaunched(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
@@ -60,8 +88,7 @@ namespace LivelyHair
 
         private void OnDayStarted(object sender, StardewModdingAPI.Events.DayStartedEventArgs e)
         {
-            Game1.player.modData["LivelyHair.CustomHair.Id"] = "ExampleAuthor.ExampleLivelyAppearancesPack/Short Hair With Curl";
-            Game1.player.modData["LivelyHair.Animation.HasAnimation"] = true.ToString();
+            Game1.player.modData["LivelyHair.CustomHair.Id"] = "ExampleAuthor.ExampleLivelyAppearancesPack/Long Hair";
         }
 
         private void LoadContentPacks()
