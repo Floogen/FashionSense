@@ -34,28 +34,15 @@
         "Duration": 100
       },
       {
-        "Frame": 1,
-        "Duration": 100
+        "Frame": 3,
+        "Duration": 100,
+        "OverrideStartingIndex": true,
+        "RequiredElapsedMovementMilliseconds": 500
       },
       {
-        "Frame": 2,
-        "Duration": 100
-      },
-      {
-        "Frame": 1,
-        "Duration": 100
-      },
-      {
-        "Frame": 2,
-        "Duration": 100
-      },
-      {
-        "Frame": 1,
-        "Duration": 100
-      },
-      {
-        "Frame": 2,
-        "Duration": 100
+        "Frame": 4,
+        "Duration": 100,
+        "RequiredElapsedMovementMilliseconds": 500
       }
     ]
   },
@@ -94,28 +81,15 @@
         "Duration": 100
       },
       {
-        "Frame": 1,
-        "Duration": 100
+        "Frame": 3,
+        "Duration": 100,
+        "OverrideStartingIndex": true,
+        "RequiredElapsedMovementMilliseconds": 500
       },
       {
-        "Frame": 2,
-        "Duration": 100
-      },
-      {
-        "Frame": 1,
-        "Duration": 100
-      },
-      {
-        "Frame": 2,
-        "Duration": 100
-      },
-      {
-        "Frame": 1,
-        "Duration": 100
-      },
-      {
-        "Frame": 2,
-        "Duration": 100
+        "Frame": 4,
+        "Duration": 100,
+        "RequiredElapsedMovementMilliseconds": 500
       }
     ]
   }
