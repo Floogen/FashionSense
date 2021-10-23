@@ -16,7 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Framework\" />
+    <Content Include="..\..\..\Sprite Sandbox\StardewMods\LivelyHair\test_hair.png" Link="Framework\Assets\Tests\test_hair.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +29,10 @@
     <None Update="manifest.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Framework\Assets\Tests\" />
   </ItemGroup>
 
 
