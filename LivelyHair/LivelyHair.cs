@@ -45,6 +45,9 @@ namespace LivelyHair
                 return;
             }
 
+            // Add in our debug commands
+            helper.ConsoleCommands.Add("lh_reload", "Reloads all Lively Hair content packs.\n\nUsage: lh_reload", delegate { this.LoadContentPacks(); });
+
             modHelper.Events.GameLoop.GameLaunched += OnGameLaunched;
             modHelper.Events.GameLoop.DayStarted += OnDayStarted;
         }
