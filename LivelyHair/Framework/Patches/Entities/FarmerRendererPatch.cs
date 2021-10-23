@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using LivelyHair.Framework.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
@@ -33,7 +34,7 @@ namespace LivelyHair.Framework.Patches.Entities
 
         private static bool DrawPrefix(FarmerRenderer __instance, Vector2 ___positionOffset, Vector2 ___rotationAdjustment, ref Rectangle ___shirtSourceRect, ref Rectangle ___accessorySourceRect, ref Rectangle ___hatSourceRect, SpriteBatch b, int facingDirection, Farmer who, Vector2 position, Vector2 origin, float scale, int currentFrame, float rotation, Color overrideColor, float layerDepth)
         {
-            if (!who.modData.ContainsKey("LivelyHair.CustomHair.Id") || who.FacingDirection != 2)
+            if (!who.modData.ContainsKey("LivelyHair.CustomHair.Id"))
             {
                 return true;
             }
@@ -44,13 +45,34 @@ namespace LivelyHair.Framework.Patches.Entities
                 return true;
             }
 
-            Rectangle sourceRect = new Rectangle(0, 0, appearanceModel.FrontHair.HairSize.Width, appearanceModel.FrontHair.HairSize.Length);
-            if (appearanceModel.FrontHair.HasIdleAnimation())
+            HairModel hairModel = null;
+            switch (who.FacingDirection)
+            {
+                case 0:
+                    return true;
+                case 1:
+                    hairModel = appearanceModel.RightHair;
+                    break;
+                case 2:
+                    hairModel = appearanceModel.FrontHair;
+                    break;
+                case 3:
+                    hairModel = appearanceModel.LeftHair;
+                    break;
+            }
+
+            if (hairModel is null)
+            {
+                return true;
+            }
+
+            Rectangle sourceRect = new Rectangle(0, 0, hairModel.HairSize.Width, hairModel.HairSize.Length);
+            if (hairModel.HasIdleAnimation())
             {
                 if (!who.modData.ContainsKey("LivelyHair.Animation.FrameIndex") || !who.modData.ContainsKey("LivelyHair.Animation.FrameDuration") || !who.modData.ContainsKey("LivelyHair.Animation.ElapsedDuration"))
                 {
                     who.modData["LivelyHair.Animation.FrameIndex"] = "0";
-                    who.modData["LivelyHair.Animation.FrameDuration"] = appearanceModel.FrontHair.GetIdleAnimationAtFrame(0).Duration.ToString();
+                    who.modData["LivelyHair.Animation.FrameDuration"] = hairModel.GetIdleAnimationAtFrame(0).Duration.ToString();
                     who.modData["LivelyHair.Animation.ElapsedDuration"] = "0";
                 }
 
@@ -60,10 +82,10 @@ namespace LivelyHair.Framework.Patches.Entities
 
                 if (elapsedDuration >= frameDuration)
                 {
-                    frameIndex = frameIndex + 1 >= appearanceModel.FrontHair.IdleAnimation.Count() ? 0 : frameIndex + 1;
+                    frameIndex = frameIndex + 1 >= hairModel.IdleAnimation.Count() ? 0 : frameIndex + 1;
 
                     who.modData["LivelyHair.Animation.FrameIndex"] = frameIndex.ToString();
-                    who.modData["LivelyHair.Animation.FrameDuration"] = appearanceModel.FrontHair.GetIdleAnimationAtFrame(frameIndex).Duration.ToString();
+                    who.modData["LivelyHair.Animation.FrameDuration"] = hairModel.GetIdleAnimationAtFrame(frameIndex).Duration.ToString();
                     who.modData["LivelyHair.Animation.ElapsedDuration"] = "0";
                 }
                 else
@@ -83,6 +105,7 @@ namespace LivelyHair.Framework.Patches.Entities
             }
             //__instance.executeRecolorActions(who);
 
+            // TODO: Split out shirt logic
             if ((int)who.accessory >= 0)
             {
                 ___accessorySourceRect = new Rectangle((int)who.accessory * 16 % FarmerRenderer.accessoriesTexture.Width, (int)who.accessory * 16 / FarmerRenderer.accessoriesTexture.Width * 32, 16, 16);
