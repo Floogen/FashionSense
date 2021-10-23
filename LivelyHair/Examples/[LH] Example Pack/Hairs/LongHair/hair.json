@@ -1,0 +1,52 @@
+{
+  "Name": "Long Hair",
+  "RightHair": {
+    "HeadPosition": {
+      "X": 16,
+      "Y": 0
+    },
+    "HairSize": {
+      "Width": 48,
+      "Length": 32
+    },
+    "MovementAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 100
+      },
+      {
+        "Frame": 1,
+        "Duration": 100
+      },
+      {
+        "Frame": 2,
+        "Duration": 100
+      }
+    ]
+  },
+  "LeftHair": {
+    "Flipped": true,
+    "HeadPosition": {
+      "X": 16,
+      "Y": 0
+    },
+    "HairSize": {
+      "Width": 48,
+      "Length": 32
+    },
+    "MovementAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 100
+      },
+      {
+        "Frame": 1,
+        "Duration": 100
+      },
+      {
+        "Frame": 2,
+        "Duration": 100
+      }
+    ]
+  }
+}
