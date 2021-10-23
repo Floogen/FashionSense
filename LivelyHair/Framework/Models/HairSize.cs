@@ -8,7 +8,7 @@ namespace LivelyHair.Framework.Models
 {
     public class HairSize
     {
-        public int HairWidth { get; set; }
-        public int HairLength { get; set; }
+        public int Width { get; set; }
+        public int Length { get; set; }
     }
 }
