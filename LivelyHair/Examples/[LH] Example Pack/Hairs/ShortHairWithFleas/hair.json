@@ -1,6 +1,10 @@
 {
   "Name": "Short Hair With Fleas",
   "FrontHair": {
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
     "HeadPosition": {
       "X": 16,
       "Y": 16

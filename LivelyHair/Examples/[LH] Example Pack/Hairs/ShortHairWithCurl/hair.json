@@ -1,6 +1,10 @@
 {
   "Name": "Short Hair With Curl",
   "FrontHair": {
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
     "HeadPosition": {
       "X": 0,
       "Y": 0
