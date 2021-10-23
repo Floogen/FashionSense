@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Version>1.0.0</Version>
@@ -49,8 +49,10 @@
       7z a -tzip "C:\Users\Floogen\Documents\GitHub Repos\LivelyHair\LivelyHair\releases\LivelyHair-$(Version).zip" "C:\Users\Floogen\Documents\GitHub Repos\LivelyHair\LivelyHair\releases\latest\LivelyHair"
 
       powershell Remove-Item -Path '$(GameModsPath)\LivelyHair' -Recurse -Force
+      powershell Remove-Item -Path '$(GameModsPath)\Lively Appearances Examples' -Recurse -Force
 
       xcopy /s /y /i "C:\Users\Floogen\Documents\GitHub Repos\LivelyHair\LivelyHair\releases\latest\LivelyHair" "$(GameModsPath)\LivelyHair"
+      xcopy /s /y /i "$(SolutionDir)Examples\*" "$(GameModsPath)\Lively Appearances Examples"
     </PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -38,13 +38,19 @@ namespace LivelyHair.Framework.Patches.Entities
                 return true;
             }
 
-            Rectangle sourceRect = new Rectangle(0, 0, 16, 16);
-            if (who.modData.ContainsKey("LivelyHair.Animation.HasAnimation") && bool.Parse(who.modData["LivelyHair.Animation.HasAnimation"]))
+            var appearanceModel = LivelyHair.textureManager.GetSpecificAppearanceModel(who.modData["LivelyHair.CustomHair.Id"]);
+            if (appearanceModel is null)
+            {
+                return true;
+            }
+
+            Rectangle sourceRect = new Rectangle(0, 0, appearanceModel.FrontHair.HairSize.HairWidth, appearanceModel.FrontHair.HairSize.HairLength);
+            if (appearanceModel.FrontHair.HasIdleAnimation())
             {
                 if (!who.modData.ContainsKey("LivelyHair.Animation.FrameIndex") || !who.modData.ContainsKey("LivelyHair.Animation.FrameDuration") || !who.modData.ContainsKey("LivelyHair.Animation.ElapsedDuration"))
                 {
                     who.modData["LivelyHair.Animation.FrameIndex"] = "0";
-                    who.modData["LivelyHair.Animation.FrameDuration"] = "500";
+                    who.modData["LivelyHair.Animation.FrameDuration"] = appearanceModel.FrontHair.GetIdleAnimationAtFrame(0).Duration.ToString();
                     who.modData["LivelyHair.Animation.ElapsedDuration"] = "0";
                 }
 
@@ -54,10 +60,10 @@ namespace LivelyHair.Framework.Patches.Entities
 
                 if (elapsedDuration >= frameDuration)
                 {
-                    frameIndex = frameIndex + 1 >= 5 ? 0 : frameIndex + 1;
+                    frameIndex = frameIndex + 1 >= appearanceModel.FrontHair.IdleAnimation.Count() ? 0 : frameIndex + 1;
 
                     who.modData["LivelyHair.Animation.FrameIndex"] = frameIndex.ToString();
-                    who.modData["LivelyHair.Animation.FrameDuration"] = "100";
+                    who.modData["LivelyHair.Animation.FrameDuration"] = appearanceModel.FrontHair.GetIdleAnimationAtFrame(frameIndex).Duration.ToString();
                     who.modData["LivelyHair.Animation.ElapsedDuration"] = "0";
                 }
                 else
@@ -102,7 +108,7 @@ namespace LivelyHair.Framework.Patches.Entities
             {
                 b.Draw(FarmerRenderer.accessoriesTexture, position + origin + ___positionOffset + ___rotationAdjustment + new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, 8 + FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + (int)__instance.heightOffset - 4), ___accessorySourceRect, (overrideColor.Equals(Color.White) && (int)who.accessory < 6) ? ((Color)who.hairstyleColor) : overrideColor, rotation, origin, 4f * scale + ((rotation != 0f) ? 0f : 0f), SpriteEffects.None, layerDepth + (((int)who.accessory < 8) ? 1.9E-05f : 2.9E-05f));
             }
-            b.Draw(LivelyHair.textureManager.testTexture, position + origin + ___positionOffset + new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + ((who.IsMale && (int)who.hair >= 16) ? (-4) : ((!who.IsMale && (int)who.hair < 16) ? 4 : 0))), sourceRect, overrideColor.Equals(Color.White) ? ((Color)who.hairstyleColor) : overrideColor, rotation, origin, 4f * scale, SpriteEffects.None, layerDepth + hair_draw_layer);
+            b.Draw(appearanceModel.Texture, position + origin + ___positionOffset + new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + ((who.IsMale && (int)who.hair >= 16) ? (-4) : ((!who.IsMale && (int)who.hair < 16) ? 4 : 0))), sourceRect, overrideColor.Equals(Color.White) ? ((Color)who.hairstyleColor) : overrideColor, rotation, origin, 4f * scale, SpriteEffects.None, layerDepth + hair_draw_layer);
 
             if (who.hat.Value != null && !who.bathingClothes)
             {

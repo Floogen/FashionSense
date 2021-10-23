@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LivelyHair.Framework.Hair
+namespace LivelyHair.Framework.Models
 {
-    class HairLogic
+    public class HeadModel
     {
-
+        public int X { get; set; }
+        public int Y { get; set; }
     }
 }
