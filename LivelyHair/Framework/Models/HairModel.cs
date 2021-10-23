@@ -10,7 +10,7 @@ namespace LivelyHair.Framework.Models
 {
     public class HairModel
     {
-        public Position StartingPosition { get; set; } = new Position() { X = 0, Y = 0 };
+        public Position StartingPosition { get; set; }
         public Position HeadPosition { get; set; } = new Position() { X = 0, Y = 0 };
         public Size HairSize { get; set; }
         public bool Flipped { get; set; }
