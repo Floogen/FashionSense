@@ -13,9 +13,40 @@
       "Width": 48,
       "Length": 32
     },
+    "IdleAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 100
+      }
+    ],
+    "RequireMovementToFinish": true,
     "MovementAnimation": [
       {
         "Frame": 0,
+        "Duration": 100
+      },
+      {
+        "Frame": 1,
+        "Duration": 100
+      },
+      {
+        "Frame": 2,
+        "Duration": 100
+      },
+      {
+        "Frame": 1,
+        "Duration": 100
+      },
+      {
+        "Frame": 2,
+        "Duration": 100
+      },
+      {
+        "Frame": 1,
+        "Duration": 100
+      },
+      {
+        "Frame": 2,
         "Duration": 100
       },
       {
@@ -30,6 +61,10 @@
   },
   "LeftHair": {
     "Flipped": true,
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
     "HeadPosition": {
       "X": 16,
       "Y": 0
@@ -38,9 +73,40 @@
       "Width": 48,
       "Length": 32
     },
+    "IdleAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 100
+      }
+    ],
+    "RequireMovementToFinish": true,
     "MovementAnimation": [
       {
         "Frame": 0,
+        "Duration": 100
+      },
+      {
+        "Frame": 1,
+        "Duration": 100
+      },
+      {
+        "Frame": 2,
+        "Duration": 100
+      },
+      {
+        "Frame": 1,
+        "Duration": 100
+      },
+      {
+        "Frame": 2,
+        "Duration": 100
+      },
+      {
+        "Frame": 1,
+        "Duration": 100
+      },
+      {
+        "Frame": 2,
         "Duration": 100
       },
       {
