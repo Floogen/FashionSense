@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LivelyHair.Framework.Models
+namespace LivelyHair.Framework.Models.Generic
 {
-    public class HairSize
+    public class Size
     {
         public int Width { get; set; }
         public int Length { get; set; }

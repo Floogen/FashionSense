@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LivelyHair.Framework.Models.Generic;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,9 @@ namespace LivelyHair.Framework.Models
 {
     public class HairModel
     {
-        public HeadModel HeadPosition { get; set; }
-        public HairSize HairSize { get; set; }
+        public Position StartingPosition { get; set; } = new Position() { X = 0, Y = 0 };
+        public Position HeadPosition { get; set; } = new Position() { X = 0, Y = 0 };
+        public Size HairSize { get; set; }
         public bool Flipped { get; set; }
         public int[] ColorOverride { get; set; } = new int[3];
         public List<AnimationModel> IdleAnimation { get; set; } = new();
