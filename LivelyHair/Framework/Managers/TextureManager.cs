@@ -19,7 +19,6 @@ namespace LivelyHair.Framework.Managers
         {
             _monitor = monitor;
             _appearanceTextures = new List<AppearanceModel>();
-            LoadTestTextures(helper);
         }
 
         public void AddAppearanceModel(AppearanceModel model)
@@ -38,11 +37,6 @@ namespace LivelyHair.Framework.Managers
         public AppearanceModel GetSpecificAppearanceModel(string appearanceId)
         {
             return _appearanceTextures.FirstOrDefault(t => String.Equals(t.Id, appearanceId, StringComparison.OrdinalIgnoreCase));
-        }
-
-        private void LoadTestTextures(IModHelper helper)
-        {
-            testTexture = helper.Content.Load<Texture2D>("Framework/Assets/Tests/test_hair.png");
         }
     }
 }
