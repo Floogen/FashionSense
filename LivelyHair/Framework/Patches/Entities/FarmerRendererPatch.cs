@@ -79,32 +79,84 @@ namespace LivelyHair.Framework.Patches.Entities
 
         private static bool HasRequiredModDataKeys(Farmer who)
         {
-            return who.modData.ContainsKey("LivelyHair.Animation.Iterator") && who.modData.ContainsKey("LivelyHair.Animation.FrameDuration") && who.modData.ContainsKey("LivelyHair.Animation.ElapsedDuration") && who.modData.ContainsKey("LivelyHair.Animation.Type");
+            return who.modData.ContainsKey("LivelyHair.Animation.Iterator") && who.modData.ContainsKey("LivelyHair.Animation.FrameDuration") && who.modData.ContainsKey("LivelyHair.Animation.ElapsedDuration") && who.modData.ContainsKey("LivelyHair.Animation.Type") && who.modData.ContainsKey("LivelyHair.Animation.FacingDirection");
+        }
+
+        private static bool IsFrameValid(AnimationModel animationModel)
+        {
+            if (animationModel.RequiredElapsedMovementMilliseconds > 0 && !LivelyHair.movementData.HasBeenMovingEnough(animationModel.RequiredElapsedMovementMilliseconds))
+            {
+                return false;
+            }
+
+            return true;
+        }
+        private static void UpdatePlayerAnimationData(Farmer who, AnimationModel.Type type, List<AnimationModel> animations, int iterator, int startingIndex)
+        {
+            who.modData["LivelyHair.Animation.Iterator"] = iterator.ToString();
+            who.modData["LivelyHair.Animation.StartingIndex"] = startingIndex.ToString();
+            who.modData["LivelyHair.Animation.FrameDuration"] = animations.ElementAt(iterator).Duration.ToString();
+            who.modData["LivelyHair.Animation.ElapsedDuration"] = "0";
+            who.modData["LivelyHair.Animation.Type"] = type.ToString();
+            who.modData["LivelyHair.Animation.FacingDirection"] = who.FacingDirection.ToString();
         }
 
         private static void HandleHairAnimation(Farmer who, AnimationModel.Type type, List<AnimationModel> animations, ref Rectangle sourceRectangle)
         {
-            if (!HasRequiredModDataKeys(who) || who.modData["LivelyHair.Animation.Type"] != type.ToString())
+            if (!HasRequiredModDataKeys(who) || who.modData["LivelyHair.Animation.Type"] != type.ToString() || who.modData["LivelyHair.Animation.FacingDirection"] != who.FacingDirection.ToString())
             {
                 who.modData["LivelyHair.Animation.Iterator"] = "0";
+                who.modData["LivelyHair.Animation.StartingIndex"] = "0";
                 who.modData["LivelyHair.Animation.FrameDuration"] = animations.ElementAt(0).Duration.ToString();
                 who.modData["LivelyHair.Animation.ElapsedDuration"] = "0";
                 who.modData["LivelyHair.Animation.Type"] = type.ToString();
+                who.modData["LivelyHair.Animation.FacingDirection"] = who.FacingDirection.ToString();
             }
 
             var iterator = Int32.Parse(who.modData["LivelyHair.Animation.Iterator"]);
+            var startingIndex = Int32.Parse(who.modData["LivelyHair.Animation.StartingIndex"]);
             var frameDuration = Int32.Parse(who.modData["LivelyHair.Animation.FrameDuration"]);
             var elapsedDuration = Int32.Parse(who.modData["LivelyHair.Animation.ElapsedDuration"]);
 
+            // Get AnimationModel for this index
             var animationModel = animations.ElementAt(iterator);
+
+            // Check if frame is valid
+            if (IsFrameValid(animationModel))
+            {
+                if (animationModel.OverrideStartingIndex && startingIndex != iterator)
+                {
+                    // See if this particular frame overrides the StartingIndex
+                    startingIndex = iterator;
+                }
+            }
+            else
+            {
+                // Frame isn't valid, get the next available StartingIndex (or set it to 0)
+                foreach (var animation in animations.Take(iterator).Reverse().Where(a => a.OverrideStartingIndex && IsFrameValid(a)))
+                {
+                    startingIndex = animations.IndexOf(animation);
+                    break;
+                }
+
+                if (startingIndex == iterator)
+                {
+                    startingIndex = 0;
+                }
+
+                iterator = startingIndex;
+                elapsedDuration = 0;
+                animationModel = animations.ElementAt(iterator);
+
+                UpdatePlayerAnimationData(who, type, animations, iterator, startingIndex);
+            }
+
+            // Perform time based logic for elapsed animations
             if (elapsedDuration >= frameDuration)
             {
-                iterator = iterator + 1 >= animations.Count() ? 0 : iterator + 1;
+                iterator = iterator + 1 >= animations.Count() ? startingIndex : iterator + 1;
 
-                who.modData["LivelyHair.Animation.Iterator"] = iterator.ToString();
-                who.modData["LivelyHair.Animation.FrameDuration"] = animationModel.Duration.ToString();
-                who.modData["LivelyHair.Animation.ElapsedDuration"] = "0";
-                who.modData["LivelyHair.Animation.Type"] = type.ToString();
+                UpdatePlayerAnimationData(who, type, animations, iterator, startingIndex);
             }
             else
             {
