@@ -96,6 +96,10 @@ namespace LivelyHair.Framework.Patches.Entities
                 {
                     isValid = LivelyHair.movementData.IsMovingFastEnough(condition.GetParsedValue<float>());
                 }
+                else if (condition.Name is Condition.Type.RidingHorse)
+                {
+                    isValid = Game1.player.isRidingHorse();
+                }
 
                 // If the condition is dependent and is false, then skip rest of evaluations
                 // Otherwise if the condition is independent and is true, then skip rest of evaluations

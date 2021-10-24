@@ -62,6 +62,26 @@
             "Value": 4
           }
         ]
+      },
+      {
+        "Frame": 5,
+        "Duration": 100,
+        "Conditions": [
+          {
+            "Name": "RidingHorse",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 6,
+        "Duration": 100,
+        "Conditions": [
+          {
+            "Name": "RidingHorse",
+            "Value": true
+          }
+        ]
       }
     ]
   },
@@ -130,6 +150,26 @@
             "Name": "MovementSpeed",
             "Value": 4,
             "Independent": true
+          }
+        ]
+      },
+      {
+        "Frame": 5,
+        "Duration": 100,
+        "Conditions": [
+          {
+            "Name": "RidingHorse",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 6,
+        "Duration": 100,
+        "Conditions": [
+          {
+            "Name": "RidingHorse",
+            "Value": true
           }
         ]
       }

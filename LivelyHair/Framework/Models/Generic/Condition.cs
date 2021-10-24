@@ -12,7 +12,8 @@ namespace LivelyHair.Framework.Models.Generic
         {
             Unknown,
             MovementSpeed,
-            MovementDuration
+            MovementDuration,
+            RidingHorse
         }
 
         public Type Name { get; set; }
@@ -27,6 +28,8 @@ namespace LivelyHair.Framework.Models.Generic
                     return (float)Value;
                 case Type.MovementDuration:
                     return (float)Value;
+                case Type.RidingHorse:
+                    return (bool)Value;
                 default:
                     return Value;
             }
