@@ -1,6 +1,7 @@
 {
   "Name": "Long Hair",
   "RightHair": {
+    "DisableGrayscale": true,
     "StartingPosition": {
       "X": 0,
       "Y": 0
@@ -48,6 +49,7 @@
   },
   "LeftHair": {
     "Flipped": true,
+    "DisableGrayscale": true,
     "StartingPosition": {
       "X": 0,
       "Y": 0

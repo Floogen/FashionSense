@@ -15,7 +15,7 @@ namespace LivelyHair.Framework.Models
         public Size HairSize { get; set; }
         public bool Flipped { get; set; }
         public bool RequireMovementToFinish { get; set; }
-        public int[] ColorOverride { get; set; } = new int[3];
+        public bool DisableGrayscale { get; set; }
         public List<AnimationModel> IdleAnimation { get; set; } = new();
         public List<AnimationModel> MovementAnimation { get; set; } = new();
 
