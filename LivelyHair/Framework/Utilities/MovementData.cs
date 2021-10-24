@@ -14,7 +14,12 @@ namespace LivelyHair.Framework.Utilities
         private float _movementSpeed = 0f;
         private float _movementDurationMilliseconds = 0;
 
-        internal bool HasBeenMovingEnough(float requiredMovementDuration)
+        internal bool IsMovingFastEnough(float requiredMovementSpeed)
+        {
+            return _movementSpeed >= requiredMovementSpeed;
+        }
+
+        internal bool IsMovingLongEnough(float requiredMovementDuration)
         {
             return _movementDurationMilliseconds >= requiredMovementDuration;
         }

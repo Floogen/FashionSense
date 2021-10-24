@@ -42,6 +42,10 @@
           {
             "Name": "MovementDuration",
             "Value": 500
+          },
+          {
+            "Name": "MovementSpeed",
+            "Value": 4
           }
         ]
       },
@@ -52,6 +56,10 @@
           {
             "Name": "MovementDuration",
             "Value": 500
+          },
+          {
+            "Name": "MovementSpeed",
+            "Value": 4
           }
         ]
       }
@@ -99,7 +107,13 @@
         "Conditions": [
           {
             "Name": "MovementDuration",
-            "Value": 500
+            "Value": 500,
+            "Independent": true
+          },
+          {
+            "Name": "MovementSpeed",
+            "Value": 4,
+            "Independent": true
           }
         ]
       },
@@ -109,7 +123,13 @@
         "Conditions": [
           {
             "Name": "MovementDuration",
-            "Value": 500
+            "Value": 500,
+            "Independent": true
+          },
+          {
+            "Name": "MovementSpeed",
+            "Value": 4,
+            "Independent": true
           }
         ]
       }

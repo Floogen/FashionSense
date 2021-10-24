@@ -85,12 +85,32 @@ namespace LivelyHair.Framework.Patches.Entities
 
         private static bool IsFrameValid(AnimationModel animationModel)
         {
-            if (animationModel.GetConditionByType(Condition.Type.MovementDuration) is Condition condition && condition != null && !LivelyHair.movementData.HasBeenMovingEnough(condition.GetParsedValue<float>()))
+            bool isValid = true;
+            foreach (var condition in animationModel.Conditions)
             {
-                return false;
+                if (condition.Name is Condition.Type.MovementDuration)
+                {
+                    isValid = LivelyHair.movementData.IsMovingLongEnough(condition.GetParsedValue<float>());
+                }
+                else if (condition.Name is Condition.Type.MovementSpeed)
+                {
+                    isValid = LivelyHair.movementData.IsMovingFastEnough(condition.GetParsedValue<float>());
+                }
+
+                // If the condition is dependent and is false, then skip rest of evaluations
+                // Otherwise if the condition is independent and is true, then skip rest of evaluations
+                if (!condition.Independent && !isValid)
+                {
+                    return false;
+                }
+                else if (condition.Independent && isValid)
+                {
+                    return true;
+                }
             }
 
-            return true;
+
+            return isValid;
         }
         private static void UpdatePlayerAnimationData(Farmer who, AnimationModel.Type type, List<AnimationModel> animations, int iterator, int startingIndex)
         {
