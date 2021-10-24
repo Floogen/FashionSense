@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using LivelyHair.Framework.Models;
+using LivelyHair.Framework.Models.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
@@ -84,7 +85,7 @@ namespace LivelyHair.Framework.Patches.Entities
 
         private static bool IsFrameValid(AnimationModel animationModel)
         {
-            if (animationModel.RequiredElapsedMovementMilliseconds > 0 && !LivelyHair.movementData.HasBeenMovingEnough(animationModel.RequiredElapsedMovementMilliseconds))
+            if (animationModel.GetConditionByType(Condition.Type.MovementDuration) is Condition condition && condition != null && !LivelyHair.movementData.HasBeenMovingEnough(condition.GetParsedValue<float>()))
             {
                 return false;
             }
