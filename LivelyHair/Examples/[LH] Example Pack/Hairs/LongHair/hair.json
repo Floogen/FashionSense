@@ -174,5 +174,50 @@
         ]
       }
     ]
+  },
+  "BackHair": {
+    "DisableGrayscale": true,
+    "StartingPosition": {
+      "X": 0,
+      "Y": 32
+    },
+    "HeadPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "HairSize": {
+      "Width": 16,
+      "Length": 32
+    },
+    "RequireMovementToFinish": true,
+    "MovementAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 100
+      },
+      {
+        "Frame": 1,
+        "Duration": 100
+      },
+      {
+        "Frame": 2,
+        "Duration": 100
+      }
+    ]
+  },
+  "FrontHair": {
+    "DisableGrayscale": true,
+    "StartingPosition": {
+      "X": 48,
+      "Y": 32
+    },
+    "HeadPosition": {
+      "X": 0,
+      "Y": 16
+    },
+    "HairSize": {
+      "Width": 16,
+      "Length": 32
+    }
   }
 }
