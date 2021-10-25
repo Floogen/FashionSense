@@ -12,7 +12,6 @@ namespace LivelyHair.Framework.Managers
     class TextureManager
     {
         private IMonitor _monitor;
-        internal Texture2D testTexture;
         private List<AppearanceModel> _appearanceTextures;
 
         public TextureManager(IMonitor monitor, IModHelper helper)
