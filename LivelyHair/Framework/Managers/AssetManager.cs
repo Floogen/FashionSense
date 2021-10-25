@@ -31,21 +31,11 @@ namespace LivelyHair.Framework.Managers
 
         public bool CanLoad<T>(IAssetInfo asset)
         {
-            if (toolNames.Any(n => asset.AssetNameEquals($"{ModDataKeys.TOOL_TOKEN_HEADER}{n.Key}")))
-            {
-                return true;
-            }
-
             return false;
         }
 
         public T Load<T>(IAssetInfo asset)
         {
-            if (toolNames.Any(n => asset.AssetNameEquals($"{ModDataKeys.TOOL_TOKEN_HEADER}{n.Key}")))
-            {
-                return (T)(object)toolNames.First(n => asset.AssetNameEquals($"{ModDataKeys.TOOL_TOKEN_HEADER}{n.Key}")).Value;
-            }
-
             return (T)(object)asset;
         }
 

@@ -97,7 +97,10 @@ namespace LivelyHair
 
         private void OnDayStarted(object sender, StardewModdingAPI.Events.DayStartedEventArgs e)
         {
-            Game1.player.modData["LivelyHair.CustomHair.Id"] = "ExampleAuthor.ExampleLivelyAppearancesPack/Long Hair";
+            if (!Game1.player.modData.ContainsKey(ModDataKeys.CUSTOM_HAIR_ID))
+            {
+                Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID] = null;
+            }
         }
 
         private void LoadContentPacks()
@@ -134,6 +137,7 @@ namespace LivelyHair
 
                         // Parse the model and assign it the content pack's owner
                         AppearanceModel appearanceModel = contentPack.ReadJsonFile<AppearanceModel>(modelPath);
+                        appearanceModel.Author = contentPack.Manifest.Author;
                         appearanceModel.Owner = contentPack.Manifest.UniqueID;
 
                         if (String.IsNullOrEmpty(appearanceModel.Name))
@@ -166,6 +170,16 @@ namespace LivelyHair
                     Monitor.Log($"Error loading content pack {contentPack.Manifest.Name}: {ex}", LogLevel.Error);
                 }
             }
+        }
+
+        internal static void ResetAnimationModDataFields(Farmer who, int duration, AnimationModel.Type animationType, int facingDirection)
+        {
+            who.modData[ModDataKeys.ANIMATION_ITERATOR] = "0";
+            who.modData[ModDataKeys.ANIMATION_STARTING_INDEX] = "0";
+            who.modData[ModDataKeys.ANIMATION_FRAME_DURATION] = duration.ToString();
+            who.modData[ModDataKeys.ANIMATION_ELAPSED_DURATION] = "0";
+            who.modData[ModDataKeys.ANIMATION_TYPE] = animationType.ToString();
+            who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] = facingDirection.ToString();
         }
     }
 }

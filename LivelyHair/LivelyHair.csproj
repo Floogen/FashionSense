@@ -63,6 +63,7 @@
     <Compile Include="Framework\Patches\PatchTemplate.cs" />
     <Compile Include="Framework\Patches\ShopLocations\SeedShopPatch.cs" />
     <Compile Include="Framework\Patches\Tools\ToolPatch.cs" />
+    <Compile Include="Framework\UI\HandMirrorMenu.cs" />
     <Compile Include="Framework\Utilities\ModDataKeys.cs" />
     <Compile Include="Framework\Utilities\MovementData.cs" />
     <Compile Include="LivelyHair.cs" />

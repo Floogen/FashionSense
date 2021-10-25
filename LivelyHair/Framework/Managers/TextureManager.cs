@@ -33,6 +33,11 @@ namespace LivelyHair.Framework.Managers
             }
         }
 
+        public List<AppearanceModel> GetAllAppearanceModels()
+        {
+            return _appearanceTextures;
+        }
+
         public AppearanceModel GetSpecificAppearanceModel(string appearanceId)
         {
             return _appearanceTextures.FirstOrDefault(t => String.Equals(t.Id, appearanceId, StringComparison.OrdinalIgnoreCase));

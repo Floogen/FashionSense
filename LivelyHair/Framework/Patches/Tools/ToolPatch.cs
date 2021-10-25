@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using LivelyHair.Framework.UI;
 using LivelyHair.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -71,9 +72,15 @@ namespace LivelyHair.Framework.Patches.Tools
 
         private static bool UseHandMirror(GameLocation location, int x, int y, Farmer who)
         {
+            if (LivelyHair.textureManager.GetAllAppearanceModels().Count == 0)
+            {
+                Game1.addHUDMessage(new HUDMessage(_helper.Translation.Get("messages.warning.no_content_packs"), 3));
+                return CancelUsing(who);
+            }
+
             if (Game1.activeClickableMenu is null)
             {
-                Game1.activeClickableMenu = Game1.activeClickableMenu = new CharacterCustomization(CharacterCustomization.Source.Wizard);
+                Game1.activeClickableMenu = new HandMirrorMenu();
             }
 
             return CancelUsing(who);

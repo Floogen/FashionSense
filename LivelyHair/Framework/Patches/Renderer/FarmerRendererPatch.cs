@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using LivelyHair.Framework.Models;
 using LivelyHair.Framework.Models.Generic;
+using LivelyHair.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
@@ -80,7 +81,7 @@ namespace LivelyHair.Framework.Patches.Renderer
 
         private static bool HasRequiredModDataKeys(Farmer who)
         {
-            return who.modData.ContainsKey("LivelyHair.Animation.Iterator") && who.modData.ContainsKey("LivelyHair.Animation.FrameDuration") && who.modData.ContainsKey("LivelyHair.Animation.ElapsedDuration") && who.modData.ContainsKey("LivelyHair.Animation.Type") && who.modData.ContainsKey("LivelyHair.Animation.FacingDirection");
+            return who.modData.ContainsKey(ModDataKeys.ANIMATION_ITERATOR) && who.modData.ContainsKey(ModDataKeys.ANIMATION_FRAME_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_ELAPSED_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_TYPE) && who.modData.ContainsKey(ModDataKeys.ANIMATION_FACING_DIRECTION);
         }
 
         private static bool IsFrameValid(AnimationModel animationModel)
@@ -118,30 +119,25 @@ namespace LivelyHair.Framework.Patches.Renderer
         }
         private static void UpdatePlayerAnimationData(Farmer who, AnimationModel.Type type, List<AnimationModel> animations, int facingDirection, int iterator, int startingIndex)
         {
-            who.modData["LivelyHair.Animation.Iterator"] = iterator.ToString();
-            who.modData["LivelyHair.Animation.StartingIndex"] = startingIndex.ToString();
-            who.modData["LivelyHair.Animation.FrameDuration"] = animations.ElementAt(iterator).Duration.ToString();
-            who.modData["LivelyHair.Animation.ElapsedDuration"] = "0";
-            who.modData["LivelyHair.Animation.Type"] = type.ToString();
-            who.modData["LivelyHair.Animation.FacingDirection"] = facingDirection.ToString();
+            who.modData[ModDataKeys.ANIMATION_ITERATOR] = iterator.ToString();
+            who.modData[ModDataKeys.ANIMATION_STARTING_INDEX] = startingIndex.ToString();
+            who.modData[ModDataKeys.ANIMATION_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
+            who.modData[ModDataKeys.ANIMATION_ELAPSED_DURATION] = "0";
+            who.modData[ModDataKeys.ANIMATION_TYPE] = type.ToString();
+            who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] = facingDirection.ToString();
         }
 
         private static void HandleHairAnimation(Farmer who, AnimationModel.Type type, List<AnimationModel> animations, int facingDirection, ref Rectangle sourceRectangle)
         {
-            if (!HasRequiredModDataKeys(who) || who.modData["LivelyHair.Animation.Type"] != type.ToString() || who.modData["LivelyHair.Animation.FacingDirection"] != facingDirection.ToString())
+            if (!HasRequiredModDataKeys(who) || who.modData[ModDataKeys.ANIMATION_TYPE] != type.ToString() || who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] != facingDirection.ToString())
             {
-                who.modData["LivelyHair.Animation.Iterator"] = "0";
-                who.modData["LivelyHair.Animation.StartingIndex"] = "0";
-                who.modData["LivelyHair.Animation.FrameDuration"] = animations.ElementAt(0).Duration.ToString();
-                who.modData["LivelyHair.Animation.ElapsedDuration"] = "0";
-                who.modData["LivelyHair.Animation.Type"] = type.ToString();
-                who.modData["LivelyHair.Animation.FacingDirection"] = facingDirection.ToString();
+                LivelyHair.ResetAnimationModDataFields(who, animations.ElementAt(0).Duration, type, facingDirection);
             }
 
-            var iterator = Int32.Parse(who.modData["LivelyHair.Animation.Iterator"]);
-            var startingIndex = Int32.Parse(who.modData["LivelyHair.Animation.StartingIndex"]);
-            var frameDuration = Int32.Parse(who.modData["LivelyHair.Animation.FrameDuration"]);
-            var elapsedDuration = Int32.Parse(who.modData["LivelyHair.Animation.ElapsedDuration"]);
+            var iterator = Int32.Parse(who.modData[ModDataKeys.ANIMATION_ITERATOR]);
+            var startingIndex = Int32.Parse(who.modData[ModDataKeys.ANIMATION_STARTING_INDEX]);
+            var frameDuration = Int32.Parse(who.modData[ModDataKeys.ANIMATION_FRAME_DURATION]);
+            var elapsedDuration = Int32.Parse(who.modData[ModDataKeys.ANIMATION_ELAPSED_DURATION]);
 
             // Get AnimationModel for this index
             var animationModel = animations.ElementAt(iterator);
@@ -185,7 +181,7 @@ namespace LivelyHair.Framework.Patches.Renderer
             }
             else
             {
-                who.modData["LivelyHair.Animation.ElapsedDuration"] = (elapsedDuration + Game1.currentGameTime.ElapsedGameTime.Milliseconds).ToString();
+                who.modData[ModDataKeys.ANIMATION_ELAPSED_DURATION] = (elapsedDuration + Game1.currentGameTime.ElapsedGameTime.Milliseconds).ToString();
             }
 
             sourceRectangle.X += sourceRectangle.Width * animationModel.Frame;
@@ -193,7 +189,7 @@ namespace LivelyHair.Framework.Patches.Renderer
 
         private static bool IsWaitingOnRequiredAnimation(Farmer who, HairModel hairModel)
         {
-            if (hairModel.RequireMovementToFinish && who.modData.ContainsKey("LivelyHair.Animation.Iterator") && Int32.Parse(who.modData["LivelyHair.Animation.Iterator"]) != 0)
+            if (hairModel.RequireMovementToFinish && who.modData.ContainsKey(ModDataKeys.ANIMATION_ITERATOR) && Int32.Parse(who.modData[ModDataKeys.ANIMATION_ITERATOR]) != 0)
             {
                 return true;
             }
@@ -203,34 +199,18 @@ namespace LivelyHair.Framework.Patches.Renderer
 
         private static bool DrawHairAndAccesoriesPrefix(FarmerRenderer __instance, bool ___isDrawingForUI, Vector2 ___positionOffset, Vector2 ___rotationAdjustment, ref Rectangle ___shirtSourceRect, ref Rectangle ___accessorySourceRect, ref Rectangle ___hatSourceRect, SpriteBatch b, int facingDirection, Farmer who, Vector2 position, Vector2 origin, float scale, int currentFrame, float rotation, Color overrideColor, float layerDepth)
         {
-            if (!who.modData.ContainsKey("LivelyHair.CustomHair.Id"))
+            if (!who.modData.ContainsKey(ModDataKeys.CUSTOM_HAIR_ID))
             {
                 return true;
             }
 
-            var appearanceModel = LivelyHair.textureManager.GetSpecificAppearanceModel(who.modData["LivelyHair.CustomHair.Id"]);
+            var appearanceModel = LivelyHair.textureManager.GetSpecificAppearanceModel(who.modData[ModDataKeys.CUSTOM_HAIR_ID]);
             if (appearanceModel is null)
             {
                 return true;
             }
 
-            HairModel hairModel = null;
-            switch (facingDirection)
-            {
-                case 0:
-                    hairModel = appearanceModel.BackHair;
-                    break;
-                case 1:
-                    hairModel = appearanceModel.RightHair;
-                    break;
-                case 2:
-                    hairModel = appearanceModel.FrontHair;
-                    break;
-                case 3:
-                    hairModel = appearanceModel.LeftHair;
-                    break;
-            }
-
+            HairModel hairModel = appearanceModel.GetHairFromFacingDirection(facingDirection);
             if (hairModel is null)
             {
                 return true;
