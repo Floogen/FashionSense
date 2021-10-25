@@ -1,7 +1,7 @@
 using HarmonyLib;
 using LivelyHair.Framework.Managers;
 using LivelyHair.Framework.Models;
-using LivelyHair.Framework.Patches.Entities;
+using LivelyHair.Framework.Patches.Renderer;
 using LivelyHair.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

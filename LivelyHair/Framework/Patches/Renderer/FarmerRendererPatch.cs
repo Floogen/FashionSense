@@ -17,7 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Object = StardewValley.Object;
 
-namespace LivelyHair.Framework.Patches.Entities
+namespace LivelyHair.Framework.Patches.Renderer
 {
     internal class FarmerRendererPatch : PatchTemplate
     {
