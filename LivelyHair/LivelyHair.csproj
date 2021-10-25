@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Framework\Managers\AssetManager.cs" />
     <Compile Include="Framework\Managers\TextureManager.cs" />
     <Compile Include="Framework\Models\AnimationModel.cs" />
     <Compile Include="Framework\Models\AppearanceModel.cs" />
@@ -58,8 +59,11 @@
     <Compile Include="Framework\Models\Generic\Position.cs" />
     <Compile Include="Framework\Models\Generic\Size.cs" />
     <Compile Include="Framework\Models\HairModel.cs" />
-    <Compile Include="Framework\Patches\Entities\FarmerRendererPatch.cs" />
+    <Compile Include="Framework\Patches\Renderer\FarmerRendererPatch.cs" />
     <Compile Include="Framework\Patches\PatchTemplate.cs" />
+    <Compile Include="Framework\Patches\ShopLocations\SeedShopPatch.cs" />
+    <Compile Include="Framework\Patches\Tools\ToolPatch.cs" />
+    <Compile Include="Framework\Utilities\ModDataKeys.cs" />
     <Compile Include="Framework\Utilities\MovementData.cs" />
     <Compile Include="LivelyHair.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -69,6 +73,9 @@
     <None Include="Examples\[LH] Example Pack\Hairs\ShortHairWithCurl\hair.json" />
     <None Include="Examples\[LH] Example Pack\Hairs\ShortHairWithFleas\hair.json" />
     <None Include="Examples\[LH] Example Pack\manifest.json" />
+    <None Include="i18n\default.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="manifest.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -77,10 +84,11 @@
     <Content Include="Examples\[LH] Example Pack\Hairs\LongHair\hair.png" />
     <Content Include="Examples\[LH] Example Pack\Hairs\ShortHairWithCurl\hair.png" />
     <Content Include="Examples\[LH] Example Pack\Hairs\ShortHairWithFleas\hair.png" />
+    <Content Include="Framework\Assets\HandMirror.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Framework\Assets\Tests\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Pathoschild.Stardew.ModBuildConfig.3.3.0\build\Pathoschild.Stardew.ModBuildConfig.targets" Condition="Exists('packages\Pathoschild.Stardew.ModBuildConfig.3.3.0\build\Pathoschild.Stardew.ModBuildConfig.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

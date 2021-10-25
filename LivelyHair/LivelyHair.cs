@@ -2,6 +2,8 @@ using HarmonyLib;
 using LivelyHair.Framework.Managers;
 using LivelyHair.Framework.Models;
 using LivelyHair.Framework.Patches.Renderer;
+using LivelyHair.Framework.Patches.ShopLocations;
+using LivelyHair.Framework.Patches.Tools;
 using LivelyHair.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -21,6 +23,7 @@ namespace LivelyHair
         internal static IModHelper modHelper;
 
         // Managers
+        internal static AssetManager assetManager;
         internal static TextureManager textureManager;
 
         // Utilities
@@ -36,6 +39,7 @@ namespace LivelyHair
             modHelper = helper;
 
             // Load managers
+            assetManager = new AssetManager(modHelper);
             textureManager = new TextureManager(monitor, modHelper);
 
             // Setup our utilities
@@ -48,6 +52,8 @@ namespace LivelyHair
 
                 // Apply hair related patches
                 new FarmerRendererPatch(monitor, modHelper).Apply(harmony);
+                new ToolPatch(monitor, modHelper).Apply(harmony);
+                new SeedShopPatch(monitor, modHelper).Apply(harmony);
             }
             catch (Exception e)
             {
