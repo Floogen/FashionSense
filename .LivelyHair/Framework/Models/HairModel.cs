@@ -16,8 +16,8 @@ namespace LivelyHair.Framework.Models
         public bool Flipped { get; set; }
         public bool RequireMovementToFinish { get; set; }
         public bool DisableGrayscale { get; set; }
-        public List<AnimationModel> IdleAnimation { get; set; } = new List<AnimationModel>();
-        public List<AnimationModel> MovementAnimation { get; set; } = new List<AnimationModel>();
+        public List<AnimationModel> IdleAnimation { get; set; } = new();
+        public List<AnimationModel> MovementAnimation { get; set; } = new();
 
         internal bool HasIdleAnimation()
         {

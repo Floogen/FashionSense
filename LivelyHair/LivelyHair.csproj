@@ -1,52 +1,118 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <Version>1.0.0</Version>
-    <TargetFramework>net5.0</TargetFramework>
     <EnableHarmony>true</EnableHarmony>
     <EnableModZip>false</EnableModZip>
     <EnableModDeploy>false</EnableModDeploy>
-    <GameModsPath>E:\SteamLibrary\steamapps\common\Stardew Valley\Mods</GameModsPath>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D355DA25-1F65-48F1-8F8A-3805E17A6CB6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LivelyHair</RootNamespace>
+    <AssemblyName>LivelyHair</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
-
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="releases\**" />
-    <EmbeddedResource Remove="releases\**" />
-    <None Remove="releases\**" />
+    <Reference Include="Microsoft.Build" />
+    <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Build.Utilities.v4.0" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.0.0-beta.20210916" />
+    <Compile Include="Framework\Managers\TextureManager.cs" />
+    <Compile Include="Framework\Models\AnimationModel.cs" />
+    <Compile Include="Framework\Models\AppearanceModel.cs" />
+    <Compile Include="Framework\Models\Generic\Condition.cs" />
+    <Compile Include="Framework\Models\Generic\Position.cs" />
+    <Compile Include="Framework\Models\Generic\Size.cs" />
+    <Compile Include="Framework\Models\HairModel.cs" />
+    <Compile Include="Framework\Patches\Entities\FarmerRendererPatch.cs" />
+    <Compile Include="Framework\Patches\PatchTemplate.cs" />
+    <Compile Include="Framework\Utilities\MovementData.cs" />
+    <Compile Include="LivelyHair.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-
   <ItemGroup>
-    <None Update="manifest.json">
+    <None Include="Examples\[LH] Example Pack\Hairs\LongHair\hair.json" />
+    <None Include="Examples\[LH] Example Pack\Hairs\ShortHairWithCurl\hair.json" />
+    <None Include="Examples\[LH] Example Pack\Hairs\ShortHairWithFleas\hair.json" />
+    <None Include="Examples\[LH] Example Pack\manifest.json" />
+    <None Include="manifest.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
-
   <ItemGroup>
-    <Folder Include="Framework\Assets\" />
+    <Content Include="Examples\[LH] Example Pack\Hairs\LongHair\hair.png" />
+    <Content Include="Examples\[LH] Example Pack\Hairs\ShortHairWithCurl\hair.png" />
+    <Content Include="Examples\[LH] Example Pack\Hairs\ShortHairWithFleas\hair.png" />
   </ItemGroup>
-
-
+  <ItemGroup>
+    <Folder Include="Framework\Assets\Tests\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="packages\Pathoschild.Stardew.ModBuildConfig.3.3.0\build\Pathoschild.Stardew.ModBuildConfig.targets" Condition="Exists('packages\Pathoschild.Stardew.ModBuildConfig.3.3.0\build\Pathoschild.Stardew.ModBuildConfig.targets')" />
+    <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\Pathoschild.Stardew.ModBuildConfig.3.3.0\build\Pathoschild.Stardew.ModBuildConfig.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Pathoschild.Stardew.ModBuildConfig.3.3.0\build\Pathoschild.Stardew.ModBuildConfig.targets'))" />
+  </Target>
+  <Target Name="PostBuildMacros">
+    <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
+      <Output TaskParameter="Assemblies" ItemName="Targets" />
+    </GetAssemblyIdentity>
+    <ItemGroup>
+      <VersionNumber Include="$([System.Text.RegularExpressions.Regex]::Replace(&quot;%(Targets.Version)&quot;, &quot;^(.+?)(\.0+)$&quot;, &quot;$1&quot;))" />
+    </ItemGroup>
+  </Target>
   <PropertyGroup>
     <PostBuildEventDependsOn>
-      $(PostBuildEventDependsOn);
-      PostBuildMacros;
-    </PostBuildEventDependsOn>
-    <PostBuildEvent>
-      powershell -Command "(ls *manifest.json -rec | foreach-object { $f=$_.FullName; (gc -LiteralPath \"$f\") -replace 'REPLACE_ME_WITH_VERSION',  '$(Version)' | sc -LiteralPath \"$f\" })"
+    $(PostBuildEventDependsOn);
+    PostBuildMacros;
+  </PostBuildEventDependsOn>
+    <PostBuildEvent>powershell -Command "(ls *manifest.json -rec | foreach-object { $f=$_.FullName; (gc -LiteralPath \"$f\") -replace 'REPLACE_ME_WITH_VERSION',  '@(VersionNumber)' | sc -LiteralPath \"$f\" })"
 
-      powershell Remove-Item -Path 'C:\Users\Floogen\Documents\GitHub Repos\LivelyHair\LivelyHair\releases\latest\LivelyHair"' -Recurse -Force
-      xcopy /s /y /i "C:\Users\Floogen\Documents\GitHub Repos\LivelyHair\LivelyHair\bin\Debug\net5.0" "C:\Users\Floogen\Documents\GitHub Repos\LivelyHair\LivelyHair\releases\latest\LivelyHair"
-      7z a -tzip "C:\Users\Floogen\Documents\GitHub Repos\LivelyHair\LivelyHair\releases\LivelyHair-$(Version).zip" "C:\Users\Floogen\Documents\GitHub Repos\LivelyHair\LivelyHair\releases\latest\LivelyHair"
+powershell Remove-Item -Path '$(SolutionDir)releases\latest\$(SolutionName)"' -Recurse -Force
+xcopy /s /y /i "$(TargetDir)" "$(SolutionDir)releases\latest\$(SolutionName)"
+7z a -tzip "$(SolutionDir)releases\$(SolutionName)-@(VersionNumber).zip" "$(SolutionDir)releases\latest\$(SolutionName)"
 
-      powershell Remove-Item -Path '$(GameModsPath)\LivelyHair' -Recurse -Force
-      powershell Remove-Item -Path '$(GameModsPath)\Lively Appearances Examples' -Recurse -Force
+powershell Remove-Item -Path '$(GameModsPath)\$(SolutionName)' -Recurse -Force
+powershell Remove-Item -Path '$(GameModsPath)\Lively Appearances Examples' -Recurse -Force
 
-      xcopy /s /y /i "C:\Users\Floogen\Documents\GitHub Repos\LivelyHair\LivelyHair\releases\latest\LivelyHair" "$(GameModsPath)\LivelyHair"
-      xcopy /s /y /i "$(SolutionDir)Examples\*" "$(GameModsPath)\Lively Appearances Examples"
-    </PostBuildEvent>
+xcopy /s /y /i "$(SolutionDir)releases\latest\$(SolutionName)" "$(GameModsPath)\$(SolutionName)"
+xcopy /s /y /i "$(SolutionDir)Examples\*" "$(GameModsPath)\Lively Appearances Examples"</PostBuildEvent>
   </PropertyGroup>
 </Project>

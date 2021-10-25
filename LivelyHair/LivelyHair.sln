@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LivelyHair", "LivelyHair.csproj", "{7220D194-63CC-4C5C-825B-9B5C9EC6AC15}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LivelyHair", "LivelyHair.csproj", "{D355DA25-1F65-48F1-8F8A-3805E17A6CB6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7220D194-63CC-4C5C-825B-9B5C9EC6AC15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7220D194-63CC-4C5C-825B-9B5C9EC6AC15}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7220D194-63CC-4C5C-825B-9B5C9EC6AC15}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7220D194-63CC-4C5C-825B-9B5C9EC6AC15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D355DA25-1F65-48F1-8F8A-3805E17A6CB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D355DA25-1F65-48F1-8F8A-3805E17A6CB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D355DA25-1F65-48F1-8F8A-3805E17A6CB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D355DA25-1F65-48F1-8F8A-3805E17A6CB6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {ECB168F1-31AF-4CDD-9AB8-C35354FCC567}
+		SolutionGuid = {76CC4324-0897-4378-A3D3-D09A67EB04F4}
 	EndGlobalSection
 EndGlobal

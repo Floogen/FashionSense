@@ -1,0 +1,39 @@
+{
+  "Name": "Short Hair With Curl",
+  "FrontHair": {
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "HeadPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "HairSize": {
+      "Width": 16,
+      "Length": 16
+    },
+    "IdleAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 5000
+      },
+      {
+        "Frame": 1,
+        "Duration": 250
+      },
+      {
+        "Frame": 2,
+        "Duration": 250
+      },
+      {
+        "Frame": 3,
+        "Duration": 250
+      },
+      {
+        "Frame": 4,
+        "Duration": 250
+      }
+    ]
+  }
+}

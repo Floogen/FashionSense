@@ -18,7 +18,7 @@ namespace LivelyHair.Framework.Models
 
         public int Frame { get; set; }
         public bool OverrideStartingIndex { get; set; }
-        public List<Condition> Conditions { get; set; } = new List<Condition>();
+        public List<Condition> Conditions { get; set; } = new();
         public int Duration { get; set; } = 1000;
 
         internal bool HasCondition(Condition.Type type)

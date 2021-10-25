@@ -1,0 +1,223 @@
+{
+  "Name": "Long Hair",
+  "RightHair": {
+    "DisableGrayscale": true,
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "HeadPosition": {
+      "X": 16,
+      "Y": 0
+    },
+    "HairSize": {
+      "Width": 48,
+      "Length": 32
+    },
+    "IdleAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 100
+      }
+    ],
+    "RequireMovementToFinish": true,
+    "MovementAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 100
+      },
+      {
+        "Frame": 1,
+        "Duration": 100
+      },
+      {
+        "Frame": 2,
+        "Duration": 100
+      },
+      {
+        "Frame": 3,
+        "Duration": 100,
+        "OverrideStartingIndex": true,
+        "Conditions": [
+          {
+            "Name": "MovementDuration",
+            "Value": 500
+          },
+          {
+            "Name": "MovementSpeed",
+            "Value": 4
+          }
+        ]
+      },
+      {
+        "Frame": 4,
+        "Duration": 100,
+        "Conditions": [
+          {
+            "Name": "MovementDuration",
+            "Value": 500
+          },
+          {
+            "Name": "MovementSpeed",
+            "Value": 4
+          }
+        ]
+      },
+      {
+        "Frame": 5,
+        "Duration": 100,
+        "Conditions": [
+          {
+            "Name": "RidingHorse",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 6,
+        "Duration": 100,
+        "Conditions": [
+          {
+            "Name": "RidingHorse",
+            "Value": true
+          }
+        ]
+      }
+    ]
+  },
+  "LeftHair": {
+    "Flipped": true,
+    "DisableGrayscale": true,
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "HeadPosition": {
+      "X": 16,
+      "Y": 0
+    },
+    "HairSize": {
+      "Width": 48,
+      "Length": 32
+    },
+    "IdleAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 100
+      }
+    ],
+    "RequireMovementToFinish": true,
+    "MovementAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 100
+      },
+      {
+        "Frame": 1,
+        "Duration": 100
+      },
+      {
+        "Frame": 2,
+        "Duration": 100
+      },
+      {
+        "Frame": 3,
+        "Duration": 100,
+        "OverrideStartingIndex": true,
+        "Conditions": [
+          {
+            "Name": "MovementDuration",
+            "Value": 500,
+            "Independent": true
+          },
+          {
+            "Name": "MovementSpeed",
+            "Value": 4,
+            "Independent": true
+          }
+        ]
+      },
+      {
+        "Frame": 4,
+        "Duration": 100,
+        "Conditions": [
+          {
+            "Name": "MovementDuration",
+            "Value": 500,
+            "Independent": true
+          },
+          {
+            "Name": "MovementSpeed",
+            "Value": 4,
+            "Independent": true
+          }
+        ]
+      },
+      {
+        "Frame": 5,
+        "Duration": 100,
+        "Conditions": [
+          {
+            "Name": "RidingHorse",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 6,
+        "Duration": 100,
+        "Conditions": [
+          {
+            "Name": "RidingHorse",
+            "Value": true
+          }
+        ]
+      }
+    ]
+  },
+  "BackHair": {
+    "DisableGrayscale": true,
+    "StartingPosition": {
+      "X": 0,
+      "Y": 32
+    },
+    "HeadPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "HairSize": {
+      "Width": 16,
+      "Length": 32
+    },
+    "RequireMovementToFinish": true,
+    "MovementAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 100
+      },
+      {
+        "Frame": 1,
+        "Duration": 100
+      },
+      {
+        "Frame": 2,
+        "Duration": 100
+      }
+    ]
+  },
+  "FrontHair": {
+    "DisableGrayscale": true,
+    "StartingPosition": {
+      "X": 48,
+      "Y": 32
+    },
+    "HeadPosition": {
+      "X": 0,
+      "Y": 16
+    },
+    "HairSize": {
+      "Width": 16,
+      "Length": 32
+    }
+  }
+}
