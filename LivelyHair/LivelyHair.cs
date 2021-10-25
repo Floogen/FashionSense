@@ -67,7 +67,10 @@ namespace LivelyHair
 
         private void OnRendered(object sender, StardewModdingAPI.Events.RenderedEventArgs e)
         {
-            movementData.OnRendered(sender, e);
+            if (_displayMovementData)
+            {
+                movementData.OnRendered(sender, e);
+            }
         }
 
         private void OnUpdateTicked(object sender, StardewModdingAPI.Events.UpdateTickedEventArgs e)
