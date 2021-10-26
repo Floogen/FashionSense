@@ -20,19 +20,9 @@ namespace LivelyHair.Framework.Models.Generic
         public object Value { get; set; }
         public bool Independent { get; set; }
 
-        internal dynamic GetParsedValue<T>()
+        internal T GetParsedValue<T>()
         {
-            switch (Value)
-            {
-                case Type.MovementSpeed:
-                    return (float)Value;
-                case Type.MovementDuration:
-                    return (float)Value;
-                case Type.RidingHorse:
-                    return (bool)Value;
-                default:
-                    return Value;
-            }
+            return (T)Value;
         }
     }
 }

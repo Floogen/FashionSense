@@ -91,11 +91,11 @@ namespace LivelyHair.Framework.Patches.Renderer
             {
                 if (condition.Name is Condition.Type.MovementDuration)
                 {
-                    isValid = LivelyHair.movementData.IsMovingLongEnough(condition.GetParsedValue<float>());
+                    isValid = LivelyHair.movementData.IsMovingLongEnough(condition.GetParsedValue<long>());
                 }
                 else if (condition.Name is Condition.Type.MovementSpeed)
                 {
-                    isValid = LivelyHair.movementData.IsMovingFastEnough(condition.GetParsedValue<float>());
+                    isValid = LivelyHair.movementData.IsMovingFastEnough(condition.GetParsedValue<long>());
                 }
                 else if (condition.Name is Condition.Type.RidingHorse)
                 {
