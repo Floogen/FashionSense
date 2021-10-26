@@ -1,0 +1,14 @@
+{
+  // Tools
+  "tools.name.hand_mirror": "Hand Mirror",
+  "tools.description.hand_mirror": "Allows you to change your hairstyle into a more lively one.",
+
+  // Messages
+  "messages.warning.no_content_packs": "You don't have any Fashion Sense content packs installed!",
+
+  // UI
+  "ui.fashion_sense.title": "Hairstyles",
+  "ui.fashion_sense.hair_color_active": "Hair Color",
+  "ui.fashion_sense.hair_color_disabled": "(Ignored)",
+  "ui.fashion_sense.hair_color_info": "The player's hair color will not affect this hairstyle."
+}
