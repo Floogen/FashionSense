@@ -1,6 +1,7 @@
 using HarmonyLib;
 using LivelyHair.Framework.Managers;
 using LivelyHair.Framework.Models;
+using LivelyHair.Framework.Patches.Menus;
 using LivelyHair.Framework.Patches.Renderer;
 using LivelyHair.Framework.Patches.ShopLocations;
 using LivelyHair.Framework.Patches.Tools;
@@ -52,8 +53,13 @@ namespace LivelyHair
 
                 // Apply hair related patches
                 new FarmerRendererPatch(monitor, modHelper).Apply(harmony);
+
+                // Apply tool related patches
                 new ToolPatch(monitor, modHelper).Apply(harmony);
                 new SeedShopPatch(monitor, modHelper).Apply(harmony);
+
+                // Apply UI related patches
+                new CharacterCustomizationPatch(monitor, modHelper).Apply(harmony);
             }
             catch (Exception e)
             {

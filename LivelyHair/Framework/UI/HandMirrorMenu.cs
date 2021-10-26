@@ -102,8 +102,8 @@ namespace LivelyHair.Framework.UI
 
             // Add color picker
             yOffset += 48;
-            var measuredStringSize = Game1.smallFont.MeasureString(LivelyHair.modHelper.Translation.Get("ui.lively_hair.hair_color_disabled"));
-            labels.Add(colorLabel = new ClickableComponent(new Rectangle(base.xPositionOnScreen + 48, base.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + yOffset, (int)measuredStringSize.X, (int)measuredStringSize.Y), LivelyHair.modHelper.Translation.Get("ui.lively_hair.hair_color_active")));
+            var measuredStringSize = Game1.smallFont.MeasureString(GetColorPickerLabel(true));
+            labels.Add(colorLabel = new ClickableComponent(new Rectangle(base.xPositionOnScreen + 48, base.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + yOffset, (int)measuredStringSize.X, (int)measuredStringSize.Y), GetColorPickerLabel(false)));
             yOffset += 32;
             var top = new Point(base.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + 32, base.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + yOffset);
             hairColorPicker = new ColorPicker("Hair", top.X, top.Y);
@@ -132,6 +132,18 @@ namespace LivelyHair.Framework.UI
                 leftNeighborImmutable = true,
                 rightNeighborImmutable = true
             });
+        }
+
+        internal static string GetColorPickerLabel(bool isDisabled = false, bool isCompact = false)
+        {
+            string labelName = LivelyHair.modHelper.Translation.Get("ui.lively_hair.hair_color_active");
+            if (isDisabled)
+            {
+                var separator = isCompact ? "\n" : " ";
+                labelName += $"{separator}{LivelyHair.modHelper.Translation.Get("ui.lively_hair.hair_color_disabled")}";
+            }
+
+            return $"{labelName}:";
         }
 
         private void selectionClick(string name, int change)
@@ -248,7 +260,7 @@ namespace LivelyHair.Framework.UI
             }
             foreach (ClickableComponent label in labels)
             {
-                if (label == colorLabel && label.name == LivelyHair.modHelper.Translation.Get("ui.lively_hair.hair_color_disabled"))
+                if (label == colorLabel && label.name == GetColorPickerLabel(true))
                 {
                     hoverText = colorLabel.containsPoint(x, y) ? LivelyHair.modHelper.Translation.Get("ui.lively_hair.hair_color_info") : String.Empty;
                 }
@@ -329,10 +341,10 @@ namespace LivelyHair.Framework.UI
                 }
                 else if (c == colorLabel)
                 {
-                    var name = LivelyHair.modHelper.Translation.Get("ui.lively_hair.hair_color_active");
+                    var name = GetColorPickerLabel(false);
                     if (currentCustomHair != null && currentCustomHair.GetHairFromFacingDirection(Game1.player.facingDirection) is HairModel model && model != null && model.DisableGrayscale)
                     {
-                        name = LivelyHair.modHelper.Translation.Get("ui.lively_hair.hair_color_disabled");
+                        name = GetColorPickerLabel(true);
                     }
 
                     colorLabel.name = name;

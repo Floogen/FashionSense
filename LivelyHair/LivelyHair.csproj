@@ -59,6 +59,7 @@
     <Compile Include="Framework\Models\Generic\Position.cs" />
     <Compile Include="Framework\Models\Generic\Size.cs" />
     <Compile Include="Framework\Models\HairModel.cs" />
+    <Compile Include="Framework\Patches\Menus\CharacterCustomizationPatch.cs" />
     <Compile Include="Framework\Patches\Renderer\FarmerRendererPatch.cs" />
     <Compile Include="Framework\Patches\PatchTemplate.cs" />
     <Compile Include="Framework\Patches\ShopLocations\SeedShopPatch.cs" />

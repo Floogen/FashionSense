@@ -8,7 +8,7 @@
 
   // UI
   "ui.lively_hair.title": "Hairstyles",
-  "ui.lively_hair.hair_color_active": "Hair Color:",
-  "ui.lively_hair.hair_color_disabled": "Hair Color (Ignored):",
+  "ui.lively_hair.hair_color_active": "Hair Color",
+  "ui.lively_hair.hair_color_disabled": "(Ignored)",
   "ui.lively_hair.hair_color_info": "The player's hair color will not affect this hairstyle."
 }
