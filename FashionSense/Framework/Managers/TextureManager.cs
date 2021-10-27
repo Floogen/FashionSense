@@ -20,6 +20,11 @@ namespace FashionSense.Framework.Managers
             _appearanceTextures = new List<AppearanceModel>();
         }
 
+        public void Reset()
+        {
+            _appearanceTextures.Clear();
+        }
+
         public void AddAppearanceModel(AppearanceModel model)
         {
             if (_appearanceTextures.Any(t => t.Id == model.Id))

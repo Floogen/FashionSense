@@ -111,6 +111,10 @@ namespace FashionSense
 
         private void LoadContentPacks()
         {
+            // Clear the existing cache of AppearanceModels
+            textureManager.Reset();
+
+
             // Load owned content packs
             foreach (IContentPack contentPack in Helper.ContentPacks.GetOwned())
             {
