@@ -121,7 +121,7 @@ namespace FashionSense
                     var hairFolders = new DirectoryInfo(Path.Combine(contentPack.DirectoryPath, "Hairs")).GetDirectories("*", SearchOption.AllDirectories);
                     if (hairFolders.Count() == 0)
                     {
-                        Monitor.Log($"No sub-folders found under Textures for the content pack {contentPack.Manifest.Name}!", LogLevel.Warn);
+                        Monitor.Log($"No sub-folders found under Textures for the content pack {contentPack.Manifest.Name}", LogLevel.Warn);
                         continue;
                     }
 
@@ -132,7 +132,7 @@ namespace FashionSense
                         {
                             if (textureFolder.GetDirectories().Count() == 0)
                             {
-                                Monitor.Log($"Content pack {contentPack.Manifest.Name} is missing a hair.json under {textureFolder.Name}!", LogLevel.Warn);
+                                Monitor.Log($"Content pack {contentPack.Manifest.Name} is missing a hair.json under {textureFolder.Name}", LogLevel.Warn);
                             }
 
                             continue;
@@ -146,18 +146,26 @@ namespace FashionSense
                         appearanceModel.Author = contentPack.Manifest.Author;
                         appearanceModel.Owner = contentPack.Manifest.UniqueID;
 
+                        // Verify the required Name property is set
                         if (String.IsNullOrEmpty(appearanceModel.Name))
                         {
-                            Monitor.Log($"Unable to add hair texture for {appearanceModel.Owner}: Missing the Name property!", LogLevel.Warn);
+                            Monitor.Log($"Unable to add hairstyle for {appearanceModel.Owner}: Missing the Name property", LogLevel.Warn);
                             continue;
                         }
                         // Set the ModelName and TextureId
                         appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.Name);
 
+                        // Verify that at least one HairModel is given
+                        if (appearanceModel.BackHair is null && appearanceModel.RightHair is null && appearanceModel.FrontHair is null && appearanceModel.LeftHair is null)
+                        {
+                            Monitor.Log($"Unable to add hairstyle for {appearanceModel.Name} from {contentPack.Manifest.Name}: No hair models given (FrontHair, BackHair, etc.)", LogLevel.Warn);
+                            continue;
+                        }
+
                         // Verify we are given a texture and if so, track it
                         if (!File.Exists(Path.Combine(textureFolder.FullName, "hair.png")))
                         {
-                            Monitor.Log($"Unable to add hair texture for {appearanceModel.Name} from {contentPack.Manifest.Name}: No associated hair.png given", LogLevel.Warn);
+                            Monitor.Log($"Unable to add hairstyle for {appearanceModel.Name} from {contentPack.Manifest.Name}: No associated hair.png given", LogLevel.Warn);
                             continue;
                         }
 
