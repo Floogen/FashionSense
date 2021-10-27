@@ -174,15 +174,12 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             // Perform time based logic for elapsed animations
+            // Note: ANIMATION_ELAPSED_DURATION is updated via UpdateTicked event
             if (elapsedDuration >= frameDuration)
             {
                 iterator = iterator + 1 >= animations.Count() ? startingIndex : iterator + 1;
 
                 UpdatePlayerAnimationData(who, type, animations, facingDirection, iterator, startingIndex);
-            }
-            else
-            {
-                who.modData[ModDataKeys.ANIMATION_ELAPSED_DURATION] = (elapsedDuration + Game1.currentGameTime.ElapsedGameTime.Milliseconds).ToString();
             }
 
             sourceRectangle.X += sourceRectangle.Width * animationModel.Frame;

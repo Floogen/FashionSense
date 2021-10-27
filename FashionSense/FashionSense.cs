@@ -30,6 +30,9 @@ namespace FashionSense
         // Utilities
         internal static MovementData movementData;
 
+        // Consts
+        internal const int MAX_TRACKED_MILLISECONDS = 3600000;
+
         // Debugging flags
         private bool _displayMovementData = false;
 
@@ -87,12 +90,25 @@ namespace FashionSense
 
         private void OnUpdateTicked(object sender, StardewModdingAPI.Events.UpdateTickedEventArgs e)
         {
-            if (!Context.IsWorldReady)
+            if (Context.IsWorldReady)
+            {
+                // Update movement trackers
+                movementData.Update(Game1.player, Game1.currentGameTime);
+            }
+
+            // Update animation timer
+            if (!Game1.player.modData.ContainsKey(ModDataKeys.ANIMATION_ELAPSED_DURATION))
             {
                 return;
             }
 
-            movementData.Update(Game1.player, Game1.currentGameTime);
+            var elapsedDuration = Int32.Parse(Game1.player.modData[ModDataKeys.ANIMATION_ELAPSED_DURATION]);
+            if (elapsedDuration >= MAX_TRACKED_MILLISECONDS)
+            {
+                return;
+            }
+
+            Game1.player.modData[ModDataKeys.ANIMATION_ELAPSED_DURATION] = (elapsedDuration + Game1.currentGameTime.ElapsedGameTime.Milliseconds).ToString();
         }
 
         private void OnGameLaunched(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
