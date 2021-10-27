@@ -89,28 +89,28 @@ namespace FashionSense.Framework.Patches.Renderer
             bool isValid = true;
             foreach (var condition in animationModel.Conditions)
             {
+                var passedCheck = false;
                 if (condition.Name is Condition.Type.MovementDuration)
                 {
-                    isValid = FashionSense.movementData.IsMovingLongEnough(condition.GetParsedValue<long>());
+                    passedCheck = FashionSense.movementData.IsMovingLongEnough(condition.GetParsedValue<long>());
                 }
                 else if (condition.Name is Condition.Type.MovementSpeed)
                 {
-                    isValid = FashionSense.movementData.IsMovingFastEnough(condition.GetParsedValue<long>());
+                    passedCheck = FashionSense.movementData.IsMovingFastEnough(condition.GetParsedValue<long>());
                 }
                 else if (condition.Name is Condition.Type.RidingHorse)
                 {
-                    isValid = Game1.player.isRidingHorse();
+                    passedCheck = Game1.player.isRidingHorse();
                 }
 
-                // If the condition is dependent and is false, then skip rest of evaluations
-                // Otherwise if the condition is independent and is true, then skip rest of evaluations
-                if (!condition.Independent && !isValid)
-                {
-                    return false;
-                }
-                else if (condition.Independent && isValid)
+                // If the condition is independent and is true, then skip rest of evaluations
+                if (condition.Independent && passedCheck)
                 {
                     return true;
+                }
+                else if (isValid)
+                {
+                    isValid = passedCheck;
                 }
             }
 
