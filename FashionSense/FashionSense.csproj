@@ -72,6 +72,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Examples\[FS] Example Pack\Hairs\LongHair\hair.json" />
+    <None Include="Examples\[FS] Example Pack\Hairs\Magic Sword\hair.json" />
+    <None Include="Examples\[FS] Example Pack\Hairs\Priestess\hair.json" />
     <None Include="Examples\[FS] Example Pack\Hairs\ShortHairWithCurlStatic\hair.json" />
     <None Include="Examples\[FS] Example Pack\Hairs\ShortHairWithCurl\hair.json" />
     <None Include="Examples\[FS] Example Pack\Hairs\ShortHairWithFleas\hair.json" />
@@ -85,6 +87,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Examples\[FS] Example Pack\Hairs\LongHair\hair.png" />
+    <Content Include="Examples\[FS] Example Pack\Hairs\Magic Sword\hair.png" />
+    <Content Include="Examples\[FS] Example Pack\Hairs\Priestess\hair.png" />
     <Content Include="Examples\[FS] Example Pack\Hairs\ShortHairWithCurlStatic\hair.png" />
     <Content Include="Examples\[FS] Example Pack\Hairs\ShortHairWithCurl\hair.png" />
     <Content Include="Examples\[FS] Example Pack\Hairs\ShortHairWithFleas\hair.png" />
