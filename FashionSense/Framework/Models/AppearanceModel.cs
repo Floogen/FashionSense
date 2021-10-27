@@ -9,10 +9,10 @@ namespace FashionSense.Framework.Models
 {
     public class AppearanceModel
     {
-        public string Owner { get; set; }
-        public string Author { get; set; }
+        internal string Owner { get; set; }
+        internal string Author { get; set; }
         public string Name { get; set; }
-        public string Id { get; set; }
+        internal string Id { get; set; }
         internal Texture2D Texture { get; set; }
         public HairModel BackHair { get; set; }
         public HairModel RightHair { get; set; }
