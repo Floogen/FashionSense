@@ -114,14 +114,14 @@ namespace FashionSense
             // Load owned content packs
             foreach (IContentPack contentPack in Helper.ContentPacks.GetOwned())
             {
-                Monitor.Log($"Loading textures from pack: {contentPack.Manifest.Name} {contentPack.Manifest.Version} by {contentPack.Manifest.Author}", LogLevel.Debug);
+                Monitor.Log($"Loading hairstyles from pack: {contentPack.Manifest.Name} {contentPack.Manifest.Version} by {contentPack.Manifest.Author}", LogLevel.Debug);
 
                 try
                 {
                     var hairFolders = new DirectoryInfo(Path.Combine(contentPack.DirectoryPath, "Hairs")).GetDirectories("*", SearchOption.AllDirectories);
                     if (hairFolders.Count() == 0)
                     {
-                        Monitor.Log($"No sub-folders found under Textures for the content pack {contentPack.Manifest.Name}", LogLevel.Warn);
+                        Monitor.Log($"No sub-folders found under Hairs for the content pack {contentPack.Manifest.Name}", LogLevel.Warn);
                         continue;
                     }
 
@@ -149,11 +149,18 @@ namespace FashionSense
                         // Verify the required Name property is set
                         if (String.IsNullOrEmpty(appearanceModel.Name))
                         {
-                            Monitor.Log($"Unable to add hairstyle for {appearanceModel.Owner}: Missing the Name property", LogLevel.Warn);
+                            Monitor.Log($"Unable to add hairstyle from {appearanceModel.Owner}: Missing the Name property", LogLevel.Warn);
                             continue;
                         }
                         // Set the ModelName and TextureId
                         appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.Name);
+
+                        // Verify that a hairstyle with the name doesn't exist in this pack
+                        if (textureManager.GetSpecificAppearanceModel(appearanceModel.Id) != null)
+                        {
+                            Monitor.Log($"Unable to add hairstyle from {contentPack.Manifest.Name}: This pack already contains a hairstyle with the name of {appearanceModel.Name}", LogLevel.Warn);
+                            continue;
+                        }
 
                         // Verify that at least one HairModel is given
                         if (appearanceModel.BackHair is null && appearanceModel.RightHair is null && appearanceModel.FrontHair is null && appearanceModel.LeftHair is null)
