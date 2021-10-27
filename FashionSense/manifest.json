@@ -5,16 +5,6 @@
   "Description": "Framework which adds hair animation and more into Stardew Valley.",
   "UniqueID": "PeacefulEnd.FashionSense",
   "EntryDll": "FashionSense.dll",
-  "MinimumApiVersion": "3.11.0",
-  "UpdateKeys": [ "Nexus:????" ],
-  "Dependencies": [
-    {
-      "UniqueID": "spacechase0.GenericModConfigMenu",
-      "IsRequired": false
-    },
-    {
-      "UniqueID": "Pathoschild.ContentPatcher",
-      "IsRequired": false
-    }
-  ]
+  "MinimumApiVersion": "3.12.0",
+  "UpdateKeys": [ "Nexus:9969" ]
 }
