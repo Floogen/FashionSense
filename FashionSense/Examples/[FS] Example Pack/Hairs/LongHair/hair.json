@@ -20,7 +20,7 @@
         "Duration": 100
       }
     ],
-    "RequireMovementToFinish": true,
+    "RequireAnimationToFinish": true,
     "MovementAnimation": [
       {
         "Frame": 0,
@@ -106,7 +106,7 @@
         "Duration": 100
       }
     ],
-    "RequireMovementToFinish": true,
+    "RequireAnimationToFinish": true,
     "MovementAnimation": [
       {
         "Frame": 0,
@@ -189,7 +189,7 @@
       "Width": 16,
       "Length": 32
     },
-    "RequireMovementToFinish": true,
+    "RequireAnimationToFinish": true,
     "MovementAnimation": [
       {
         "Frame": 0,

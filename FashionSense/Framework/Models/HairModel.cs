@@ -14,7 +14,7 @@ namespace FashionSense.Framework.Models
         public Position HeadPosition { get; set; } = new Position() { X = 0, Y = 0 };
         public Size HairSize { get; set; }
         public bool Flipped { get; set; }
-        public bool RequireMovementToFinish { get; set; }
+        public bool RequireAnimationToFinish { get; set; }
         public bool DisableGrayscale { get; set; }
         public List<AnimationModel> IdleAnimation { get; set; } = new List<AnimationModel>();
         public List<AnimationModel> MovementAnimation { get; set; } = new List<AnimationModel>();

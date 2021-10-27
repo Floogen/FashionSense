@@ -189,7 +189,7 @@ namespace FashionSense.Framework.Patches.Renderer
 
         private static bool IsWaitingOnRequiredAnimation(Farmer who, HairModel hairModel)
         {
-            if (hairModel.RequireMovementToFinish && who.modData.ContainsKey(ModDataKeys.ANIMATION_ITERATOR) && Int32.Parse(who.modData[ModDataKeys.ANIMATION_ITERATOR]) != 0)
+            if (hairModel.RequireAnimationToFinish && who.modData.ContainsKey(ModDataKeys.ANIMATION_ITERATOR) && Int32.Parse(who.modData[ModDataKeys.ANIMATION_ITERATOR]) != 0)
             {
                 return true;
             }
