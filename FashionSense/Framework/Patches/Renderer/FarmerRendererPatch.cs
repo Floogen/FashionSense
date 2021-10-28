@@ -348,7 +348,12 @@ namespace FashionSense.Framework.Patches.Renderer
                 hairColor = Color.White;
             }
 
-            b.Draw(appearanceModel.Texture, position + origin + ___positionOffset + new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + ((who.IsMale && (int)who.hair >= 16) ? (-4) : ((!who.IsMale && (int)who.hair < 16) ? 4 : 0))), sourceRect, hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, hairModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + hair_draw_layer);
+            // This fixes a potential issue where the hair isn't offset correctly when facing left while sitting or riding
+            // Note that I was unable to pinpoint why this occurs and this should be treated as a tape and glue fix (i.e. not good)
+            var offsetFix = ((who.IsSitting() || who.isRidingHorse()) && who.FacingDirection == 3 && who.yJumpOffset == 0 ? new Vector2(-8, 0) : Vector2.Zero);
+
+            // Draw the hair
+            b.Draw(appearanceModel.Texture, position + origin + ___positionOffset + new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4) - offsetFix, sourceRect, hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, hairModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + hair_draw_layer);
 
             // Perform hat draw logic
             DrawHat(b, ___hatSourceRect, __instance, who, currentFrame, facingDirection, rotation, scale, layerDepth, position, origin, ___positionOffset);
