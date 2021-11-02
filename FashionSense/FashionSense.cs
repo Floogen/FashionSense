@@ -321,7 +321,7 @@ namespace FashionSense
             }
         }
 
-        internal static void ResetAnimationModDataFields(Farmer who, int duration, AnimationModel.Type animationType, int facingDirection)
+        internal static void ResetAnimationModDataFields(Farmer who, int duration, AnimationModel.Type animationType, int facingDirection, bool ignoreAnimationType = false)
         {
             who.modData[ModDataKeys.ANIMATION_HAIR_ITERATOR] = "0";
             who.modData[ModDataKeys.ANIMATION_HAIR_STARTING_INDEX] = "0";
@@ -333,8 +333,13 @@ namespace FashionSense
             who.modData[ModDataKeys.ANIMATION_ACCESSORY_FRAME_DURATION] = duration.ToString();
             who.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION] = "0";
 
-            who.modData[ModDataKeys.ANIMATION_TYPE] = animationType.ToString();
             who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] = facingDirection.ToString();
+
+            if (!ignoreAnimationType)
+            {
+                who.modData[ModDataKeys.ANIMATION_HAIR_TYPE] = animationType.ToString();
+                who.modData[ModDataKeys.ANIMATION_ACCESSORY_TYPE] = animationType.ToString();
+            }
         }
     }
 }

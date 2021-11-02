@@ -135,11 +135,11 @@ namespace FashionSense.Framework.Patches.Renderer
         {
             switch (model)
             {
-                case HairModel hairModel:
-                    return who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_ITERATOR) && who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_FRAME_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_TYPE) && who.modData.ContainsKey(ModDataKeys.ANIMATION_FACING_DIRECTION);
+                case AccessoryModel accessoryModel:
+                    return who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_ITERATOR) && who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_FRAME_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_TYPE) && who.modData.ContainsKey(ModDataKeys.ANIMATION_FACING_DIRECTION);
             }
 
-            return who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_ITERATOR) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_FRAME_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_TYPE) && who.modData.ContainsKey(ModDataKeys.ANIMATION_FACING_DIRECTION);
+            return who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_ITERATOR) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_FRAME_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_TYPE) && who.modData.ContainsKey(ModDataKeys.ANIMATION_FACING_DIRECTION);
         }
 
         private static bool IsFrameValid(AnimationModel animationModel)
@@ -180,20 +180,14 @@ namespace FashionSense.Framework.Patches.Renderer
             switch (model)
             {
                 case AccessoryModel accessoryModel:
-                    who.modData[ModDataKeys.ANIMATION_ACCESSORY_ITERATOR] = iterator.ToString();
-                    who.modData[ModDataKeys.ANIMATION_ACCESSORY_STARTING_INDEX] = startingIndex.ToString();
-                    who.modData[ModDataKeys.ANIMATION_ACCESSORY_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
-                    who.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION] = "0";
+                    who.modData[ModDataKeys.ANIMATION_ACCESSORY_TYPE] = type.ToString();
                     who.modData[ModDataKeys.ANIMATION_ACCESSORY_ITERATOR] = iterator.ToString();
                     who.modData[ModDataKeys.ANIMATION_ACCESSORY_STARTING_INDEX] = startingIndex.ToString();
                     who.modData[ModDataKeys.ANIMATION_ACCESSORY_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
                     who.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION] = "0";
                     break;
                 default:
-                    who.modData[ModDataKeys.ANIMATION_HAIR_ITERATOR] = iterator.ToString();
-                    who.modData[ModDataKeys.ANIMATION_HAIR_STARTING_INDEX] = startingIndex.ToString();
-                    who.modData[ModDataKeys.ANIMATION_HAIR_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
-                    who.modData[ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION] = "0";
+                    who.modData[ModDataKeys.ANIMATION_HAIR_TYPE] = type.ToString();
                     who.modData[ModDataKeys.ANIMATION_HAIR_ITERATOR] = iterator.ToString();
                     who.modData[ModDataKeys.ANIMATION_HAIR_STARTING_INDEX] = startingIndex.ToString();
                     who.modData[ModDataKeys.ANIMATION_HAIR_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
@@ -201,7 +195,6 @@ namespace FashionSense.Framework.Patches.Renderer
                     break;
             }
 
-            who.modData[ModDataKeys.ANIMATION_TYPE] = type.ToString();
             who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] = facingDirection.ToString();
         }
 
@@ -228,13 +221,42 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 HandleAppearanceAnimation(model, who, AnimationModel.Type.Idle, model.IdleAnimation, facingDirection, ref sourceRectangle);
             }
+            else if (model.HasUniformAnimation())
+            {
+                HandleAppearanceAnimation(model, who, AnimationModel.Type.Uniform, model.UniformAnimation, facingDirection, ref sourceRectangle);
+            }
+        }
+
+        private static bool HasCorrectAnimationTypeCached(AppearanceModel model, Farmer who, AnimationModel.Type type)
+        {
+            switch (model)
+            {
+                case AccessoryModel accessoryModel:
+                    return who.modData[ModDataKeys.ANIMATION_ACCESSORY_TYPE] == type.ToString();
+                default:
+                    return who.modData[ModDataKeys.ANIMATION_HAIR_TYPE] == type.ToString();
+            }
+        }
+
+        private static void SetAnimationType(AppearanceModel model, Farmer who, AnimationModel.Type type)
+        {
+            switch (model)
+            {
+                case AccessoryModel accessoryModel:
+                    who.modData[ModDataKeys.ANIMATION_ACCESSORY_TYPE] = type.ToString();
+                    break;
+                default:
+                    who.modData[ModDataKeys.ANIMATION_HAIR_TYPE] = type.ToString();
+                    break;
+            }
         }
 
         private static void HandleAppearanceAnimation(AppearanceModel model, Farmer who, AnimationModel.Type type, List<AnimationModel> animations, int facingDirection, ref Rectangle sourceRectangle)
         {
-            if (!HasRequiredModDataKeys(model, who) || who.modData[ModDataKeys.ANIMATION_TYPE] != type.ToString() || who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] != facingDirection.ToString())
+            if (!HasRequiredModDataKeys(model, who) || !HasCorrectAnimationTypeCached(model, who, type) || who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] != facingDirection.ToString())
             {
-                FashionSense.ResetAnimationModDataFields(who, animations.ElementAt(0).Duration, type, facingDirection);
+                SetAnimationType(model, who, type);
+                FashionSense.ResetAnimationModDataFields(who, animations.ElementAt(0).Duration, type, facingDirection, true);
             }
 
             // Utilize the default modData key properties (HairModel)
@@ -493,7 +515,7 @@ namespace FashionSense.Framework.Patches.Renderer
                     accessoryColor = Color.White;
                 }
 
-                b.Draw(accessoryPack.Texture, position + origin + ___positionOffset + ___rotationAdjustment + new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, 4 + FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + (int)__instance.heightOffset), customAccessorySourceRect, accessoryColor, rotation, origin + new Vector2(accessoryModel.HeadPosition.X, accessoryModel.HeadPosition.Y), 4f * scale + ((rotation != 0f) ? 0f : 0f), SpriteEffects.None, (accessoryModel.DrawBehindHair ? 1.9E-05f : layerDepth + 2.9E-05f));
+                b.Draw(accessoryPack.Texture, position + origin + ___positionOffset + ___rotationAdjustment + new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, 4 + FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + (int)__instance.heightOffset), customAccessorySourceRect, accessoryColor, rotation, origin + new Vector2(accessoryModel.HeadPosition.X, accessoryModel.HeadPosition.Y), 4f * scale + ((rotation != 0f) ? 0f : 0f), SpriteEffects.None, layerDepth + (accessoryModel.DrawBehindHair ? -0.1E-05f : 2.9E-05f));
             }
 
             // Draw hair

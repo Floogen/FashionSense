@@ -13,7 +13,8 @@ namespace FashionSense.Framework.Models
         {
             Unknown,
             Idle,
-            Moving
+            Moving,
+            Uniform
         }
 
         public int Frame { get; set; }
