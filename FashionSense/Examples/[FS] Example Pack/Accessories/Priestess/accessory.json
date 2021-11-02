@@ -2,7 +2,7 @@
   "Name": "Priestess",
   "FrontAccessory": {
     "DisableGrayscale": true,
-    "DrawBehindHair": true,
+    "DrawBeforeHair": true,
     "StartingPosition": {
       "X": 0,
       "Y": 0
@@ -60,6 +60,7 @@
   },
   "BackAccessory": {
     "DisableGrayscale": true,
+    "DrawBeforeHair": true,
     "StartingPosition": {
       "X": 0,
       "Y": 32
