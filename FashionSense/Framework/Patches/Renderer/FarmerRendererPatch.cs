@@ -295,7 +295,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             // Get AnimationModel for this index
-            var animationModel = animations.ElementAt(iterator);
+            var animationModel = animations.ElementAtOrDefault(iterator) is null ? animations.ElementAtOrDefault(0) : animations.ElementAtOrDefault(iterator);
 
             // Check if frame is valid
             if (IsFrameValid(animationModel))
