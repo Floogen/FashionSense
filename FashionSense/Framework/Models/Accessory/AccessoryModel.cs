@@ -13,5 +13,6 @@ namespace FashionSense.Framework.Models.Accessory
         public Position HeadPosition { get; set; } = new Position() { X = 0, Y = 0 };
         public Size AccessorySize { get; set; }
         public bool DrawBeforeHair { get; set; }
+        public bool DrawBeforePlayer { get; set; }
     }
 }

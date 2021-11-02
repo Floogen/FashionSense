@@ -212,6 +212,24 @@ namespace FashionSense.Framework.Patches.Renderer
                 size.Length = accessoryModel.AccessorySize.Length;
             }
 
+            // Reset any cached animation data, if needd
+            if (model.HasMovementAnimation() && FashionSense.movementData.IsPlayerMoving() && !HasCorrectAnimationTypeCached(model, who, AnimationModel.Type.Moving))
+            {
+                SetAnimationType(model, who, AnimationModel.Type.Moving);
+                FashionSense.ResetAnimationModDataFields(who, 0, AnimationModel.Type.Moving, facingDirection, true);
+            }
+            else if (model.HasIdleAnimation() && !FashionSense.movementData.IsPlayerMoving() && !HasCorrectAnimationTypeCached(model, who, AnimationModel.Type.Idle))
+            {
+                SetAnimationType(model, who, AnimationModel.Type.Idle);
+                FashionSense.ResetAnimationModDataFields(who, 0, AnimationModel.Type.Idle, facingDirection, true);
+            }
+            else if (!model.HasMovementAnimation() && !model.HasIdleAnimation() && !HasCorrectAnimationTypeCached(model, who, AnimationModel.Type.Uniform))
+            {
+                SetAnimationType(model, who, AnimationModel.Type.Uniform);
+                FashionSense.ResetAnimationModDataFields(who, 0, AnimationModel.Type.Uniform, facingDirection, true);
+            }
+
+            // Update the animations
             sourceRectangle = new Rectangle(model.StartingPosition.X, model.StartingPosition.Y, size.Width, size.Length);
             if (model.HasMovementAnimation() && (FashionSense.movementData.IsPlayerMoving() || IsWaitingOnRequiredAnimation(who, model)))
             {
@@ -517,8 +535,9 @@ namespace FashionSense.Framework.Patches.Renderer
 
                 // Correct how the accessory is drawn according to facingDirection and AccessoryModel.DrawBehindHair
                 var layerFix = facingDirection == 0 ? (accessoryModel.DrawBeforeHair ? 2.9E-05f : 2E-05f) : (accessoryModel.DrawBeforeHair ? -0.1E-05f : 2.9E-05f);
+                layerFix += accessoryModel.DrawBeforePlayer ? 0.2E-05f : 0;
 
-                b.Draw(accessoryPack.Texture, position + origin + ___positionOffset + ___rotationAdjustment + new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, 4 + FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + (int)__instance.heightOffset), customAccessorySourceRect, accessoryColor, rotation, origin + new Vector2(accessoryModel.HeadPosition.X, accessoryModel.HeadPosition.Y), 4f * scale + ((rotation != 0f) ? 0f : 0f), SpriteEffects.None, layerDepth + layerFix);
+                b.Draw(accessoryPack.Texture, position + origin + ___positionOffset + ___rotationAdjustment + new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, 4 + FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + (int)__instance.heightOffset), customAccessorySourceRect, accessoryColor, rotation, origin + new Vector2(accessoryModel.HeadPosition.X, accessoryModel.HeadPosition.Y), 4f * scale + ((rotation != 0f) ? 0f : 0f), accessoryModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + layerFix);
             }
 
             // Draw hair
