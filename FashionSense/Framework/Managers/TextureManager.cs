@@ -51,7 +51,7 @@ namespace FashionSense.Framework.Managers
 
         public T GetSpecificAppearanceModel<T>(string appearanceId) where T : AppearanceContentPack
         {
-            return (T)_appearanceTextures.FirstOrDefault(t => String.Equals(t.Id, appearanceId, StringComparison.OrdinalIgnoreCase));
+            return (T)_appearanceTextures.FirstOrDefault(t => String.Equals(t.Id, appearanceId, StringComparison.OrdinalIgnoreCase) && t is T);
         }
     }
 }

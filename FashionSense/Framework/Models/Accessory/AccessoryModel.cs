@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FashionSense.Framework.Models.Hair
+namespace FashionSense.Framework.Models.Accessory
 {
-    public class HairModel : AppearanceModel
+    public class AccessoryModel : AppearanceModel
     {
         public Position HeadPosition { get; set; } = new Position() { X = 0, Y = 0 };
-        public Size HairSize { get; set; }
+        public Size AccessorySize { get; set; }
     }
 }

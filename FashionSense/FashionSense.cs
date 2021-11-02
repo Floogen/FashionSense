@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using FashionSense.Framework.Models.Hair;
+using FashionSense.Framework.Models.Accessory;
 
 namespace FashionSense
 {
@@ -97,19 +98,24 @@ namespace FashionSense
                 movementData.Update(Game1.player, Game1.currentGameTime);
             }
 
-            // Update animation timer
-            if (!Game1.player.modData.ContainsKey(ModDataKeys.ANIMATION_ELAPSED_DURATION))
+            // Update animation timers
+            if (Game1.player.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION))
             {
-                return;
+                var elapsedDuration = Int32.Parse(Game1.player.modData[ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION]);
+                if (elapsedDuration < MAX_TRACKED_MILLISECONDS)
+                {
+                    Game1.player.modData[ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION] = (elapsedDuration + Game1.currentGameTime.ElapsedGameTime.Milliseconds).ToString();
+                }
+            }
+            if (Game1.player.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION))
+            {
+                var elapsedDuration = Int32.Parse(Game1.player.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION]);
+                if (elapsedDuration < MAX_TRACKED_MILLISECONDS)
+                {
+                    Game1.player.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION] = (elapsedDuration + Game1.currentGameTime.ElapsedGameTime.Milliseconds).ToString();
+                }
             }
 
-            var elapsedDuration = Int32.Parse(Game1.player.modData[ModDataKeys.ANIMATION_ELAPSED_DURATION]);
-            if (elapsedDuration >= MAX_TRACKED_MILLISECONDS)
-            {
-                return;
-            }
-
-            Game1.player.modData[ModDataKeys.ANIMATION_ELAPSED_DURATION] = (elapsedDuration + Game1.currentGameTime.ElapsedGameTime.Milliseconds).ToString();
         }
 
         private void OnGameLaunched(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
@@ -121,6 +127,10 @@ namespace FashionSense
         private void OnDayStarted(object sender, StardewModdingAPI.Events.DayStartedEventArgs e)
         {
             if (!Game1.player.modData.ContainsKey(ModDataKeys.CUSTOM_HAIR_ID))
+            {
+                Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID] = null;
+            }
+            if (!Game1.player.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_ID))
             {
                 Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID] = null;
             }
@@ -140,6 +150,13 @@ namespace FashionSense
                 // Load Hairs
                 Monitor.Log($"Loading hairstyles from pack: {contentPack.Manifest.Name} {contentPack.Manifest.Version} by {contentPack.Manifest.Author}", LogLevel.Trace);
                 AddHairContentPacks(contentPack);
+
+                // Load Accessories
+                Monitor.Log($"Loading accessories from pack: {contentPack.Manifest.Name} {contentPack.Manifest.Version} by {contentPack.Manifest.Author}", LogLevel.Trace);
+                AddAccessoriesContentPacks(contentPack);
+            }
+        }
+
         private void AddHairContentPacks(IContentPack contentPack)
         {
             try
@@ -220,34 +237,100 @@ namespace FashionSense
                 Monitor.Log($"Error loading hairstyles from content pack {contentPack.Manifest.Name}: {ex}", LogLevel.Error);
             }
         }
+
+        private void AddAccessoriesContentPacks(IContentPack contentPack)
+        {
+            try
+            {
+                var accessoryFolders = new DirectoryInfo(Path.Combine(contentPack.DirectoryPath, "Accessories")).GetDirectories("*", SearchOption.AllDirectories);
+                if (accessoryFolders.Count() == 0)
+                {
+                    Monitor.Log($"No sub-folders found under Accessories for the content pack {contentPack.Manifest.Name}", LogLevel.Warn);
+                    return;
+                }
+
+                // Load in the accessories
+                foreach (var textureFolder in accessoryFolders)
+                {
+                    if (!File.Exists(Path.Combine(textureFolder.FullName, "accessory.json")))
+                    {
+                        if (textureFolder.GetDirectories().Count() == 0)
                         {
-                            Monitor.Log($"Unable to add hairstyle for {appearanceModel.Name} from {contentPack.Manifest.Name}: No associated hair.png given", LogLevel.Warn);
-                            continue;
+                            Monitor.Log($"Content pack {contentPack.Manifest.Name} is missing a accessory.json under {textureFolder.Name}", LogLevel.Warn);
                         }
 
-                        // Load in the texture
-                        appearanceModel.Texture = contentPack.LoadAsset<Texture2D>(contentPack.GetActualAssetKey(Path.Combine(parentFolderName, textureFolder.Name, "hair.png")));
-
-                        // Track the model
-                        textureManager.AddAppearanceModel(appearanceModel);
-
-                        // Log it
-                        Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
+                        continue;
                     }
+
+                    var parentFolderName = textureFolder.Parent.FullName.Replace(contentPack.DirectoryPath + Path.DirectorySeparatorChar, String.Empty);
+                    var modelPath = Path.Combine(parentFolderName, textureFolder.Name, "accessory.json");
+
+                    // Parse the model and assign it the content pack's owner
+                    AccessoryContentPack appearanceModel = contentPack.ReadJsonFile<AccessoryContentPack>(modelPath);
+                    appearanceModel.Author = contentPack.Manifest.Author;
+                    appearanceModel.Owner = contentPack.Manifest.UniqueID;
+
+                    // Verify the required Name property is set
+                    if (String.IsNullOrEmpty(appearanceModel.Name))
+                    {
+                        Monitor.Log($"Unable to add accessories from {appearanceModel.Owner}: Missing the Name property", LogLevel.Warn);
+                        continue;
+                    }
+                    // Set the ModelName and TextureId
+                    appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.Name);
+
+                    // Verify that a accessory with the name doesn't exist in this pack
+                    if (textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(appearanceModel.Id) != null)
+                    {
+                        Monitor.Log($"Unable to add accessory from {contentPack.Manifest.Name}: This pack already contains a accessory with the name of {appearanceModel.Name}", LogLevel.Warn);
+                        continue;
+                    }
+
+                    // Verify that at least one AccessoryModel is given
+                    if (appearanceModel.BackAccessory is null && appearanceModel.RightAccessory is null && appearanceModel.FrontAccessory is null && appearanceModel.LeftAccessory is null)
+                    {
+                        Monitor.Log($"Unable to add accessory for {appearanceModel.Name} from {contentPack.Manifest.Name}: No accessory models given (FrontAccessory, BackAccessory, etc.)", LogLevel.Warn);
+                        continue;
+                    }
+
+                    // Verify we are given a texture and if so, track it
+                    if (!File.Exists(Path.Combine(textureFolder.FullName, "accessory.png")))
+                    {
+                        Monitor.Log($"Unable to add accessory for {appearanceModel.Name} from {contentPack.Manifest.Name}: No associated accessory.png given", LogLevel.Warn);
+                        continue;
+                    }
+
+                    // Load in the texture
+                    appearanceModel.Texture = contentPack.LoadAsset<Texture2D>(contentPack.GetActualAssetKey(Path.Combine(parentFolderName, textureFolder.Name, "accessory.png")));
+
+                    // Set the model type
+                    appearanceModel.PackType = AppearanceContentPack.Type.Accessory;
+
+                    // Track the model
+                    textureManager.AddAppearanceModel(appearanceModel);
+
+                    // Log it
+                    Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
                 }
-                catch (Exception ex)
-                {
-                    Monitor.Log($"Error loading content pack {contentPack.Manifest.Name}: {ex}", LogLevel.Error);
-                }
+            }
+            catch (Exception ex)
+            {
+                Monitor.Log($"Error loading accessories from content pack {contentPack.Manifest.Name}: {ex}", LogLevel.Error);
             }
         }
 
         internal static void ResetAnimationModDataFields(Farmer who, int duration, AnimationModel.Type animationType, int facingDirection)
         {
-            who.modData[ModDataKeys.ANIMATION_ITERATOR] = "0";
-            who.modData[ModDataKeys.ANIMATION_STARTING_INDEX] = "0";
-            who.modData[ModDataKeys.ANIMATION_FRAME_DURATION] = duration.ToString();
-            who.modData[ModDataKeys.ANIMATION_ELAPSED_DURATION] = "0";
+            who.modData[ModDataKeys.ANIMATION_HAIR_ITERATOR] = "0";
+            who.modData[ModDataKeys.ANIMATION_HAIR_STARTING_INDEX] = "0";
+            who.modData[ModDataKeys.ANIMATION_HAIR_FRAME_DURATION] = duration.ToString();
+            who.modData[ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION] = "0";
+
+            who.modData[ModDataKeys.ANIMATION_ACCESSORY_ITERATOR] = "0";
+            who.modData[ModDataKeys.ANIMATION_ACCESSORY_STARTING_INDEX] = "0";
+            who.modData[ModDataKeys.ANIMATION_ACCESSORY_FRAME_DURATION] = duration.ToString();
+            who.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION] = "0";
+
             who.modData[ModDataKeys.ANIMATION_TYPE] = animationType.ToString();
             who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] = facingDirection.ToString();
         }
