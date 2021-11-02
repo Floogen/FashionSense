@@ -9,7 +9,6 @@ namespace FashionSense.Framework.Models.Hair
 {
     public class HairContentPack : AppearanceContentPack
     {
-        internal Texture2D Texture { get; set; }
         public HairModel BackHair { get; set; }
         public HairModel RightHair { get; set; }
         public HairModel FrontHair { get; set; }
