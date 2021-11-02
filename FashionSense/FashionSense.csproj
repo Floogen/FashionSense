@@ -54,11 +54,12 @@
     <Compile Include="Framework\Managers\AssetManager.cs" />
     <Compile Include="Framework\Managers\TextureManager.cs" />
     <Compile Include="Framework\Models\AnimationModel.cs" />
-    <Compile Include="Framework\Models\AppearanceModel.cs" />
+    <Compile Include="Framework\Models\AppearanceContentPack.cs" />
+    <Compile Include="Framework\Models\Hair\HairContentPack.cs" />
     <Compile Include="Framework\Models\Generic\Condition.cs" />
     <Compile Include="Framework\Models\Generic\Position.cs" />
     <Compile Include="Framework\Models\Generic\Size.cs" />
-    <Compile Include="Framework\Models\HairModel.cs" />
+    <Compile Include="Framework\Models\Hair\HairModel.cs" />
     <Compile Include="Framework\Patches\Menus\CharacterCustomizationPatch.cs" />
     <Compile Include="Framework\Patches\Renderer\FarmerRendererPatch.cs" />
     <Compile Include="Framework\Patches\PatchTemplate.cs" />

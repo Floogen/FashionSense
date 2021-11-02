@@ -17,6 +17,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Object = StardewValley.Object;
+using FashionSense.Framework.Models.Hair;
 
 namespace FashionSense.Framework.Patches.Renderer
 {
@@ -333,12 +334,18 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             // Set up each AppearanceModel
-            AppearanceModel appearanceModel = null;
+            HairContentPack appearanceModel = null;
             HairModel hairModel = null;
-            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_HAIR_ID) && FashionSense.textureManager.GetSpecificAppearanceModel(who.modData[ModDataKeys.CUSTOM_HAIR_ID]) is AppearanceModel model && model != null)
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_HAIR_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(who.modData[ModDataKeys.CUSTOM_HAIR_ID]) is HairContentPack model && model != null)
             {
                 appearanceModel = model;
                 hairModel = appearanceModel.GetHairFromFacingDirection(facingDirection);
+            }
+
+            // Check if all the models are null, if so revert back to vanilla logic
+            if (hairModel is null)
+            {
+                return true;
             }
 
             // Set up source rectangles
@@ -417,7 +424,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 return true;
             }
 
-            var appearanceModel = FashionSense.textureManager.GetSpecificAppearanceModel(who.modData[ModDataKeys.CUSTOM_HAIR_ID]);
+            var appearanceModel = FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(who.modData[ModDataKeys.CUSTOM_HAIR_ID]);
             if (appearanceModel is null)
             {
                 return true;

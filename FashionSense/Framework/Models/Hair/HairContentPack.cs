@@ -5,14 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FashionSense.Framework.Models
+namespace FashionSense.Framework.Models.Hair
 {
-    public class AppearanceModel
+    public class HairContentPack : AppearanceContentPack
     {
-        internal string Owner { get; set; }
-        internal string Author { get; set; }
-        public string Name { get; set; }
-        internal string Id { get; set; }
         internal Texture2D Texture { get; set; }
         public HairModel BackHair { get; set; }
         public HairModel RightHair { get; set; }

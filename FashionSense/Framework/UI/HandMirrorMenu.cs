@@ -1,4 +1,5 @@
 ﻿using FashionSense.Framework.Models;
+using FashionSense.Framework.Models.Hair;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -152,8 +153,9 @@ namespace FashionSense.Framework.UI
             {
                 case "Hair":
                     {
-                        List<AppearanceModel> hairModels = FashionSense.textureManager.GetAllAppearanceModels();
-                        var currentCustomHair = FashionSense.textureManager.GetSpecificAppearanceModel(Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID]);
+                        List<AppearanceContentPack> hairModels = FashionSense.textureManager.GetAllAppearanceModels().Where(t => t is HairContentPack).ToList();
+                        FashionSense.monitor.Log(FashionSense.textureManager.GetAllAppearanceModels().Count.ToString());
+                        var currentCustomHair = FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID]);
 
                         int current_index = -1;
                         if (currentCustomHair != null)
@@ -284,7 +286,7 @@ namespace FashionSense.Framework.UI
             }
 
             // Get the custom hair object, if it exists
-            var currentCustomHair = FashionSense.textureManager.GetSpecificAppearanceModel(Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID]);
+            var currentCustomHair = FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID]);
 
             // General UI (title, background)
             b.Draw(Game1.fadeToBlackRect, Game1.graphics.GraphicsDevice.Viewport.Bounds, Color.Black * 0.75f);

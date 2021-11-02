@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FashionSense.Framework.Models
+namespace FashionSense.Framework.Models.Hair
 {
     public class HairModel
     {

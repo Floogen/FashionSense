@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using static StardewValley.Menus.CharacterCustomization;
+using FashionSense.Framework.Models.Hair;
 
 namespace FashionSense.Framework.Patches.Menus
 {
@@ -77,8 +78,8 @@ namespace FashionSense.Framework.Patches.Menus
             {
                 case "fashion_sense":
                     {
-                        List<AppearanceModel> hairModels = FashionSense.textureManager.GetAllAppearanceModels();
-                        var currentCustomHair = FashionSense.textureManager.GetSpecificAppearanceModel(Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID]);
+                        List<HairContentPack> hairModels = FashionSense.textureManager.GetAllAppearanceModels<HairContentPack>();
+                        var currentCustomHair = FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID]);
 
                         int current_index = -1;
                         if (currentCustomHair != null)
@@ -127,7 +128,7 @@ namespace FashionSense.Framework.Patches.Menus
             }
 
             // Get the custom hair object, if it exists
-            var currentCustomHair = FashionSense.textureManager.GetSpecificAppearanceModel(Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID]);
+            var currentCustomHair = FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID]);
 
             // Draw labels
             foreach (ClickableComponent c in ___labels)

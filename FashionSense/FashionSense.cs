@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using FashionSense.Framework.Models.Hair;
 
 namespace FashionSense
 {
@@ -162,7 +163,7 @@ namespace FashionSense
                         var modelPath = Path.Combine(parentFolderName, textureFolder.Name, "hair.json");
 
                         // Parse the model and assign it the content pack's owner
-                        AppearanceModel appearanceModel = contentPack.ReadJsonFile<AppearanceModel>(modelPath);
+                        HairContentPack appearanceModel = contentPack.ReadJsonFile<HairContentPack>(modelPath);
                         appearanceModel.Author = contentPack.Manifest.Author;
                         appearanceModel.Owner = contentPack.Manifest.UniqueID;
 
@@ -176,7 +177,7 @@ namespace FashionSense
                         appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.Name);
 
                         // Verify that a hairstyle with the name doesn't exist in this pack
-                        if (textureManager.GetSpecificAppearanceModel(appearanceModel.Id) != null)
+                        if (textureManager.GetSpecificAppearanceModel<HairContentPack>(appearanceModel.Id) != null)
                         {
                             Monitor.Log($"Unable to add hairstyle from {contentPack.Manifest.Name}: This pack already contains a hairstyle with the name of {appearanceModel.Name}", LogLevel.Warn);
                             continue;
