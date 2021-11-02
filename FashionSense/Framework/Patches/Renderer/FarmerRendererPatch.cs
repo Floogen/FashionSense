@@ -515,7 +515,10 @@ namespace FashionSense.Framework.Patches.Renderer
                     accessoryColor = Color.White;
                 }
 
-                b.Draw(accessoryPack.Texture, position + origin + ___positionOffset + ___rotationAdjustment + new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, 4 + FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + (int)__instance.heightOffset), customAccessorySourceRect, accessoryColor, rotation, origin + new Vector2(accessoryModel.HeadPosition.X, accessoryModel.HeadPosition.Y), 4f * scale + ((rotation != 0f) ? 0f : 0f), SpriteEffects.None, layerDepth + (accessoryModel.DrawBehindHair ? -0.1E-05f : 2.9E-05f));
+                // Correct how the accessory is drawn according to facingDirection and AccessoryModel.DrawBehindHair
+                var layerFix = facingDirection == 0 ? (accessoryModel.DrawBeforeHair ? 2.9E-05f : 2E-05f) : (accessoryModel.DrawBeforeHair ? -0.1E-05f : 2.9E-05f);
+
+                b.Draw(accessoryPack.Texture, position + origin + ___positionOffset + ___rotationAdjustment + new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, 4 + FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + (int)__instance.heightOffset), customAccessorySourceRect, accessoryColor, rotation, origin + new Vector2(accessoryModel.HeadPosition.X, accessoryModel.HeadPosition.Y), 4f * scale + ((rotation != 0f) ? 0f : 0f), SpriteEffects.None, layerDepth + layerFix);
             }
 
             // Draw hair
