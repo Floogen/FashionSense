@@ -56,7 +56,7 @@ namespace FashionSense.Framework.Patches.Menus
                 rightNeighborID = -99998,
                 downNeighborID = -99998
             });
-            ___labels.Add(new ClickableComponent(new Rectangle(__instance.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + 280 - 48 + IClickableMenu.borderWidth + 64 + 8, ___accLabel.bounds.Y, 1, 1), _helper.Translation.Get("ui.fashion_sense.title")));
+            ___labels.Add(new ClickableComponent(new Rectangle(__instance.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + 280 - 48 + IClickableMenu.borderWidth + 64 + 8, ___accLabel.bounds.Y, 1, 1), _helper.Translation.Get("ui.fashion_sense.title.hair")));
             ___rightSelectionButtons.Add(new ClickableTextureComponent("fashion_sense", new Rectangle(__instance.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + 280 - 48 + IClickableMenu.borderWidth + 200, ___leftSelectionButtons.First(b => b.name == "Acc").bounds.Y, 64, 64), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 33), 1f)
             {
                 myID = 517,
@@ -115,7 +115,7 @@ namespace FashionSense.Framework.Patches.Menus
             {
                 if (label.name == HandMirrorMenu.GetColorPickerLabel(true, true) && label.containsPoint(x, y))
                 {
-                    ___hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.hair_color_info");
+                    ___hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_info.hair");
                 }
             }
         }
@@ -141,7 +141,7 @@ namespace FashionSense.Framework.Patches.Menus
                 float offset = 0f;
                 float subYOffset = 0f;
                 Color color = Game1.textColor;
-                if (c.name == _helper.Translation.Get("ui.fashion_sense.title"))
+                if (c.name == _helper.Translation.Get("ui.fashion_sense.title.hair"))
                 {
                     offset = Game1.smallFont.MeasureString(c.name).X / 2f - 20;
                     if (!c.name.Contains("Color"))

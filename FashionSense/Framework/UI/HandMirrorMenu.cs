@@ -82,7 +82,7 @@ namespace FashionSense.Framework.UI
                 rightNeighborID = -99998,
                 downNeighborID = -99998
             });
-            labels.Add(hairLabel = new ClickableComponent(new Rectangle(_portraitBox.Right - 86, _portraitBox.Y + yOffset + 16, 1, 1), FashionSense.modHelper.Translation.Get("ui.fashion_sense.title")));
+            labels.Add(hairLabel = new ClickableComponent(new Rectangle(_portraitBox.Right - 86, _portraitBox.Y + yOffset + 16, 1, 1), FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.hair")));
             rightSelectionButtons.Add(new ClickableTextureComponent("Hair", new Rectangle(_portraitBox.Right, _portraitBox.Y + yOffset, 64, 64), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 33), 1f)
             {
                 myID = 515,
@@ -137,11 +137,11 @@ namespace FashionSense.Framework.UI
 
         internal static string GetColorPickerLabel(bool isDisabled = false, bool isCompact = false)
         {
-            string labelName = FashionSense.modHelper.Translation.Get("ui.fashion_sense.hair_color_active");
+            string labelName = FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_active.hair");
             if (isDisabled)
             {
                 var separator = isCompact ? "\n" : " ";
-                labelName += $"{separator}{FashionSense.modHelper.Translation.Get("ui.fashion_sense.hair_color_disabled")}";
+                labelName += $"{separator}{FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_disabled.generic")}";
             }
 
             return $"{labelName}:";
@@ -264,7 +264,7 @@ namespace FashionSense.Framework.UI
             {
                 if (label == colorLabel && label.name == GetColorPickerLabel(true))
                 {
-                    hoverText = colorLabel.containsPoint(x, y) ? FashionSense.modHelper.Translation.Get("ui.fashion_sense.hair_color_info") : String.Empty;
+                    hoverText = colorLabel.containsPoint(x, y) ? FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_info.hair") : String.Empty;
                 }
             }
 
