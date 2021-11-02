@@ -14,7 +14,49 @@
       "Width": 48,
       "Length": 32
     },
-    "IdleAnimation": [
+    "UniformAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 167
+      },
+      {
+        "Frame": 1,
+        "Duration": 167
+      },
+      {
+        "Frame": 2,
+        "Duration": 167
+      },
+      {
+        "Frame": 3,
+        "Duration": 167
+      },
+      {
+        "Frame": 4,
+        "Duration": 167
+      },
+      {
+        "Frame": 5,
+        "Duration": 167
+      }
+    ]
+  },
+  "BackHair": {
+    "DisableGrayscale": true,
+    "Flipped": true,
+    "StartingPosition": {
+      "X": 0,
+      "Y": 32
+    },
+    "HeadPosition": {
+      "X": 16,
+      "Y": 16
+    },
+    "HairSize": {
+      "Width": 48,
+      "Length": 32
+    },
+    "UniformAnimation": [
       {
         "Frame": 0,
         "Duration": 167

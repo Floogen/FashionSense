@@ -1,0 +1,48 @@
+{
+  "Name": "One Winged Angel",
+  "FrontAccessory": {
+    "DisableGrayscale": true,
+    "DrawBeforeHair": true,
+    "DrawBeforePlayer": false,
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "HeadPosition": {
+      "X": 20,
+      "Y": 16
+    },
+    "AccessorySize": {
+      "Width": 32,
+      "Length": 48
+    },
+    "IdleAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 125
+      }
+    ]
+  },
+  "BackAccessory": {
+    "DisableGrayscale": true,
+    "Flipped": true,
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "HeadPosition": {
+      "X": -6,
+      "Y": 12
+    },
+    "AccessorySize": {
+      "Width": 32,
+      "Length": 48
+    },
+    "IdleAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 125
+      }
+    ]
+  }
+}
