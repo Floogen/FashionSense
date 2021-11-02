@@ -1,0 +1,118 @@
+{
+  "Name": "Priestess",
+  "FrontAccessory": {
+    "DisableGrayscale": true,
+    "DrawBehindHair": true,
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "HeadPosition": {
+      "X": 0,
+      "Y": 8
+    },
+    "AccessorySize": {
+      "Width": 16,
+      "Length": 32
+    },
+    "UniformAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 150
+      },
+      {
+        "Frame": 1,
+        "Duration": 150
+      },
+      {
+        "Frame": 2,
+        "Duration": 150
+      },
+      {
+        "Frame": 3,
+        "Duration": 300
+      },
+      {
+        "Frame": 4,
+        "Duration": 150
+      },
+      {
+        "Frame": 5,
+        "Duration": 150
+      },
+      {
+        "Frame": 6,
+        "Duration": 150
+      },
+      {
+        "Frame": 7,
+        "Duration": 150
+      },
+      {
+        "Frame": 8,
+        "Duration": 150
+      },
+      {
+        "Frame": 9,
+        "Duration": 300
+      }
+    ]
+  },
+  "BackAccessory": {
+    "DisableGrayscale": true,
+    "StartingPosition": {
+      "X": 0,
+      "Y": 32
+    },
+    "HeadPosition": {
+      "X": 0,
+      "Y": 8
+    },
+    "AccessorySize": {
+      "Width": 16,
+      "Length": 32
+    },
+    "UniformAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 150
+      },
+      {
+        "Frame": 1,
+        "Duration": 150
+      },
+      {
+        "Frame": 2,
+        "Duration": 150
+      },
+      {
+        "Frame": 3,
+        "Duration": 300
+      },
+      {
+        "Frame": 4,
+        "Duration": 150
+      },
+      {
+        "Frame": 5,
+        "Duration": 150
+      },
+      {
+        "Frame": 6,
+        "Duration": 150
+      },
+      {
+        "Frame": 7,
+        "Duration": 150
+      },
+      {
+        "Frame": 8,
+        "Duration": 150
+      },
+      {
+        "Frame": 9,
+        "Duration": 300
+      }
+    ]
+  }
+}
