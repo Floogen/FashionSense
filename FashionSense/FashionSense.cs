@@ -195,8 +195,12 @@ namespace FashionSense
                         Monitor.Log($"Unable to add hairstyle from {appearanceModel.Owner}: Missing the Name property", LogLevel.Warn);
                         continue;
                     }
+
+                    // Set the model type
+                    appearanceModel.PackType = AppearanceContentPack.Type.Hair;
+
                     // Set the ModelName and TextureId
-                    appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.Name);
+                    appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.PackType, "/", appearanceModel.Name);
 
                     // Verify that a hairstyle with the name doesn't exist in this pack
                     if (textureManager.GetSpecificAppearanceModel<HairContentPack>(appearanceModel.Id) != null)
@@ -221,9 +225,6 @@ namespace FashionSense
 
                     // Load in the texture
                     appearanceModel.Texture = contentPack.LoadAsset<Texture2D>(contentPack.GetActualAssetKey(Path.Combine(parentFolderName, textureFolder.Name, "hair.png")));
-
-                    // Set the model type
-                    appearanceModel.PackType = AppearanceContentPack.Type.Hair;
 
                     // Track the model
                     textureManager.AddAppearanceModel(appearanceModel);
@@ -276,8 +277,12 @@ namespace FashionSense
                         Monitor.Log($"Unable to add accessories from {appearanceModel.Owner}: Missing the Name property", LogLevel.Warn);
                         continue;
                     }
+
+                    // Set the model type
+                    appearanceModel.PackType = AppearanceContentPack.Type.Accessory;
+
                     // Set the ModelName and TextureId
-                    appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.Name);
+                    appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.PackType, "/", appearanceModel.Name);
 
                     // Verify that a accessory with the name doesn't exist in this pack
                     if (textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(appearanceModel.Id) != null)
@@ -302,9 +307,6 @@ namespace FashionSense
 
                     // Load in the texture
                     appearanceModel.Texture = contentPack.LoadAsset<Texture2D>(contentPack.GetActualAssetKey(Path.Combine(parentFolderName, textureFolder.Name, "accessory.png")));
-
-                    // Set the model type
-                    appearanceModel.PackType = AppearanceContentPack.Type.Accessory;
 
                     // Track the model
                     textureManager.AddAppearanceModel(appearanceModel);
