@@ -75,6 +75,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Examples\[FS] Example Pack\Accessories\FlowingCape\accessory.json" />
+    <None Include="Examples\[FS] Example Pack\Accessories\FlowingScarf\accessory.json" />
     <None Include="Examples\[FS] Example Pack\Accessories\Priestess\accessory.json" />
     <None Include="Examples\[FS] Example Pack\Accessories\ShinySunglasses\accessory.json" />
     <None Include="Examples\[FS] Example Pack\Hairs\LongHair\hair.json" />
@@ -92,6 +94,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Examples\[FS] Example Pack\Accessories\FlowingCape\accessory.png" />
+    <Content Include="Examples\[FS] Example Pack\Accessories\FlowingScarf\accessory.png" />
     <Content Include="Examples\[FS] Example Pack\Accessories\Priestess\accessory.png" />
     <Content Include="Examples\[FS] Example Pack\Accessories\ShinySunglasses\accessory.png" />
     <Content Include="Examples\[FS] Example Pack\Hairs\LongHair\hair.png" />
