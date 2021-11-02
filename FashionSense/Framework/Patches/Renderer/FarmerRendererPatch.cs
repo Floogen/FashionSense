@@ -37,7 +37,7 @@ namespace FashionSense.Framework.Patches.Renderer
             harmony.CreateReversePatcher(AccessTools.Method(_entity, "executeRecolorActions", new[] { typeof(Farmer) }), new HarmonyMethod(GetType(), nameof(ExecuteRecolorActionsReversePatch))).Patch();
         }
 
-        private static void DrawShirt(SpriteBatch b, Rectangle shirtSourceRect, Rectangle dyed_shirt_source_rect, FarmerRenderer renderer, Farmer who, int currentFrame, float rotation, float scale, float layerDepth, Vector2 position, Vector2 origin, Vector2 positionOffset, Color overrideColor)
+        private static void DrawShirtVanilla(SpriteBatch b, Rectangle shirtSourceRect, Rectangle dyed_shirt_source_rect, FarmerRenderer renderer, Farmer who, int currentFrame, float rotation, float scale, float layerDepth, Vector2 position, Vector2 origin, Vector2 positionOffset, Color overrideColor)
         {
             float dye_layer_offset = 1E-07f;
 
@@ -48,7 +48,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
         }
 
-        private static void DrawAccessory(SpriteBatch b, Rectangle accessorySourceRect, FarmerRenderer renderer, Farmer who, int currentFrame, float rotation, float scale, float layerDepth, Vector2 position, Vector2 origin, Vector2 positionOffset, Vector2 rotationAdjustment, Color overrideColor)
+        private static void DrawAccessoryVanilla(SpriteBatch b, Rectangle accessorySourceRect, FarmerRenderer renderer, Farmer who, int currentFrame, float rotation, float scale, float layerDepth, Vector2 position, Vector2 origin, Vector2 positionOffset, Vector2 rotationAdjustment, Color overrideColor)
         {
             if ((int)who.accessory >= 0)
             {
@@ -56,7 +56,47 @@ namespace FashionSense.Framework.Patches.Renderer
             }
         }
 
-        private static void DrawHat(SpriteBatch b, Rectangle hatSourceRect, FarmerRenderer renderer, Farmer who, int currentFrame, int facingDirection, float rotation, float scale, float layerDepth, Vector2 position, Vector2 origin, Vector2 positionOffset)
+        private static void DrawHairVanilla(SpriteBatch b, Texture2D hair_texture, Rectangle hairstyleSourceRect, FarmerRenderer renderer, Farmer who, int currentFrame, int facingDirection, float rotation, float scale, float layerDepth, Vector2 position, Vector2 origin, Vector2 positionOffset, Color overrideColor)
+        {
+            float hair_draw_layer = 2.2E-05f;
+
+            int hair_style = who.getHair();
+            HairStyleMetadata hair_metadata = Farmer.GetHairStyleMetadata(who.hair.Value);
+            if (who != null && who.hat.Value != null && who.hat.Value.hairDrawType.Value == 1 && hair_metadata != null && hair_metadata.coveredIndex != -1)
+            {
+                hair_style = hair_metadata.coveredIndex;
+                hair_metadata = Farmer.GetHairStyleMetadata(hair_style);
+            }
+
+
+            hairstyleSourceRect = new Rectangle(hair_style * 16 % FarmerRenderer.hairStylesTexture.Width, hair_style * 16 / FarmerRenderer.hairStylesTexture.Width * 96, 16, 32);
+            if (hair_metadata != null)
+            {
+                hair_texture = hair_metadata.texture;
+                hairstyleSourceRect = new Rectangle(hair_metadata.tileX * 16, hair_metadata.tileY * 16, 16, 32);
+            }
+
+            switch (facingDirection)
+            {
+                case 0:
+                    hairstyleSourceRect.Offset(0, 64);
+                    b.Draw(hair_texture, position + origin + positionOffset + new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + 4 + ((who.IsMale && hair_style >= 16) ? (-4) : ((!who.IsMale && hair_style < 16) ? 4 : 0))), hairstyleSourceRect, overrideColor.Equals(Color.White) ? ((Color)who.hairstyleColor) : overrideColor, rotation, origin, 4f * scale, SpriteEffects.None, layerDepth + hair_draw_layer);
+                    break;
+                case 1:
+                    hairstyleSourceRect.Offset(0, 32);
+                    b.Draw(hair_texture, position + origin + positionOffset + new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + ((who.IsMale && (int)who.hair >= 16) ? (-4) : ((!who.IsMale && (int)who.hair < 16) ? 4 : 0))), hairstyleSourceRect, overrideColor.Equals(Color.White) ? ((Color)who.hairstyleColor) : overrideColor, rotation, origin, 4f * scale, SpriteEffects.None, layerDepth + hair_draw_layer);
+                    break;
+                case 2:
+                    b.Draw(hair_texture, position + origin + positionOffset + new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + ((who.IsMale && (int)who.hair >= 16) ? (-4) : ((!who.IsMale && (int)who.hair < 16) ? 4 : 0))), hairstyleSourceRect, overrideColor.Equals(Color.White) ? ((Color)who.hairstyleColor) : overrideColor, rotation, origin, 4f * scale, SpriteEffects.None, layerDepth + hair_draw_layer);
+                    break;
+                case 3:
+                    bool flip2 = true;
+                    b.Draw(hair_texture, position + origin + positionOffset + new Vector2(-FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + ((who.IsMale && (int)who.hair >= 16) ? (-4) : ((!who.IsMale && (int)who.hair < 16) ? 4 : 0))), hairstyleSourceRect, overrideColor.Equals(Color.White) ? ((Color)who.hairstyleColor) : overrideColor, rotation, origin, 4f * scale, flip2 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + hair_draw_layer);
+                    break;
+            }
+        }
+
+        private static void DrawHatVanilla(SpriteBatch b, Rectangle hatSourceRect, FarmerRenderer renderer, Farmer who, int currentFrame, int facingDirection, float rotation, float scale, float layerDepth, Vector2 position, Vector2 origin, Vector2 positionOffset)
         {
             if (who.hat.Value != null && !who.bathingClothes)
             {
@@ -285,34 +325,37 @@ namespace FashionSense.Framework.Patches.Renderer
             }
         }
 
-        private static bool DrawHairAndAccesoriesPrefix(FarmerRenderer __instance, bool ___isDrawingForUI, Vector2 ___positionOffset, Vector2 ___rotationAdjustment, ref Rectangle ___shirtSourceRect, ref Rectangle ___accessorySourceRect, ref Rectangle ___hatSourceRect, SpriteBatch b, int facingDirection, Farmer who, Vector2 position, Vector2 origin, float scale, int currentFrame, float rotation, Color overrideColor, float layerDepth)
+        private static bool DrawHairAndAccesoriesPrefix(FarmerRenderer __instance, bool ___isDrawingForUI, Vector2 ___positionOffset, Vector2 ___rotationAdjustment, ref Rectangle ___hairstyleSourceRect, ref Rectangle ___shirtSourceRect, ref Rectangle ___accessorySourceRect, ref Rectangle ___hatSourceRect, SpriteBatch b, int facingDirection, Farmer who, Vector2 position, Vector2 origin, float scale, int currentFrame, float rotation, Color overrideColor, float layerDepth)
         {
             if (!who.modData.ContainsKey(ModDataKeys.CUSTOM_HAIR_ID))
             {
                 return true;
             }
 
-            var appearanceModel = FashionSense.textureManager.GetSpecificAppearanceModel(who.modData[ModDataKeys.CUSTOM_HAIR_ID]);
-            if (appearanceModel is null)
+            // Set up each AppearanceModel
+            AppearanceModel appearanceModel = null;
+            HairModel hairModel = null;
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_HAIR_ID) && FashionSense.textureManager.GetSpecificAppearanceModel(who.modData[ModDataKeys.CUSTOM_HAIR_ID]) is AppearanceModel model && model != null)
             {
-                return true;
+                appearanceModel = model;
+                hairModel = appearanceModel.GetHairFromFacingDirection(facingDirection);
             }
 
-            HairModel hairModel = appearanceModel.GetHairFromFacingDirection(facingDirection);
-            if (hairModel is null)
-            {
-                return true;
-            }
-            Rectangle sourceRect = new Rectangle(hairModel.StartingPosition.X, hairModel.StartingPosition.Y, hairModel.HairSize.Width, hairModel.HairSize.Length);
+            // Set up source rectangles
+            Rectangle customHairSourceRect = new Rectangle();
 
             // Handle any animation
-            if (hairModel.HasMovementAnimation() && (FashionSense.movementData.IsPlayerMoving() || IsWaitingOnRequiredAnimation(who, hairModel)))
+            if (hairModel != null)
             {
-                HandleHairAnimation(who, AnimationModel.Type.Moving, hairModel.MovementAnimation, facingDirection, ref sourceRect);
-            }
-            else if (hairModel.HasIdleAnimation() && !FashionSense.movementData.IsPlayerMoving())
-            {
-                HandleHairAnimation(who, AnimationModel.Type.Idle, hairModel.IdleAnimation, facingDirection, ref sourceRect);
+                customHairSourceRect = new Rectangle(hairModel.StartingPosition.X, hairModel.StartingPosition.Y, hairModel.HairSize.Width, hairModel.HairSize.Length);
+                if (hairModel.HasMovementAnimation() && (FashionSense.movementData.IsPlayerMoving() || IsWaitingOnRequiredAnimation(who, hairModel)))
+                {
+                    HandleHairAnimation(who, AnimationModel.Type.Moving, hairModel.MovementAnimation, facingDirection, ref customHairSourceRect);
+                }
+                else if (hairModel.HasIdleAnimation() && !FashionSense.movementData.IsPlayerMoving())
+                {
+                    HandleHairAnimation(who, AnimationModel.Type.Idle, hairModel.IdleAnimation, facingDirection, ref customHairSourceRect);
+                }
             }
 
             // Execute recolor
@@ -337,26 +380,33 @@ namespace FashionSense.Framework.Patches.Renderer
             OffsetSourceRectangles(who, facingDirection, rotation, ref ___shirtSourceRect, ref dyed_shirt_source_rect, ref ___accessorySourceRect, ref ___hatSourceRect, ref ___rotationAdjustment);
 
             // Draw the shirt and accessory
-            DrawShirt(b, ___shirtSourceRect, dyed_shirt_source_rect, __instance, who, currentFrame, rotation, scale, layerDepth, position, origin, ___positionOffset, overrideColor);
-            DrawAccessory(b, ___accessorySourceRect, __instance, who, currentFrame, rotation, scale, layerDepth, position, origin, ___positionOffset, ___rotationAdjustment, overrideColor);
+            DrawShirtVanilla(b, ___shirtSourceRect, dyed_shirt_source_rect, __instance, who, currentFrame, rotation, scale, layerDepth, position, origin, ___positionOffset, overrideColor);
+            DrawAccessoryVanilla(b, ___accessorySourceRect, __instance, who, currentFrame, rotation, scale, layerDepth, position, origin, ___positionOffset, ___rotationAdjustment, overrideColor);
 
             // Draw hair
-            float hair_draw_layer = 2.2E-05f;
-            var hairColor = overrideColor.Equals(Color.White) ? ((Color)who.hairstyleColor) : overrideColor;
-            if (hairModel.DisableGrayscale)
+            if (appearanceModel is null || hairModel is null)
             {
-                hairColor = Color.White;
+                DrawHairVanilla(b, FarmerRenderer.hairStylesTexture, ___hairstyleSourceRect, __instance, who, currentFrame, facingDirection, rotation, scale, layerDepth, position, origin, ___positionOffset, overrideColor);
+            }
+            else
+            {
+                float hair_draw_layer = 2.2E-05f;
+                var hairColor = overrideColor.Equals(Color.White) ? ((Color)who.hairstyleColor) : overrideColor;
+                if (hairModel.DisableGrayscale)
+                {
+                    hairColor = Color.White;
+                }
+
+                // This fixes a potential issue where the hair isn't offset correctly when facing left while sitting or riding
+                // Note that I was unable to pinpoint why this occurs and this should be treated as a tape and glue fix (i.e. not good)
+                var offsetFix = ((who.IsSitting() || who.isRidingHorse()) && who.FacingDirection == 3 && who.yJumpOffset == 0 ? new Vector2(-8, 0) : Vector2.Zero);
+
+                // Draw the hair
+                b.Draw(appearanceModel.Texture, position + origin + ___positionOffset + new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4) - offsetFix, customHairSourceRect, hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, hairModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + hair_draw_layer);
             }
 
-            // This fixes a potential issue where the hair isn't offset correctly when facing left while sitting or riding
-            // Note that I was unable to pinpoint why this occurs and this should be treated as a tape and glue fix (i.e. not good)
-            var offsetFix = ((who.IsSitting() || who.isRidingHorse()) && who.FacingDirection == 3 && who.yJumpOffset == 0 ? new Vector2(-8, 0) : Vector2.Zero);
-
-            // Draw the hair
-            b.Draw(appearanceModel.Texture, position + origin + ___positionOffset + new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4) - offsetFix, sourceRect, hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, hairModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + hair_draw_layer);
-
             // Perform hat draw logic
-            DrawHat(b, ___hatSourceRect, __instance, who, currentFrame, facingDirection, rotation, scale, layerDepth, position, origin, ___positionOffset);
+            DrawHatVanilla(b, ___hatSourceRect, __instance, who, currentFrame, facingDirection, rotation, scale, layerDepth, position, origin, ___positionOffset);
             return false;
         }
 
@@ -391,7 +441,6 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             // Get hair metadata
-            int hair_style = who.getHair(ignore_hat: true);
             HairStyleMetadata hair_metadata = Farmer.GetHairStyleMetadata(who.hair.Value);
 
             // This is in the vanilla code, which for some reason is always 2 instead of relying on facingDirection's initial value
