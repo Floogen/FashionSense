@@ -135,63 +135,91 @@ namespace FashionSense
             // Load owned content packs
             foreach (IContentPack contentPack in Helper.ContentPacks.GetOwned())
             {
-                Monitor.Log($"Loading hairstyles from pack: {contentPack.Manifest.Name} {contentPack.Manifest.Version} by {contentPack.Manifest.Author}", LogLevel.Debug);
+                Monitor.Log($"Loading data from pack: {contentPack.Manifest.Name} {contentPack.Manifest.Version} by {contentPack.Manifest.Author}", LogLevel.Debug);
 
-                try
+                // Load Hairs
+                Monitor.Log($"Loading hairstyles from pack: {contentPack.Manifest.Name} {contentPack.Manifest.Version} by {contentPack.Manifest.Author}", LogLevel.Trace);
+                AddHairContentPacks(contentPack);
+        private void AddHairContentPacks(IContentPack contentPack)
+        {
+            try
+            {
+                var hairFolders = new DirectoryInfo(Path.Combine(contentPack.DirectoryPath, "Hairs")).GetDirectories("*", SearchOption.AllDirectories);
+                if (hairFolders.Count() == 0)
                 {
-                    var hairFolders = new DirectoryInfo(Path.Combine(contentPack.DirectoryPath, "Hairs")).GetDirectories("*", SearchOption.AllDirectories);
-                    if (hairFolders.Count() == 0)
+                    Monitor.Log($"No sub-folders found under Hairs for the content pack {contentPack.Manifest.Name}", LogLevel.Warn);
+                    return;
+                }
+
+                // Load in the hairs
+                foreach (var textureFolder in hairFolders)
+                {
+                    if (!File.Exists(Path.Combine(textureFolder.FullName, "hair.json")))
                     {
-                        Monitor.Log($"No sub-folders found under Hairs for the content pack {contentPack.Manifest.Name}", LogLevel.Warn);
+                        if (textureFolder.GetDirectories().Count() == 0)
+                        {
+                            Monitor.Log($"Content pack {contentPack.Manifest.Name} is missing a hair.json under {textureFolder.Name}", LogLevel.Warn);
+                        }
+
                         continue;
                     }
 
-                    // Load in the hairs
-                    foreach (var textureFolder in hairFolders)
+                    var parentFolderName = textureFolder.Parent.FullName.Replace(contentPack.DirectoryPath + Path.DirectorySeparatorChar, String.Empty);
+                    var modelPath = Path.Combine(parentFolderName, textureFolder.Name, "hair.json");
+
+                    // Parse the model and assign it the content pack's owner
+                    HairContentPack appearanceModel = contentPack.ReadJsonFile<HairContentPack>(modelPath);
+                    appearanceModel.Author = contentPack.Manifest.Author;
+                    appearanceModel.Owner = contentPack.Manifest.UniqueID;
+
+                    // Verify the required Name property is set
+                    if (String.IsNullOrEmpty(appearanceModel.Name))
                     {
-                        if (!File.Exists(Path.Combine(textureFolder.FullName, "hair.json")))
-                        {
-                            if (textureFolder.GetDirectories().Count() == 0)
-                            {
-                                Monitor.Log($"Content pack {contentPack.Manifest.Name} is missing a hair.json under {textureFolder.Name}", LogLevel.Warn);
-                            }
+                        Monitor.Log($"Unable to add hairstyle from {appearanceModel.Owner}: Missing the Name property", LogLevel.Warn);
+                        continue;
+                    }
+                    // Set the ModelName and TextureId
+                    appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.Name);
 
-                            continue;
-                        }
+                    // Verify that a hairstyle with the name doesn't exist in this pack
+                    if (textureManager.GetSpecificAppearanceModel<HairContentPack>(appearanceModel.Id) != null)
+                    {
+                        Monitor.Log($"Unable to add hairstyle from {contentPack.Manifest.Name}: This pack already contains a hairstyle with the name of {appearanceModel.Name}", LogLevel.Warn);
+                        continue;
+                    }
 
-                        var parentFolderName = textureFolder.Parent.FullName.Replace(contentPack.DirectoryPath + Path.DirectorySeparatorChar, String.Empty);
-                        var modelPath = Path.Combine(parentFolderName, textureFolder.Name, "hair.json");
+                    // Verify that at least one HairModel is given
+                    if (appearanceModel.BackHair is null && appearanceModel.RightHair is null && appearanceModel.FrontHair is null && appearanceModel.LeftHair is null)
+                    {
+                        Monitor.Log($"Unable to add hairstyle for {appearanceModel.Name} from {contentPack.Manifest.Name}: No hair models given (FrontHair, BackHair, etc.)", LogLevel.Warn);
+                        continue;
+                    }
 
-                        // Parse the model and assign it the content pack's owner
-                        HairContentPack appearanceModel = contentPack.ReadJsonFile<HairContentPack>(modelPath);
-                        appearanceModel.Author = contentPack.Manifest.Author;
-                        appearanceModel.Owner = contentPack.Manifest.UniqueID;
+                    // Verify we are given a texture and if so, track it
+                    if (!File.Exists(Path.Combine(textureFolder.FullName, "hair.png")))
+                    {
+                        Monitor.Log($"Unable to add hairstyle for {appearanceModel.Name} from {contentPack.Manifest.Name}: No associated hair.png given", LogLevel.Warn);
+                        continue;
+                    }
 
-                        // Verify the required Name property is set
-                        if (String.IsNullOrEmpty(appearanceModel.Name))
-                        {
-                            Monitor.Log($"Unable to add hairstyle from {appearanceModel.Owner}: Missing the Name property", LogLevel.Warn);
-                            continue;
-                        }
-                        // Set the ModelName and TextureId
-                        appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.Name);
+                    // Load in the texture
+                    appearanceModel.Texture = contentPack.LoadAsset<Texture2D>(contentPack.GetActualAssetKey(Path.Combine(parentFolderName, textureFolder.Name, "hair.png")));
 
-                        // Verify that a hairstyle with the name doesn't exist in this pack
-                        if (textureManager.GetSpecificAppearanceModel<HairContentPack>(appearanceModel.Id) != null)
-                        {
-                            Monitor.Log($"Unable to add hairstyle from {contentPack.Manifest.Name}: This pack already contains a hairstyle with the name of {appearanceModel.Name}", LogLevel.Warn);
-                            continue;
-                        }
+                    // Set the model type
+                    appearanceModel.PackType = AppearanceContentPack.Type.Hair;
 
-                        // Verify that at least one HairModel is given
-                        if (appearanceModel.BackHair is null && appearanceModel.RightHair is null && appearanceModel.FrontHair is null && appearanceModel.LeftHair is null)
-                        {
-                            Monitor.Log($"Unable to add hairstyle for {appearanceModel.Name} from {contentPack.Manifest.Name}: No hair models given (FrontHair, BackHair, etc.)", LogLevel.Warn);
-                            continue;
-                        }
+                    // Track the model
+                    textureManager.AddAppearanceModel(appearanceModel);
 
-                        // Verify we are given a texture and if so, track it
-                        if (!File.Exists(Path.Combine(textureFolder.FullName, "hair.png")))
+                    // Log it
+                    Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
+                }
+            }
+            catch (Exception ex)
+            {
+                Monitor.Log($"Error loading hairstyles from content pack {contentPack.Manifest.Name}: {ex}", LogLevel.Error);
+            }
+        }
                         {
                             Monitor.Log($"Unable to add hairstyle for {appearanceModel.Name} from {contentPack.Manifest.Name}: No associated hair.png given", LogLevel.Warn);
                             continue;

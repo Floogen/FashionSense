@@ -26,11 +26,11 @@ namespace FashionSense.Framework.Managers
             _appearanceTextures.Clear();
         }
 
-        public void AddAppearanceModel(HairContentPack model)
+        public void AddAppearanceModel(AppearanceContentPack model)
         {
             if (_appearanceTextures.Any(t => t.Id == model.Id))
             {
-                var replacementIndex = _appearanceTextures.IndexOf(_appearanceTextures.First(t => t.Id == model.Id));
+                var replacementIndex = _appearanceTextures.IndexOf(_appearanceTextures.First(t => t.Id == model.Id && t.PackType == model.PackType));
                 _appearanceTextures[replacementIndex] = model;
             }
             else
