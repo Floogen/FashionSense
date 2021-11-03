@@ -78,7 +78,7 @@ namespace FashionSense.Framework.Patches.Menus
             {
                 case "fashion_sense":
                     {
-                        List<HairContentPack> hairModels = FashionSense.textureManager.GetAllAppearanceModels<HairContentPack>();
+                        var hairModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is HairContentPack).ToList();
                         var currentCustomHair = FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID]);
 
                         int current_index = -1;

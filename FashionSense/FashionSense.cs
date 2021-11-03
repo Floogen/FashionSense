@@ -115,7 +115,6 @@ namespace FashionSense
                     Game1.player.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION] = (elapsedDuration + Game1.currentGameTime.ElapsedGameTime.Milliseconds).ToString();
                 }
             }
-
         }
 
         private void OnGameLaunched(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)

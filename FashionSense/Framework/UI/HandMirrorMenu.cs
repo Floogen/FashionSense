@@ -1,4 +1,5 @@
 ﻿using FashionSense.Framework.Models;
+using FashionSense.Framework.Models.Accessory;
 using FashionSense.Framework.Models.Hair;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
@@ -20,12 +21,13 @@ namespace FashionSense.Framework.UI
         private Farmer _displayFarmer;
         private string hoverText = "";
 
-        private ClickableComponent hairLabel;
+        private ClickableComponent descriptionLabel;
         private ClickableComponent colorLabel;
         private ClickableComponent authorLabel;
         public List<ClickableComponent> labels = new List<ClickableComponent>();
         public List<ClickableComponent> leftSelectionButtons = new List<ClickableComponent>();
         public List<ClickableComponent> rightSelectionButtons = new List<ClickableComponent>();
+        public List<ClickableComponent> filterButtons = new List<ClickableComponent>();
         public List<ClickableComponent> colorPickerCCs = new List<ClickableComponent>();
 
         public ColorPicker hairColorPicker;
@@ -74,7 +76,7 @@ namespace FashionSense.Framework.UI
             });
 
             yOffset += 64;
-            leftSelectionButtons.Add(new ClickableTextureComponent("Hair", new Rectangle(_portraitBox.X - 64, _portraitBox.Y + yOffset, 64, 64), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 44), 1f)
+            leftSelectionButtons.Add(new ClickableTextureComponent("Appearance", new Rectangle(_portraitBox.X - 64, _portraitBox.Y + yOffset, 64, 64), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 44), 1f)
             {
                 myID = 514,
                 upNeighborID = -99998,
@@ -82,10 +84,28 @@ namespace FashionSense.Framework.UI
                 rightNeighborID = -99998,
                 downNeighborID = -99998
             });
-            labels.Add(hairLabel = new ClickableComponent(new Rectangle(_portraitBox.Right - 86, _portraitBox.Y + yOffset + 16, 1, 1), FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.hair")));
-            rightSelectionButtons.Add(new ClickableTextureComponent("Hair", new Rectangle(_portraitBox.Right, _portraitBox.Y + yOffset, 64, 64), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 33), 1f)
+            labels.Add(descriptionLabel = new ClickableComponent(new Rectangle(_portraitBox.Right - 86, _portraitBox.Y + yOffset + 16, 1, 1), FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.hair")));
+            rightSelectionButtons.Add(new ClickableTextureComponent("Appearance", new Rectangle(_portraitBox.Right, _portraitBox.Y + yOffset, 64, 64), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 33), 1f)
             {
                 myID = 515,
+                upNeighborID = -99998,
+                leftNeighborID = -99998,
+                rightNeighborID = -99998,
+                downNeighborID = -99998
+            });
+
+            filterButtons.Add(new ClickableTextureComponent("HairFilter", new Rectangle(base.xPositionOnScreen + 50, base.yPositionOnScreen + 70, 64, 64), null, "enabled", FashionSense.assetManager.scissorsButtonTexture, new Rectangle(0, 0, 15, 15), 3f)
+            {
+                myID = 601,
+                upNeighborID = -99998,
+                leftNeighborID = -99998,
+                rightNeighborID = -99998,
+                downNeighborID = -99998
+            });
+
+            filterButtons.Add(new ClickableTextureComponent("AccessoryFilter", new Rectangle(base.xPositionOnScreen + 50, base.yPositionOnScreen + 125, 64, 64), null, "disabled", FashionSense.assetManager.accessoryButtonTexture, new Rectangle(0, 0, 15, 15), 3f)
+            {
+                myID = 601,
                 upNeighborID = -99998,
                 leftNeighborID = -99998,
                 rightNeighborID = -99998,
@@ -147,34 +167,63 @@ namespace FashionSense.Framework.UI
             return $"{labelName}:";
         }
 
+        private string GetNameOfEnabledFilter()
+        {
+            var enabledButton = filterButtons.FirstOrDefault(f => (f as ClickableTextureComponent).hoverText == "enabled");
+            if (enabledButton is null)
+            {
+                return null;
+            }
+
+            return enabledButton.name;
+        }
+
+        private void UpdateAppearance(int change)
+        {
+            string modDataKey = null;
+            AppearanceContentPack currentAppearance = null;
+            List<AppearanceContentPack> appearanceModels = new List<AppearanceContentPack>();
+            switch (GetNameOfEnabledFilter())
+            {
+                case "HairFilter":
+                    modDataKey = ModDataKeys.CUSTOM_HAIR_ID;
+                    currentAppearance = FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID]);
+                    appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is HairContentPack).ToList();
+                    break;
+                case "AccessoryFilter":
+                    modDataKey = ModDataKeys.CUSTOM_ACCESSORY_ID;
+                    currentAppearance = FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_ID]);
+                    appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is AccessoryContentPack).ToList();
+                    break;
+            }
+
+            int current_index = -1;
+            if (currentAppearance != null)
+            {
+                current_index = appearanceModels.IndexOf(currentAppearance);
+            }
+            current_index += change;
+            if (current_index >= appearanceModels.Count)
+            {
+                current_index = -1;
+            }
+            else if (current_index < -1)
+            {
+                current_index = appearanceModels.Count() - 1;
+            }
+
+            Game1.player.modData[modDataKey] = current_index == -1 ? "None" : appearanceModels[current_index].Id;
+            FashionSense.ResetAnimationModDataFields(Game1.player, 0, AnimationModel.Type.Idle, Game1.player.facingDirection);
+            Game1.playSound("grassyStep");
+        }
+
         private void selectionClick(string name, int change)
         {
             switch (name)
             {
-                case "Hair":
+                case "Appearance":
                     {
-                        List<AppearanceContentPack> hairModels = FashionSense.textureManager.GetAllAppearanceModels().Where(t => t is HairContentPack).ToList();
-                        FashionSense.monitor.Log(FashionSense.textureManager.GetAllAppearanceModels().Count.ToString());
-                        var currentCustomHair = FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID]);
-
-                        int current_index = -1;
-                        if (currentCustomHair != null)
-                        {
-                            current_index = hairModels.IndexOf(currentCustomHair);
-                        }
-                        current_index += change;
-                        if (current_index >= hairModels.Count)
-                        {
-                            current_index = -1;
-                        }
-                        else if (current_index < -1)
-                        {
-                            current_index = hairModels.Count() - 1;
-                        }
-
-                        Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID] = current_index == -1 ? "None" : hairModels[current_index].Id;
-                        FashionSense.ResetAnimationModDataFields(Game1.player, 0, AnimationModel.Type.Idle, Game1.player.facingDirection);
-                        Game1.playSound("grassyStep");
+                        UpdateAppearance(change);
                         break;
                     }
                 case "Direction":
@@ -220,6 +269,35 @@ namespace FashionSense.Framework.UI
                 }
             }
 
+            foreach (ClickableTextureComponent c in filterButtons)
+            {
+                if (c.containsPoint(x, y))
+                {
+                    var enabledButton = filterButtons.FirstOrDefault(b => (b as ClickableTextureComponent).hoverText == "enabled");
+                    if (enabledButton != null)
+                    {
+                        (enabledButton as ClickableTextureComponent).hoverText = "disabled";
+                    }
+
+                    c.hoverText = "enabled";
+                    switch (c.name)
+                    {
+                        case "HairFilter":
+                            descriptionLabel.name = FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.hair");
+                            break;
+                        case "AccessoryFilter":
+                            descriptionLabel.name = FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.accessory");
+                            break;
+                    }
+
+                    if (c.scale != 0f)
+                    {
+                        c.scale -= 0.25f;
+                        c.scale = Math.Max(0.75f, c.scale);
+                    }
+                }
+            }
+
             if (hairColorPicker != null && hairColorPicker.containsPoint(x, y))
             {
                 Color color2 = hairColorPicker.click(x, y);
@@ -238,6 +316,7 @@ namespace FashionSense.Framework.UI
 
         public override void performHoverAction(int x, int y)
         {
+            this.hoverText = "";
             foreach (ClickableTextureComponent c6 in leftSelectionButtons)
             {
                 if (c6.containsPoint(x, y))
@@ -260,11 +339,37 @@ namespace FashionSense.Framework.UI
                     c5.scale = Math.Max(c5.scale - 0.02f, c5.baseScale);
                 }
             }
+            foreach (ClickableTextureComponent c5 in filterButtons)
+            {
+                if (c5.containsPoint(x, y))
+                {
+                    if (c5.hoverText == "disabled")
+                    {
+                        c5.scale = Math.Min(c5.scale + 0.02f, c5.baseScale + 0.1f);
+                    }
+
+                    switch (c5.name)
+                    {
+                        case "HairFilter":
+                            hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.hair");
+                            break;
+                        case "AccessoryFilter":
+                            hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.accessory");
+                            break;
+                        default:
+                            continue;
+                    }
+                }
+                else
+                {
+                    c5.scale = Math.Max(c5.scale - 0.02f, c5.baseScale);
+                }
+            }
             foreach (ClickableComponent label in labels)
             {
-                if (label == colorLabel && label.name == GetColorPickerLabel(true))
+                if (label == colorLabel && label.name == GetColorPickerLabel(true) && colorLabel.containsPoint(x, y))
                 {
-                    hoverText = colorLabel.containsPoint(x, y) ? FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_info.hair") : String.Empty;
+                    hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_info.hair");
                 }
             }
 
@@ -286,11 +391,20 @@ namespace FashionSense.Framework.UI
             }
 
             // Get the custom hair object, if it exists
-            var currentCustomHair = FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID]);
+            AppearanceContentPack contentPack = null;
+            switch (GetNameOfEnabledFilter())
+            {
+                case "HairFilter":
+                    contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID]);
+                    break;
+                case "AccessoryFilter":
+                    contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_ID]);
+                    break;
+            }
 
             // General UI (title, background)
             b.Draw(Game1.fadeToBlackRect, Game1.graphics.GraphicsDevice.Viewport.Bounds, Color.Black * 0.75f);
-            SpriteText.drawStringWithScrollCenteredAt(b, "Hand Mirror", base.xPositionOnScreen + base.width / 2, base.yPositionOnScreen - 64);
+            SpriteText.drawStringWithScrollCenteredAt(b, FashionSense.modHelper.Translation.Get("tools.name.hand_mirror"), base.xPositionOnScreen + base.width / 2, base.yPositionOnScreen - 64);
             IClickableMenu.drawTextureBox(b, Game1.mouseCursors, new Rectangle(384, 373, 18, 18), base.xPositionOnScreen, base.yPositionOnScreen, base.width, base.height, Color.White, 4f);
 
             // Farmer portrait
@@ -306,6 +420,10 @@ namespace FashionSense.Framework.UI
             {
                 rightSelectionButton.draw(b);
             }
+            foreach (ClickableTextureComponent filterButton in filterButtons)
+            {
+                filterButton.draw(b, filterButton.hoverText == "enabled" ? Color.White : Color.Gray, 1f);
+            }
             okButton.draw(b);
 
             // Draw labels
@@ -319,24 +437,24 @@ namespace FashionSense.Framework.UI
                 float offset = 0f;
                 float subYOffset = 0f;
                 Color color = Game1.textColor;
-                if (c == hairLabel)
+                if (c == descriptionLabel)
                 {
                     offset = 21f - Game1.smallFont.MeasureString(c.name).X / 2f;
                     if (!c.name.Contains("Color"))
                     {
                         sub = "None";
-                        if (currentCustomHair != null)
+                        if (contentPack != null)
                         {
-                            sub = currentCustomHair.Name;
+                            sub = contentPack.Name;
                         }
                     }
                 }
                 else if (c == authorLabel)
                 {
                     authorLabel.name = "";
-                    if (currentCustomHair != null)
+                    if (contentPack != null)
                     {
-                        authorLabel.name = currentCustomHair.Author;
+                        authorLabel.name = contentPack.Author;
                     }
 
                     authorLabel.bounds.X = (int)(_portraitBox.X - Game1.smallFont.MeasureString(authorLabel.name).X / 2) + 64;
@@ -344,9 +462,16 @@ namespace FashionSense.Framework.UI
                 else if (c == colorLabel)
                 {
                     var name = GetColorPickerLabel(false);
-                    if (currentCustomHair != null && currentCustomHair.GetHairFromFacingDirection(Game1.player.facingDirection) is HairModel model && model != null && model.DisableGrayscale)
+                    if (contentPack != null)
                     {
-                        name = GetColorPickerLabel(true);
+                        if (contentPack is HairContentPack hairPack && hairPack.GetHairFromFacingDirection(Game1.player.facingDirection) is HairModel hModel && hModel != null && hModel.DisableGrayscale)
+                        {
+                            name = GetColorPickerLabel(true);
+                        }
+                        else if (contentPack is AccessoryContentPack accessoryPack && accessoryPack.GetAccessoryFromFacingDirection(Game1.player.facingDirection) is AccessoryModel aModel && aModel != null && aModel.DisableGrayscale)
+                        {
+                            name = GetColorPickerLabel(true);
+                        }
                     }
 
                     colorLabel.name = name;
@@ -371,6 +496,8 @@ namespace FashionSense.Framework.UI
             // Draw hover text
             if (!hoverText.Equals(""))
             {
+                b.End();
+                b.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
                 IClickableMenu.drawHoverText(b, hoverText, Game1.smallFont);
             }
 
