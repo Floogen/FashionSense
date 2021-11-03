@@ -16,6 +16,7 @@ using System.IO;
 using System.Linq;
 using FashionSense.Framework.Models.Hair;
 using FashionSense.Framework.Models.Accessory;
+using FashionSense.Framework.External.ContentPatcher;
 
 namespace FashionSense
 {
@@ -26,13 +27,14 @@ namespace FashionSense
         internal static IModHelper modHelper;
 
         // Managers
+        internal static ApiManager apiManager;
         internal static AssetManager assetManager;
         internal static TextureManager textureManager;
 
         // Utilities
         internal static MovementData movementData;
 
-        // Consts
+        // Constants
         internal const int MAX_TRACKED_MILLISECONDS = 3600000;
 
         // Debugging flags
@@ -45,6 +47,7 @@ namespace FashionSense
             modHelper = helper;
 
             // Load managers
+            apiManager = new ApiManager(monitor);
             assetManager = new AssetManager(modHelper);
             textureManager = new TextureManager(monitor, modHelper);
 
@@ -119,6 +122,11 @@ namespace FashionSense
 
         private void OnGameLaunched(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
         {
+            // Hook into the APIs we utilize
+            if (Helper.ModRegistry.IsLoaded("Pathoschild.ContentPatcher") && apiManager.HookIntoContentPatcher(Helper))
+            {
+            }
+
             // Load any owned content packs
             this.LoadContentPacks();
         }

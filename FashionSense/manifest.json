@@ -6,5 +6,11 @@
   "UniqueID": "PeacefulEnd.FashionSense",
   "EntryDll": "FashionSense.dll",
   "MinimumApiVersion": "3.12.0",
-  "UpdateKeys": [ "Nexus:9969" ]
+  "UpdateKeys": [ "Nexus:9969" ],
+  "Dependencies": [
+    {
+      "UniqueID": "Pathoschild.ContentPatcher",
+      "IsRequired": false
+    }
+  ]
 }

@@ -51,6 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Framework\Interfaces\IContentPatcherApi.cs" />
+    <Compile Include="Framework\Managers\ApiManager.cs" />
     <Compile Include="Framework\Managers\AssetManager.cs" />
     <Compile Include="Framework\Managers\TextureManager.cs" />
     <Compile Include="Framework\Models\AppearanceModel.cs" />
