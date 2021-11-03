@@ -125,6 +125,7 @@ namespace FashionSense
             // Hook into the APIs we utilize
             if (Helper.ModRegistry.IsLoaded("Pathoschild.ContentPatcher") && apiManager.HookIntoContentPatcher(Helper))
             {
+                apiManager.GetContentPatcherApi().RegisterToken(ModManifest, "Appearance", new AppearanceToken());
             }
 
             // Load any owned content packs

@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Framework\External\ContentPatcher\AppearanceToken.cs" />
     <Compile Include="Framework\Interfaces\IContentPatcherApi.cs" />
     <Compile Include="Framework\Managers\ApiManager.cs" />
     <Compile Include="Framework\Managers\AssetManager.cs" />
