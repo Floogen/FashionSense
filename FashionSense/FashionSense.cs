@@ -131,7 +131,7 @@ namespace FashionSense
             }
             if (!Game1.player.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_ID))
             {
-                Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID] = null;
+                Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_ID] = null;
             }
         }
 
