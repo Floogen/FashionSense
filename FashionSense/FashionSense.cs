@@ -160,7 +160,14 @@ namespace FashionSense
         {
             try
             {
-                var hairFolders = new DirectoryInfo(Path.Combine(contentPack.DirectoryPath, "Hairs")).GetDirectories("*", SearchOption.AllDirectories);
+                var directoryPath = new DirectoryInfo(Path.Combine(contentPack.DirectoryPath, "Hairs"));
+                if (!directoryPath.Exists)
+                {
+                    Monitor.Log($"No Hairs folder found for the content pack {contentPack.Manifest.Name}", LogLevel.Trace);
+                    return;
+                }
+
+                var hairFolders = directoryPath.GetDirectories("*", SearchOption.AllDirectories);
                 if (hairFolders.Count() == 0)
                 {
                     Monitor.Log($"No sub-folders found under Hairs for the content pack {contentPack.Manifest.Name}", LogLevel.Warn);
@@ -242,7 +249,14 @@ namespace FashionSense
         {
             try
             {
-                var accessoryFolders = new DirectoryInfo(Path.Combine(contentPack.DirectoryPath, "Accessories")).GetDirectories("*", SearchOption.AllDirectories);
+                var directoryPath = new DirectoryInfo(Path.Combine(contentPack.DirectoryPath, "Accessories"));
+                if (!directoryPath.Exists)
+                {
+                    Monitor.Log($"No Accessories folder found for the content pack {contentPack.Manifest.Name}", LogLevel.Trace);
+                    return;
+                }
+
+                var accessoryFolders = directoryPath.GetDirectories("*", SearchOption.AllDirectories);
                 if (accessoryFolders.Count() == 0)
                 {
                     Monitor.Log($"No sub-folders found under Accessories for the content pack {contentPack.Manifest.Name}", LogLevel.Warn);
