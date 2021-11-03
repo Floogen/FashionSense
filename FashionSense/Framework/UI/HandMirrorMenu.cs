@@ -409,7 +409,9 @@ namespace FashionSense.Framework.UI
 
             // Farmer portrait
             b.Draw(Game1.daybg, new Vector2(_portraitBox.X, _portraitBox.Y), Color.White);
+            FarmerRenderer.isDrawingForUI = true;
             _displayFarmer.FarmerRenderer.draw(b, _displayFarmer.FarmerSprite.CurrentAnimationFrame, _displayFarmer.FarmerSprite.CurrentFrame, _displayFarmer.FarmerSprite.SourceRect, new Vector2(_portraitBox.Center.X - 32, _portraitBox.Bottom - 160), Vector2.Zero, 0.8f, Color.White, 0f, 1f, _displayFarmer);
+            FarmerRenderer.isDrawingForUI = false;
 
             // Draw buttons
             foreach (ClickableTextureComponent leftSelectionButton in leftSelectionButtons)
