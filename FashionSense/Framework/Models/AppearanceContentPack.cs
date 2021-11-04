@@ -13,7 +13,8 @@ namespace FashionSense.Framework.Models
         {
             Unknown,
             Hair,
-            Accessory
+            Accessory,
+            Shirt
         }
 
         internal Type PackType { get; set; }
