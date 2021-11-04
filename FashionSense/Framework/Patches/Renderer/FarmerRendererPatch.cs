@@ -63,14 +63,63 @@ namespace FashionSense.Framework.Patches.Renderer
             return false;
         }
 
-        private static void DrawShirtVanilla(SpriteBatch b, Rectangle shirtSourceRect, Rectangle dyed_shirt_source_rect, FarmerRenderer renderer, Farmer who, int currentFrame, float rotation, float scale, float layerDepth, Vector2 position, Vector2 origin, Vector2 positionOffset, Color overrideColor)
+        private static void DrawShirtVanilla(SpriteBatch b, Rectangle shirtSourceRect, Rectangle dyed_shirt_source_rect, FarmerRenderer renderer, Farmer who, int currentFrame, int facingDirection, float rotation, float scale, float layerDepth, Vector2 position, Vector2 origin, Vector2 positionOffset, Vector2 rotationAdjustment, Color overrideColor)
         {
             float dye_layer_offset = 1E-07f;
+            var offset = GetFeatureOffset(facingDirection, currentFrame, renderer, AppearanceContentPack.Type.Shirt);
 
-            if (!who.bathingClothes)
+            switch (facingDirection)
             {
-                b.Draw(FarmerRenderer.shirtsTexture, position + origin + positionOffset + new Vector2(16 + FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, (float)(56 + FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4) + (float)(int)renderer.heightOffset * scale - (float)(who.IsMale ? 0 : 0)), shirtSourceRect, overrideColor.Equals(Color.White) ? Color.White : overrideColor, rotation, origin, 4f * scale, SpriteEffects.None, layerDepth + 1.5E-07f);
-                b.Draw(FarmerRenderer.shirtsTexture, position + origin + positionOffset + new Vector2(16 + FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, (float)(56 + FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4) + (float)(int)renderer.heightOffset * scale - (float)(who.IsMale ? 0 : 0)), dyed_shirt_source_rect, overrideColor.Equals(Color.White) ? Utility.MakeCompletelyOpaque(who.GetShirtColor()) : overrideColor, rotation, origin, 4f * scale, SpriteEffects.None, layerDepth + 1.5E-07f + dye_layer_offset);
+                case 0:
+                    if (!who.bathingClothes)
+                    {
+                        b.Draw(FarmerRenderer.shirtsTexture, position + origin + positionOffset + new Vector2(16f * scale + (float)(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4), (float)(56 + FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4) + (float)(int)renderer.heightOffset * scale), shirtSourceRect, overrideColor.Equals(Color.White) ? Color.White : overrideColor, rotation, origin, 4f * scale, SpriteEffects.None, layerDepth + 1.8E-07f);
+                        b.Draw(FarmerRenderer.shirtsTexture, position + origin + positionOffset + new Vector2(16f * scale + (float)(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4), (float)(56 + FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4) + (float)(int)renderer.heightOffset * scale), dyed_shirt_source_rect, overrideColor.Equals(Color.White) ? Utility.MakeCompletelyOpaque(who.GetShirtColor()) : overrideColor, rotation, origin, 4f * scale, SpriteEffects.None, layerDepth + 1.8E-07f + dye_layer_offset);
+                    }
+                    break;
+                case 1:
+                    if (rotation == -(float)Math.PI / 32f)
+                    {
+                        rotationAdjustment.X = 6f;
+                        rotationAdjustment.Y = -2f;
+                    }
+                    else if (rotation == (float)Math.PI / 32f)
+                    {
+                        rotationAdjustment.X = -6f;
+                        rotationAdjustment.Y = 1f;
+                    }
+                    if (!who.bathingClothes)
+                    {
+                        b.Draw(FarmerRenderer.shirtsTexture, position + origin + positionOffset + rotationAdjustment + new Vector2(16f * scale + (float)(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4), 56f * scale + (float)(FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4) + (float)(int)renderer.heightOffset * scale), shirtSourceRect, overrideColor.Equals(Color.White) ? Color.White : overrideColor, rotation, origin, 4f * scale + ((rotation != 0f) ? 0f : 0f), SpriteEffects.None, layerDepth + 1.8E-07f);
+                        b.Draw(FarmerRenderer.shirtsTexture, position + origin + positionOffset + rotationAdjustment + new Vector2(16f * scale + (float)(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4), 56f * scale + (float)(FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4) + (float)(int)renderer.heightOffset * scale), dyed_shirt_source_rect, overrideColor.Equals(Color.White) ? Utility.MakeCompletelyOpaque(who.GetShirtColor()) : overrideColor, rotation, origin, 4f * scale + ((rotation != 0f) ? 0f : 0f), SpriteEffects.None, layerDepth + 1.8E-07f + dye_layer_offset);
+                    }
+                    break;
+                case 2:
+                    if (!who.bathingClothes)
+                    {
+                        b.Draw(FarmerRenderer.shirtsTexture, position + origin + positionOffset + new Vector2(16 + FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, (float)(56 + FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4) + (float)(int)renderer.heightOffset * scale - (float)(who.IsMale ? 0 : 0)), shirtSourceRect, overrideColor.Equals(Color.White) ? Color.White : overrideColor, rotation, origin, 4f * scale, SpriteEffects.None, layerDepth + 1.5E-07f);
+                        b.Draw(FarmerRenderer.shirtsTexture, position + origin + positionOffset + new Vector2(16 + FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, (float)(56 + FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4) + (float)(int)renderer.heightOffset * scale - (float)(who.IsMale ? 0 : 0)), dyed_shirt_source_rect, overrideColor.Equals(Color.White) ? Utility.MakeCompletelyOpaque(who.GetShirtColor()) : overrideColor, rotation, origin, 4f * scale, SpriteEffects.None, layerDepth + 1.5E-07f + dye_layer_offset);
+                    }
+                    break;
+                case 3:
+                    {
+                        if (rotation == -(float)Math.PI / 32f)
+                        {
+                            rotationAdjustment.X = 6f;
+                            rotationAdjustment.Y = -2f;
+                        }
+                        else if (rotation == (float)Math.PI / 32f)
+                        {
+                            rotationAdjustment.X = -5f;
+                            rotationAdjustment.Y = 1f;
+                        }
+                        if (!who.bathingClothes)
+                        {
+                            b.Draw(FarmerRenderer.shirtsTexture, position + origin + positionOffset + rotationAdjustment + new Vector2(16 - FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, 56 + FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + (int)renderer.heightOffset), shirtSourceRect, overrideColor.Equals(Color.White) ? Color.White : overrideColor, rotation, origin, 4f * scale + ((rotation != 0f) ? 0f : 0f), SpriteEffects.None, layerDepth + 1.5E-07f);
+                            b.Draw(FarmerRenderer.shirtsTexture, position + origin + positionOffset + rotationAdjustment + new Vector2(16 - FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, 56 + FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + (int)renderer.heightOffset), dyed_shirt_source_rect, overrideColor.Equals(Color.White) ? Utility.MakeCompletelyOpaque(who.GetShirtColor()) : overrideColor, rotation, origin, 4f * scale + ((rotation != 0f) ? 0f : 0f), SpriteEffects.None, layerDepth + 1.5E-07f + dye_layer_offset);
+                        }
+                        break;
+                    }
             }
         }
 
@@ -474,6 +523,44 @@ namespace FashionSense.Framework.Patches.Renderer
             }
         }
 
+        private static Vector2 GetFeatureOffset(int facingDirection, int currentFrame, FarmerRenderer renderer, AppearanceContentPack.Type type)
+        {
+            Vector2 offset = Vector2.Zero;
+            switch (facingDirection)
+            {
+                case 0:
+                    offset = new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4);
+                    break;
+                case 1:
+                    offset = new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, 4 + FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4);
+                    break;
+                case 2:
+                    offset = new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4);
+                    break;
+                case 3:
+                    offset = new Vector2(-FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4);
+                    break;
+            }
+
+            if (type is AppearanceContentPack.Type.Accessory)
+            {
+                switch (facingDirection)
+                {
+                    case 0:
+                    case 1:
+                        break;
+                    case 2:
+                    case 3:
+                        offset.Y += 4;
+                        break;
+                }
+
+                offset.Y += renderer.heightOffset;
+            }
+
+            return offset;
+        }
+
         private static bool DrawHairAndAccesoriesPrefix(FarmerRenderer __instance, bool ___isDrawingForUI, Vector2 ___positionOffset, Vector2 ___rotationAdjustment, ref Rectangle ___hairstyleSourceRect, ref Rectangle ___shirtSourceRect, ref Rectangle ___accessorySourceRect, ref Rectangle ___hatSourceRect, SpriteBatch b, int facingDirection, Farmer who, Vector2 position, Vector2 origin, float scale, int currentFrame, float rotation, Color overrideColor, float layerDepth)
         {
             if (!who.modData.ContainsKey(ModDataKeys.CUSTOM_HAIR_ID) && !who.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_ID))
@@ -523,7 +610,7 @@ namespace FashionSense.Framework.Patches.Renderer
             // Execute recolor
             ExecuteRecolorActionsReversePatch(__instance, who);
 
-            // Set the source rectangles for shirts, accessories and hats
+            // Set the source rectangles for vanilla shirts, accessories and hats
             ___shirtSourceRect = new Rectangle(__instance.ClampShirt(who.GetShirtIndex()) * 8 % 128, __instance.ClampShirt(who.GetShirtIndex()) * 8 / 128 * 32, 8, 8);
             if ((int)who.accessory >= 0)
             {
@@ -542,7 +629,7 @@ namespace FashionSense.Framework.Patches.Renderer
             OffsetSourceRectangles(who, facingDirection, rotation, ref ___shirtSourceRect, ref dyed_shirt_source_rect, ref ___accessorySourceRect, ref ___hatSourceRect, ref ___rotationAdjustment);
 
             // Draw the shirt
-            DrawShirtVanilla(b, ___shirtSourceRect, dyed_shirt_source_rect, __instance, who, currentFrame, rotation, scale, layerDepth, position, origin, ___positionOffset, overrideColor);
+            DrawShirtVanilla(b, ___shirtSourceRect, dyed_shirt_source_rect, __instance, who, currentFrame, facingDirection, rotation, scale, layerDepth, position, origin, ___positionOffset, ___rotationAdjustment, overrideColor);
 
             // Draw accessory
             if (accessoryModel is null)
@@ -561,7 +648,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 var layerFix = facingDirection == 0 ? (accessoryModel.DrawBeforeHair ? 3.9E-05f : 2E-05f) : (accessoryModel.DrawBeforeHair ? -0.1E-05f : 2.9E-05f);
                 layerFix += accessoryModel.DrawBeforePlayer ? 0.2E-05f : 0;
 
-                b.Draw(accessoryPack.Texture, position + origin + ___positionOffset + ___rotationAdjustment + new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, 4 + FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + (int)__instance.heightOffset), customAccessorySourceRect, accessoryColor, rotation, origin + new Vector2(accessoryModel.HeadPosition.X, accessoryModel.HeadPosition.Y), 4f * scale + ((rotation != 0f) ? 0f : 0f), accessoryModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + layerFix);
+                b.Draw(accessoryPack.Texture, position + origin + ___positionOffset + ___rotationAdjustment + GetFeatureOffset(facingDirection, currentFrame, __instance, accessoryPack.PackType), customAccessorySourceRect, accessoryColor, rotation, origin + new Vector2(accessoryModel.HeadPosition.X, accessoryModel.HeadPosition.Y), 4f * scale + ((rotation != 0f) ? 0f : 0f), accessoryModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + layerFix);
             }
 
             // Draw hair
@@ -578,12 +665,8 @@ namespace FashionSense.Framework.Patches.Renderer
                     hairColor = Color.White;
                 }
 
-                // This fixes a potential issue where the hair isn't offset correctly when facing left while sitting or riding
-                // Note that I was unable to pinpoint why this occurs and this should be treated as a tape and glue fix (i.e. not good)
-                var offsetFix = ((who.IsSitting() || who.isRidingHorse()) && who.FacingDirection == 3 && who.yJumpOffset == 0 ? new Vector2(-8, 0) : Vector2.Zero);
-
                 // Draw the hair
-                b.Draw(hairPack.Texture, position + origin + ___positionOffset + new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4) - offsetFix, customHairSourceRect, hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, hairModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + hair_draw_layer);
+                b.Draw(hairPack.Texture, position + origin + ___positionOffset + GetFeatureOffset(facingDirection, currentFrame, __instance, hairPack.PackType), customHairSourceRect, hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, hairModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + hair_draw_layer);
             }
 
             // Perform hat draw logic
