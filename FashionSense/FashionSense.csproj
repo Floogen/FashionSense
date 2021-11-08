@@ -91,6 +91,7 @@
     <None Include="Examples\[FS] Example Pack\Hairs\ShortHairWithCurlStatic\hair.json" />
     <None Include="Examples\[FS] Example Pack\Hairs\ShortHairWithCurl\hair.json" />
     <None Include="Examples\[FS] Example Pack\Hairs\ShortHairWithFleas\hair.json" />
+    <None Include="Examples\[FS] Example Pack\Hats\ColorableMouseEars\hat.json" />
     <None Include="Examples\[FS] Example Pack\Hats\PrismaticDinoHead\hat.json" />
     <None Include="Examples\[FS] Example Pack\Hats\AnimatedPumpkinHead\hat.json" />
     <None Include="Examples\[FS] Example Pack\manifest.json" />
@@ -113,6 +114,7 @@
     <Content Include="Examples\[FS] Example Pack\Hairs\ShortHairWithCurlStatic\hair.png" />
     <Content Include="Examples\[FS] Example Pack\Hairs\ShortHairWithCurl\hair.png" />
     <Content Include="Examples\[FS] Example Pack\Hairs\ShortHairWithFleas\hair.png" />
+    <Content Include="Examples\[FS] Example Pack\Hats\ColorableMouseEars\hat.png" />
     <Content Include="Examples\[FS] Example Pack\Hats\PrismaticDinoHead\hat.png" />
     <Content Include="Examples\[FS] Example Pack\Hats\AnimatedPumpkinHead\hat.png" />
     <Content Include="Framework\Assets\HandMirror.png">
