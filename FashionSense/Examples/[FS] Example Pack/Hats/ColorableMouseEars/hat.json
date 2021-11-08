@@ -2,14 +2,14 @@
   "Name": "Colorable Mouse Ears",
   "FrontHat": {
     "ColorMasks": [
-      [ 38, 34, 33 ]
+      [ 191, 183, 181 ]
     ],
     "StartingPosition": {
       "X": 0,
       "Y": 0
     },
     "HeadPosition": {
-      "X": 0,
+      "X": -2,
       "Y": 0
     },
     "HatSize": {
