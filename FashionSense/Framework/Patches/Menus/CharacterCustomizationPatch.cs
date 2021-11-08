@@ -31,7 +31,7 @@ namespace FashionSense.Framework.Patches.Menus
             harmony.Patch(AccessTools.Method(_menu, "setUpPositions", null), postfix: new HarmonyMethod(GetType(), nameof(SetUpPositionsPostfix)));
             harmony.Patch(AccessTools.Method(_menu, "selectionClick", new[] { typeof(string), typeof(int) }), postfix: new HarmonyMethod(GetType(), nameof(SelectionClickPostfix)));
 
-            harmony.Patch(AccessTools.Method(_menu, nameof(CharacterCustomization.performHoverAction), new[] { typeof(int), typeof(int) }), postfix: new HarmonyMethod(GetType(), nameof(PerformHoverAction)));
+            harmony.Patch(AccessTools.Method(_menu, nameof(CharacterCustomization.performHoverAction), new[] { typeof(int), typeof(int) }), postfix: new HarmonyMethod(GetType(), nameof(PerformHoverActionPostfix)));
             harmony.Patch(AccessTools.Method(_menu, nameof(CharacterCustomization.draw), new[] { typeof(SpriteBatch) }), postfix: new HarmonyMethod(GetType(), nameof(DrawPostfix)));
         }
 
@@ -104,7 +104,7 @@ namespace FashionSense.Framework.Patches.Menus
             }
         }
 
-        private static void PerformHoverAction(CharacterCustomization __instance, List<ClickableComponent> ___labels, ref string ___hoverText, int x, int y)
+        private static void PerformHoverActionPostfix(CharacterCustomization __instance, List<ClickableComponent> ___labels, ref string ___hoverText, int x, int y)
         {
             if (__instance.source != Source.NewGame)
             {
