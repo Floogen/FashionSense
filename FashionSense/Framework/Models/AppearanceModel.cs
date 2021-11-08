@@ -15,9 +15,28 @@ namespace FashionSense.Framework.Models
         public bool RequireAnimationToFinish { get; set; }
         public bool DisableGrayscale { get; set; }
         public bool IsPrismatic { get; set; }
+        public List<int[]> ColorMasks { get; set; } = new List<int[]>();
         public List<AnimationModel> UniformAnimation { get; set; } = new List<AnimationModel>();
         public List<AnimationModel> IdleAnimation { get; set; } = new List<AnimationModel>();
         public List<AnimationModel> MovementAnimation { get; set; } = new List<AnimationModel>();
+
+        internal bool IsMaskedColor(Color color)
+        {
+            foreach (Color maskedColor in ColorMasks.Select(c => new Color(c[0], c[1], c[2])))
+            {
+                if (maskedColor == color)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        internal bool HasColorMask()
+        {
+            return ColorMasks.Count > 0;
+        }
 
         internal bool HasUniformAnimation()
         {

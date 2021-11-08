@@ -592,6 +592,24 @@ namespace FashionSense.Framework.Patches.Renderer
             return offset;
         }
 
+        private static void DrawColorMask(SpriteBatch b, AppearanceContentPack appearancePack, AppearanceModel appearanceModel, Vector2 position, Rectangle sourceRect, Color color, float rotation, Vector2 origin, float scale, float layerDepth)
+        {
+            Color[] data = new Color[appearancePack.Texture.Width * appearancePack.Texture.Height];
+            appearancePack.Texture.GetData(data);
+            Texture2D maskedTexture = new Texture2D(Game1.graphics.GraphicsDevice, appearancePack.Texture.Width, appearancePack.Texture.Height);
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                if (!appearanceModel.IsMaskedColor(data[i]))
+                {
+                    data[i] = Color.Transparent;
+                }
+            }
+
+            maskedTexture.SetData(data);
+            b.Draw(maskedTexture, position, sourceRect, color, rotation, origin, scale, appearanceModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
+        }
+
         private static bool DrawHairAndAccesoriesPrefix(FarmerRenderer __instance, bool ___isDrawingForUI, Vector2 ___positionOffset, Vector2 ___rotationAdjustment, ref Rectangle ___hairstyleSourceRect, ref Rectangle ___shirtSourceRect, ref Rectangle ___accessorySourceRect, ref Rectangle ___hatSourceRect, SpriteBatch b, int facingDirection, Farmer who, Vector2 position, Vector2 origin, float scale, int currentFrame, float rotation, Color overrideColor, float layerDepth)
         {
             if (!who.modData.ContainsKey(ModDataKeys.CUSTOM_HAIR_ID) && !who.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_ID))
@@ -698,6 +716,11 @@ namespace FashionSense.Framework.Patches.Renderer
                 layerFix += accessoryModel.DrawBeforePlayer ? 0.2E-05f : 0;
 
                 b.Draw(accessoryPack.Texture, position + origin + ___positionOffset + ___rotationAdjustment + GetFeatureOffset(facingDirection, currentFrame, __instance, accessoryPack.PackType), customAccessorySourceRect, accessoryColor, rotation, origin + new Vector2(accessoryModel.HeadPosition.X, accessoryModel.HeadPosition.Y), 4f * scale + ((rotation != 0f) ? 0f : 0f), accessoryModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + layerFix);
+
+                if (accessoryModel.HasColorMask())
+                {
+                    DrawColorMask(b, accessoryPack, accessoryModel, position + origin + ___positionOffset + GetFeatureOffset(facingDirection, currentFrame, __instance, accessoryPack.PackType), customAccessorySourceRect, accessoryColor, rotation, origin + new Vector2(accessoryModel.HeadPosition.X, accessoryModel.HeadPosition.Y), 4f * scale, layerDepth + layerFix + 0.01E-05f);
+                }
             }
 
             // Draw hair
@@ -725,6 +748,11 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     // Draw the hair
                     b.Draw(hairPack.Texture, position + origin + ___positionOffset + GetFeatureOffset(facingDirection, currentFrame, __instance, hairPack.PackType), customHairSourceRect, hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, hairModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + hair_draw_layer);
+
+                    if (hairModel.HasColorMask())
+                    {
+                        DrawColorMask(b, hairPack, hairModel, position + origin + ___positionOffset + GetFeatureOffset(facingDirection, currentFrame, __instance, hairPack.PackType), customHairSourceRect, hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, layerDepth + hair_draw_layer + 0.01E-05f);
+                    }
                 }
             }
 
@@ -746,8 +774,13 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
 
                 bool flip = who.FarmerSprite.CurrentAnimationFrame.flip;
-                float layer_offset = 3.9E-05f;
-                b.Draw(hatPack.Texture, position + origin + ___positionOffset + GetFeatureOffset(facingDirection, currentFrame, __instance, AppearanceContentPack.Type.Hat, flip), customHatSourceRect, hatColor, rotation, origin + new Vector2(hatModel.HeadPosition.X, hatModel.HeadPosition.Y), 4f * scale, hatModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + layer_offset);
+                float layer_offset = 3.88E-05f;
+                b.Draw(hatPack.Texture, position + origin + ___positionOffset + GetFeatureOffset(facingDirection, currentFrame, __instance, hatPack.PackType, flip), customHatSourceRect, hatModel.HasColorMask() ? Color.White : hatColor, rotation, origin + new Vector2(hatModel.HeadPosition.X, hatModel.HeadPosition.Y), 4f * scale, hatModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + layer_offset);
+
+                if (hatModel.HasColorMask())
+                {
+                    DrawColorMask(b, hatPack, hatModel, position + origin + ___positionOffset + GetFeatureOffset(facingDirection, currentFrame, __instance, hatPack.PackType, flip), customHatSourceRect, hatColor, rotation, origin + new Vector2(hatModel.HeadPosition.X, hatModel.HeadPosition.Y), 4f * scale, layerDepth + layer_offset + 0.01E-05f);
+                }
             }
 
             return false;
