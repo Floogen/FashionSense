@@ -1,0 +1,101 @@
+{
+  "Name": "Animated Pumpkin Head",
+  "FrontHat": {
+    "HideHair": true,
+    "DisableGrayscale": true,
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "HeadPosition": {
+      "X": -2,
+      "Y": -2
+    },
+    "HatSize": {
+      "Width": 16,
+      "Length": 16
+    },
+    "UniformAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 200
+      },
+      {
+        "Frame": 1,
+        "Duration": 200
+      },
+      {
+        "Frame": 0,
+        "Duration": 167
+      },
+      {
+        "Frame": 2,
+        "Duration": 200
+      },
+      {
+        "Frame": 0,
+        "Duration": 2000
+      },
+      {
+        "Frame": 3,
+        "Duration": 167
+      },
+      {
+        "Frame": 4,
+        "Duration": 167
+      },
+      {
+        "Frame": 0,
+        "Duration": 2000
+      }
+    ]
+  },
+  "RightHat": {
+    "HideHair": true,
+    "DisableGrayscale": true,
+    "StartingPosition": {
+      "X": 0,
+      "Y": 16
+    },
+    "HeadPosition": {
+      "X": -2,
+      "Y": -2
+    },
+    "HatSize": {
+      "Width": 16,
+      "Length": 16
+    }
+  },
+  "LeftHat": {
+    "HideHair": true,
+    "DisableGrayscale": true,
+    "StartingPosition": {
+      "X": 16,
+      "Y": 16
+    },
+    "HeadPosition": {
+      "X": -2,
+      "Y": -2
+    },
+    "HatSize": {
+      "Width": 16,
+      "Length": 16
+    }
+  },
+  "BackHat": {
+    "HideHair": true,
+    "DisableGrayscale": true,
+    "StartingPosition": {
+      "X": 32,
+      "Y": 16
+    },
+    "HeadPosition": {
+      "X": -2,
+      "Y": -2
+    },
+    "HatSize": {
+      "Width": 16,
+      "Length": 16
+    }
+  }
+}

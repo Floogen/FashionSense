@@ -66,6 +66,8 @@
     <Compile Include="Framework\Models\Generic\Position.cs" />
     <Compile Include="Framework\Models\Generic\Size.cs" />
     <Compile Include="Framework\Models\Hair\HairModel.cs" />
+    <Compile Include="Framework\Models\Hat\HatContentPack.cs" />
+    <Compile Include="Framework\Models\Hat\HatModel.cs" />
     <Compile Include="Framework\Patches\Menus\CharacterCustomizationPatch.cs" />
     <Compile Include="Framework\Patches\Renderer\FarmerRendererPatch.cs" />
     <Compile Include="Framework\Patches\PatchTemplate.cs" />
@@ -89,6 +91,7 @@
     <None Include="Examples\[FS] Example Pack\Hairs\ShortHairWithCurlStatic\hair.json" />
     <None Include="Examples\[FS] Example Pack\Hairs\ShortHairWithCurl\hair.json" />
     <None Include="Examples\[FS] Example Pack\Hairs\ShortHairWithFleas\hair.json" />
+    <None Include="Examples\[FS] Example Pack\Hats\AnimatedPumpkinHead\hat.json" />
     <None Include="Examples\[FS] Example Pack\manifest.json" />
     <None Include="i18n\default.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -109,6 +112,7 @@
     <Content Include="Examples\[FS] Example Pack\Hairs\ShortHairWithCurlStatic\hair.png" />
     <Content Include="Examples\[FS] Example Pack\Hairs\ShortHairWithCurl\hair.png" />
     <Content Include="Examples\[FS] Example Pack\Hairs\ShortHairWithFleas\hair.png" />
+    <Content Include="Examples\[FS] Example Pack\Hats\AnimatedPumpkinHead\hat.png" />
     <Content Include="Framework\Assets\HandMirror.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -17,6 +17,7 @@ using System.Linq;
 using FashionSense.Framework.Models.Hair;
 using FashionSense.Framework.Models.Accessory;
 using FashionSense.Framework.External.ContentPatcher;
+using FashionSense.Framework.Models.Hat;
 
 namespace FashionSense
 {
@@ -118,6 +119,14 @@ namespace FashionSense
                     Game1.player.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION] = (elapsedDuration + Game1.currentGameTime.ElapsedGameTime.Milliseconds).ToString();
                 }
             }
+            if (Game1.player.modData.ContainsKey(ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION))
+            {
+                var elapsedDuration = Int32.Parse(Game1.player.modData[ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION]);
+                if (elapsedDuration < MAX_TRACKED_MILLISECONDS)
+                {
+                    Game1.player.modData[ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION] = (elapsedDuration + Game1.currentGameTime.ElapsedGameTime.Milliseconds).ToString();
+                }
+            }
         }
 
         private void OnGameLaunched(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
@@ -142,6 +151,10 @@ namespace FashionSense
             {
                 Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_ID] = null;
             }
+            if (!Game1.player.modData.ContainsKey(ModDataKeys.CUSTOM_HAT_ID))
+            {
+                Game1.player.modData[ModDataKeys.CUSTOM_HAT_ID] = null;
+            }
         }
 
         private void LoadContentPacks()
@@ -162,6 +175,10 @@ namespace FashionSense
                 // Load Accessories
                 Monitor.Log($"Loading accessories from pack: {contentPack.Manifest.Name} {contentPack.Manifest.Version} by {contentPack.Manifest.Author}", LogLevel.Trace);
                 AddAccessoriesContentPacks(contentPack);
+
+                // Load Hats
+                Monitor.Log($"Loading hats from pack: {contentPack.Manifest.Name} {contentPack.Manifest.Version} by {contentPack.Manifest.Author}", LogLevel.Trace);
+                AddHatsContentPacks(contentPack);
             }
         }
 
@@ -343,6 +360,95 @@ namespace FashionSense
             }
         }
 
+        private void AddHatsContentPacks(IContentPack contentPack)
+        {
+            try
+            {
+                var directoryPath = new DirectoryInfo(Path.Combine(contentPack.DirectoryPath, "Hats"));
+                if (!directoryPath.Exists)
+                {
+                    Monitor.Log($"No Hats folder found for the content pack {contentPack.Manifest.Name}", LogLevel.Trace);
+                    return;
+                }
+
+                var hatFolders = directoryPath.GetDirectories("*", SearchOption.AllDirectories);
+                if (hatFolders.Count() == 0)
+                {
+                    Monitor.Log($"No sub-folders found under Hats for the content pack {contentPack.Manifest.Name}", LogLevel.Warn);
+                    return;
+                }
+
+                // Load in the accessories
+                foreach (var textureFolder in hatFolders)
+                {
+                    if (!File.Exists(Path.Combine(textureFolder.FullName, "hat.json")))
+                    {
+                        if (textureFolder.GetDirectories().Count() == 0)
+                        {
+                            Monitor.Log($"Content pack {contentPack.Manifest.Name} is missing a hat.json under {textureFolder.Name}", LogLevel.Warn);
+                        }
+
+                        continue;
+                    }
+
+                    var parentFolderName = textureFolder.Parent.FullName.Replace(contentPack.DirectoryPath + Path.DirectorySeparatorChar, String.Empty);
+                    var modelPath = Path.Combine(parentFolderName, textureFolder.Name, "hat.json");
+
+                    // Parse the model and assign it the content pack's owner
+                    HatContentPack appearanceModel = contentPack.ReadJsonFile<HatContentPack>(modelPath);
+                    appearanceModel.Author = contentPack.Manifest.Author;
+                    appearanceModel.Owner = contentPack.Manifest.UniqueID;
+
+                    // Verify the required Name property is set
+                    if (String.IsNullOrEmpty(appearanceModel.Name))
+                    {
+                        Monitor.Log($"Unable to add accessories from {appearanceModel.Owner}: Missing the Name property", LogLevel.Warn);
+                        continue;
+                    }
+
+                    // Set the model type
+                    appearanceModel.PackType = AppearanceContentPack.Type.Hat;
+
+                    // Set the ModelName and TextureId
+                    appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.PackType, "/", appearanceModel.Name);
+
+                    // Verify that a hat with the name doesn't exist in this pack
+                    if (textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(appearanceModel.Id) != null)
+                    {
+                        Monitor.Log($"Unable to add hat from {contentPack.Manifest.Name}: This pack already contains a hat with the name of {appearanceModel.Name}", LogLevel.Warn);
+                        continue;
+                    }
+
+                    // Verify that at least one AccessoryModel is given
+                    if (appearanceModel.BackHat is null && appearanceModel.RightHat is null && appearanceModel.FrontHat is null && appearanceModel.LeftHat is null)
+                    {
+                        Monitor.Log($"Unable to add hat for {appearanceModel.Name} from {contentPack.Manifest.Name}: No hat models given (FrontAccessory, BackAccessory, etc.)", LogLevel.Warn);
+                        continue;
+                    }
+
+                    // Verify we are given a texture and if so, track it
+                    if (!File.Exists(Path.Combine(textureFolder.FullName, "hat.png")))
+                    {
+                        Monitor.Log($"Unable to add hat for {appearanceModel.Name} from {contentPack.Manifest.Name}: No associated hat.png given", LogLevel.Warn);
+                        continue;
+                    }
+
+                    // Load in the texture
+                    appearanceModel.Texture = contentPack.LoadAsset<Texture2D>(contentPack.GetActualAssetKey(Path.Combine(parentFolderName, textureFolder.Name, "hat.png")));
+
+                    // Track the model
+                    textureManager.AddAppearanceModel(appearanceModel);
+
+                    // Log it
+                    Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
+                }
+            }
+            catch (Exception ex)
+            {
+                Monitor.Log($"Error loading accessories from content pack {contentPack.Manifest.Name}: {ex}", LogLevel.Error);
+            }
+        }
+
         internal static void ResetAnimationModDataFields(Farmer who, int duration, AnimationModel.Type animationType, int facingDirection, bool ignoreAnimationType = false)
         {
             who.modData[ModDataKeys.ANIMATION_HAIR_ITERATOR] = "0";
@@ -355,12 +461,18 @@ namespace FashionSense
             who.modData[ModDataKeys.ANIMATION_ACCESSORY_FRAME_DURATION] = duration.ToString();
             who.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION] = "0";
 
+            who.modData[ModDataKeys.ANIMATION_HAT_ITERATOR] = "0";
+            who.modData[ModDataKeys.ANIMATION_HAT_STARTING_INDEX] = "0";
+            who.modData[ModDataKeys.ANIMATION_HAT_FRAME_DURATION] = duration.ToString();
+            who.modData[ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION] = "0";
+
             who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] = facingDirection.ToString();
 
             if (!ignoreAnimationType)
             {
                 who.modData[ModDataKeys.ANIMATION_HAIR_TYPE] = animationType.ToString();
                 who.modData[ModDataKeys.ANIMATION_ACCESSORY_TYPE] = animationType.ToString();
+                who.modData[ModDataKeys.ANIMATION_HAT_TYPE] = animationType.ToString();
             }
         }
     }

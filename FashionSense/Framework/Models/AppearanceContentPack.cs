@@ -14,6 +14,7 @@ namespace FashionSense.Framework.Models
             Unknown,
             Hair,
             Accessory,
+            Hat,
             Shirt
         }
 

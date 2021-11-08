@@ -16,7 +16,8 @@ namespace FashionSense.Framework.External.ContentPatcher
         private readonly List<string> _validInputs = new List<string>()
         {
             "Hairstyle",
-            "Accessory"
+            "Accessory",
+            "Hat"
         };
 
         /// <summary>Get whether the token allows input arguments (e.g. an NPC name for a relationship token).</summary>
@@ -85,6 +86,9 @@ namespace FashionSense.Framework.External.ContentPatcher
                     break;
                 case "accessory":
                     targetKey = ModDataKeys.CUSTOM_ACCESSORY_ID;
+                    break;
+                case "hat":
+                    targetKey = ModDataKeys.CUSTOM_HAT_ID;
                     break;
             }
 

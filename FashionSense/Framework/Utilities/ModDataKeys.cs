@@ -11,6 +11,7 @@ namespace FashionSense.Framework.Utilities
         // Core keys
         internal const string CUSTOM_HAIR_ID = "FashionSense.CustomHair.Id";
         internal const string CUSTOM_ACCESSORY_ID = "FashionSense.CustomAccessory.Id";
+        internal const string CUSTOM_HAT_ID = "FashionSense.CustomHat.Id";
 
         // Tool related keys
         internal const string HAND_MIRROR_FLAG = "FashionSense.Tools.HandMirror";
@@ -31,5 +32,12 @@ namespace FashionSense.Framework.Utilities
         internal const string ANIMATION_ACCESSORY_STARTING_INDEX = "FashionSense.Animation.Accessory.StartingIndex";
         internal const string ANIMATION_ACCESSORY_FRAME_DURATION = "FashionSense.Animation.Accessory.FrameDuration";
         internal const string ANIMATION_ACCESSORY_ELAPSED_DURATION = "FashionSense.Animation.Accessory.ElapsedDuration";
+
+        // Hat animation related keys
+        internal const string ANIMATION_HAT_TYPE = "FashionSense.Animation.Hat.Type";
+        internal const string ANIMATION_HAT_ITERATOR = "FashionSense.Animation.Hat.Iterator";
+        internal const string ANIMATION_HAT_STARTING_INDEX = "FashionSense.Animation.Hat.StartingIndex";
+        internal const string ANIMATION_HAT_FRAME_DURATION = "FashionSense.Animation.Hat.FrameDuration";
+        internal const string ANIMATION_HAT_ELAPSED_DURATION = "FashionSense.Animation.Hat.ElapsedDuration";
     }
 }

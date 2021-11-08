@@ -20,6 +20,7 @@ using Object = StardewValley.Object;
 using FashionSense.Framework.Models.Hair;
 using FashionSense.Framework.Models.Accessory;
 using StardewValley.Tools;
+using FashionSense.Framework.Models.Hat;
 
 namespace FashionSense.Framework.Patches.Renderer
 {
@@ -210,6 +211,8 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 case AccessoryModel accessoryModel:
                     return who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_ITERATOR) && who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_FRAME_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_TYPE) && who.modData.ContainsKey(ModDataKeys.ANIMATION_FACING_DIRECTION);
+                case HatModel hatModel:
+                    return who.modData.ContainsKey(ModDataKeys.ANIMATION_HAT_ITERATOR) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAT_FRAME_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAT_TYPE) && who.modData.ContainsKey(ModDataKeys.ANIMATION_FACING_DIRECTION);
             }
 
             return who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_ITERATOR) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_FRAME_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_TYPE) && who.modData.ContainsKey(ModDataKeys.ANIMATION_FACING_DIRECTION);
@@ -259,6 +262,13 @@ namespace FashionSense.Framework.Patches.Renderer
                     who.modData[ModDataKeys.ANIMATION_ACCESSORY_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
                     who.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION] = "0";
                     break;
+                case HatModel hatModel:
+                    who.modData[ModDataKeys.ANIMATION_HAT_TYPE] = type.ToString();
+                    who.modData[ModDataKeys.ANIMATION_HAT_ITERATOR] = iterator.ToString();
+                    who.modData[ModDataKeys.ANIMATION_HAT_STARTING_INDEX] = startingIndex.ToString();
+                    who.modData[ModDataKeys.ANIMATION_HAT_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
+                    who.modData[ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION] = "0";
+                    break;
                 default:
                     who.modData[ModDataKeys.ANIMATION_HAIR_TYPE] = type.ToString();
                     who.modData[ModDataKeys.ANIMATION_HAIR_ITERATOR] = iterator.ToString();
@@ -283,6 +293,11 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 size.Width = accessoryModel.AccessorySize.Width;
                 size.Length = accessoryModel.AccessorySize.Length;
+            }
+            else if (model is HatModel hatModel)
+            {
+                size.Width = hatModel.HatSize.Width;
+                size.Length = hatModel.HatSize.Length;
             }
 
             // Reset any cached animation data, if needd
@@ -323,9 +338,11 @@ namespace FashionSense.Framework.Patches.Renderer
             switch (model)
             {
                 case AccessoryModel accessoryModel:
-                    return who.modData[ModDataKeys.ANIMATION_ACCESSORY_TYPE] == type.ToString();
+                    return who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_TYPE) ? who.modData[ModDataKeys.ANIMATION_ACCESSORY_TYPE] == type.ToString() : false;
+                case HatModel hatModel:
+                    return who.modData.ContainsKey(ModDataKeys.ANIMATION_HAT_TYPE) ? who.modData[ModDataKeys.ANIMATION_HAT_TYPE] == type.ToString() : false;
                 default:
-                    return who.modData[ModDataKeys.ANIMATION_HAIR_TYPE] == type.ToString();
+                    return who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_TYPE) ? who.modData[ModDataKeys.ANIMATION_HAIR_TYPE] == type.ToString() : false;
             }
         }
 
@@ -335,6 +352,9 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 case AccessoryModel accessoryModel:
                     who.modData[ModDataKeys.ANIMATION_ACCESSORY_TYPE] = type.ToString();
+                    break;
+                case HatModel hatModel:
+                    who.modData[ModDataKeys.ANIMATION_HAT_TYPE] = type.ToString();
                     break;
                 default:
                     who.modData[ModDataKeys.ANIMATION_HAIR_TYPE] = type.ToString();
@@ -364,6 +384,12 @@ namespace FashionSense.Framework.Patches.Renderer
                     startingIndex = Int32.Parse(who.modData[ModDataKeys.ANIMATION_ACCESSORY_STARTING_INDEX]);
                     frameDuration = Int32.Parse(who.modData[ModDataKeys.ANIMATION_ACCESSORY_FRAME_DURATION]);
                     elapsedDuration = Int32.Parse(who.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION]);
+                    break;
+                case HatModel hatModel:
+                    iterator = Int32.Parse(who.modData[ModDataKeys.ANIMATION_HAT_ITERATOR]);
+                    startingIndex = Int32.Parse(who.modData[ModDataKeys.ANIMATION_HAT_STARTING_INDEX]);
+                    frameDuration = Int32.Parse(who.modData[ModDataKeys.ANIMATION_HAT_FRAME_DURATION]);
+                    elapsedDuration = Int32.Parse(who.modData[ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION]);
                     break;
             }
 
@@ -523,9 +549,14 @@ namespace FashionSense.Framework.Patches.Renderer
             }
         }
 
-        private static Vector2 GetFeatureOffset(int facingDirection, int currentFrame, FarmerRenderer renderer, AppearanceContentPack.Type type)
+        private static Vector2 GetFeatureOffset(int facingDirection, int currentFrame, FarmerRenderer renderer, AppearanceContentPack.Type type, bool flip = false)
         {
             Vector2 offset = Vector2.Zero;
+            if (type is AppearanceContentPack.Type.Hat)
+            {
+                return new Vector2(-8 + ((!flip) ? 1 : (-1)) * FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, -16 + FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + 4 + (int)renderer.heightOffset);
+            }
+
             switch (facingDirection)
             {
                 case 0:
@@ -587,8 +618,17 @@ namespace FashionSense.Framework.Patches.Renderer
                 accessoryModel = aPack.GetAccessoryFromFacingDirection(facingDirection);
             }
 
+            // Hat pack
+            HatContentPack hatPack = null;
+            HatModel hatModel = null;
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_HAT_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<HatContentPack>(who.modData[ModDataKeys.CUSTOM_HAT_ID]) is HatContentPack tPack && tPack != null)
+            {
+                hatPack = tPack;
+                hatModel = tPack.GetHatFromFacingDirection(facingDirection);
+            }
+
             // Check if all the models are null, if so revert back to vanilla logic
-            if (hairModel is null && accessoryModel is null)
+            if (hairModel is null && accessoryModel is null && hatModel is null)
             {
                 return true;
             }
@@ -596,6 +636,7 @@ namespace FashionSense.Framework.Patches.Renderer
             // Set up source rectangles
             Rectangle customHairSourceRect = new Rectangle();
             Rectangle customAccessorySourceRect = new Rectangle();
+            Rectangle customHatSourceRect = new Rectangle();
 
             // Handle any animations
             if (hairModel != null)
@@ -605,6 +646,10 @@ namespace FashionSense.Framework.Patches.Renderer
             if (accessoryModel != null)
             {
                 HandleAppearanceAnimation(accessoryModel, who, facingDirection, ref customAccessorySourceRect);
+            }
+            if (hatModel != null)
+            {
+                HandleAppearanceAnimation(hatModel, who, facingDirection, ref customHatSourceRect);
             }
 
             // Execute recolor
@@ -658,7 +703,10 @@ namespace FashionSense.Framework.Patches.Renderer
             // Draw hair
             if (hairModel is null)
             {
-                DrawHairVanilla(b, FarmerRenderer.hairStylesTexture, ___hairstyleSourceRect, __instance, who, currentFrame, facingDirection, rotation, scale, layerDepth, position, origin, ___positionOffset, overrideColor);
+                if (hatModel is null || !hatModel.HideHair)
+                {
+                    DrawHairVanilla(b, FarmerRenderer.hairStylesTexture, ___hairstyleSourceRect, __instance, who, currentFrame, facingDirection, rotation, scale, layerDepth, position, origin, ___positionOffset, overrideColor);
+                }
             }
             else
             {
@@ -673,12 +721,35 @@ namespace FashionSense.Framework.Patches.Renderer
                     hairColor = Utility.GetPrismaticColor();
                 }
 
-                // Draw the hair
-                b.Draw(hairPack.Texture, position + origin + ___positionOffset + GetFeatureOffset(facingDirection, currentFrame, __instance, hairPack.PackType), customHairSourceRect, hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, hairModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + hair_draw_layer);
+                if (hatModel is null || !hatModel.HideHair)
+                {
+                    // Draw the hair
+                    b.Draw(hairPack.Texture, position + origin + ___positionOffset + GetFeatureOffset(facingDirection, currentFrame, __instance, hairPack.PackType), customHairSourceRect, hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, hairModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + hair_draw_layer);
+                }
             }
 
-            // Perform hat draw logic
-            DrawHatVanilla(b, ___hatSourceRect, __instance, who, currentFrame, facingDirection, rotation, scale, layerDepth, position, origin, ___positionOffset);
+            // Draw hat
+            if (hatModel is null)
+            {
+                DrawHatVanilla(b, ___hatSourceRect, __instance, who, currentFrame, facingDirection, rotation, scale, layerDepth, position, origin, ___positionOffset);
+            }
+            else
+            {
+                var hatColor = overrideColor.Equals(Color.White) ? ((Color)who.hairstyleColor) : overrideColor;
+                if (hatModel.DisableGrayscale)
+                {
+                    hatColor = Color.White;
+                }
+                else if (hatModel.IsPrismatic)
+                {
+                    hatColor = Utility.GetPrismaticColor();
+                }
+
+                bool flip = who.FarmerSprite.CurrentAnimationFrame.flip;
+                float layer_offset = 3.9E-05f;
+                b.Draw(hatPack.Texture, position + origin + ___positionOffset + GetFeatureOffset(facingDirection, currentFrame, __instance, AppearanceContentPack.Type.Hat, flip), customHatSourceRect, hatColor, rotation, origin + new Vector2(hatModel.HeadPosition.X, hatModel.HeadPosition.Y), 4f * scale, hatModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + layer_offset);
+            }
+
             return false;
         }
 
