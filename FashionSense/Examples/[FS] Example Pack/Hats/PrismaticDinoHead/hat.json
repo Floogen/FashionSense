@@ -1,0 +1,150 @@
+{
+  "Name": "Prismatic Dinosaur Head",
+  "FrontHat": {
+    "HideHair": true,
+    "IsPrismatic": true,
+    "ColorMasks": [
+      [ 35, 35, 36 ],
+      [ 84, 86, 86 ]
+    ],
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "HeadPosition": {
+      "X": -2,
+      "Y": -2
+    },
+    "HatSize": {
+      "Width": 16,
+      "Length": 16
+    },
+    "UniformAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 200
+      },
+      {
+        "Frame": 1,
+        "Duration": 200
+      },
+      {
+        "Frame": 0,
+        "Duration": 167
+      },
+      {
+        "Frame": 2,
+        "Duration": 200
+      },
+      {
+        "Frame": 0,
+        "Duration": 2000
+      }
+    ]
+  },
+  "RightHat": {
+    "HideHair": true,
+    "IsPrismatic": true,
+    "ColorMasks": [
+      [ 35, 35, 36 ],
+      [ 84, 86, 86 ]
+    ],
+    "StartingPosition": {
+      "X": 0,
+      "Y": 16
+    },
+    "HeadPosition": {
+      "X": -2,
+      "Y": -2
+    },
+    "HatSize": {
+      "Width": 16,
+      "Length": 16
+    },
+    "UniformAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 200
+      },
+      {
+        "Frame": 1,
+        "Duration": 200
+      },
+      {
+        "Frame": 2,
+        "Duration": 167
+      },
+      {
+        "Frame": 1,
+        "Duration": 200
+      },
+      {
+        "Frame": 0,
+        "Duration": 2000
+      }
+    ]
+  },
+  "LeftHat": {
+    "HideHair": true,
+    "IsPrismatic": true,
+    "Flipped": true,
+    "ColorMasks": [
+      [ 35, 35, 36 ],
+      [ 84, 86, 86 ]
+    ],
+    "StartingPosition": {
+      "X": 0,
+      "Y": 16
+    },
+    "HeadPosition": {
+      "X": -2,
+      "Y": -2
+    },
+    "HatSize": {
+      "Width": 16,
+      "Length": 16
+    },
+    "UniformAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 200
+      },
+      {
+        "Frame": 1,
+        "Duration": 200
+      },
+      {
+        "Frame": 2,
+        "Duration": 167
+      },
+      {
+        "Frame": 1,
+        "Duration": 200
+      },
+      {
+        "Frame": 0,
+        "Duration": 2000
+      }
+    ]
+  },
+  "BackHat": {
+    "HideHair": true,
+    "IsPrismatic": true,
+    "ColorMasks": [
+      [ 35, 35, 36 ],
+      [ 84, 86, 86 ]
+    ],
+    "StartingPosition": {
+      "X": 0,
+      "Y": 32
+    },
+    "HeadPosition": {
+      "X": -2,
+      "Y": -2
+    },
+    "HatSize": {
+      "Width": 16,
+      "Length": 16
+    }
+  }
+}
