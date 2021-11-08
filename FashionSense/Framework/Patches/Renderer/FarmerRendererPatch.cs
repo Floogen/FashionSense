@@ -793,13 +793,13 @@ namespace FashionSense.Framework.Patches.Renderer
                 return true;
             }
 
-            var appearanceModel = FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(who.modData[ModDataKeys.CUSTOM_HAIR_ID]);
-            if (appearanceModel is null)
+            var hairPack = FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(who.modData[ModDataKeys.CUSTOM_HAIR_ID]);
+            if (hairPack is null)
             {
                 return true;
             }
 
-            HairModel hairModel = appearanceModel.GetHairFromFacingDirection(facingDirection);
+            HairModel hairModel = hairPack.GetHairFromFacingDirection(facingDirection);
             if (hairModel is null)
             {
                 return true;
@@ -814,6 +814,10 @@ namespace FashionSense.Framework.Patches.Renderer
             if (hairModel.DisableGrayscale)
             {
                 hairColor = Color.White;
+            }
+            else if (hairModel.IsPrismatic)
+            {
+                hairColor = Utility.GetPrismaticColor();
             }
 
             // Get hair metadata
@@ -855,8 +859,15 @@ namespace FashionSense.Framework.Patches.Renderer
 
             // Draw the player's face, then the custom hairstyle
             b.Draw(___baseTexture, position, new Rectangle(0, yOffset, 16, who.isMale ? 15 : 16), Color.White, 0f, Vector2.Zero, scale, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
-            int sort_direction = ((!Game1.isUsingBackToFrontSorting) ? 1 : (-1));
-            b.Draw(appearanceModel.Texture, position + new Vector2(0f, feature_y_offset * 4 + ((who.IsMale && (int)who.hair >= 16) ? (-4) : ((!who.IsMale && (int)who.hair < 16) ? 4 : 0))) * scale / 4f, sourceRect, hairColor, 0f, new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), scale, hairModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + 1.1E-07f * (float)sort_direction);
+
+            // Draw the hair
+            float hair_draw_layer = 2.2E-05f;
+            b.Draw(hairPack.Texture, position + new Vector2(0f, feature_y_offset * 4), sourceRect, hairColor, 0f, new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), scale, hairModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + hair_draw_layer);
+
+            if (hairModel.HasColorMask())
+            {
+                DrawColorMask(b, hairPack, hairModel, position + new Vector2(0f, feature_y_offset * 4) * scale / 4f, sourceRect, hairColor, 0f, new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, layerDepth + hair_draw_layer + 0.01E-05f);
+            }
 
             return false;
         }
