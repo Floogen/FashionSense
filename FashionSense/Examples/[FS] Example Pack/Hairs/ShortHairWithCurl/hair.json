@@ -1,6 +1,7 @@
 {
   "Name": "Short Hair With Curl",
   "FrontHair": {
+    "IsPrismatic": true,
     "StartingPosition": {
       "X": 0,
       "Y": 0

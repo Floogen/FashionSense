@@ -643,6 +643,10 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     accessoryColor = Color.White;
                 }
+                else if (accessoryModel.IsPrismatic)
+                {
+                    accessoryColor = Utility.GetPrismaticColor();
+                }
 
                 // Correct how the accessory is drawn according to facingDirection and AccessoryModel.DrawBehindHair
                 var layerFix = facingDirection == 0 ? (accessoryModel.DrawBeforeHair ? 3.9E-05f : 2E-05f) : (accessoryModel.DrawBeforeHair ? -0.1E-05f : 2.9E-05f);
@@ -663,6 +667,10 @@ namespace FashionSense.Framework.Patches.Renderer
                 if (hairModel.DisableGrayscale)
                 {
                     hairColor = Color.White;
+                }
+                else if (hairModel.IsPrismatic)
+                {
+                    hairColor = Utility.GetPrismaticColor();
                 }
 
                 // Draw the hair

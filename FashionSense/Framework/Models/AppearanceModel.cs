@@ -14,6 +14,7 @@ namespace FashionSense.Framework.Models
         public bool Flipped { get; set; }
         public bool RequireAnimationToFinish { get; set; }
         public bool DisableGrayscale { get; set; }
+        public bool IsPrismatic { get; set; }
         public List<AnimationModel> UniformAnimation { get; set; } = new List<AnimationModel>();
         public List<AnimationModel> IdleAnimation { get; set; } = new List<AnimationModel>();
         public List<AnimationModel> MovementAnimation { get; set; } = new List<AnimationModel>();
