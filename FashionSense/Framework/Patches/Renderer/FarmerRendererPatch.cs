@@ -449,6 +449,9 @@ namespace FashionSense.Framework.Patches.Renderer
                 case AccessoryModel accessoryModel:
                     iteratorKey = ModDataKeys.ANIMATION_ACCESSORY_ITERATOR;
                     break;
+                case HatModel hatModel:
+                    iteratorKey = ModDataKeys.ANIMATION_HAT_ITERATOR;
+                    break;
             }
 
             if (model.RequireAnimationToFinish && who.modData.ContainsKey(iteratorKey) && Int32.Parse(who.modData[iteratorKey]) != 0)
