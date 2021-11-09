@@ -715,7 +715,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 var layerFix = facingDirection == 0 ? (accessoryModel.DrawBeforeHair ? 3.9E-05f : 2E-05f) : (accessoryModel.DrawBeforeHair ? -0.1E-05f : 2.9E-05f);
                 layerFix += accessoryModel.DrawBeforePlayer ? 0.2E-05f : 0;
 
-                b.Draw(accessoryPack.Texture, position + origin + ___positionOffset + ___rotationAdjustment + GetFeatureOffset(facingDirection, currentFrame, __instance, accessoryPack.PackType), customAccessorySourceRect, accessoryColor, rotation, origin + new Vector2(accessoryModel.HeadPosition.X, accessoryModel.HeadPosition.Y), 4f * scale + ((rotation != 0f) ? 0f : 0f), accessoryModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + layerFix);
+                b.Draw(accessoryPack.Texture, position + origin + ___positionOffset + ___rotationAdjustment + GetFeatureOffset(facingDirection, currentFrame, __instance, accessoryPack.PackType), customAccessorySourceRect, accessoryModel.HasColorMask() ? Color.White : accessoryColor, rotation, origin + new Vector2(accessoryModel.HeadPosition.X, accessoryModel.HeadPosition.Y), 4f * scale + ((rotation != 0f) ? 0f : 0f), accessoryModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + layerFix);
 
                 if (accessoryModel.HasColorMask())
                 {
@@ -747,7 +747,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 if (hatModel is null || !hatModel.HideHair)
                 {
                     // Draw the hair
-                    b.Draw(hairPack.Texture, position + origin + ___positionOffset + GetFeatureOffset(facingDirection, currentFrame, __instance, hairPack.PackType), customHairSourceRect, hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, hairModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + hair_draw_layer);
+                    b.Draw(hairPack.Texture, position + origin + ___positionOffset + GetFeatureOffset(facingDirection, currentFrame, __instance, hairPack.PackType), customHairSourceRect, hairModel.HasColorMask() ? Color.White : hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, hairModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + hair_draw_layer);
 
                     if (hairModel.HasColorMask())
                     {
