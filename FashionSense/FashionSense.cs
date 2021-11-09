@@ -146,6 +146,16 @@ namespace FashionSense
         {
             // Reset Hand Mirror UI
             Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON] = String.Empty;
+
+            // Set the cached colors, if needed
+            if (!Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR))
+            {
+                Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR] = Game1.player.hairstyleColor.Value.PackedValue.ToString();
+            }
+            if (!Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_HAT_COLOR))
+            {
+                Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_HAT_COLOR] = Game1.player.hairstyleColor.Value.PackedValue.ToString();
+            }
         }
 
         private void OnDayStarted(object sender, StardewModdingAPI.Events.DayStartedEventArgs e)

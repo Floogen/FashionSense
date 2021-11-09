@@ -13,6 +13,10 @@
 
   // UI - Etc
   "ui.fashion_sense.color_active.hair": "Hair Color",
+  "ui.fashion_sense.color_active.hat": "Hat Color",
+  "ui.fashion_sense.color_active.accessory": "Acc. Color",
   "ui.fashion_sense.color_disabled.generic": "(Ignored)",
-  "ui.fashion_sense.color_info.hair": "The player's hair color will not affect this."
+  "ui.fashion_sense.color_info.hair": "Color overlays will not affect this hairstyle.",
+  "ui.fashion_sense.color_info.hat": "Color overlays will not affect this hat.",
+  "ui.fashion_sense.color_info.accessory": "Color overlays will not affect this accessory."
 }
