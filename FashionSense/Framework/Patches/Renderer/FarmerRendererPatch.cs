@@ -321,7 +321,7 @@ namespace FashionSense.Framework.Patches.Renderer
             sourceRectangle = new Rectangle(model.StartingPosition.X, model.StartingPosition.Y, size.Width, size.Length);
             if (model.HasMovementAnimation() && (FashionSense.movementData.IsPlayerMoving() || IsWaitingOnRequiredAnimation(who, model)))
             {
-                HandleAppearanceAnimation(model, who, AnimationModel.Type.Moving, model.MovementAnimation, facingDirection, ref sourceRectangle);
+                HandleAppearanceAnimation(model, who, AnimationModel.Type.Moving, model.MovementAnimation, facingDirection, ref sourceRectangle, !FashionSense.movementData.IsPlayerMoving() && IsWaitingOnRequiredAnimation(who, model));
             }
             else if (model.HasIdleAnimation() && !FashionSense.movementData.IsPlayerMoving())
             {
@@ -362,7 +362,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
         }
 
-        private static void HandleAppearanceAnimation(AppearanceModel model, Farmer who, AnimationModel.Type type, List<AnimationModel> animations, int facingDirection, ref Rectangle sourceRectangle)
+        private static void HandleAppearanceAnimation(AppearanceModel model, Farmer who, AnimationModel.Type type, List<AnimationModel> animations, int facingDirection, ref Rectangle sourceRectangle, bool isAnimationFinishing = false)
         {
             if (!HasRequiredModDataKeys(model, who) || !HasCorrectAnimationTypeCached(model, who, type) || who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] != facingDirection.ToString())
             {
@@ -403,6 +403,10 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     // See if this particular frame overrides the StartingIndex
                     startingIndex = iterator;
+                }
+                else if (isAnimationFinishing)
+                {
+                    startingIndex = 0;
                 }
             }
             else
