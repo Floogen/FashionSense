@@ -156,7 +156,7 @@ namespace FashionSense.Framework.Patches.Menus
                 else if (c.name == HandMirrorMenu.GetColorPickerLabel(false, true) || c.name == HandMirrorMenu.GetColorPickerLabel(true, true))
                 {
                     var name = HandMirrorMenu.GetColorPickerLabel(false, true);
-                    if (currentCustomHair != null && currentCustomHair.GetHairFromFacingDirection(Game1.player.facingDirection) is HairModel model && model != null && model.DisableGrayscale)
+                    if (currentCustomHair != null && currentCustomHair.GetHairFromFacingDirection(Game1.player.facingDirection) is HairModel model && model != null && model.IsPlayerColorChoiceIgnored())
                     {
                         name = HandMirrorMenu.GetColorPickerLabel(true, true);
                     }
