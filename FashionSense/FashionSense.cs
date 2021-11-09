@@ -402,7 +402,7 @@ namespace FashionSense
                     // Verify the required Name property is set
                     if (String.IsNullOrEmpty(appearanceModel.Name))
                     {
-                        Monitor.Log($"Unable to add accessories from {appearanceModel.Owner}: Missing the Name property", LogLevel.Warn);
+                        Monitor.Log($"Unable to add hats from {appearanceModel.Owner}: Missing the Name property", LogLevel.Warn);
                         continue;
                     }
 
@@ -422,7 +422,7 @@ namespace FashionSense
                     // Verify that at least one AccessoryModel is given
                     if (appearanceModel.BackHat is null && appearanceModel.RightHat is null && appearanceModel.FrontHat is null && appearanceModel.LeftHat is null)
                     {
-                        Monitor.Log($"Unable to add hat for {appearanceModel.Name} from {contentPack.Manifest.Name}: No hat models given (FrontAccessory, BackAccessory, etc.)", LogLevel.Warn);
+                        Monitor.Log($"Unable to add hat for {appearanceModel.Name} from {contentPack.Manifest.Name}: No hat models given (FrontHat, BackHat, etc.)", LogLevel.Warn);
                         continue;
                     }
 
@@ -445,7 +445,7 @@ namespace FashionSense
             }
             catch (Exception ex)
             {
-                Monitor.Log($"Error loading accessories from content pack {contentPack.Manifest.Name}: {ex}", LogLevel.Error);
+                Monitor.Log($"Error loading hats from content pack {contentPack.Manifest.Name}: {ex}", LogLevel.Error);
             }
         }
 
