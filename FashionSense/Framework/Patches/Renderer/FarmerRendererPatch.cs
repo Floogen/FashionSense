@@ -708,7 +708,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
                 else if (accessoryModel.IsPrismatic)
                 {
-                    accessoryColor = Utility.GetPrismaticColor();
+                    accessoryColor = Utility.GetPrismaticColor(speedMultiplier: accessoryModel.PrismaticAnimationSpeedMultiplier);
                 }
 
                 // Correct how the accessory is drawn according to facingDirection and AccessoryModel.DrawBehindHair
@@ -741,7 +741,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
                 else if (hairModel.IsPrismatic)
                 {
-                    hairColor = Utility.GetPrismaticColor();
+                    hairColor = Utility.GetPrismaticColor(speedMultiplier: hairModel.PrismaticAnimationSpeedMultiplier);
                 }
 
                 if (hatModel is null || !hatModel.HideHair)
@@ -770,7 +770,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
                 else if (hatModel.IsPrismatic)
                 {
-                    hatColor = Utility.GetPrismaticColor();
+                    hatColor = Utility.GetPrismaticColor(speedMultiplier: hatModel.PrismaticAnimationSpeedMultiplier);
                 }
 
                 bool flip = who.FarmerSprite.CurrentAnimationFrame.flip;
@@ -817,7 +817,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
             else if (hairModel.IsPrismatic)
             {
-                hairColor = Utility.GetPrismaticColor();
+                hairColor = Utility.GetPrismaticColor(speedMultiplier: hairModel.PrismaticAnimationSpeedMultiplier);
             }
 
             // Get hair metadata

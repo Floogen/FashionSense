@@ -3,6 +3,7 @@
   "FrontHat": {
     "HideHair": true,
     "IsPrismatic": true,
+    "PrismaticAnimationSpeedMultiplier": 2.0,
     "ColorMasks": [
       [ 35, 35, 36 ],
       [ 84, 86, 86 ]
