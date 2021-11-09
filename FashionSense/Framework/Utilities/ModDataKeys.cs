@@ -13,6 +13,9 @@ namespace FashionSense.Framework.Utilities
         internal const string CUSTOM_ACCESSORY_ID = "FashionSense.CustomAccessory.Id";
         internal const string CUSTOM_HAT_ID = "FashionSense.CustomHat.Id";
 
+        // UI related keys
+        internal const string UI_HAND_MIRROR_FILTER_BUTTON = "FashionSense.UI.HandMirror.SelectedFilterButton";
+
         // Tool related keys
         internal const string HAND_MIRROR_FLAG = "FashionSense.Tools.HandMirror";
 

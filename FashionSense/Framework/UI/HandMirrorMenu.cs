@@ -22,6 +22,10 @@ namespace FashionSense.Framework.UI
         private Farmer _displayFarmer;
         private string hoverText = "";
 
+        private const string ACCESSORY_FILTER_BUTTON = "AccessoryFilter";
+        private const string HAIR_FILTER_BUTTON = "HairFilter";
+        private const string HAT_FILTER_BUTTON = "HatFilter";
+
         private ClickableComponent descriptionLabel;
         private ClickableComponent colorLabel;
         private ClickableComponent authorLabel;
@@ -95,7 +99,13 @@ namespace FashionSense.Framework.UI
                 downNeighborID = -99998
             });
 
-            filterButtons.Add(new ClickableTextureComponent("HairFilter", new Rectangle(base.xPositionOnScreen + 50, base.yPositionOnScreen + 70, 64, 64), null, "enabled", FashionSense.assetManager.scissorsButtonTexture, new Rectangle(0, 0, 15, 15), 3f)
+            var lastSelectedFilter = HAIR_FILTER_BUTTON;
+            if (Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON) && !String.IsNullOrEmpty(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON]))
+            {
+                lastSelectedFilter = Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON];
+            }
+
+            filterButtons.Add(new ClickableTextureComponent(HAIR_FILTER_BUTTON, new Rectangle(base.xPositionOnScreen + 50, base.yPositionOnScreen + 70, 64, 64), null, lastSelectedFilter == HAIR_FILTER_BUTTON ? "enabled" : "disabled", FashionSense.assetManager.scissorsButtonTexture, new Rectangle(0, 0, 15, 15), 3f)
             {
                 myID = 601,
                 upNeighborID = -99998,
@@ -104,7 +114,7 @@ namespace FashionSense.Framework.UI
                 downNeighborID = -99998
             });
 
-            filterButtons.Add(new ClickableTextureComponent("AccessoryFilter", new Rectangle(base.xPositionOnScreen + 50, base.yPositionOnScreen + 125, 64, 64), null, "disabled", FashionSense.assetManager.accessoryButtonTexture, new Rectangle(0, 0, 15, 15), 3f)
+            filterButtons.Add(new ClickableTextureComponent(ACCESSORY_FILTER_BUTTON, new Rectangle(base.xPositionOnScreen + 50, base.yPositionOnScreen + 125, 64, 64), null, lastSelectedFilter == ACCESSORY_FILTER_BUTTON ? "enabled" : "disabled", FashionSense.assetManager.accessoryButtonTexture, new Rectangle(0, 0, 15, 15), 3f)
             {
                 myID = 601,
                 upNeighborID = -99998,
@@ -113,7 +123,7 @@ namespace FashionSense.Framework.UI
                 downNeighborID = -99998
             });
 
-            filterButtons.Add(new ClickableTextureComponent("HatFilter", new Rectangle(base.xPositionOnScreen + 50, base.yPositionOnScreen + 180, 64, 64), null, "disabled", FashionSense.assetManager.hatButtonTexture, new Rectangle(0, 0, 15, 15), 3f)
+            filterButtons.Add(new ClickableTextureComponent(HAT_FILTER_BUTTON, new Rectangle(base.xPositionOnScreen + 50, base.yPositionOnScreen + 180, 64, 64), null, lastSelectedFilter == HAT_FILTER_BUTTON ? "enabled" : "disabled", FashionSense.assetManager.hatButtonTexture, new Rectangle(0, 0, 15, 15), 3f)
             {
                 myID = 601,
                 upNeighborID = -99998,
@@ -195,17 +205,17 @@ namespace FashionSense.Framework.UI
             List<AppearanceContentPack> appearanceModels = new List<AppearanceContentPack>();
             switch (GetNameOfEnabledFilter())
             {
-                case "HairFilter":
+                case HAIR_FILTER_BUTTON:
                     modDataKey = ModDataKeys.CUSTOM_HAIR_ID;
                     currentAppearance = FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID]);
                     appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is HairContentPack).ToList();
                     break;
-                case "AccessoryFilter":
+                case ACCESSORY_FILTER_BUTTON:
                     modDataKey = ModDataKeys.CUSTOM_ACCESSORY_ID;
                     currentAppearance = FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_ID]);
                     appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is AccessoryContentPack).ToList();
                     break;
-                case "HatFilter":
+                case HAT_FILTER_BUTTON:
                     modDataKey = ModDataKeys.CUSTOM_HAT_ID;
                     currentAppearance = FashionSense.textureManager.GetSpecificAppearanceModel<HatContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAT_ID]);
                     appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is HatContentPack).ToList();
@@ -297,14 +307,14 @@ namespace FashionSense.Framework.UI
                     c.hoverText = "enabled";
                     switch (c.name)
                     {
-                        case "HairFilter":
-                            descriptionLabel.name = FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.hair");
+                        case HAIR_FILTER_BUTTON:
+                            Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON] = HAIR_FILTER_BUTTON;
                             break;
-                        case "AccessoryFilter":
-                            descriptionLabel.name = FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.accessory");
+                        case ACCESSORY_FILTER_BUTTON:
+                            Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON] = ACCESSORY_FILTER_BUTTON;
                             break;
-                        case "HatFilter":
-                            descriptionLabel.name = FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.hat");
+                        case HAT_FILTER_BUTTON:
+                            Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON] = HAT_FILTER_BUTTON;
                             break;
                     }
 
@@ -368,13 +378,13 @@ namespace FashionSense.Framework.UI
 
                     switch (c5.name)
                     {
-                        case "HairFilter":
+                        case HAIR_FILTER_BUTTON:
                             hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.hair");
                             break;
-                        case "AccessoryFilter":
+                        case ACCESSORY_FILTER_BUTTON:
                             hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.accessory");
                             break;
-                        case "HatFilter":
+                        case HAT_FILTER_BUTTON:
                             hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.hat");
                             break;
                         default:
@@ -415,13 +425,13 @@ namespace FashionSense.Framework.UI
             AppearanceContentPack contentPack = null;
             switch (GetNameOfEnabledFilter())
             {
-                case "HairFilter":
+                case HAIR_FILTER_BUTTON:
                     contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID]);
                     break;
-                case "AccessoryFilter":
+                case ACCESSORY_FILTER_BUTTON:
                     contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_ID]);
                     break;
-                case "HatFilter":
+                case HAT_FILTER_BUTTON:
                     contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<HatContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAT_ID]);
                     break;
             }
@@ -465,6 +475,21 @@ namespace FashionSense.Framework.UI
                 Color color = Game1.textColor;
                 if (c == descriptionLabel)
                 {
+                    // Update display name, if needed
+                    var descriptionName = Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON) ? Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON] : String.Empty;
+                    switch (descriptionName)
+                    {
+                        case ACCESSORY_FILTER_BUTTON:
+                            descriptionLabel.name = FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.accessory");
+                            break;
+                        case HAT_FILTER_BUTTON:
+                            descriptionLabel.name = FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.hat");
+                            break;
+                        default:
+                            descriptionLabel.name = FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.hair");
+                            break;
+                    }
+
                     offset = 21f - Game1.smallFont.MeasureString(c.name).X / 2f;
                     if (!c.name.Contains("Color"))
                     {
