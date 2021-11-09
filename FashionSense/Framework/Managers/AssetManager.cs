@@ -21,6 +21,7 @@ namespace FashionSense.Framework.Managers
         // UI textures
         internal readonly Texture2D scissorsButtonTexture;
         internal readonly Texture2D accessoryButtonTexture;
+        internal readonly Texture2D hatButtonTexture;
 
         public AssetManager(IModHelper helper)
         {
@@ -31,6 +32,7 @@ namespace FashionSense.Framework.Managers
             _handMirrorTexture = helper.Content.Load<Texture2D>(Path.Combine(assetFolderPath, "HandMirror.png"));
             scissorsButtonTexture = helper.Content.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "HairButton.png"));
             accessoryButtonTexture = helper.Content.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "AccessoryButton.png"));
+            hatButtonTexture = helper.Content.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "HatButton.png"));
 
             // Setup toolNames
             toolNames.Add("HandMirror", _handMirrorTexture);

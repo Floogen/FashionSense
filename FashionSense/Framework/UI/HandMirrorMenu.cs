@@ -1,6 +1,7 @@
 ﻿using FashionSense.Framework.Models;
 using FashionSense.Framework.Models.Accessory;
 using FashionSense.Framework.Models.Hair;
+using FashionSense.Framework.Models.Hat;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -112,6 +113,15 @@ namespace FashionSense.Framework.UI
                 downNeighborID = -99998
             });
 
+            filterButtons.Add(new ClickableTextureComponent("HatFilter", new Rectangle(base.xPositionOnScreen + 50, base.yPositionOnScreen + 180, 64, 64), null, "disabled", FashionSense.assetManager.hatButtonTexture, new Rectangle(0, 0, 15, 15), 3f)
+            {
+                myID = 601,
+                upNeighborID = -99998,
+                leftNeighborID = -99998,
+                rightNeighborID = -99998,
+                downNeighborID = -99998
+            });
+
             okButton = new ClickableTextureComponent("OK", new Rectangle(base.xPositionOnScreen + base.width - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder - 32, base.yPositionOnScreen + base.height - IClickableMenu.borderWidth - IClickableMenu.spaceToClearTopBorder + 32, 64, 64), null, null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46), 1f)
             {
                 myID = 505,
@@ -194,6 +204,11 @@ namespace FashionSense.Framework.UI
                     modDataKey = ModDataKeys.CUSTOM_ACCESSORY_ID;
                     currentAppearance = FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_ID]);
                     appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is AccessoryContentPack).ToList();
+                    break;
+                case "HatFilter":
+                    modDataKey = ModDataKeys.CUSTOM_HAT_ID;
+                    currentAppearance = FashionSense.textureManager.GetSpecificAppearanceModel<HatContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAT_ID]);
+                    appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is HatContentPack).ToList();
                     break;
             }
 
@@ -288,6 +303,9 @@ namespace FashionSense.Framework.UI
                         case "AccessoryFilter":
                             descriptionLabel.name = FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.accessory");
                             break;
+                        case "HatFilter":
+                            descriptionLabel.name = FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.hat");
+                            break;
                     }
 
                     if (c.scale != 0f)
@@ -356,6 +374,9 @@ namespace FashionSense.Framework.UI
                         case "AccessoryFilter":
                             hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.accessory");
                             break;
+                        case "HatFilter":
+                            hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.hat");
+                            break;
                         default:
                             continue;
                     }
@@ -399,6 +420,9 @@ namespace FashionSense.Framework.UI
                     break;
                 case "AccessoryFilter":
                     contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_ID]);
+                    break;
+                case "HatFilter":
+                    contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<HatContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAT_ID]);
                     break;
             }
 
@@ -466,11 +490,15 @@ namespace FashionSense.Framework.UI
                     var name = GetColorPickerLabel(false);
                     if (contentPack != null)
                     {
-                        if (contentPack is HairContentPack hairPack && hairPack.GetHairFromFacingDirection(Game1.player.facingDirection) is HairModel hModel && hModel != null && hModel.DisableGrayscale)
+                        if (contentPack is HairContentPack hairPack && hairPack.GetHairFromFacingDirection(Game1.player.facingDirection) is HairModel hModel && hModel != null && hModel.IsPlayerColorChoiceIgnored())
                         {
                             name = GetColorPickerLabel(true);
                         }
-                        else if (contentPack is AccessoryContentPack accessoryPack && accessoryPack.GetAccessoryFromFacingDirection(Game1.player.facingDirection) is AccessoryModel aModel && aModel != null && aModel.DisableGrayscale)
+                        else if (contentPack is AccessoryContentPack accessoryPack && accessoryPack.GetAccessoryFromFacingDirection(Game1.player.facingDirection) is AccessoryModel aModel && aModel != null && aModel.IsPlayerColorChoiceIgnored())
+                        {
+                            name = GetColorPickerLabel(true);
+                        }
+                        else if (contentPack is HatContentPack hatPack && hatPack.GetHatFromFacingDirection(Game1.player.facingDirection) is HatModel htModel && htModel != null && htModel.IsPlayerColorChoiceIgnored())
                         {
                             name = GetColorPickerLabel(true);
                         }

@@ -20,6 +20,11 @@ namespace FashionSense.Framework.Models
         public List<AnimationModel> IdleAnimation { get; set; } = new List<AnimationModel>();
         public List<AnimationModel> MovementAnimation { get; set; } = new List<AnimationModel>();
 
+        internal bool IsPlayerColorChoiceIgnored()
+        {
+            return DisableGrayscale || IsPrismatic;
+        }
+        
         internal bool IsMaskedColor(Color color)
         {
             foreach (Color maskedColor in ColorMasks.Select(c => new Color(c[0], c[1], c[2])))

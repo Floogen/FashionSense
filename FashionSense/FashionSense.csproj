@@ -120,6 +120,9 @@
     <Content Include="Framework\Assets\HandMirror.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Framework\Assets\UI\HatButton.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Framework\Assets\UI\AccessoryButton.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
