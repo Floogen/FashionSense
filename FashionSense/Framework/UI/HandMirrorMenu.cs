@@ -311,7 +311,7 @@ namespace FashionSense.Framework.UI
                     if (c.scale != 0f)
                     {
                         c.scale -= 0.25f;
-                        c.scale = Math.Max(0.75f, c.scale);
+                        c.scale = Math.Max(2.75f, c.scale);
                     }
                 }
             }
