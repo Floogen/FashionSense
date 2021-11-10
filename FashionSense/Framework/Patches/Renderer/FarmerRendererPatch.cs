@@ -218,7 +218,7 @@ namespace FashionSense.Framework.Patches.Renderer
             return who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_ITERATOR) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_FRAME_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_TYPE) && who.modData.ContainsKey(ModDataKeys.ANIMATION_FACING_DIRECTION);
         }
 
-        private static bool IsFrameValid(AnimationModel animationModel)
+        private static bool IsFrameValid(AnimationModel animationModel, bool probe = false)
         {
             bool isValid = true;
             foreach (var condition in animationModel.Conditions)
@@ -227,6 +227,10 @@ namespace FashionSense.Framework.Patches.Renderer
                 if (condition.Name is Condition.Type.MovementDuration)
                 {
                     passedCheck = FashionSense.movementData.IsMovingLongEnough(condition.GetParsedValue<long>());
+                }
+                else if (condition.Name is Condition.Type.IsElapsedTimeMultipleOf)
+                {
+                    passedCheck = FashionSense.movementData.IsElapsedTimeMultipleOf(condition, probe);
                 }
                 else if (condition.Name is Condition.Type.MovementSpeed)
                 {
@@ -397,7 +401,7 @@ namespace FashionSense.Framework.Patches.Renderer
             var animationModel = animations.ElementAtOrDefault(iterator) is null ? animations.ElementAtOrDefault(0) : animations.ElementAtOrDefault(iterator);
 
             // Check if frame is valid
-            if (IsFrameValid(animationModel))
+            if (IsFrameValid(animationModel, probe: true))
             {
                 if (animationModel.OverrideStartingIndex && startingIndex != iterator)
                 {
@@ -412,7 +416,7 @@ namespace FashionSense.Framework.Patches.Renderer
             else
             {
                 // Frame isn't valid, get the next available StartingIndex (or set it to 0)
-                foreach (var animation in animations.Take(iterator).Reverse().Where(a => a.OverrideStartingIndex && IsFrameValid(a)))
+                foreach (var animation in animations.Take(iterator).Reverse().Where(a => a.OverrideStartingIndex && IsFrameValid(a, probe: true)))
                 {
                     startingIndex = animations.IndexOf(animation);
                     break;
@@ -437,6 +441,9 @@ namespace FashionSense.Framework.Patches.Renderer
                 iterator = iterator + 1 >= animations.Count() ? startingIndex : iterator + 1;
 
                 UpdatePlayerAnimationData(model, who, type, animations, facingDirection, iterator, startingIndex);
+
+                // Force the frame's condition to evalute and update any caches
+                IsFrameValid(animationModel);
             }
 
             sourceRectangle.X += sourceRectangle.Width * animationModel.Frame;
