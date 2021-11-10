@@ -228,7 +228,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 var passedCheck = false;
                 if (condition.Name is Condition.Type.MovementDuration)
                 {
-                    passedCheck = FashionSense.conditionData.IsMovingLongEnough(condition.GetParsedValue<long>());
+                    passedCheck = FashionSense.conditionData.IsMovingLongEnough(condition.GetParsedValue<long>(!probe));
                 }
                 else if (condition.Name is Condition.Type.IsElapsedTimeMultipleOf)
                 {
@@ -243,12 +243,12 @@ namespace FashionSense.Framework.Patches.Renderer
                     }
                     else
                     {
-                        passedCheck = (condition.GetParsedValue<bool>() && previousAnimationModel.WasDisplayed) || (!condition.GetParsedValue<bool>() && !previousAnimationModel.WasDisplayed);
+                        passedCheck = (condition.GetParsedValue<bool>(!probe) && previousAnimationModel.WasDisplayed) || (!condition.GetParsedValue<bool>(!probe) && !previousAnimationModel.WasDisplayed);
                     }
                 }
                 else if (condition.Name is Condition.Type.MovementSpeed)
                 {
-                    passedCheck = FashionSense.conditionData.IsMovingFastEnough(condition.GetParsedValue<long>());
+                    passedCheck = FashionSense.conditionData.IsMovingFastEnough(condition.GetParsedValue<long>(!probe));
                 }
                 else if (condition.Name is Condition.Type.RidingHorse)
                 {
@@ -436,7 +436,7 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 // Frame isn't valid, get the next available frame starting from iterator
                 var hasFoundNextFrame = false;
-                foreach (var animation in animations.Skip(iterator).Where(a => IsFrameValid(animations, animations.IndexOf(a), probe: true)))
+                foreach (var animation in animations.Skip(iterator + 1).Where(a => IsFrameValid(animations, animations.IndexOf(a), probe: true)))
                 {
                     iterator = animations.IndexOf(animation);
 
@@ -453,7 +453,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 // If no frames are available from iterator onwards, then check backwards for the next available frame with OverrideStartingIndex
                 if (!hasFoundNextFrame)
                 {
-                    foreach (var animation in animations.Take(iterator).Reverse().Where(a => a.OverrideStartingIndex && IsFrameValid(animations, animations.IndexOf(a), probe: true)))
+                    foreach (var animation in animations.Take(iterator + 1).Reverse().Where(a => a.OverrideStartingIndex && IsFrameValid(animations, animations.IndexOf(a), probe: true)))
                     {
                         iterator = animations.IndexOf(animation);
                         startingIndex = iterator;
@@ -472,7 +472,6 @@ namespace FashionSense.Framework.Patches.Renderer
                     elapsedDuration = 0;
                 }
 
-
                 animationModel = animations.ElementAt(iterator);
 
                 UpdatePlayerAnimationData(model, who, type, animations, facingDirection, iterator, startingIndex);
@@ -490,7 +489,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 UpdatePlayerAnimationData(model, who, type, animations, facingDirection, iterator, startingIndex);
 
                 animationModel.WasDisplayed = true;
-                if (startingIndex == iterator)
+                if (iterator == startingIndex)
                 {
                     // Reset any cached values with the AnimationModel
                     foreach (var animation in animations)

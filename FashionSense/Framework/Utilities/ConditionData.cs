@@ -28,7 +28,7 @@ namespace FashionSense.Framework.Utilities
 
         internal bool IsElapsedTimeMultipleOf(Condition condition, bool probe)
         {
-            if (_elapsedMilliseconds - condition.GetCache<float>() > condition.GetParsedValue<long>() || condition.GetCache<float>() > _elapsedMilliseconds)
+            if (_elapsedMilliseconds > condition.GetCache<float>() + condition.GetParsedValue<long>(!probe) || condition.GetCache<float>() > _elapsedMilliseconds)
             {
                 if (!probe)
                 {
