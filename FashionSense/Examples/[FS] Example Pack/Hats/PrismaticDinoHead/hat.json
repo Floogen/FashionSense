@@ -27,19 +27,45 @@
       },
       {
         "Frame": 1,
-        "Duration": 200
-      },
-      {
-        "Frame": 0,
-        "Duration": 167
+        "Duration": 200,
+        "Conditions": [
+          {
+            "Name": "IsElapsedTimeMultipleOf",
+            "Value": {
+              "RandomValue": [ 1000, 2500, 5000 ]
+            }
+          }
+        ]
       },
       {
         "Frame": 2,
-        "Duration": 200
+        "Duration": 167,
+        "Conditions": [
+          {
+            "Name": "DidPreviousFrameDisplay",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 1,
+        "Duration": 200,
+        "Conditions": [
+          {
+            "Name": "DidPreviousFrameDisplay",
+            "Value": true
+          }
+        ]
       },
       {
         "Frame": 0,
-        "Duration": 2000
+        "Duration": 2000,
+        "Conditions": [
+          {
+            "Name": "DidPreviousFrameDisplay",
+            "Value": true
+          }
+        ]
       }
     ]
   },

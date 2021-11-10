@@ -38,15 +38,38 @@
       },
       {
         "Frame": 3,
-        "Duration": 167
+        "Duration": 167,
+        "Conditions": [
+          {
+            "Name": "IsElapsedTimeMultipleOf",
+            "Value": {
+              "RandomRange": {
+                "Min": 1000,
+                "Max": 5000
+              }
+            }
+          }
+        ]
       },
       {
         "Frame": 4,
-        "Duration": 167
+        "Duration": 167,
+        "Conditions": [
+          {
+            "Name": "DidPreviousFrameDisplay",
+            "Value": true
+          }
+        ]
       },
       {
         "Frame": 0,
-        "Duration": 2000
+        "Duration": 2000,
+        "Conditions": [
+          {
+            "Name": "DidPreviousFrameDisplay",
+            "Value": true
+          }
+        ]
       }
     ]
   },
