@@ -218,8 +218,10 @@ namespace FashionSense.Framework.Patches.Renderer
             return who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_ITERATOR) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_FRAME_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_TYPE) && who.modData.ContainsKey(ModDataKeys.ANIMATION_FACING_DIRECTION);
         }
 
-        private static bool IsFrameValid(AnimationModel animationModel, bool probe = false)
+        private static bool IsFrameValid(List<AnimationModel> animations, int iterator, bool probe = false)
         {
+            AnimationModel animationModel = animations.ElementAt(iterator);
+
             bool isValid = true;
             foreach (var condition in animationModel.Conditions)
             {
@@ -232,6 +234,17 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     passedCheck = FashionSense.conditionData.IsElapsedTimeMultipleOf(condition, probe);
                 }
+                else if (condition.Name is Condition.Type.DidPreviousFrameDisplay)
+                {
+                    var previousAnimationModel = animations.ElementAtOrDefault(iterator - 1);
+                    if (previousAnimationModel is null)
+                    {
+                        passedCheck = false;
+                    }
+                    else
+                    {
+                        passedCheck = (condition.GetParsedValue<bool>() && previousAnimationModel.WasDisplayed) || (!condition.GetParsedValue<bool>() && !previousAnimationModel.WasDisplayed);
+                    }
                 }
                 else if (condition.Name is Condition.Type.MovementSpeed)
                 {
@@ -245,7 +258,8 @@ namespace FashionSense.Framework.Patches.Renderer
                 // If the condition is independent and is true, then skip rest of evaluations
                 if (condition.Independent && passedCheck)
                 {
-                    return true;
+                    isValid = true;
+                    break;
                 }
                 else if (isValid)
                 {
@@ -253,6 +267,10 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
             }
 
+            if (!probe)
+            {
+                animationModel.WasDisplayed = isValid;
+            }
 
             return isValid;
         }
@@ -402,7 +420,7 @@ namespace FashionSense.Framework.Patches.Renderer
             var animationModel = animations.ElementAtOrDefault(iterator) is null ? animations.ElementAtOrDefault(0) : animations.ElementAtOrDefault(iterator);
 
             // Check if frame is valid
-            if (IsFrameValid(animationModel, probe: true))
+            if (IsFrameValid(animations, iterator, probe: true))
             {
                 if (animationModel.OverrideStartingIndex && startingIndex != iterator)
                 {
@@ -439,12 +457,22 @@ namespace FashionSense.Framework.Patches.Renderer
             // Note: ANIMATION_ELAPSED_DURATION is updated via UpdateTicked event
             if (elapsedDuration >= frameDuration)
             {
+                // Force the frame's condition to evalute and update any caches
+                IsFrameValid(animations, iterator);
+
                 iterator = iterator + 1 >= animations.Count() ? startingIndex : iterator + 1;
 
                 UpdatePlayerAnimationData(model, who, type, animations, facingDirection, iterator, startingIndex);
 
-                // Force the frame's condition to evalute and update any caches
-                IsFrameValid(animationModel);
+                animationModel.WasDisplayed = true;
+                if (startingIndex == iterator)
+                {
+                    // Reset any cached values with the AnimationModel
+                    foreach (var animation in animations)
+                    {
+                        animation.Reset();
+                    }
+                }
             }
 
             sourceRectangle.X += sourceRectangle.Width * animationModel.Frame;
