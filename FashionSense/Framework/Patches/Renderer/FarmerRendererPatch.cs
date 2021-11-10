@@ -434,20 +434,45 @@ namespace FashionSense.Framework.Patches.Renderer
             }
             else
             {
-                // Frame isn't valid, get the next available StartingIndex (or set it to 0)
-                foreach (var animation in animations.Take(iterator).Reverse().Where(a => a.OverrideStartingIndex && IsFrameValid(a, probe: true)))
+                // Frame isn't valid, get the next available frame starting from iterator
+                var hasFoundNextFrame = false;
+                foreach (var animation in animations.Skip(iterator).Where(a => IsFrameValid(animations, animations.IndexOf(a), probe: true)))
                 {
-                    startingIndex = animations.IndexOf(animation);
+                    iterator = animations.IndexOf(animation);
+
+                    if (animation.OverrideStartingIndex)
+                    {
+                        startingIndex = iterator;
+                    }
+                    elapsedDuration = 0;
+
+                    hasFoundNextFrame = true;
                     break;
                 }
 
-                if (startingIndex == iterator)
+                // If no frames are available from iterator onwards, then check backwards for the next available frame with OverrideStartingIndex
+                if (!hasFoundNextFrame)
                 {
-                    startingIndex = 0;
+                    foreach (var animation in animations.Take(iterator).Reverse().Where(a => a.OverrideStartingIndex && IsFrameValid(animations, animations.IndexOf(a), probe: true)))
+                    {
+                        iterator = animations.IndexOf(animation);
+                        startingIndex = iterator;
+                        elapsedDuration = 0;
+
+                        hasFoundNextFrame = true;
+                        break;
+                    }
                 }
 
-                iterator = startingIndex;
-                elapsedDuration = 0;
+                // If next frame is not available, revert to the first one
+                if (!hasFoundNextFrame)
+                {
+                    iterator = 0;
+                    startingIndex = 0;
+                    elapsedDuration = 0;
+                }
+
+
                 animationModel = animations.ElementAt(iterator);
 
                 UpdatePlayerAnimationData(model, who, type, animations, facingDirection, iterator, startingIndex);
