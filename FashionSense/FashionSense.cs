@@ -33,7 +33,7 @@ namespace FashionSense
         internal static TextureManager textureManager;
 
         // Utilities
-        internal static MovementData movementData;
+        internal static ConditionData conditionData;
 
         // Constants
         internal const int MAX_TRACKED_MILLISECONDS = 3600000;
@@ -53,7 +53,7 @@ namespace FashionSense
             textureManager = new TextureManager(monitor, modHelper);
 
             // Setup our utilities
-            movementData = new MovementData();
+            conditionData = new ConditionData();
 
             // Load our Harmony patches
             try
@@ -91,7 +91,7 @@ namespace FashionSense
         {
             if (_displayMovementData)
             {
-                movementData.OnRendered(sender, e);
+                conditionData.OnRendered(sender, e);
             }
         }
 
@@ -100,7 +100,7 @@ namespace FashionSense
             if (Context.IsWorldReady)
             {
                 // Update movement trackers
-                movementData.Update(Game1.player, Game1.currentGameTime);
+                conditionData.Update(Game1.player, Game1.currentGameTime);
             }
 
             // Update animation timers

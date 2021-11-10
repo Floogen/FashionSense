@@ -226,15 +226,16 @@ namespace FashionSense.Framework.Patches.Renderer
                 var passedCheck = false;
                 if (condition.Name is Condition.Type.MovementDuration)
                 {
-                    passedCheck = FashionSense.movementData.IsMovingLongEnough(condition.GetParsedValue<long>());
+                    passedCheck = FashionSense.conditionData.IsMovingLongEnough(condition.GetParsedValue<long>());
                 }
                 else if (condition.Name is Condition.Type.IsElapsedTimeMultipleOf)
                 {
-                    passedCheck = FashionSense.movementData.IsElapsedTimeMultipleOf(condition, probe);
+                    passedCheck = FashionSense.conditionData.IsElapsedTimeMultipleOf(condition, probe);
+                }
                 }
                 else if (condition.Name is Condition.Type.MovementSpeed)
                 {
-                    passedCheck = FashionSense.movementData.IsMovingFastEnough(condition.GetParsedValue<long>());
+                    passedCheck = FashionSense.conditionData.IsMovingFastEnough(condition.GetParsedValue<long>());
                 }
                 else if (condition.Name is Condition.Type.RidingHorse)
                 {
@@ -305,12 +306,12 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             // Reset any cached animation data, if needd
-            if (model.HasMovementAnimation() && FashionSense.movementData.IsPlayerMoving() && !HasCorrectAnimationTypeCached(model, who, AnimationModel.Type.Moving))
+            if (model.HasMovementAnimation() && FashionSense.conditionData.IsPlayerMoving() && !HasCorrectAnimationTypeCached(model, who, AnimationModel.Type.Moving))
             {
                 SetAnimationType(model, who, AnimationModel.Type.Moving);
                 FashionSense.ResetAnimationModDataFields(who, 0, AnimationModel.Type.Moving, facingDirection, true);
             }
-            else if (model.HasIdleAnimation() && !FashionSense.movementData.IsPlayerMoving() && !HasCorrectAnimationTypeCached(model, who, AnimationModel.Type.Idle))
+            else if (model.HasIdleAnimation() && !FashionSense.conditionData.IsPlayerMoving() && !HasCorrectAnimationTypeCached(model, who, AnimationModel.Type.Idle))
             {
                 SetAnimationType(model, who, AnimationModel.Type.Idle);
                 FashionSense.ResetAnimationModDataFields(who, 0, AnimationModel.Type.Idle, facingDirection, true);
@@ -323,11 +324,11 @@ namespace FashionSense.Framework.Patches.Renderer
 
             // Update the animations
             sourceRectangle = new Rectangle(model.StartingPosition.X, model.StartingPosition.Y, size.Width, size.Length);
-            if (model.HasMovementAnimation() && (FashionSense.movementData.IsPlayerMoving() || IsWaitingOnRequiredAnimation(who, model)))
+            if (model.HasMovementAnimation() && (FashionSense.conditionData.IsPlayerMoving() || IsWaitingOnRequiredAnimation(who, model)))
             {
-                HandleAppearanceAnimation(model, who, AnimationModel.Type.Moving, model.MovementAnimation, facingDirection, ref sourceRectangle, !FashionSense.movementData.IsPlayerMoving() && IsWaitingOnRequiredAnimation(who, model));
+                HandleAppearanceAnimation(model, who, AnimationModel.Type.Moving, model.MovementAnimation, facingDirection, ref sourceRectangle, !FashionSense.conditionData.IsPlayerMoving() && IsWaitingOnRequiredAnimation(who, model));
             }
-            else if (model.HasIdleAnimation() && !FashionSense.movementData.IsPlayerMoving())
+            else if (model.HasIdleAnimation() && !FashionSense.conditionData.IsPlayerMoving())
             {
                 HandleAppearanceAnimation(model, who, AnimationModel.Type.Idle, model.IdleAnimation, facingDirection, ref sourceRectangle);
             }

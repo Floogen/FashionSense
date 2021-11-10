@@ -75,7 +75,7 @@
     <Compile Include="Framework\Patches\Tools\ToolPatch.cs" />
     <Compile Include="Framework\UI\HandMirrorMenu.cs" />
     <Compile Include="Framework\Utilities\ModDataKeys.cs" />
-    <Compile Include="Framework\Utilities\MovementData.cs" />
+    <Compile Include="Framework\Utilities\ConditionData.cs" />
     <Compile Include="FashionSense.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
