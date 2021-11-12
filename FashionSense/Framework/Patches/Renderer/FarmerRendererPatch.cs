@@ -768,7 +768,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
             else
             {
-                var accessoryColor = overrideColor.Equals(Color.White) ? new Color() { PackedValue = Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR) ? uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR]) : who.hairstyleColor.Value.PackedValue } : overrideColor;
+                var accessoryColor = new Color() { PackedValue = Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR) ? uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR]) : who.hairstyleColor.Value.PackedValue };
                 if (accessoryModel.DisableGrayscale)
                 {
                     accessoryColor = Color.White;
@@ -830,7 +830,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
             else
             {
-                var hatColor = overrideColor.Equals(Color.White) ? new Color() { PackedValue = Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_HAT_COLOR) ? uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_HAT_COLOR]) : who.hairstyleColor.Value.PackedValue } : overrideColor;
+                var hatColor = new Color() { PackedValue = Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_HAT_COLOR) ? uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_HAT_COLOR]) : who.hairstyleColor.Value.PackedValue };
                 if (hatModel.DisableGrayscale)
                 {
                     hatColor = Color.White;
