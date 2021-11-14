@@ -89,6 +89,7 @@
     <None Include="Examples\[FS] Example Pack\Accessories\FlowingScarf\accessory.json" />
     <None Include="Examples\[FS] Example Pack\Accessories\Priestess\accessory.json" />
     <None Include="Examples\[FS] Example Pack\Accessories\OneWingedAngel\accessory.json" />
+    <None Include="Examples\[FS] Example Pack\Accessories\TwoToneGlasses\accessory.json" />
     <None Include="Examples\[FS] Example Pack\Accessories\ShinySunglasses\accessory.json" />
     <None Include="Examples\[FS] Example Pack\Hairs\LongHair\hair.json" />
     <None Include="Examples\[FS] Example Pack\Hairs\Magic Sword\hair.json" />
@@ -113,6 +114,7 @@
     <Content Include="Examples\[FS] Example Pack\Accessories\FlowingScarf\accessory.png" />
     <Content Include="Examples\[FS] Example Pack\Accessories\Priestess\accessory.png" />
     <Content Include="Examples\[FS] Example Pack\Accessories\OneWingedAngel\accessory.png" />
+    <Content Include="Examples\[FS] Example Pack\Accessories\TwoToneGlasses\accessory.png" />
     <Content Include="Examples\[FS] Example Pack\Accessories\ShinySunglasses\accessory.png" />
     <Content Include="Examples\[FS] Example Pack\Hairs\LongHair\hair.png" />
     <Content Include="Examples\[FS] Example Pack\Hairs\Magic Sword\hair.png" />

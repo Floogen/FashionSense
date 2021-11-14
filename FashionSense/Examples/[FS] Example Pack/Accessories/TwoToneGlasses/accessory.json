@@ -1,0 +1,80 @@
+{
+  "Name": "Two Tone Glasses",
+  "FrontAccessory": {
+    "ColorMasks": [
+      [ 192, 236, 192 ],
+      [ 106, 236, 212 ]
+    ],
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "HeadPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "AccessorySize": {
+      "Width": 16,
+      "Length": 16
+    },
+    "IdleAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 125
+      }
+    ]
+  },
+  "RightAccessory": {
+    "StartingPosition": {
+      "X": 0,
+      "Y": 16
+    },
+    "HeadPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "AccessorySize": {
+      "Width": 16,
+      "Length": 16
+    },
+    "IdleAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 125
+      }
+    ]
+  },
+  "LeftAccessory": {
+    "DisableGrayscale": true,
+    "StartingPosition": {
+      "X": 0,
+      "Y": 32
+    },
+    "HeadPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "AccessorySize": {
+      "Width": 16,
+      "Length": 16
+    },
+    "IdleAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 125
+      },
+      {
+        "Frame": 1,
+        "Duration": 125
+      },
+      {
+        "Frame": 2,
+        "Duration": 125
+      },
+      {
+        "Frame": 3,
+        "Duration": 125
+      }
+    ]
+  }
+}
