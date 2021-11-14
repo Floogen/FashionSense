@@ -144,7 +144,7 @@ namespace FashionSense.Framework.UI
                 downNeighborID = -99998
             };
 
-            searchButton = new ClickableTextureComponent("Search", new Rectangle(base.xPositionOnScreen + base.width - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder + 10, base.yPositionOnScreen + 22, 64, 64), null, null, Game1.mouseCursors, new Rectangle(208, 320, 16, 16), 2f)
+            searchButton = new ClickableTextureComponent("Search", new Rectangle(base.xPositionOnScreen + base.width - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder + 8, base.yPositionOnScreen + 26, 64, 64), null, null, Game1.mouseCursors, new Rectangle(208, 320, 16, 16), 2f)
             {
                 myID = 701,
                 upNeighborID = -99998,
@@ -741,7 +741,7 @@ namespace FashionSense.Framework.UI
 
             if (appearanceLabel.name.Length > 0)
             {
-                Utility.drawTextWithShadow(b, appearanceLabel.name, Game1.smallFont, new Vector2((float)(appearanceLabel.bounds.X + 21) - Game1.smallFont.MeasureString(appearanceLabel.name).X / 2f, (float)(appearanceLabel.bounds.Y)), Game1.textColor);
+                Utility.drawTextWithShadow(b, appearanceLabel.name, Game1.smallFont, new Vector2((appearanceLabel.bounds.X + 21) - Game1.smallFont.MeasureString(appearanceLabel.name).X / 2f, appearanceLabel.bounds.Y + 5f), Game1.textColor);
             }
 
             // Draw color selector
