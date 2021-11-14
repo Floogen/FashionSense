@@ -27,8 +27,9 @@ namespace FashionSense.Framework.UI
         private const string HAT_FILTER_BUTTON = "HatFilter";
 
         private ClickableComponent descriptionLabel;
+        private ClickableComponent appearanceLabel;
         private ClickableComponent colorLabel;
-        private ClickableComponent authorLabel;
+        private ClickableComponent contentPackLabel;
         public List<ClickableComponent> labels = new List<ClickableComponent>();
         public List<ClickableComponent> leftSelectionButtons = new List<ClickableComponent>();
         public List<ClickableComponent> rightSelectionButtons = new List<ClickableComponent>();
@@ -57,11 +58,11 @@ namespace FashionSense.Framework.UI
             _displayFarmer = Game1.player;
 
             // Add author label
-            var authorName = "Author's Hair Name";
-            labels.Add(authorLabel = new ClickableComponent(new Rectangle((int)(_portraitBox.X - Game1.smallFont.MeasureString(authorName).X / 2) + 64, base.yPositionOnScreen + 32, 1, 1), authorName));
+            var contentPackName = "Content Pack's Name";
+            labels.Add(contentPackLabel = new ClickableComponent(new Rectangle((int)(_portraitBox.X - Game1.smallFont.MeasureString(contentPackName).X / 2) + 64, base.yPositionOnScreen + 32, 1, 1), contentPackName));
 
             // Add buttons
-            int yOffset = 144;
+            int yOffset = 160;
             leftSelectionButtons.Add(new ClickableTextureComponent("Direction", new Rectangle(_portraitBox.X - 32, _portraitBox.Y + yOffset, 64, 64), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 44), 1f)
             {
                 myID = 520,
@@ -97,7 +98,8 @@ namespace FashionSense.Framework.UI
                 leftNeighborID = -99998,
                 rightNeighborID = -99998,
                 downNeighborID = -99998
-            });
+            });;
+            appearanceLabel = new ClickableComponent(new Rectangle(_portraitBox.Right - 86, _portraitBox.Y + yOffset + 48, 1, 1), String.Empty);
 
             var lastSelectedFilter = HAIR_FILTER_BUTTON;
             if (Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON) && !String.IsNullOrEmpty(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON]))
@@ -464,6 +466,44 @@ namespace FashionSense.Framework.UI
                 }
             }
 
+            if (contentPackLabel.containsPoint(x, y))
+            {
+                AppearanceContentPack contentPack = null;
+                switch (GetNameOfEnabledFilter())
+                {
+                    case HAIR_FILTER_BUTTON:
+                        contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID]);
+                        break;
+                    case ACCESSORY_FILTER_BUTTON:
+                        contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_ID]);
+                        break;
+                    case HAT_FILTER_BUTTON:
+                        contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<HatContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAT_ID]);
+                        break;
+                }
+
+                hoverText = $"{contentPack.PackName} by {contentPack.Author}";
+            }
+
+            if (appearanceLabel.containsPoint(x, y))
+            {
+                AppearanceContentPack contentPack = null;
+                switch (GetNameOfEnabledFilter())
+                {
+                    case HAIR_FILTER_BUTTON:
+                        contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID]);
+                        break;
+                    case ACCESSORY_FILTER_BUTTON:
+                        contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_ID]);
+                        break;
+                    case HAT_FILTER_BUTTON:
+                        contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<HatContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAT_ID]);
+                        break;
+                }
+
+                hoverText = contentPack.Name;
+            }
+
             if (okButton.containsPoint(x, y))
             {
                 okButton.scale = Math.Min(okButton.scale + 0.02f, okButton.baseScale + 0.1f);
@@ -529,9 +569,8 @@ namespace FashionSense.Framework.UI
                 {
                     continue;
                 }
-                string sub = "";
+
                 float offset = 0f;
-                float subYOffset = 0f;
                 Color color = Game1.textColor;
                 if (c == descriptionLabel)
                 {
@@ -553,22 +592,38 @@ namespace FashionSense.Framework.UI
                     offset = 21f - Game1.smallFont.MeasureString(c.name).X / 2f;
                     if (!c.name.Contains("Color"))
                     {
-                        sub = "None";
+                        appearanceLabel.name = "None";
                         if (contentPack != null)
                         {
-                            sub = contentPack.Name;
+                            appearanceLabel.name = contentPack.Name;
+                            if (appearanceLabel.name.Length > 21)
+                            {
+                                appearanceLabel.name = $"{appearanceLabel.name.Substring(0, 21).TrimEnd()}...";
+                            }
                         }
+
+                        var labelMeasured = Game1.smallFont.MeasureString(appearanceLabel.name);
+                        appearanceLabel.bounds.Width = (int)labelMeasured.X;
+                        appearanceLabel.bounds.Height = (int)labelMeasured.Y;
                     }
                 }
-                else if (c == authorLabel)
+                else if (c == contentPackLabel)
                 {
-                    authorLabel.name = "";
+                    contentPackLabel.name = "";
                     if (contentPack != null)
                     {
-                        authorLabel.name = contentPack.Author;
+                        contentPackLabel.name = contentPack.PackName;
                     }
 
-                    authorLabel.bounds.X = (int)(_portraitBox.X - Game1.smallFont.MeasureString(authorLabel.name).X / 2) + 64;
+                    if (contentPackLabel.name.Length > 21)
+                    {
+                        contentPackLabel.name = $"{contentPackLabel.name.Substring(0, 21).TrimEnd()}...";
+                    }
+
+                    var labelMeasured = Game1.smallFont.MeasureString(contentPackLabel.name);
+                    contentPackLabel.bounds.X = (int)(_portraitBox.X - labelMeasured.X / 2) + 64;
+                    contentPackLabel.bounds.Width = (int)labelMeasured.X;
+                    contentPackLabel.bounds.Height = (int)labelMeasured.Y;
                 }
                 else if (c == colorLabel)
                 {
@@ -596,10 +651,11 @@ namespace FashionSense.Framework.UI
                     color = Game1.textColor;
                 }
                 Utility.drawTextWithShadow(b, c.name, Game1.smallFont, new Vector2((float)c.bounds.X + offset, c.bounds.Y), color);
-                if (sub.Length > 0)
-                {
-                    Utility.drawTextWithShadow(b, sub, Game1.smallFont, new Vector2((float)(c.bounds.X + 21) - Game1.smallFont.MeasureString(sub).X / 2f, (float)(c.bounds.Y + 32) + subYOffset), color);
-                }
+            }
+
+            if (appearanceLabel.name.Length > 0)
+            {
+                Utility.drawTextWithShadow(b, appearanceLabel.name, Game1.smallFont, new Vector2((float)(appearanceLabel.bounds.X + 21) - Game1.smallFont.MeasureString(appearanceLabel.name).X / 2f, (float)(appearanceLabel.bounds.Y)), Game1.textColor);
             }
 
             // Draw color selector
