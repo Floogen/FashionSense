@@ -23,6 +23,7 @@ namespace FashionSense.Framework.Models
         internal string Author { get; set; }
         public string Name { get; set; }
         internal string Id { get; set; }
+        internal string PackName { get; set; }
         internal Texture2D Texture { get; set; }
     }
 }

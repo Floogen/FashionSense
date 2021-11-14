@@ -248,7 +248,8 @@ namespace FashionSense
                     // Set the model type
                     appearanceModel.PackType = AppearanceContentPack.Type.Hair;
 
-                    // Set the ModelName and TextureId
+                    // Set the PackName and Id
+                    appearanceModel.PackName = contentPack.Manifest.Name;
                     appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.PackType, "/", appearanceModel.Name);
 
                     // Verify that a hairstyle with the name doesn't exist in this pack
@@ -337,7 +338,8 @@ namespace FashionSense
                     // Set the model type
                     appearanceModel.PackType = AppearanceContentPack.Type.Accessory;
 
-                    // Set the ModelName and TextureId
+                    // Set the PackName and Id
+                    appearanceModel.PackName = contentPack.Manifest.Name;
                     appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.PackType, "/", appearanceModel.Name);
 
                     // Verify that a accessory with the name doesn't exist in this pack
@@ -426,7 +428,8 @@ namespace FashionSense
                     // Set the model type
                     appearanceModel.PackType = AppearanceContentPack.Type.Hat;
 
-                    // Set the ModelName and TextureId
+                    // Set the PackName and Id
+                    appearanceModel.PackName = contentPack.Manifest.Name;
                     appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.PackType, "/", appearanceModel.Name);
 
                     // Verify that a hat with the name doesn't exist in this pack
