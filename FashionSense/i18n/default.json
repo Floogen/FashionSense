@@ -7,11 +7,13 @@
   "messages.warning.no_content_packs": "You don't have any Fashion Sense content packs installed!",
 
   // UI - Titles
+  "ui.fashion_sense.title.search": "Select a Fashion Sense Pack",
   "ui.fashion_sense.title.hair": "Hairstyles",
   "ui.fashion_sense.title.accessory": "Accessories",
   "ui.fashion_sense.title.hat": "Hats",
 
   // UI - Etc
+  "ui.fashion_sense.search_button": "Search for a specific Fashion Sense pack.",
   "ui.fashion_sense.color_active.hair": "Hair Color",
   "ui.fashion_sense.color_active.hat": "Hat Color",
   "ui.fashion_sense.color_active.accessory": "Acc. Color",
