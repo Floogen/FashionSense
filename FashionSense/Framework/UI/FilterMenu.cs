@@ -64,7 +64,6 @@ namespace FashionSense.Framework.UI
             }
 
             // Set up the various other buttons
-            base.upperRightCloseButton = new ClickableTextureComponent(new Rectangle(base.xPositionOnScreen + base.width - 20, base.yPositionOnScreen - 8, 48, 48), Game1.mouseCursors, new Rectangle(337, 494, 12, 12), 4f);
             backButton = new ClickableTextureComponent(new Rectangle(base.xPositionOnScreen - 64, base.yPositionOnScreen + 8, 48, 44), Game1.mouseCursors, new Rectangle(352, 495, 12, 11), 4f)
             {
                 myID = 102,
@@ -111,6 +110,21 @@ namespace FashionSense.Framework.UI
                 _pages.Add(new List<AppearanceContentPack>());
             }
             _currentPage = Math.Min(Math.Max(_currentPage, 0), _pages.Count - 1);
+        }
+
+        public override void receiveScrollWheelAction(int direction)
+        {
+            base.receiveScrollWheelAction(direction);
+            if (direction > 0 && _currentPage > 0)
+            {
+                _currentPage--;
+                Game1.playSound("shiny4");
+            }
+            else if (direction < 0 && _currentPage < _pages.Count - 1)
+            {
+                _currentPage++;
+                Game1.playSound("shiny4");
+            }
         }
 
         public override void receiveLeftClick(int x, int y, bool playSound = true)
@@ -163,7 +177,20 @@ namespace FashionSense.Framework.UI
 
         public override void performHoverAction(int x, int y)
         {
+            _hoverText = String.Empty;
+            for (int i = 0; i < packButtons.Count; i++)
+            {
+                if (!(_pages.Count > 0 && _pages[_currentPage].Count > i))
+                {
+                    continue;
+                }
 
+                if (packButtons[i].containsPoint(x, y))
+                {
+                    _hoverText = $"{ _pages[_currentPage][i].PackName} by { _pages[_currentPage][i].Author}";
+                    return;
+                }
+            }
         }
 
         public override void draw(SpriteBatch b)
@@ -186,6 +213,15 @@ namespace FashionSense.Framework.UI
                     IClickableMenu.drawTextureBox(b, Game1.mouseCursors, new Rectangle(384, 396, 15, 15), packButtons[j].bounds.X, packButtons[j].bounds.Y, packButtons[j].bounds.Width, packButtons[j].bounds.Height, packButtons[j].containsPoint(Game1.getOldMouseX(), Game1.getOldMouseY()) ? Color.Wheat : Color.White, 4f, drawShadow: false);
                     SpriteText.drawStringHorizontallyCenteredAt(b, _pages[_currentPage][j].PackName, packButtons[j].bounds.X + packButtons[j].bounds.Width / 2, packButtons[j].bounds.Y + 20);
                 }
+            }
+
+            if (_currentPage < _pages.Count - 1)
+            {
+                this.forwardButton.draw(b);
+            }
+            if (_currentPage > 0)
+            {
+                this.backButton.draw(b);
             }
 
             // Draw hover text
