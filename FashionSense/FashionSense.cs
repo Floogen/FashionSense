@@ -120,6 +120,22 @@ namespace FashionSense
                     Game1.player.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION] = (elapsedDuration + Game1.currentGameTime.ElapsedGameTime.Milliseconds).ToString();
                 }
             }
+            if (Game1.player.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ELAPSED_DURATION))
+            {
+                var elapsedDuration = Int32.Parse(Game1.player.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ELAPSED_DURATION]);
+                if (elapsedDuration < MAX_TRACKED_MILLISECONDS)
+                {
+                    Game1.player.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ELAPSED_DURATION] = (elapsedDuration + Game1.currentGameTime.ElapsedGameTime.Milliseconds).ToString();
+                }
+            }
+            if (Game1.player.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION))
+            {
+                var elapsedDuration = Int32.Parse(Game1.player.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION]);
+                if (elapsedDuration < MAX_TRACKED_MILLISECONDS)
+                {
+                    Game1.player.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION] = (elapsedDuration + Game1.currentGameTime.ElapsedGameTime.Milliseconds).ToString();
+                }
+            }
             if (Game1.player.modData.ContainsKey(ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION))
             {
                 var elapsedDuration = Int32.Parse(Game1.player.modData[ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION]);
@@ -489,6 +505,16 @@ namespace FashionSense
             who.modData[ModDataKeys.ANIMATION_ACCESSORY_FRAME_DURATION] = duration.ToString();
             who.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION] = "0";
 
+            who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ITERATOR] = "0";
+            who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_STARTING_INDEX] = "0";
+            who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_FRAME_DURATION] = duration.ToString();
+            who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ELAPSED_DURATION] = "0";
+
+            who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ITERATOR] = "0";
+            who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_STARTING_INDEX] = "0";
+            who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_FRAME_DURATION] = duration.ToString();
+            who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION] = "0";
+
             who.modData[ModDataKeys.ANIMATION_HAT_ITERATOR] = "0";
             who.modData[ModDataKeys.ANIMATION_HAT_STARTING_INDEX] = "0";
             who.modData[ModDataKeys.ANIMATION_HAT_FRAME_DURATION] = duration.ToString();
@@ -500,6 +526,8 @@ namespace FashionSense
             {
                 who.modData[ModDataKeys.ANIMATION_HAIR_TYPE] = animationType.ToString();
                 who.modData[ModDataKeys.ANIMATION_ACCESSORY_TYPE] = animationType.ToString();
+                who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_TYPE] = animationType.ToString();
+                who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_TYPE] = animationType.ToString();
                 who.modData[ModDataKeys.ANIMATION_HAT_TYPE] = animationType.ToString();
             }
         }

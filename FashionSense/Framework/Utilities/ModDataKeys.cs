@@ -40,6 +40,20 @@ namespace FashionSense.Framework.Utilities
         internal const string ANIMATION_ACCESSORY_FRAME_DURATION = "FashionSense.Animation.Accessory.FrameDuration";
         internal const string ANIMATION_ACCESSORY_ELAPSED_DURATION = "FashionSense.Animation.Accessory.ElapsedDuration";
 
+        // Accessory animation related keys
+        internal const string ANIMATION_ACCESSORY_SECONDARY_TYPE = "FashionSense.Animation.Accessory.Secondary.Type";
+        internal const string ANIMATION_ACCESSORY_SECONDARY_ITERATOR = "FashionSense.Animation.Accessory.Secondary.Iterator";
+        internal const string ANIMATION_ACCESSORY_SECONDARY_STARTING_INDEX = "FashionSense.Animation.Accessory.Secondary.StartingIndex";
+        internal const string ANIMATION_ACCESSORY_SECONDARY_FRAME_DURATION = "FashionSense.Animation.Accessory.Secondary.FrameDuration";
+        internal const string ANIMATION_ACCESSORY_SECONDARY_ELAPSED_DURATION = "FashionSense.Animation.Accessory.Secondary.ElapsedDuration";
+
+        // Accessory animation related keys
+        internal const string ANIMATION_ACCESSORY_TERTIARY_TYPE = "FashionSense.Animation.Accessory.Tertiary.Type";
+        internal const string ANIMATION_ACCESSORY_TERTIARY_ITERATOR = "FashionSense.Animation.Accessory.Tertiary.Iterator";
+        internal const string ANIMATION_ACCESSORY_TERTIARY_STARTING_INDEX = "FashionSense.Animation.Accessory.Tertiary.StartingIndex";
+        internal const string ANIMATION_ACCESSORY_TERTIARY_FRAME_DURATION = "FashionSense.Animation.Accessory.Tertiary.FrameDuration";
+        internal const string ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION = "FashionSense.Animation.Accessory.Tertiary.ElapsedDuration";
+
         // Hat animation related keys
         internal const string ANIMATION_HAT_TYPE = "FashionSense.Animation.Hat.Type";
         internal const string ANIMATION_HAT_ITERATOR = "FashionSense.Animation.Hat.Iterator";

@@ -210,6 +210,14 @@ namespace FashionSense.Framework.Patches.Renderer
             switch (model)
             {
                 case AccessoryModel accessoryModel:
+                    if (accessoryModel.Priority == AccessoryModel.Type.Secondary)
+                    {
+                        return who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ITERATOR) && who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_FRAME_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ELAPSED_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_TYPE) && who.modData.ContainsKey(ModDataKeys.ANIMATION_FACING_DIRECTION);
+                    }
+                    if (accessoryModel.Priority == AccessoryModel.Type.Tertiary)
+                    {
+                        return who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ITERATOR) && who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_FRAME_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_TYPE) && who.modData.ContainsKey(ModDataKeys.ANIMATION_FACING_DIRECTION);
+                    }
                     return who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_ITERATOR) && who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_FRAME_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_TYPE) && who.modData.ContainsKey(ModDataKeys.ANIMATION_FACING_DIRECTION);
                 case HatModel hatModel:
                     return who.modData.ContainsKey(ModDataKeys.ANIMATION_HAT_ITERATOR) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAT_FRAME_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAT_TYPE) && who.modData.ContainsKey(ModDataKeys.ANIMATION_FACING_DIRECTION);
@@ -279,11 +287,30 @@ namespace FashionSense.Framework.Patches.Renderer
             switch (model)
             {
                 case AccessoryModel accessoryModel:
-                    who.modData[ModDataKeys.ANIMATION_ACCESSORY_TYPE] = type.ToString();
-                    who.modData[ModDataKeys.ANIMATION_ACCESSORY_ITERATOR] = iterator.ToString();
-                    who.modData[ModDataKeys.ANIMATION_ACCESSORY_STARTING_INDEX] = startingIndex.ToString();
-                    who.modData[ModDataKeys.ANIMATION_ACCESSORY_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
-                    who.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION] = "0";
+                    if (accessoryModel.Priority == AccessoryModel.Type.Secondary)
+                    {
+                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_TYPE] = type.ToString();
+                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ITERATOR] = iterator.ToString();
+                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_STARTING_INDEX] = startingIndex.ToString();
+                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
+                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ELAPSED_DURATION] = "0";
+                    }
+                    else if (accessoryModel.Priority == AccessoryModel.Type.Tertiary)
+                    {
+                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_TYPE] = type.ToString();
+                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ITERATOR] = iterator.ToString();
+                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_STARTING_INDEX] = startingIndex.ToString();
+                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
+                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION] = "0";
+                    }
+                    else
+                    {
+                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_TYPE] = type.ToString();
+                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_ITERATOR] = iterator.ToString();
+                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_STARTING_INDEX] = startingIndex.ToString();
+                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
+                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION] = "0";
+                    }
                     break;
                 case HatModel hatModel:
                     who.modData[ModDataKeys.ANIMATION_HAT_TYPE] = type.ToString();
@@ -361,6 +388,14 @@ namespace FashionSense.Framework.Patches.Renderer
             switch (model)
             {
                 case AccessoryModel accessoryModel:
+                    if (accessoryModel.Priority == AccessoryModel.Type.Secondary)
+                    {
+                        return who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_TYPE) ? who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_TYPE] == type.ToString() : false;
+                    }
+                    if (accessoryModel.Priority == AccessoryModel.Type.Tertiary)
+                    {
+                        return who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_TYPE) ? who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_TYPE] == type.ToString() : false;
+                    }
                     return who.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_TYPE) ? who.modData[ModDataKeys.ANIMATION_ACCESSORY_TYPE] == type.ToString() : false;
                 case HatModel hatModel:
                     return who.modData.ContainsKey(ModDataKeys.ANIMATION_HAT_TYPE) ? who.modData[ModDataKeys.ANIMATION_HAT_TYPE] == type.ToString() : false;
@@ -374,7 +409,18 @@ namespace FashionSense.Framework.Patches.Renderer
             switch (model)
             {
                 case AccessoryModel accessoryModel:
-                    who.modData[ModDataKeys.ANIMATION_ACCESSORY_TYPE] = type.ToString();
+                    if (accessoryModel.Priority == AccessoryModel.Type.Secondary)
+                    {
+                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_TYPE] = type.ToString();
+                    }
+                    else if (accessoryModel.Priority == AccessoryModel.Type.Tertiary)
+                    {
+                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_TYPE] = type.ToString();
+                    }
+                    else
+                    {
+                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_TYPE] = type.ToString();
+                    }
                     break;
                 case HatModel hatModel:
                     who.modData[ModDataKeys.ANIMATION_HAT_TYPE] = type.ToString();
@@ -403,10 +449,27 @@ namespace FashionSense.Framework.Patches.Renderer
             switch (model)
             {
                 case AccessoryModel accessoryModel:
-                    iterator = Int32.Parse(who.modData[ModDataKeys.ANIMATION_ACCESSORY_ITERATOR]);
-                    startingIndex = Int32.Parse(who.modData[ModDataKeys.ANIMATION_ACCESSORY_STARTING_INDEX]);
-                    frameDuration = Int32.Parse(who.modData[ModDataKeys.ANIMATION_ACCESSORY_FRAME_DURATION]);
-                    elapsedDuration = Int32.Parse(who.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION]);
+                    if (accessoryModel.Priority == AccessoryModel.Type.Secondary)
+                    {
+                        iterator = Int32.Parse(who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ITERATOR]);
+                        startingIndex = Int32.Parse(who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_STARTING_INDEX]);
+                        frameDuration = Int32.Parse(who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_FRAME_DURATION]);
+                        elapsedDuration = Int32.Parse(who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ELAPSED_DURATION]);
+                    }
+                    else if (accessoryModel.Priority == AccessoryModel.Type.Tertiary)
+                    {
+                        iterator = Int32.Parse(who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ITERATOR]);
+                        startingIndex = Int32.Parse(who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_STARTING_INDEX]);
+                        frameDuration = Int32.Parse(who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_FRAME_DURATION]);
+                        elapsedDuration = Int32.Parse(who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION]);
+                    }
+                    else
+                    {
+                        iterator = Int32.Parse(who.modData[ModDataKeys.ANIMATION_ACCESSORY_ITERATOR]);
+                        startingIndex = Int32.Parse(who.modData[ModDataKeys.ANIMATION_ACCESSORY_STARTING_INDEX]);
+                        frameDuration = Int32.Parse(who.modData[ModDataKeys.ANIMATION_ACCESSORY_FRAME_DURATION]);
+                        elapsedDuration = Int32.Parse(who.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION]);
+                    }
                     break;
                 case HatModel hatModel:
                     iterator = Int32.Parse(who.modData[ModDataKeys.ANIMATION_HAT_ITERATOR]);
@@ -511,7 +574,18 @@ namespace FashionSense.Framework.Patches.Renderer
             switch (model)
             {
                 case AccessoryModel accessoryModel:
-                    iteratorKey = ModDataKeys.ANIMATION_ACCESSORY_ITERATOR;
+                    if (accessoryModel.Priority == AccessoryModel.Type.Secondary)
+                    {
+                        iteratorKey = ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ITERATOR;
+                    }
+                    else if (accessoryModel.Priority == AccessoryModel.Type.Tertiary)
+                    {
+                        iteratorKey = ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ITERATOR;
+                    }
+                    else
+                    {
+                        iteratorKey = ModDataKeys.ANIMATION_ACCESSORY_ITERATOR;
+                    }
                     break;
                 case HatModel hatModel:
                     iteratorKey = ModDataKeys.ANIMATION_HAT_ITERATOR;
@@ -725,6 +799,11 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 accessoryPack = aPack;
                 accessoryModel = aPack.GetAccessoryFromFacingDirection(facingDirection);
+
+                if (accessoryModel != null)
+                {
+                    accessoryModel.Priority = AccessoryModel.Type.Primary;
+                }
             }
 
             AccessoryContentPack secondaryAccessoryPack = null;
@@ -733,6 +812,11 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 secondaryAccessoryPack = secAPack;
                 secondaryAccessoryModel = secAPack.GetAccessoryFromFacingDirection(facingDirection);
+
+                if (secondaryAccessoryModel != null)
+                {
+                    secondaryAccessoryModel.Priority = AccessoryModel.Type.Secondary;
+                }
             }
 
             AccessoryContentPack tertiaryAccessoryPack = null;
@@ -741,6 +825,11 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 tertiaryAccessoryPack = triAPack;
                 tertiaryAccessoryModel = triAPack.GetAccessoryFromFacingDirection(facingDirection);
+
+                if (tertiaryAccessoryModel != null)
+                {
+                    tertiaryAccessoryModel.Priority = AccessoryModel.Type.Tertiary;
+                }
             }
 
             // Hat pack
@@ -772,15 +861,15 @@ namespace FashionSense.Framework.Patches.Renderer
             }
             if (accessoryModel != null)
             {
-                HandleAppearanceAnimation(accessoryModel, who, facingDirection, ref customSecondaryAccessorySourceRect);
+                HandleAppearanceAnimation(accessoryModel, who, facingDirection, ref customAccessorySourceRect);
             }
             if (secondaryAccessoryModel != null)
             {
-                HandleAppearanceAnimation(secondaryAccessoryModel, who, facingDirection, ref customTertiaryAccessorySourceRect);
+                HandleAppearanceAnimation(secondaryAccessoryModel, who, facingDirection, ref customSecondaryAccessorySourceRect);
             }
             if (tertiaryAccessoryModel != null)
             {
-                HandleAppearanceAnimation(tertiaryAccessoryModel, who, facingDirection, ref customAccessorySourceRect);
+                HandleAppearanceAnimation(tertiaryAccessoryModel, who, facingDirection, ref customTertiaryAccessorySourceRect);
             }
             if (hatModel != null)
             {
@@ -820,7 +909,7 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 if (accessoryModel != null)
                 {
-                    DrawCustomAccessory(accessoryPack, accessoryModel, customAccessorySourceRect, ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR, __instance, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, layerDepth);
+                    DrawCustomAccessory(accessoryPack, accessoryModel, customAccessorySourceRect, ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR, __instance, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, layerDepth + 0.02E-05f);
                 }
                 if (secondaryAccessoryModel != null)
                 {
@@ -828,7 +917,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
                 if (tertiaryAccessoryModel != null)
                 {
-                    DrawCustomAccessory(tertiaryAccessoryPack, tertiaryAccessoryModel, customTertiaryAccessorySourceRect, ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR, __instance, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, layerDepth + 0.02E-05f);
+                    DrawCustomAccessory(tertiaryAccessoryPack, tertiaryAccessoryModel, customTertiaryAccessorySourceRect, ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR, __instance, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, layerDepth);
                 }
             }
 
