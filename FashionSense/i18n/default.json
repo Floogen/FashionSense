@@ -14,6 +14,7 @@
 
   // UI - Etc
   "ui.fashion_sense.search_button": "Search for a specific Fashion Sense pack.",
+  "ui.fashion_sense.clear_button": "Clears the currently selected Fashion Sense item.",
   "ui.fashion_sense.color_active.hair": "Hair Color",
   "ui.fashion_sense.color_active.hat": "Hat Color",
   "ui.fashion_sense.color_active.accessory": "Acc. Color",

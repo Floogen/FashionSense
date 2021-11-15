@@ -43,6 +43,7 @@ namespace FashionSense.Framework.UI
         public List<ClickableComponent> colorPickerCCs = new List<ClickableComponent>();
 
         public ColorPicker colorPicker;
+        private ClickableTextureComponent clearButton;
         private ClickableTextureComponent searchButton;
         public ClickableTextureComponent okButton;
 
@@ -178,7 +179,15 @@ namespace FashionSense.Framework.UI
                 downNeighborID = -99998
             };
 
-            searchButton = new ClickableTextureComponent("Search", new Rectangle(base.xPositionOnScreen + base.width - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder + 8, base.yPositionOnScreen + 26, 64, 64), null, null, Game1.mouseCursors, new Rectangle(208, 320, 16, 16), 2f)
+            searchButton = new ClickableTextureComponent("Search", new Rectangle(base.xPositionOnScreen + base.width - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder + 8, base.yPositionOnScreen + 26, 32, 32), null, null, Game1.mouseCursors, new Rectangle(208, 320, 16, 16), 2f)
+            {
+                myID = 701,
+                upNeighborID = -99998,
+                leftNeighborID = -99998,
+                rightNeighborID = -99998,
+                downNeighborID = -99998
+            };
+            clearButton = new ClickableTextureComponent("Clear", new Rectangle(base.xPositionOnScreen + base.width - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder + 8, base.yPositionOnScreen + 70, 32, 32), null, null, Game1.mouseCursors, new Rectangle(323, 433, 9, 10), 3f)
             {
                 myID = 701,
                 upNeighborID = -99998,
@@ -525,6 +534,25 @@ namespace FashionSense.Framework.UI
                 Game1.activeClickableMenu = new FilterMenu(GetNameOfEnabledFilter(), this);
             }
 
+            if (clearButton.containsPoint(x, y))
+            {
+                string modDataKey = String.Empty;
+                switch (GetNameOfEnabledFilter())
+                {
+                    case HAIR_FILTER_BUTTON:
+                        modDataKey = ModDataKeys.CUSTOM_HAIR_ID;
+                        break;
+                    case ACCESSORY_FILTER_BUTTON:
+                        modDataKey = GetCurrentAccessorySlotKey();
+                        break;
+                    case HAT_FILTER_BUTTON:
+                        modDataKey = ModDataKeys.CUSTOM_HAT_ID;
+                        break;
+                }
+
+                Game1.player.modData[modDataKey] = "None";
+            }
+
             if (okButton.containsPoint(x, y))
             {
                 okButton.scale -= 0.25f;
@@ -675,6 +703,16 @@ namespace FashionSense.Framework.UI
                 searchButton.scale = Math.Max(searchButton.scale - 0.02f, searchButton.baseScale);
             }
 
+            if (clearButton.containsPoint(x, y))
+            {
+                hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.clear_button");
+                clearButton.scale = Math.Min(clearButton.scale + 0.02f, 3.2f);
+            }
+            else
+            {
+                clearButton.scale = Math.Max(clearButton.scale - 0.02f, clearButton.baseScale);
+            }
+
             if (okButton.containsPoint(x, y))
             {
                 okButton.scale = Math.Min(okButton.scale + 0.02f, okButton.baseScale + 0.1f);
@@ -741,6 +779,7 @@ namespace FashionSense.Framework.UI
                 }
             }
             searchButton.draw(b);
+            clearButton.draw(b);
             okButton.draw(b);
 
             // Draw labels
