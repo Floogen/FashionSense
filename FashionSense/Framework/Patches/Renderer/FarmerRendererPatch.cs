@@ -677,9 +677,33 @@ namespace FashionSense.Framework.Patches.Renderer
             b.Draw(maskedTexture, position, sourceRect, color, rotation, origin, scale, appearanceModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
         }
 
+        private static void DrawCustomAccessory(AccessoryContentPack accessoryPack, AccessoryModel accessoryModel, Rectangle customAccessorySourceRect, string colorModDataKey, FarmerRenderer renderer, SpriteBatch b, Farmer who, int facingDirection, Vector2 position, Vector2 origin, Vector2 positionOffset, Vector2 rotationAdjustment, float scale, int currentFrame, float rotation, float layerDepth)
+        {
+            var accessoryColor = new Color() { PackedValue = Game1.player.modData.ContainsKey(colorModDataKey) ? uint.Parse(Game1.player.modData[colorModDataKey]) : who.hairstyleColor.Value.PackedValue };
+            if (accessoryModel.DisableGrayscale)
+            {
+                accessoryColor = Color.White;
+            }
+            else if (accessoryModel.IsPrismatic)
+            {
+                accessoryColor = Utility.GetPrismaticColor(speedMultiplier: accessoryModel.PrismaticAnimationSpeedMultiplier);
+            }
+
+            // Correct how the accessory is drawn according to facingDirection and AccessoryModel.DrawBehindHair
+            var layerFix = facingDirection == 0 ? (accessoryModel.DrawBeforeHair ? 3.9E-05f : 2E-05f) : (accessoryModel.DrawBeforeHair ? -0.1E-05f : 2.9E-05f);
+            layerFix += accessoryModel.DrawBeforePlayer ? 0.2E-05f : 0;
+
+            b.Draw(accessoryPack.Texture, position + origin + positionOffset + rotationAdjustment + GetFeatureOffset(facingDirection, currentFrame, renderer, accessoryPack.PackType), customAccessorySourceRect, accessoryModel.HasColorMask() ? Color.White : accessoryColor, rotation, origin + new Vector2(accessoryModel.HeadPosition.X, accessoryModel.HeadPosition.Y), 4f * scale + ((rotation != 0f) ? 0f : 0f), accessoryModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + layerFix);
+
+            if (accessoryModel.HasColorMask())
+            {
+                DrawColorMask(b, accessoryPack, accessoryModel, position + origin + positionOffset + GetFeatureOffset(facingDirection, currentFrame, renderer, accessoryPack.PackType), customAccessorySourceRect, accessoryColor, rotation, origin + new Vector2(accessoryModel.HeadPosition.X, accessoryModel.HeadPosition.Y), 4f * scale, layerDepth + layerFix + 0.01E-05f);
+            }
+        }
+
         private static bool DrawHairAndAccesoriesPrefix(FarmerRenderer __instance, bool ___isDrawingForUI, Vector2 ___positionOffset, Vector2 ___rotationAdjustment, ref Rectangle ___hairstyleSourceRect, ref Rectangle ___shirtSourceRect, ref Rectangle ___accessorySourceRect, ref Rectangle ___hatSourceRect, SpriteBatch b, int facingDirection, Farmer who, Vector2 position, Vector2 origin, float scale, int currentFrame, float rotation, Color overrideColor, float layerDepth)
         {
-            if (!who.modData.ContainsKey(ModDataKeys.CUSTOM_HAIR_ID) && !who.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_ID))
+            if (!who.modData.ContainsKey(ModDataKeys.CUSTOM_HAIR_ID) && !who.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_ID) && !who.modData.ContainsKey(ModDataKeys.CUSTOM_HAT_ID))
             {
                 return true;
             }
@@ -703,6 +727,22 @@ namespace FashionSense.Framework.Patches.Renderer
                 accessoryModel = aPack.GetAccessoryFromFacingDirection(facingDirection);
             }
 
+            AccessoryContentPack secondaryAccessoryPack = null;
+            AccessoryModel secondaryAccessoryModel = null;
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(who.modData[ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID]) is AccessoryContentPack secAPack && secAPack != null)
+            {
+                secondaryAccessoryPack = secAPack;
+                secondaryAccessoryModel = secAPack.GetAccessoryFromFacingDirection(facingDirection);
+            }
+
+            AccessoryContentPack tertiaryAccessoryPack = null;
+            AccessoryModel tertiaryAccessoryModel = null;
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(who.modData[ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID]) is AccessoryContentPack triAPack && triAPack != null)
+            {
+                tertiaryAccessoryPack = triAPack;
+                tertiaryAccessoryModel = triAPack.GetAccessoryFromFacingDirection(facingDirection);
+            }
+
             // Hat pack
             HatContentPack hatPack = null;
             HatModel hatModel = null;
@@ -721,6 +761,8 @@ namespace FashionSense.Framework.Patches.Renderer
             // Set up source rectangles
             Rectangle customHairSourceRect = new Rectangle();
             Rectangle customAccessorySourceRect = new Rectangle();
+            Rectangle customSecondaryAccessorySourceRect = new Rectangle();
+            Rectangle customTertiaryAccessorySourceRect = new Rectangle();
             Rectangle customHatSourceRect = new Rectangle();
 
             // Handle any animations
@@ -730,7 +772,15 @@ namespace FashionSense.Framework.Patches.Renderer
             }
             if (accessoryModel != null)
             {
-                HandleAppearanceAnimation(accessoryModel, who, facingDirection, ref customAccessorySourceRect);
+                HandleAppearanceAnimation(accessoryModel, who, facingDirection, ref customSecondaryAccessorySourceRect);
+            }
+            if (secondaryAccessoryModel != null)
+            {
+                HandleAppearanceAnimation(secondaryAccessoryModel, who, facingDirection, ref customTertiaryAccessorySourceRect);
+            }
+            if (tertiaryAccessoryModel != null)
+            {
+                HandleAppearanceAnimation(tertiaryAccessoryModel, who, facingDirection, ref customAccessorySourceRect);
             }
             if (hatModel != null)
             {
@@ -762,31 +812,23 @@ namespace FashionSense.Framework.Patches.Renderer
             DrawShirtVanilla(b, ___shirtSourceRect, dyed_shirt_source_rect, __instance, who, currentFrame, facingDirection, rotation, scale, layerDepth, position, origin, ___positionOffset, ___rotationAdjustment, overrideColor);
 
             // Draw accessory
-            if (accessoryModel is null)
+            if (accessoryModel is null && secondaryAccessoryModel is null && tertiaryAccessoryModel is null)
             {
                 DrawAccessoryVanilla(b, ___accessorySourceRect, __instance, who, currentFrame, rotation, scale, layerDepth, position, origin, ___positionOffset, ___rotationAdjustment, overrideColor);
             }
             else
             {
-                var accessoryColor = new Color() { PackedValue = Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR) ? uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR]) : who.hairstyleColor.Value.PackedValue };
-                if (accessoryModel.DisableGrayscale)
+                if (accessoryModel != null)
                 {
-                    accessoryColor = Color.White;
+                    DrawCustomAccessory(accessoryPack, accessoryModel, customAccessorySourceRect, ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR, __instance, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, layerDepth);
                 }
-                else if (accessoryModel.IsPrismatic)
+                if (secondaryAccessoryModel != null)
                 {
-                    accessoryColor = Utility.GetPrismaticColor(speedMultiplier: accessoryModel.PrismaticAnimationSpeedMultiplier);
+                    DrawCustomAccessory(secondaryAccessoryPack, secondaryAccessoryModel, customSecondaryAccessorySourceRect, ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR, __instance, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, layerDepth + 0.01E-05f);
                 }
-
-                // Correct how the accessory is drawn according to facingDirection and AccessoryModel.DrawBehindHair
-                var layerFix = facingDirection == 0 ? (accessoryModel.DrawBeforeHair ? 3.9E-05f : 2E-05f) : (accessoryModel.DrawBeforeHair ? -0.1E-05f : 2.9E-05f);
-                layerFix += accessoryModel.DrawBeforePlayer ? 0.2E-05f : 0;
-
-                b.Draw(accessoryPack.Texture, position + origin + ___positionOffset + ___rotationAdjustment + GetFeatureOffset(facingDirection, currentFrame, __instance, accessoryPack.PackType), customAccessorySourceRect, accessoryModel.HasColorMask() ? Color.White : accessoryColor, rotation, origin + new Vector2(accessoryModel.HeadPosition.X, accessoryModel.HeadPosition.Y), 4f * scale + ((rotation != 0f) ? 0f : 0f), accessoryModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + layerFix);
-
-                if (accessoryModel.HasColorMask())
+                if (tertiaryAccessoryModel != null)
                 {
-                    DrawColorMask(b, accessoryPack, accessoryModel, position + origin + ___positionOffset + GetFeatureOffset(facingDirection, currentFrame, __instance, accessoryPack.PackType), customAccessorySourceRect, accessoryColor, rotation, origin + new Vector2(accessoryModel.HeadPosition.X, accessoryModel.HeadPosition.Y), 4f * scale, layerDepth + layerFix + 0.01E-05f);
+                    DrawCustomAccessory(tertiaryAccessoryPack, tertiaryAccessoryModel, customTertiaryAccessorySourceRect, ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR, __instance, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, layerDepth + 0.02E-05f);
                 }
             }
 

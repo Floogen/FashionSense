@@ -168,6 +168,14 @@ namespace FashionSense
             {
                 Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_ID] = null;
             }
+            if (!Game1.player.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID))
+            {
+                Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID] = null;
+            }
+            if (!Game1.player.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID))
+            {
+                Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID] = null;
+            }
             if (!Game1.player.modData.ContainsKey(ModDataKeys.CUSTOM_HAT_ID))
             {
                 Game1.player.modData[ModDataKeys.CUSTOM_HAT_ID] = null;

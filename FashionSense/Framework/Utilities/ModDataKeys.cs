@@ -11,6 +11,8 @@ namespace FashionSense.Framework.Utilities
         // Core keys
         internal const string CUSTOM_HAIR_ID = "FashionSense.CustomHair.Id";
         internal const string CUSTOM_ACCESSORY_ID = "FashionSense.CustomAccessory.Id";
+        internal const string CUSTOM_ACCESSORY_SECONDARY_ID = "FashionSense.CustomAccessory.Secondary.Id";
+        internal const string CUSTOM_ACCESSORY_TERTIARY_ID = "FashionSense.CustomAccessory.Tertiary.Id";
         internal const string CUSTOM_HAT_ID = "FashionSense.CustomHat.Id";
 
         // UI related keys

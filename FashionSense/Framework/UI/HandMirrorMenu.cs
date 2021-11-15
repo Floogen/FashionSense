@@ -328,6 +328,25 @@ namespace FashionSense.Framework.UI
             return enabledButton.name;
         }
 
+        private string GetCurrentAccessorySlotKey()
+        {
+            var enabledButton = optionButtons.FirstOrDefault(f => (f as ClickableTextureComponent).hoverText == "enabled");
+            if (enabledButton is null)
+            {
+                return null;
+            }
+
+            switch (enabledButton.name)
+            {
+                case SECOND_OPTION_BUTTON:
+                    return ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID;
+                case THIRD_OPTION_BUTTON:
+                    return ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID;
+                default:
+                    return ModDataKeys.CUSTOM_ACCESSORY_ID;
+            }
+        }
+
         private void UpdateAppearance(int change, bool overrideIndex = false)
         {
             string modDataKey = null;
@@ -337,17 +356,17 @@ namespace FashionSense.Framework.UI
             {
                 case HAIR_FILTER_BUTTON:
                     modDataKey = ModDataKeys.CUSTOM_HAIR_ID;
-                    currentAppearance = FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID]);
+                    currentAppearance = FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(Game1.player.modData[modDataKey]);
                     appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is HairContentPack).ToList();
                     break;
                 case ACCESSORY_FILTER_BUTTON:
-                    modDataKey = ModDataKeys.CUSTOM_ACCESSORY_ID;
-                    currentAppearance = FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_ID]);
+                    modDataKey = GetCurrentAccessorySlotKey();
+                    currentAppearance = FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(Game1.player.modData[modDataKey]);
                     appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is AccessoryContentPack).ToList();
                     break;
                 case HAT_FILTER_BUTTON:
                     modDataKey = ModDataKeys.CUSTOM_HAT_ID;
-                    currentAppearance = FashionSense.textureManager.GetSpecificAppearanceModel<HatContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAT_ID]);
+                    currentAppearance = FashionSense.textureManager.GetSpecificAppearanceModel<HatContentPack>(Game1.player.modData[modDataKey]);
                     appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is HatContentPack).ToList();
                     break;
             }
@@ -681,7 +700,7 @@ namespace FashionSense.Framework.UI
                     contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID]);
                     break;
                 case ACCESSORY_FILTER_BUTTON:
-                    contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_ID]);
+                    contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(Game1.player.modData[GetCurrentAccessorySlotKey()]);
                     break;
                 case HAT_FILTER_BUTTON:
                     contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<HatContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAT_ID]);
