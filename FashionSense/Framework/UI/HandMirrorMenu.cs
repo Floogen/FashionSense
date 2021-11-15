@@ -26,6 +26,10 @@ namespace FashionSense.Framework.UI
         internal const string HAIR_FILTER_BUTTON = "HairFilter";
         internal const string HAT_FILTER_BUTTON = "HatFilter";
 
+        internal const string FIRST_OPTION_BUTTON = "FirstOption";
+        internal const string SECOND_OPTION_BUTTON = "SecondOption";
+        internal const string THIRD_OPTION_BUTTON = "ThirdOption";
+
         private ClickableComponent descriptionLabel;
         private ClickableComponent appearanceLabel;
         private ClickableComponent colorLabel;
@@ -35,6 +39,7 @@ namespace FashionSense.Framework.UI
         public List<ClickableComponent> leftSelectionButtons = new List<ClickableComponent>();
         public List<ClickableComponent> rightSelectionButtons = new List<ClickableComponent>();
         public List<ClickableComponent> filterButtons = new List<ClickableComponent>();
+        public List<ClickableComponent> optionButtons = new List<ClickableComponent>();
         public List<ClickableComponent> colorPickerCCs = new List<ClickableComponent>();
 
         public ColorPicker colorPicker;
@@ -62,7 +67,7 @@ namespace FashionSense.Framework.UI
             var contentPackName = "Content Pack's Name";
             labels.Add(contentPackLabel = new ClickableComponent(new Rectangle((int)(_portraitBox.X - Game1.smallFont.MeasureString(contentPackName).X / 2) + 64, base.yPositionOnScreen + 32, 1, 1), contentPackName));
 
-            // Add buttons
+            // Add appearance-related buttons
             int yOffset = 160;
             leftSelectionButtons.Add(new ClickableTextureComponent("Direction", new Rectangle(_portraitBox.X - 32, _portraitBox.Y + yOffset, 64, 64), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 44), 1f)
             {
@@ -83,7 +88,7 @@ namespace FashionSense.Framework.UI
             });
 
             yOffset += 64;
-            leftSelectionButtons.Add(new ClickableTextureComponent("Appearance", new Rectangle(_portraitBox.X - 64, _portraitBox.Y + yOffset, 64, 64), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 44), 1f)
+            leftSelectionButtons.Add(new ClickableTextureComponent("Appearance", new Rectangle(_portraitBox.X - 64, _portraitBox.Y + yOffset + 16, 64, 64), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 44), 1f)
             {
                 myID = 514,
                 upNeighborID = -99998,
@@ -91,8 +96,8 @@ namespace FashionSense.Framework.UI
                 rightNeighborID = -99998,
                 downNeighborID = -99998
             });
-            labels.Add(descriptionLabel = new ClickableComponent(new Rectangle(_portraitBox.Right - 86, _portraitBox.Y + yOffset + 16, 1, 1), FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.hair")));
-            rightSelectionButtons.Add(new ClickableTextureComponent("Appearance", new Rectangle(_portraitBox.Right, _portraitBox.Y + yOffset, 64, 64), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 33), 1f)
+            labels.Add(descriptionLabel = new ClickableComponent(new Rectangle(_portraitBox.Right - 86, _portraitBox.Y + yOffset + 32, 1, 1), FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.hair")));
+            rightSelectionButtons.Add(new ClickableTextureComponent("Appearance", new Rectangle(_portraitBox.Right, _portraitBox.Y + yOffset + 16, 64, 64), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 33), 1f)
             {
                 myID = 515,
                 upNeighborID = -99998,
@@ -100,14 +105,16 @@ namespace FashionSense.Framework.UI
                 rightNeighborID = -99998,
                 downNeighborID = -99998
             }); ;
-            appearanceLabel = new ClickableComponent(new Rectangle(_portraitBox.Right - 86, _portraitBox.Y + yOffset + 48, 1, 1), String.Empty);
+            appearanceLabel = new ClickableComponent(new Rectangle(_portraitBox.Right - 86, _portraitBox.Y + yOffset + 64, 1, 1), String.Empty);
 
+            // Get the last selected filter button
             var lastSelectedFilter = HAIR_FILTER_BUTTON;
             if (Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON) && !String.IsNullOrEmpty(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON]))
             {
                 lastSelectedFilter = Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON];
             }
 
+            // Add all the relevant filter buttons
             filterButtons.Add(new ClickableTextureComponent(HAIR_FILTER_BUTTON, new Rectangle(base.xPositionOnScreen + 50, base.yPositionOnScreen + 70, 64, 64), null, lastSelectedFilter == HAIR_FILTER_BUTTON ? "enabled" : "disabled", FashionSense.assetManager.scissorsButtonTexture, new Rectangle(0, 0, 15, 15), 3f)
             {
                 myID = 601,
@@ -135,6 +142,33 @@ namespace FashionSense.Framework.UI
                 downNeighborID = -99998
             });
 
+            // Add the option buttons (currently only for accessories)
+            optionButtons.Add(new ClickableTextureComponent(FIRST_OPTION_BUTTON, new Rectangle(_portraitBox.Right - 134, _portraitBox.Y + yOffset, 32, 32), null, "enabled", FashionSense.assetManager.optionOneButton, new Rectangle(0, 0, 15, 15), 2f)
+            {
+                myID = 601,
+                upNeighborID = -99998,
+                leftNeighborID = -99998,
+                rightNeighborID = -99998,
+                downNeighborID = -99998
+            });
+            optionButtons.Add(new ClickableTextureComponent(SECOND_OPTION_BUTTON, new Rectangle(_portraitBox.Right - 86, _portraitBox.Y + yOffset, 32, 32), null, "disabled", FashionSense.assetManager.optionTwoButton, new Rectangle(0, 0, 15, 15), 2f)
+            {
+                myID = 601,
+                upNeighborID = -99998,
+                leftNeighborID = -99998,
+                rightNeighborID = -99998,
+                downNeighborID = -99998
+            });
+            optionButtons.Add(new ClickableTextureComponent(THIRD_OPTION_BUTTON, new Rectangle(_portraitBox.Right - 38, _portraitBox.Y + yOffset, 32, 32), null, "disabled", FashionSense.assetManager.optionThreeButton, new Rectangle(0, 0, 15, 15), 2f)
+            {
+                myID = 601,
+                upNeighborID = -99998,
+                leftNeighborID = -99998,
+                rightNeighborID = -99998,
+                downNeighborID = -99998
+            });
+
+            // Add the left over buttons
             okButton = new ClickableTextureComponent("OK", new Rectangle(base.xPositionOnScreen + base.width - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder - 32, base.yPositionOnScreen + base.height - IClickableMenu.borderWidth - IClickableMenu.spaceToClearTopBorder + 32, 64, 64), null, null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46), 1f)
             {
                 myID = 505,
@@ -393,7 +427,7 @@ namespace FashionSense.Framework.UI
 
             foreach (ClickableTextureComponent c in filterButtons)
             {
-                if (c.containsPoint(x, y))
+                if (c.containsPoint(x, y) && c.hoverText != "enabled")
                 {
                     var enabledButton = filterButtons.FirstOrDefault(b => (b as ClickableTextureComponent).hoverText == "enabled");
                     if (enabledButton != null)
@@ -427,6 +461,25 @@ namespace FashionSense.Framework.UI
                     {
                         c.scale -= 0.25f;
                         c.scale = Math.Max(2.75f, c.scale);
+                    }
+                }
+            }
+
+            foreach (ClickableTextureComponent c in optionButtons)
+            {
+                if (c.containsPoint(x, y) && c.hoverText != "enabled")
+                {
+                    var enabledButton = optionButtons.FirstOrDefault(b => (b as ClickableTextureComponent).hoverText == "enabled");
+                    if (enabledButton != null)
+                    {
+                        (enabledButton as ClickableTextureComponent).hoverText = "disabled";
+                    }
+
+                    c.hoverText = "enabled";
+                    if (c.scale != 0f)
+                    {
+                        c.scale -= 0.25f;
+                        c.scale = Math.Max(1.75f, c.scale);
                     }
                 }
             }
@@ -514,6 +567,20 @@ namespace FashionSense.Framework.UI
                 else
                 {
                     c5.scale = Math.Max(c5.scale - 0.02f, c5.baseScale);
+                }
+            }
+            foreach (ClickableTextureComponent c5 in optionButtons)
+            {
+                if (c5.containsPoint(x, y))
+                {
+                    if (c5.hoverText == "disabled")
+                    {
+                        c5.scale = Math.Min(c5.scale + 0.02f, 2.2f);
+                    }
+                }
+                else
+                {
+                    c5.scale = Math.Max(c5.scale - 0.02f, 2f);
                 }
             }
             foreach (ClickableComponent label in labels)
@@ -644,6 +711,15 @@ namespace FashionSense.Framework.UI
             foreach (ClickableTextureComponent filterButton in filterButtons)
             {
                 filterButton.draw(b, filterButton.hoverText == "enabled" ? Color.White : Color.Gray, 1f);
+            }
+
+            // Draw option button for supported appearance types (currently only accessories)
+            if (GetNameOfEnabledFilter() == ACCESSORY_FILTER_BUTTON)
+            {
+                foreach (ClickableTextureComponent optionButton in optionButtons)
+                {
+                    optionButton.draw(b, optionButton.hoverText == "enabled" ? Color.White : Color.Gray, 1f);
+                }
             }
             searchButton.draw(b);
             okButton.draw(b);
