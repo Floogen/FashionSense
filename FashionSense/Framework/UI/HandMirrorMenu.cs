@@ -70,7 +70,7 @@ namespace FashionSense.Framework.UI
 
             // Add appearance-related buttons
             int yOffset = 160;
-            leftSelectionButtons.Add(new ClickableTextureComponent("Direction", new Rectangle(_portraitBox.X - 32, _portraitBox.Y + yOffset, 64, 64), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 44), 1f)
+            leftSelectionButtons.Add(new ClickableTextureComponent("Direction", new Rectangle(_portraitBox.X - 32, _portraitBox.Y + yOffset, 48, 48), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 44), 1f)
             {
                 myID = 520,
                 upNeighborID = -99998,
@@ -79,7 +79,7 @@ namespace FashionSense.Framework.UI
                 rightNeighborID = -99998,
                 downNeighborID = -99998
             });
-            rightSelectionButtons.Add(new ClickableTextureComponent("Direction", new Rectangle(_portraitBox.Right - 32, _portraitBox.Y + yOffset, 64, 64), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 33), 1f)
+            rightSelectionButtons.Add(new ClickableTextureComponent("Direction", new Rectangle(_portraitBox.Right - 32, _portraitBox.Y + yOffset, 48, 48), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 33), 1f)
             {
                 myID = 521,
                 upNeighborID = -99998,
@@ -89,7 +89,7 @@ namespace FashionSense.Framework.UI
             });
 
             yOffset += 64;
-            leftSelectionButtons.Add(new ClickableTextureComponent("Appearance", new Rectangle(_portraitBox.X - 64, _portraitBox.Y + yOffset + 16, 64, 64), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 44), 1f)
+            leftSelectionButtons.Add(new ClickableTextureComponent("Appearance", new Rectangle(_portraitBox.X - 64, _portraitBox.Y + yOffset + 16, 48, 48), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 44), 1f)
             {
                 myID = 514,
                 upNeighborID = -99998,
@@ -98,7 +98,7 @@ namespace FashionSense.Framework.UI
                 downNeighborID = -99998
             });
             labels.Add(descriptionLabel = new ClickableComponent(new Rectangle(_portraitBox.Right - 86, _portraitBox.Y + yOffset + 32, 1, 1), FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.hair")));
-            rightSelectionButtons.Add(new ClickableTextureComponent("Appearance", new Rectangle(_portraitBox.Right, _portraitBox.Y + yOffset + 16, 64, 64), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 33), 1f)
+            rightSelectionButtons.Add(new ClickableTextureComponent("Appearance", new Rectangle(_portraitBox.Right, _portraitBox.Y + yOffset + 16, 48, 48), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 33), 1f)
             {
                 myID = 515,
                 upNeighborID = -99998,
@@ -211,6 +211,15 @@ namespace FashionSense.Framework.UI
                     break;
                 case ACCESSORY_FILTER_BUTTON:
                     var accessoryColor = new Color() { PackedValue = uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR]) };
+                    switch (GetCurrentAccessorySlotKey())
+                    {
+                        case ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID:
+                            accessoryColor = new Color() { PackedValue = uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR]) };
+                            break;
+                        case ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID:
+                            accessoryColor = new Color() { PackedValue = uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR]) };
+                            break;
+                    }
                     colorPicker.setColor(accessoryColor);
                     break;
                 case HAT_FILTER_BUTTON:
@@ -293,6 +302,15 @@ namespace FashionSense.Framework.UI
                     Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON] = ACCESSORY_FILTER_BUTTON;
 
                     var accessoryColor = new Color() { PackedValue = uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR]) };
+                    switch (GetCurrentAccessorySlotKey())
+                    {
+                        case ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID:
+                            accessoryColor = new Color() { PackedValue = uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR]) };
+                            break;
+                        case ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID:
+                            accessoryColor = new Color() { PackedValue = uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR]) };
+                            break;
+                    }
                     colorPicker.setColor(accessoryColor);
 
                     filterButton = filterButtons.First(b => b.name == ACCESSORY_FILTER_BUTTON) as ClickableTextureComponent;
@@ -475,6 +493,15 @@ namespace FashionSense.Framework.UI
                             Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON] = ACCESSORY_FILTER_BUTTON;
 
                             var accessoryColor = new Color() { PackedValue = uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR]) };
+                            switch (GetCurrentAccessorySlotKey())
+                            {
+                                case ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID:
+                                    accessoryColor = new Color() { PackedValue = uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR]) };
+                                    break;
+                                case ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID:
+                                    accessoryColor = new Color() { PackedValue = uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR]) };
+                                    break;
+                            }
                             colorPicker.setColor(accessoryColor);
                             break;
                         case HAT_FILTER_BUTTON:
@@ -509,6 +536,23 @@ namespace FashionSense.Framework.UI
                         c.scale -= 0.25f;
                         c.scale = Math.Max(1.75f, c.scale);
                     }
+
+                    if (GetNameOfEnabledFilter() == ACCESSORY_FILTER_BUTTON)
+                    {
+                        Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON] = ACCESSORY_FILTER_BUTTON;
+
+                        var accessoryColor = new Color() { PackedValue = uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR]) };
+                        switch (GetCurrentAccessorySlotKey())
+                        {
+                            case ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID:
+                                accessoryColor = new Color() { PackedValue = uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR]) };
+                                break;
+                            case ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID:
+                                accessoryColor = new Color() { PackedValue = uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR]) };
+                                break;
+                        }
+                        colorPicker.setColor(accessoryColor);
+                    }
                 }
             }
 
@@ -521,7 +565,17 @@ namespace FashionSense.Framework.UI
                         Game1.player.changeHairColor(color2);
                         break;
                     case ACCESSORY_FILTER_BUTTON:
-                        Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR] = color2.PackedValue.ToString();
+                        var accessoryColorKey = ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR;
+                        switch (GetCurrentAccessorySlotKey())
+                        {
+                            case ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID:
+                                accessoryColorKey = ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR;
+                                break;
+                            case ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID:
+                                accessoryColorKey = ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR;
+                                break;
+                        }
+                        Game1.player.modData[accessoryColorKey] = color2.PackedValue.ToString();
                         break;
                     case HAT_FILTER_BUTTON:
                         Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_HAT_COLOR] = color2.PackedValue.ToString();

@@ -168,6 +168,14 @@ namespace FashionSense
             {
                 Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR] = Game1.player.hairstyleColor.Value.PackedValue.ToString();
             }
+            if (!Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR))
+            {
+                Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR] = Game1.player.hairstyleColor.Value.PackedValue.ToString();
+            }
+            if (!Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR))
+            {
+                Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR] = Game1.player.hairstyleColor.Value.PackedValue.ToString();
+            }
             if (!Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_HAT_COLOR))
             {
                 Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_HAT_COLOR] = Game1.player.hairstyleColor.Value.PackedValue.ToString();

@@ -27,6 +27,10 @@ namespace FashionSense.Framework.Patches.Renderer
     internal class FarmerRendererPatch : PatchTemplate
     {
         private readonly Type _entity = typeof(FarmerRenderer);
+        private const float BASE_ACCESSORY_LAYER = 0f;
+        private const float BASE_HAIR_LAYER = 0f;
+        private const float BASE_HAT_LAYER = 0f;
+
 
         internal FarmerRendererPatch(IMonitor modMonitor, IModHelper modHelper) : base(modMonitor, modHelper)
         {
@@ -842,7 +846,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             // Check if all the models are null, if so revert back to vanilla logic
-            if (hairModel is null && accessoryModel is null && hatModel is null)
+            if (hairModel is null && accessoryModel is null && secondaryAccessoryModel is null && tertiaryAccessoryModel is null && hatModel is null)
             {
                 return true;
             }
@@ -909,15 +913,15 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 if (accessoryModel != null)
                 {
-                    DrawCustomAccessory(accessoryPack, accessoryModel, customAccessorySourceRect, ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR, __instance, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, layerDepth + 0.02E-05f);
+                    DrawCustomAccessory(accessoryPack, accessoryModel, customAccessorySourceRect, ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR, __instance, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, layerDepth);
                 }
                 if (secondaryAccessoryModel != null)
                 {
-                    DrawCustomAccessory(secondaryAccessoryPack, secondaryAccessoryModel, customSecondaryAccessorySourceRect, ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR, __instance, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, layerDepth + 0.01E-05f);
+                    DrawCustomAccessory(secondaryAccessoryPack, secondaryAccessoryModel, customSecondaryAccessorySourceRect, ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR, __instance, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, layerDepth + 2E-05f);
                 }
                 if (tertiaryAccessoryModel != null)
                 {
-                    DrawCustomAccessory(tertiaryAccessoryPack, tertiaryAccessoryModel, customTertiaryAccessorySourceRect, ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR, __instance, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, layerDepth);
+                    DrawCustomAccessory(tertiaryAccessoryPack, tertiaryAccessoryModel, customTertiaryAccessorySourceRect, ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR, __instance, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, layerDepth);
                 }
             }
 
@@ -931,7 +935,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
             else
             {
-                float hair_draw_layer = 2.2E-05f;
+                float hair_draw_layer = 4.2E-05f;
                 var hairColor = overrideColor.Equals(Color.White) ? ((Color)who.hairstyleColor) : overrideColor;
                 if (hairModel.DisableGrayscale)
                 {
@@ -972,7 +976,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
 
                 bool flip = who.FarmerSprite.CurrentAnimationFrame.flip;
-                float layer_offset = 3.88E-05f;
+                float layer_offset = 5.88E-05f;
                 b.Draw(hatPack.Texture, position + origin + ___positionOffset + GetFeatureOffset(facingDirection, currentFrame, __instance, hatPack.PackType, flip), customHatSourceRect, hatModel.HasColorMask() ? Color.White : hatColor, rotation, origin + new Vector2(hatModel.HeadPosition.X, hatModel.HeadPosition.Y), 4f * scale, hatModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + layer_offset);
 
                 if (hatModel.HasColorMask())

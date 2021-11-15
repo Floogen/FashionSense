@@ -18,6 +18,8 @@ namespace FashionSense.Framework.Utilities
         // UI related keys
         internal const string UI_HAND_MIRROR_FILTER_BUTTON = "FashionSense.UI.HandMirror.SelectedFilterButton";
         internal const string UI_HAND_MIRROR_ACCESSORY_COLOR = "FashionSense.UI.HandMirror.Color.Accessory";
+        internal const string UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR = "FashionSense.UI.HandMirror.Color.Accessory.Secondary";
+        internal const string UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR = "FashionSense.UI.HandMirror.Color.Accessory.Tertiary";
         internal const string UI_HAND_MIRROR_HAT_COLOR = "FashionSense.UI.HandMirror.Color.Hat";
 
         // Tool related keys
