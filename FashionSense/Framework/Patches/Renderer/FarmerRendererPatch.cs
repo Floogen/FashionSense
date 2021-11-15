@@ -944,8 +944,11 @@ namespace FashionSense.Framework.Patches.Renderer
 
                 if (hatModel is null || !hatModel.HideHair)
                 {
+                    var featureOffset = GetFeatureOffset(facingDirection, currentFrame, __instance, hairPack.PackType);
+                    featureOffset.Y -= who.isMale ? 4 : 0;
+
                     // Draw the hair
-                    b.Draw(hairPack.Texture, position + origin + ___positionOffset + GetFeatureOffset(facingDirection, currentFrame, __instance, hairPack.PackType), customHairSourceRect, hairModel.HasColorMask() ? Color.White : hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, hairModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + hair_draw_layer);
+                    b.Draw(hairPack.Texture, position + origin + ___positionOffset + featureOffset, customHairSourceRect, hairModel.HasColorMask() ? Color.White : hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, hairModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + hair_draw_layer);
 
                     if (hairModel.HasColorMask())
                     {
@@ -1054,6 +1057,7 @@ namespace FashionSense.Framework.Patches.Renderer
                     feature_y_offset = FarmerRenderer.featureYOffsetPerFrame[0];
                     break;
             }
+            feature_y_offset -= who.isMale ? 1 : 0;
 
             // Draw the player's face, then the custom hairstyle
             b.Draw(___baseTexture, position, new Rectangle(0, yOffset, 16, who.isMale ? 15 : 16), Color.White, 0f, Vector2.Zero, scale, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
