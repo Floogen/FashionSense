@@ -63,6 +63,7 @@ namespace FashionSense
 
                 // Apply appearance related patches
                 new FarmerRendererPatch(monitor, modHelper).Apply(harmony);
+                new DrawPatch(monitor, modHelper).Apply(harmony);
 
                 // Apply tool related patches
                 new ToolPatch(monitor, modHelper).Apply(harmony);

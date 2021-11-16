@@ -76,6 +76,7 @@
     <Compile Include="Framework\Models\Shirt\ShirtContentPack.cs" />
     <Compile Include="Framework\Models\Shirt\ShirtModel.cs" />
     <Compile Include="Framework\Patches\Menus\CharacterCustomizationPatch.cs" />
+    <Compile Include="Framework\Patches\Renderer\DrawPatch.cs" />
     <Compile Include="Framework\Patches\Renderer\FarmerRendererPatch.cs" />
     <Compile Include="Framework\Patches\PatchTemplate.cs" />
     <Compile Include="Framework\Patches\ShopLocations\SeedShopPatch.cs" />
