@@ -104,6 +104,7 @@
     <None Include="Examples\[FS] Example Pack\Hats\PrismaticDinoHead\hat.json" />
     <None Include="Examples\[FS] Example Pack\Hats\AnimatedPumpkinHead\hat.json" />
     <None Include="Examples\[FS] Example Pack\manifest.json" />
+    <None Include="Examples\[FS] Example Pack\Shirts\MageRobe\shirt.json" />
     <None Include="i18n\default.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -128,6 +129,7 @@
     <Content Include="Examples\[FS] Example Pack\Hats\ColorableMouseEars\hat.png" />
     <Content Include="Examples\[FS] Example Pack\Hats\PrismaticDinoHead\hat.png" />
     <Content Include="Examples\[FS] Example Pack\Hats\AnimatedPumpkinHead\hat.png" />
+    <Content Include="Examples\[FS] Example Pack\Shirts\MageRobe\shirt.png" />
     <Content Include="Framework\Assets\HandMirror.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

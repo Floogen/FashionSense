@@ -1,0 +1,24 @@
+{
+  "Name": "Mage's Robe",
+  "FrontShirt": {
+    "IsPrismatic": true,
+    "PrismaticAnimationSpeedMultiplier": 2.0,
+    "SleeveColor": [ 198, 157, 131 ],
+    "ColorMasks": [
+      [ 93, 92, 83 ],
+      [ 68, 68, 62 ]
+    ],
+    "StartingPosition": {
+      "X": 1,
+      "Y": 2
+    },
+    "BodyPosition": {
+      "X": 3,
+      "Y": 2
+    },
+    "ShirtSize": {
+      "Width": 16,
+      "Length": 14
+    }
+  }
+}
