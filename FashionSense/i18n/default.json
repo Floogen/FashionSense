@@ -11,15 +11,18 @@
   "ui.fashion_sense.title.hair": "Hairstyles",
   "ui.fashion_sense.title.accessory": "Accessories",
   "ui.fashion_sense.title.hat": "Hats",
+  "ui.fashion_sense.title.shirt": "Shirts",
 
   // UI - Etc
   "ui.fashion_sense.search_button": "Search for a specific Fashion Sense pack.",
   "ui.fashion_sense.clear_button": "Clears the currently selected Fashion Sense item.",
   "ui.fashion_sense.color_active.hair": "Hair Color",
   "ui.fashion_sense.color_active.hat": "Hat Color",
+  "ui.fashion_sense.color_active.shirt": "Shirt Color",
   "ui.fashion_sense.color_active.accessory": "Acc. Color",
   "ui.fashion_sense.color_disabled.generic": "(Ignored)",
   "ui.fashion_sense.color_info.hair": "Color overlays will not affect this hairstyle.",
   "ui.fashion_sense.color_info.hat": "Color overlays will not affect this hat.",
+  "ui.fashion_sense.color_info.shirt": "Color overlays will not affect this shirt.",
   "ui.fashion_sense.color_info.accessory": "Color overlays will not affect this accessory."
 }
