@@ -36,12 +36,67 @@ namespace FashionSense.Framework.Patches.Renderer
 
         internal void Apply(Harmony harmony)
         {
+            harmony.Patch(AccessTools.Method(_entity, nameof(FarmerRenderer.ApplySleeveColor), new[] { typeof(string), typeof(Color[]), typeof(Farmer) }), prefix: new HarmonyMethod(GetType(), nameof(ApplySleeveColorPrefix)));
             harmony.Patch(AccessTools.Method(_entity, nameof(FarmerRenderer.draw), new[] { typeof(SpriteBatch), typeof(FarmerSprite.AnimationFrame), typeof(int), typeof(Rectangle), typeof(Vector2), typeof(Vector2), typeof(float), typeof(int), typeof(Color), typeof(float), typeof(float), typeof(Farmer) }), prefix: new HarmonyMethod(GetType(), nameof(DrawPrefix)));
 
             harmony.CreateReversePatcher(AccessTools.Method(_entity, "executeRecolorActions", new[] { typeof(Farmer) }), new HarmonyMethod(GetType(), nameof(ExecuteRecolorActionsReversePatch))).Patch();
+            harmony.CreateReversePatcher(AccessTools.Method(_entity, "_SwapColor", new[] { typeof(string), typeof(Color[]), typeof(int), typeof(Color) }), new HarmonyMethod(GetType(), nameof(SwapColorReversePatch))).Patch();
             harmony.CreateReversePatcher(AccessTools.Method(_entity, nameof(FarmerRenderer.draw), new[] { typeof(SpriteBatch), typeof(FarmerSprite.AnimationFrame), typeof(int), typeof(Rectangle), typeof(Vector2), typeof(Vector2), typeof(float), typeof(int), typeof(Color), typeof(float), typeof(float), typeof(Farmer) }), new HarmonyMethod(GetType(), nameof(DrawReversePatch))).Patch();
         }
 
+        private static bool ApplySleeveColorPrefix(FarmerRenderer __instance, LocalizedContentManager ___farmerTextureManager, Texture2D ___baseTexture, NetInt ___skin, bool ____sickFrame, string texture_name, Color[] pixels, Farmer who)
+        {
+            ShirtModel shirtModel = null;
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_SHIRT_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<ShirtContentPack>(who.modData[ModDataKeys.CUSTOM_SHIRT_ID]) is ShirtContentPack sPack && sPack != null)
+            {
+                shirtModel = sPack.GetShirtFromFacingDirection(who.facingDirection);
+            }
+
+            if (shirtModel is null)
+            {
+                return true;
+            }
+
+            if (shirtModel.SleeveColors is null)
+            {
+                Texture2D skinColors = ___farmerTextureManager.Load<Texture2D>("Characters\\Farmer\\skinColors");
+                Color[] skinColorsData = new Color[skinColors.Width * skinColors.Height];
+                int skin_index = ___skin.Value;
+
+                if (skin_index < 0)
+                {
+                    skin_index = skinColors.Height - 1;
+                }
+                if (skin_index > skinColors.Height - 1)
+                {
+                    skin_index = 0;
+                }
+
+                skinColors.GetData(skinColorsData);
+                Color darkest = skinColorsData[skin_index * 3 % (skinColors.Height * 3)];
+                Color medium = skinColorsData[skin_index * 3 % (skinColors.Height * 3) + 1];
+                Color lightest = skinColorsData[skin_index * 3 % (skinColors.Height * 3) + 2];
+
+                if (____sickFrame)
+                {
+                    darkest = pixels[260 + ___baseTexture.Width];
+                    medium = pixels[261 + ___baseTexture.Width];
+                    lightest = pixels[262 + ___baseTexture.Width];
+                }
+
+                SwapColorReversePatch(__instance, texture_name, pixels, 256, darkest);
+                SwapColorReversePatch(__instance, texture_name, pixels, 257, medium);
+                SwapColorReversePatch(__instance, texture_name, pixels, 258, lightest);
+            }
+            else
+            {
+                SwapColorReversePatch(__instance, texture_name, pixels, 256, shirtModel.GetSleeveColor(0));
+                SwapColorReversePatch(__instance, texture_name, pixels, 257, shirtModel.GetSleeveColor(1));
+                SwapColorReversePatch(__instance, texture_name, pixels, 258, shirtModel.GetSleeveColor(2));
+            }
+
+            return false;
+        }
 
         private static bool DrawPrefix(FarmerRenderer __instance, Texture2D ___baseTexture, ref Vector2 ___positionOffset, ref Vector2 ___rotationAdjustment, ref bool ____sickFrame, ref bool ____shirtDirty, ref bool ____spriteDirty, SpriteBatch b, FarmerSprite.AnimationFrame animationFrame, int currentFrame, Rectangle sourceRect, Vector2 position, Vector2 origin, float layerDepth, int facingDirection, Color overrideColor, float rotation, float scale, Farmer who)
         {

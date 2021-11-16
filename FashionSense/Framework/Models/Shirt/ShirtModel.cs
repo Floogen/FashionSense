@@ -12,6 +12,31 @@ namespace FashionSense.Framework.Models.Shirt
     {
         public Position BodyPosition { get; set; } = new Position() { X = 0, Y = 0 };
         public Size ShirtSize { get; set; }
-        public int[] SleeveColor { get; set; }
+        public List<int[]> SleeveColors { get; set; }
+
+        internal Color GetSleeveColor(int layer = 0)
+        {
+            Color sleeveColor = Color.White;
+            if (SleeveColors.Count > layer)
+            {
+                sleeveColor = new Color(GetColorIndex(SleeveColors[layer], 0), GetColorIndex(SleeveColors[layer], 1), GetColorIndex(SleeveColors[layer], 2), GetColorIndex(SleeveColors[layer], 3));
+            }
+            else if (layer > 0)
+            {
+                return GetSleeveColor(layer - 1);
+            }
+
+            return sleeveColor;
+        }
+
+        private int GetColorIndex(int[] colorArray, int position)
+        {
+            if (position >= colorArray.Length)
+            {
+                return 255;
+            }
+
+            return colorArray[position];
+        }
     }
 }
