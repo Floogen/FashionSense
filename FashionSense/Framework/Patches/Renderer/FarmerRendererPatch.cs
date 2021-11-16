@@ -739,7 +739,7 @@ namespace FashionSense.Framework.Patches.Renderer
                     offset = new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4);
                     break;
                 case 3:
-                    offset = new Vector2(-FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4);
+                    offset = new Vector2(-FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, (flip ? 4 : 0) + FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4);
                     break;
             }
 
@@ -1012,7 +1012,7 @@ namespace FashionSense.Framework.Patches.Renderer
 
                 if (hatModel is null || !hatModel.HideHair)
                 {
-                    var featureOffset = GetFeatureOffset(facingDirection, currentFrame, __instance, hairPack.PackType);
+                    var featureOffset = GetFeatureOffset(facingDirection, currentFrame, __instance, hairPack.PackType, true);
                     featureOffset.Y -= who.isMale ? 4 : 0;
 
                     // Draw the hair
@@ -1020,7 +1020,7 @@ namespace FashionSense.Framework.Patches.Renderer
 
                     if (hairModel.HasColorMask())
                     {
-                        DrawColorMask(b, hairPack, hairModel, position + origin + ___positionOffset + GetFeatureOffset(facingDirection, currentFrame, __instance, hairPack.PackType), customHairSourceRect, hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, layerDepth + hair_draw_layer + 0.01E-05f);
+                        DrawColorMask(b, hairPack, hairModel, position + origin + ___positionOffset + featureOffset, customHairSourceRect, hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, layerDepth + hair_draw_layer + 0.01E-05f);
                     }
                 }
             }
