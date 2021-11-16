@@ -147,6 +147,9 @@ namespace FashionSense
             EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_HAT_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_SHIRT_ID);
+
+            // Set sprite to dirty in order to refresh sleeves and other tied-in appearances
+            SetSpriteDirty();
         }
 
         private void UpdateElapsedDuration(string durationKey)
@@ -182,7 +185,6 @@ namespace FashionSense
             // Clear the existing cache of AppearanceModels
             textureManager.Reset();
 
-
             // Load owned content packs
             foreach (IContentPack contentPack in Helper.ContentPacks.GetOwned())
             {
@@ -203,6 +205,11 @@ namespace FashionSense
                 // Load Shirts
                 Monitor.Log($"Loading shirts from pack: {contentPack.Manifest.Name} {contentPack.Manifest.Version} by {contentPack.Manifest.Author}", LogLevel.Trace);
                 AddShirtsContentPacks(contentPack);
+            }
+
+            if (Context.IsWorldReady)
+            {
+                SetSpriteDirty();
             }
         }
 
@@ -564,6 +571,13 @@ namespace FashionSense
             {
                 Monitor.Log($"Error loading shirts from content pack {contentPack.Manifest.Name}: {ex}", LogLevel.Error);
             }
+        }
+        internal static void SetSpriteDirty()
+        {
+            var spriteDirty = modHelper.Reflection.GetField<bool>(Game1.player.FarmerRenderer, "_spriteDirty");
+            spriteDirty.SetValue(true);
+            var shirtDirty = modHelper.Reflection.GetField<bool>(Game1.player.FarmerRenderer, "_shirtDirty");
+            shirtDirty.SetValue(true);
         }
 
         internal static void ResetAnimationModDataFields(Farmer who, int duration, AnimationModel.Type animationType, int facingDirection, bool ignoreAnimationType = false)

@@ -417,6 +417,8 @@ namespace FashionSense.Framework.UI
             Game1.player.modData[modDataKey] = current_index == -1 ? "None" : appearanceModels[current_index].Id;
             FashionSense.ResetAnimationModDataFields(Game1.player, 0, AnimationModel.Type.Idle, Game1.player.facingDirection);
             Game1.playSound("grassyStep");
+
+            FashionSense.SetSpriteDirty();
         }
 
         private void selectionClick(string name, int change)
@@ -605,6 +607,7 @@ namespace FashionSense.Framework.UI
                 }
 
                 Game1.player.modData[modDataKey] = "None";
+                FashionSense.SetSpriteDirty();
             }
 
             if (okButton.containsPoint(x, y))
