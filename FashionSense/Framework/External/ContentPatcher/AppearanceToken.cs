@@ -17,7 +17,8 @@ namespace FashionSense.Framework.External.ContentPatcher
         {
             "Hairstyle",
             "Accessory",
-            "Hat"
+            "Hat",
+            "Shirt"
         };
 
         /// <summary>Get whether the token allows input arguments (e.g. an NPC name for a relationship token).</summary>
@@ -89,6 +90,9 @@ namespace FashionSense.Framework.External.ContentPatcher
                     break;
                 case "hat":
                     targetKey = ModDataKeys.CUSTOM_HAT_ID;
+                    break;
+                case "shirt":
+                    targetKey = ModDataKeys.CUSTOM_SHIRT_ID;
                     break;
             }
 

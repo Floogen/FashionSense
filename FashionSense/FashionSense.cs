@@ -18,6 +18,7 @@ using FashionSense.Framework.Models.Hair;
 using FashionSense.Framework.Models.Accessory;
 using FashionSense.Framework.External.ContentPatcher;
 using FashionSense.Framework.Models.Hat;
+using FashionSense.Framework.Models.Shirt;
 
 namespace FashionSense
 {
@@ -60,7 +61,7 @@ namespace FashionSense
             {
                 var harmony = new Harmony(this.ModManifest.UniqueID);
 
-                // Apply hair related patches
+                // Apply appearance related patches
                 new FarmerRendererPatch(monitor, modHelper).Apply(harmony);
 
                 // Apply tool related patches
@@ -197,6 +198,10 @@ namespace FashionSense
                 // Load Hats
                 Monitor.Log($"Loading hats from pack: {contentPack.Manifest.Name} {contentPack.Manifest.Version} by {contentPack.Manifest.Author}", LogLevel.Trace);
                 AddHatsContentPacks(contentPack);
+
+                // Load Shirts
+                Monitor.Log($"Loading shirts from pack: {contentPack.Manifest.Name} {contentPack.Manifest.Version} by {contentPack.Manifest.Author}", LogLevel.Trace);
+                AddShirtsContentPacks(contentPack);
             }
         }
 
@@ -434,13 +439,13 @@ namespace FashionSense
                     appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.PackType, "/", appearanceModel.Name);
 
                     // Verify that a hat with the name doesn't exist in this pack
-                    if (textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(appearanceModel.Id) != null)
+                    if (textureManager.GetSpecificAppearanceModel<HatContentPack>(appearanceModel.Id) != null)
                     {
                         Monitor.Log($"Unable to add hat from {contentPack.Manifest.Name}: This pack already contains a hat with the name of {appearanceModel.Name}", LogLevel.Warn);
                         continue;
                     }
 
-                    // Verify that at least one AccessoryModel is given
+                    // Verify that at least one HatModel is given
                     if (appearanceModel.BackHat is null && appearanceModel.RightHat is null && appearanceModel.FrontHat is null && appearanceModel.LeftHat is null)
                     {
                         Monitor.Log($"Unable to add hat for {appearanceModel.Name} from {contentPack.Manifest.Name}: No hat models given (FrontHat, BackHat, etc.)", LogLevel.Warn);
@@ -467,6 +472,96 @@ namespace FashionSense
             catch (Exception ex)
             {
                 Monitor.Log($"Error loading hats from content pack {contentPack.Manifest.Name}: {ex}", LogLevel.Error);
+            }
+        }
+
+        private void AddShirtsContentPacks(IContentPack contentPack)
+        {
+            try
+            {
+                var directoryPath = new DirectoryInfo(Path.Combine(contentPack.DirectoryPath, "Shirts"));
+                if (!directoryPath.Exists)
+                {
+                    Monitor.Log($"No Shirts folder found for the content pack {contentPack.Manifest.Name}", LogLevel.Trace);
+                    return;
+                }
+
+                var shirtFolders = directoryPath.GetDirectories("*", SearchOption.AllDirectories);
+                if (shirtFolders.Count() == 0)
+                {
+                    Monitor.Log($"No sub-folders found under Shirts for the content pack {contentPack.Manifest.Name}", LogLevel.Warn);
+                    return;
+                }
+
+                // Load in the accessories
+                foreach (var textureFolder in shirtFolders)
+                {
+                    if (!File.Exists(Path.Combine(textureFolder.FullName, "shirt.json")))
+                    {
+                        if (textureFolder.GetDirectories().Count() == 0)
+                        {
+                            Monitor.Log($"Content pack {contentPack.Manifest.Name} is missing a shirt.json under {textureFolder.Name}", LogLevel.Warn);
+                        }
+
+                        continue;
+                    }
+
+                    var parentFolderName = textureFolder.Parent.FullName.Replace(contentPack.DirectoryPath + Path.DirectorySeparatorChar, String.Empty);
+                    var modelPath = Path.Combine(parentFolderName, textureFolder.Name, "shirt.json");
+
+                    // Parse the model and assign it the content pack's owner
+                    ShirtContentPack appearanceModel = contentPack.ReadJsonFile<ShirtContentPack>(modelPath);
+                    appearanceModel.Author = contentPack.Manifest.Author;
+                    appearanceModel.Owner = contentPack.Manifest.UniqueID;
+
+                    // Verify the required Name property is set
+                    if (String.IsNullOrEmpty(appearanceModel.Name))
+                    {
+                        Monitor.Log($"Unable to add shirts from {appearanceModel.Owner}: Missing the Name property", LogLevel.Warn);
+                        continue;
+                    }
+
+                    // Set the model type
+                    appearanceModel.PackType = AppearanceContentPack.Type.Shirt;
+
+                    // Set the PackName and Id
+                    appearanceModel.PackName = contentPack.Manifest.Name;
+                    appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.PackType, "/", appearanceModel.Name);
+
+                    // Verify that a shirt with the name doesn't exist in this pack
+                    if (textureManager.GetSpecificAppearanceModel<ShirtContentPack>(appearanceModel.Id) != null)
+                    {
+                        Monitor.Log($"Unable to add shirt from {contentPack.Manifest.Name}: This pack already contains a shirt with the name of {appearanceModel.Name}", LogLevel.Warn);
+                        continue;
+                    }
+
+                    // Verify that at least one ShirtModel is given
+                    if (appearanceModel.BackShirt is null && appearanceModel.RightShirt is null && appearanceModel.FrontShirt is null && appearanceModel.LeftShirt is null)
+                    {
+                        Monitor.Log($"Unable to add shirt for {appearanceModel.Name} from {contentPack.Manifest.Name}: No shirt models given (FrontShirt, BackShirt, etc.)", LogLevel.Warn);
+                        continue;
+                    }
+
+                    // Verify we are given a texture and if so, track it
+                    if (!File.Exists(Path.Combine(textureFolder.FullName, "shirt.png")))
+                    {
+                        Monitor.Log($"Unable to add shirt for {appearanceModel.Name} from {contentPack.Manifest.Name}: No associated shirt.png given", LogLevel.Warn);
+                        continue;
+                    }
+
+                    // Load in the texture
+                    appearanceModel.Texture = contentPack.LoadAsset<Texture2D>(contentPack.GetActualAssetKey(Path.Combine(parentFolderName, textureFolder.Name, "shirt.png")));
+
+                    // Track the model
+                    textureManager.AddAppearanceModel(appearanceModel);
+
+                    // Log it
+                    Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
+                }
+            }
+            catch (Exception ex)
+            {
+                Monitor.Log($"Error loading shirts from content pack {contentPack.Manifest.Name}: {ex}", LogLevel.Error);
             }
         }
 
