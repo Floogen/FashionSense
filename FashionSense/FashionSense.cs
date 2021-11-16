@@ -528,6 +528,11 @@ namespace FashionSense
             who.modData[ModDataKeys.ANIMATION_HAT_FRAME_DURATION] = duration.ToString();
             who.modData[ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION] = "0";
 
+            who.modData[ModDataKeys.ANIMATION_SHIRT_ITERATOR] = "0";
+            who.modData[ModDataKeys.ANIMATION_SHIRT_STARTING_INDEX] = "0";
+            who.modData[ModDataKeys.ANIMATION_SHIRT_FRAME_DURATION] = duration.ToString();
+            who.modData[ModDataKeys.ANIMATION_SHIRT_ELAPSED_DURATION] = "0";
+
             who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] = facingDirection.ToString();
 
             if (!ignoreAnimationType)
@@ -537,6 +542,7 @@ namespace FashionSense
                 who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_TYPE] = animationType.ToString();
                 who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_TYPE] = animationType.ToString();
                 who.modData[ModDataKeys.ANIMATION_HAT_TYPE] = animationType.ToString();
+                who.modData[ModDataKeys.ANIMATION_SHIRT_TYPE] = animationType.ToString();
             }
         }
     }

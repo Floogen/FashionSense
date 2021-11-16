@@ -14,6 +14,7 @@ namespace FashionSense.Framework.Utilities
         internal const string CUSTOM_ACCESSORY_SECONDARY_ID = "FashionSense.CustomAccessory.Secondary.Id";
         internal const string CUSTOM_ACCESSORY_TERTIARY_ID = "FashionSense.CustomAccessory.Tertiary.Id";
         internal const string CUSTOM_HAT_ID = "FashionSense.CustomHat.Id";
+        internal const string CUSTOM_SHIRT_ID = "FashionSense.CustomShirt.Id";
 
         // UI related keys
         internal const string UI_HAND_MIRROR_FILTER_BUTTON = "FashionSense.UI.HandMirror.SelectedFilterButton";
@@ -21,6 +22,7 @@ namespace FashionSense.Framework.Utilities
         internal const string UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR = "FashionSense.UI.HandMirror.Color.Accessory.Secondary";
         internal const string UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR = "FashionSense.UI.HandMirror.Color.Accessory.Tertiary";
         internal const string UI_HAND_MIRROR_HAT_COLOR = "FashionSense.UI.HandMirror.Color.Hat";
+        internal const string UI_HAND_MIRROR_SHIRT_COLOR = "FashionSense.UI.HandMirror.Color.Shirt";
 
         // Tool related keys
         internal const string HAND_MIRROR_FLAG = "FashionSense.Tools.HandMirror";
@@ -62,5 +64,12 @@ namespace FashionSense.Framework.Utilities
         internal const string ANIMATION_HAT_STARTING_INDEX = "FashionSense.Animation.Hat.StartingIndex";
         internal const string ANIMATION_HAT_FRAME_DURATION = "FashionSense.Animation.Hat.FrameDuration";
         internal const string ANIMATION_HAT_ELAPSED_DURATION = "FashionSense.Animation.Hat.ElapsedDuration";
+
+        // Hat animation related keys
+        internal const string ANIMATION_SHIRT_TYPE = "FashionSense.Animation.Shirt.Type";
+        internal const string ANIMATION_SHIRT_ITERATOR = "FashionSense.Animation.Shirt.Iterator";
+        internal const string ANIMATION_SHIRT_STARTING_INDEX = "FashionSense.Animation.Shirt.StartingIndex";
+        internal const string ANIMATION_SHIRT_FRAME_DURATION = "FashionSense.Animation.Shirt.FrameDuration";
+        internal const string ANIMATION_SHIRT_ELAPSED_DURATION = "FashionSense.Animation.Shirt.ElapsedDuration";
     }
 }
