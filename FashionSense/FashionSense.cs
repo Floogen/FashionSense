@@ -103,47 +103,13 @@ namespace FashionSense
                 conditionData.Update(Game1.player, Game1.currentGameTime);
             }
 
-            // Update animation timers
-            if (Game1.player.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION))
-            {
-                var elapsedDuration = Int32.Parse(Game1.player.modData[ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION]);
-                if (elapsedDuration < MAX_TRACKED_MILLISECONDS)
-                {
-                    Game1.player.modData[ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION] = (elapsedDuration + Game1.currentGameTime.ElapsedGameTime.Milliseconds).ToString();
-                }
-            }
-            if (Game1.player.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION))
-            {
-                var elapsedDuration = Int32.Parse(Game1.player.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION]);
-                if (elapsedDuration < MAX_TRACKED_MILLISECONDS)
-                {
-                    Game1.player.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION] = (elapsedDuration + Game1.currentGameTime.ElapsedGameTime.Milliseconds).ToString();
-                }
-            }
-            if (Game1.player.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ELAPSED_DURATION))
-            {
-                var elapsedDuration = Int32.Parse(Game1.player.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ELAPSED_DURATION]);
-                if (elapsedDuration < MAX_TRACKED_MILLISECONDS)
-                {
-                    Game1.player.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ELAPSED_DURATION] = (elapsedDuration + Game1.currentGameTime.ElapsedGameTime.Milliseconds).ToString();
-                }
-            }
-            if (Game1.player.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION))
-            {
-                var elapsedDuration = Int32.Parse(Game1.player.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION]);
-                if (elapsedDuration < MAX_TRACKED_MILLISECONDS)
-                {
-                    Game1.player.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION] = (elapsedDuration + Game1.currentGameTime.ElapsedGameTime.Milliseconds).ToString();
-                }
-            }
-            if (Game1.player.modData.ContainsKey(ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION))
-            {
-                var elapsedDuration = Int32.Parse(Game1.player.modData[ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION]);
-                if (elapsedDuration < MAX_TRACKED_MILLISECONDS)
-                {
-                    Game1.player.modData[ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION] = (elapsedDuration + Game1.currentGameTime.ElapsedGameTime.Milliseconds).ToString();
-                }
-            }
+            // Update elapsed durations
+            UpdateElapsedDuration(ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION);
+            UpdateElapsedDuration(ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION);
+            UpdateElapsedDuration(ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ELAPSED_DURATION);
+            UpdateElapsedDuration(ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION);
+            UpdateElapsedDuration(ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION);
+            UpdateElapsedDuration(ModDataKeys.ANIMATION_SHIRT_ELAPSED_DURATION);
         }
 
         private void OnGameLaunched(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
@@ -164,45 +130,48 @@ namespace FashionSense
             Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON] = String.Empty;
 
             // Set the cached colors, if needed
-            if (!Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR))
-            {
-                Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR] = Game1.player.hairstyleColor.Value.PackedValue.ToString();
-            }
-            if (!Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR))
-            {
-                Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR] = Game1.player.hairstyleColor.Value.PackedValue.ToString();
-            }
-            if (!Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR))
-            {
-                Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR] = Game1.player.hairstyleColor.Value.PackedValue.ToString();
-            }
-            if (!Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_HAT_COLOR))
-            {
-                Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_HAT_COLOR] = Game1.player.hairstyleColor.Value.PackedValue.ToString();
-            }
+            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR);
+            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR);
+            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR);
+            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_HAT_COLOR);
+            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR);
         }
 
         private void OnDayStarted(object sender, StardewModdingAPI.Events.DayStartedEventArgs e)
         {
-            if (!Game1.player.modData.ContainsKey(ModDataKeys.CUSTOM_HAIR_ID))
+            EnsureKeyExists(ModDataKeys.CUSTOM_HAIR_ID);
+            EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_ID);
+            EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID);
+            EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID);
+            EnsureKeyExists(ModDataKeys.CUSTOM_HAT_ID);
+            EnsureKeyExists(ModDataKeys.CUSTOM_SHIRT_ID);
+        }
+
+        private void UpdateElapsedDuration(string durationKey)
+        {
+            if (Game1.player.modData.ContainsKey(durationKey))
             {
-                Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID] = null;
+                var elapsedDuration = Int32.Parse(Game1.player.modData[durationKey]);
+                if (elapsedDuration < MAX_TRACKED_MILLISECONDS)
+                {
+                    Game1.player.modData[durationKey] = (elapsedDuration + Game1.currentGameTime.ElapsedGameTime.Milliseconds).ToString();
+                }
             }
-            if (!Game1.player.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_ID))
+        }
+
+        private void SetCachedColor(string colorKey)
+        {
+            if (!Game1.player.modData.ContainsKey(colorKey))
             {
-                Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_ID] = null;
+                Game1.player.modData[colorKey] = Game1.player.hairstyleColor.Value.PackedValue.ToString();
             }
-            if (!Game1.player.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID))
+        }
+
+        private void EnsureKeyExists(string key)
+        {
+            if (!Game1.player.modData.ContainsKey(key))
             {
-                Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID] = null;
-            }
-            if (!Game1.player.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID))
-            {
-                Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID] = null;
-            }
-            if (!Game1.player.modData.ContainsKey(ModDataKeys.CUSTOM_HAT_ID))
-            {
-                Game1.player.modData[ModDataKeys.CUSTOM_HAT_ID] = null;
+                Game1.player.modData[key] = null;
             }
         }
 
