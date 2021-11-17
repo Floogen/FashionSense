@@ -941,7 +941,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
             else
             {
-                float layerOffset = 10.8E-07f;
+                float layerOffset = who.FacingDirection > 1 ? 1.5E-07f : 1.8E-07f;
 
                 var shirtColor = new Color() { PackedValue = Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR) ? uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR]) : who.hairstyleColor.Value.PackedValue };
                 if (shirtModel.DisableGrayscale)
