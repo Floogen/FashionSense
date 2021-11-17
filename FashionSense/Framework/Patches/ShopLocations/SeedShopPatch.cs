@@ -23,12 +23,12 @@ namespace FashionSense.Framework.Patches.ShopLocations
             harmony.Patch(AccessTools.Method(_object, nameof(SeedShop.shopStock), null), postfix: new HarmonyMethod(GetType(), nameof(AddStockPostfix)));
         }
 
-        private static GenericTool GetHandMirrorTool()
+        internal static GenericTool GetHandMirrorTool()
         {
-            var paintBucket = new GenericTool(_helper.Translation.Get("tools.name.hand_mirror"), _helper.Translation.Get("tools.description.hand_mirror"), -1, 6, 6);
-            paintBucket.modData[ModDataKeys.HAND_MIRROR_FLAG] = true.ToString();
+            var handMirror = new GenericTool(_helper.Translation.Get("tools.name.hand_mirror"), _helper.Translation.Get("tools.description.hand_mirror"), -1, 6, 6);
+            handMirror.modData[ModDataKeys.HAND_MIRROR_FLAG] = true.ToString();
 
-            return paintBucket;
+            return handMirror;
         }
 
         private static void AddStockPostfix(SeedShop __instance, ref Dictionary<ISalable, int[]> __result)
