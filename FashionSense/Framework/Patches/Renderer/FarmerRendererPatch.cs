@@ -204,7 +204,11 @@ namespace FashionSense.Framework.Patches.Renderer
 
         private static bool IsFrameValid(List<AnimationModel> animations, int iterator, bool probe = false)
         {
-            AnimationModel animationModel = animations.ElementAt(iterator);
+            AnimationModel animationModel = animations.ElementAtOrDefault(iterator);
+            if (animationModel is null)
+            {
+                return false;
+            }
 
             bool isValid = true;
             foreach (var condition in animationModel.Conditions)
