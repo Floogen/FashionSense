@@ -788,7 +788,7 @@ namespace FashionSense.Framework.Patches.Renderer
 
             // Correct how the accessory is drawn according to facingDirection and AccessoryModel.DrawBehindHair
             var layerFix = facingDirection == 0 ? (accessoryModel.DrawBeforeHair ? 3.9E-05f : 2E-05f) : (accessoryModel.DrawBeforeHair ? -0.1E-05f : 2.9E-05f);
-            layerFix += accessoryModel.DrawBeforePlayer ? 0.2E-05f : 0;
+            layerFix += accessoryModel.DrawAfterPlayer ? 0.2E-05f : 0;
 
             b.Draw(accessoryPack.Texture, position + origin + positionOffset + rotationAdjustment + GetFeatureOffset(facingDirection, currentFrame, scale, renderer, accessoryPack.PackType), customAccessorySourceRect, accessoryModel.HasColorMask() ? Color.White : accessoryColor, rotation, origin + new Vector2(accessoryModel.HeadPosition.X, accessoryModel.HeadPosition.Y), 4f * scale + ((rotation != 0f) ? 0f : 0f), accessoryModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + layerFix);
 

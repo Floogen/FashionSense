@@ -57,7 +57,7 @@
   "RightAccessory": {
     "DisableGrayscale": true,
     "DrawBeforeHair": true,
-    "DrawBeforePlayer": true,
+    "DrawAfterPlayer": true,
     "StartingPosition": {
       "X": 0,
       "Y": 64
@@ -93,7 +93,7 @@
   "LeftAccessory": {
     "DisableGrayscale": true,
     "DrawBeforeHair": true,
-    "DrawBeforePlayer": true,
+    "DrawAfterPlayer": true,
     "Flipped": true,
     "StartingPosition": {
       "X": 0,
