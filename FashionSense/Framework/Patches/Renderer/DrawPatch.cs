@@ -100,7 +100,7 @@ namespace FashionSense.Framework.Patches.Renderer
 
         private static bool DrawPrefix(FarmerRenderer __instance, Texture2D ___baseTexture, ref Vector2 ___positionOffset, ref Vector2 ___rotationAdjustment, ref bool ____sickFrame, ref bool ____shirtDirty, ref bool ____spriteDirty, SpriteBatch b, FarmerSprite.AnimationFrame animationFrame, int currentFrame, Rectangle sourceRect, Vector2 position, Vector2 origin, float layerDepth, int facingDirection, Color overrideColor, float rotation, float scale, Farmer who)
         {
-            if (!who.modData.ContainsKey(ModDataKeys.CUSTOM_HAIR_ID) && !who.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_ID) && !who.modData.ContainsKey(ModDataKeys.CUSTOM_HAT_ID) && !who.modData.ContainsKey(ModDataKeys.CUSTOM_SHIRT_ID))
+            if (!who.modData.ContainsKey(ModDataKeys.CUSTOM_HAIR_ID) || !who.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_ID) || !who.modData.ContainsKey(ModDataKeys.CUSTOM_HAT_ID) || !who.modData.ContainsKey(ModDataKeys.CUSTOM_SHIRT_ID))
             {
                 return true;
             }
@@ -127,7 +127,7 @@ namespace FashionSense.Framework.Patches.Renderer
 
         private static void HandleConditionalDraw(FarmerRenderer __instance, Texture2D ___baseTexture, ref Vector2 ___positionOffset, ref Vector2 ___rotationAdjustment, ref bool ____sickFrame, ref bool ____shirtDirty, ref bool ____spriteDirty, SpriteBatch b, FarmerSprite.AnimationFrame animationFrame, int currentFrame, Rectangle sourceRect, Vector2 position, Vector2 origin, float layerDepth, int facingDirection, Color overrideColor, float rotation, float scale, Farmer who)
         {
-            if (___baseTexture != null && (FashionSense.textureManager.GetSpecificAppearanceModel<ShirtContentPack>(who.modData[ModDataKeys.CUSTOM_SHIRT_ID]) is ShirtContentPack sPack && sPack != null))
+            if (___baseTexture != null && (who.modData.ContainsKey(ModDataKeys.CUSTOM_SHIRT_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<ShirtContentPack>(who.modData[ModDataKeys.CUSTOM_SHIRT_ID]) is ShirtContentPack sPack && sPack != null))
             {
                 //DrawReversePatch(__instance, b, animationFrame, currentFrame, sourceRect, position, origin, layerDepth, facingDirection, overrideColor, rotation, scale, who);
                 HandleCustomDraw(__instance, ___baseTexture, ref ___positionOffset, ref ___rotationAdjustment, ref ____sickFrame, ref ____shirtDirty, ref ____spriteDirty, b, animationFrame, currentFrame, sourceRect, position, origin, layerDepth, facingDirection, overrideColor, rotation, scale, who);
