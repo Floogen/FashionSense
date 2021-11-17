@@ -1,0 +1,111 @@
+{
+  "Name": "Blinky",
+  "FrontShirt": {
+    "DisableGrayscale": true,
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "ShirtSize": {
+      "Width": 8,
+      "Length": 8
+    },
+    "UniformAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 200
+      },
+      {
+        "Frame": 1,
+        "Duration": 200,
+        "Conditions": [
+          {
+            "Name": "IsElapsedTimeMultipleOf",
+            "Value": {
+              "RandomValue": [ 1000, 2500, 5000 ]
+            }
+          }
+        ]
+      },
+      {
+        "Frame": 2,
+        "Duration": 200,
+        "Conditions": [
+          {
+            "Name": "DidPreviousFrameDisplay",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 1,
+        "Duration": 200,
+        "Conditions": [
+          {
+            "Name": "DidPreviousFrameDisplay",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 0,
+        "Duration": 2000,
+        "Conditions": [
+          {
+            "Name": "DidPreviousFrameDisplay",
+            "Value": true
+          }
+        ]
+      }
+    ]
+  },
+  "RightShirt": {
+    "DisableGrayscale": true,
+    "StartingPosition": {
+      "X": 0,
+      "Y": 8
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "ShirtSize": {
+      "Width": 8,
+      "Length": 8
+    }
+  },
+  "LeftShirt": {
+    "DisableGrayscale": true,
+    "StartingPosition": {
+      "X": 0,
+      "Y": 16
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "ShirtSize": {
+      "Width": 8,
+      "Length": 8
+    }
+  },
+  "BackShirt": {
+    "DisableGrayscale": true,
+    "StartingPosition": {
+      "X": 0,
+      "Y": 24
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "ShirtSize": {
+      "Width": 8,
+      "Length": 8
+    }
+  }
+}
