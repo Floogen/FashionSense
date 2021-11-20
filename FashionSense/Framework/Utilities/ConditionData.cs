@@ -46,6 +46,11 @@ namespace FashionSense.Framework.Utilities
             return _movementDurationMilliseconds > 0;
         }
 
+        internal int GetActualPlayerInventoryCount(Farmer who)
+        {
+            return who.items.Where(o => o != null).Count();
+        }
+
         internal void Update(Farmer who, GameTime time)
         {
             if (_elapsedMilliseconds > FashionSense.MAX_TRACKED_MILLISECONDS)
