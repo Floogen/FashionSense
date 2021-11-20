@@ -70,7 +70,7 @@ namespace FashionSense.Framework.Patches.Tools
 
         private static bool BeginUsingPrefix(Tool __instance, ref bool __result, GameLocation location, int x, int y, Farmer who)
         {
-            if (__instance.modData.ContainsKey(ModDataKeys.HAND_MIRROR_FLAG))
+            if (__instance.modData.ContainsKey(ModDataKeys.HAND_MIRROR_FLAG) && who == Game1.player)
             {
                 __result = true;
                 return UseHandMirror(location, x, y, who);
