@@ -12,6 +12,13 @@ namespace FashionSense.Framework.Models.Generic
 {
     public class Condition
     {
+        public enum Comparison
+        {
+            EqualTo,
+            GreaterThan,
+            LessThan
+        }
+
         public enum Type
         {
             Unknown,
@@ -20,16 +27,58 @@ namespace FashionSense.Framework.Models.Generic
             IsElapsedTimeMultipleOf,
             DidPreviousFrameDisplay,
             RidingHorse,
-            MinimumInventoryItemCount,
-            ExactInventoryItemCount,
+            InventoryItemCount,
             IsInventoryFull
         }
 
         public Type Name { get; set; }
         public object Value { get; set; }
+        public Comparison Operator { get; set; } = Comparison.EqualTo;
+        public bool Inverse { get; set; }
+        public bool Independent { get; set; }
+
         private object ParsedValue { get; set; }
         private object Cache { get; set; }
-        public bool Independent { get; set; }
+
+        internal bool IsValid(bool booleanValue)
+        {
+            return IsValid(booleanValue, GetParsedValue<bool>(recalculateValue: false));
+        }
+
+        internal bool IsValid(bool booleanValue, bool comparisonValue)
+        {
+            var passed = (booleanValue == comparisonValue);
+            if (Inverse)
+            {
+                passed = !passed;
+            }
+
+            return passed;
+        }
+
+        internal bool IsValid(long numericalValue)
+        {
+            var passed = false;
+            var comparisonValue = GetParsedValue<long>(recalculateValue: false);
+            switch (Operator)
+            {
+                case Comparison.EqualTo:
+                    passed = (numericalValue == comparisonValue);
+                    break;
+                case Comparison.GreaterThan:
+                    passed = (numericalValue > comparisonValue);
+                    break;
+                case Comparison.LessThan:
+                    passed = (numericalValue < comparisonValue);
+                    break;
+            }
+            if (Inverse)
+            {
+                passed = !passed;
+            }
+
+            return passed;
+        }
 
         internal T GetParsedValue<T>(bool recalculateValue = false)
         {
