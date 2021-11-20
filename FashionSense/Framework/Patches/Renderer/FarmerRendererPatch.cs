@@ -242,6 +242,18 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     passedCheck = Game1.player.isRidingHorse();
                 }
+                else if (condition.Name is Condition.Type.MinimumInventoryItemCount)
+                {
+                    passedCheck = FashionSense.conditionData.GetActualPlayerInventoryCount(Game1.player) >= condition.GetParsedValue<long>(!probe);
+                }
+                else if (condition.Name is Condition.Type.ExactInventoryItemCount)
+                {
+                    passedCheck = Game1.player.numberOfItemsInInventory() == condition.GetParsedValue<long>(!probe);
+                }
+                else if (condition.Name is Condition.Type.IsInventoryFull)
+                {
+                    passedCheck = Game1.player.isInventoryFull() == condition.GetParsedValue<bool>(!probe);
+                }
 
                 // If the condition is independent and is true, then skip rest of evaluations
                 if (condition.Independent && passedCheck)
