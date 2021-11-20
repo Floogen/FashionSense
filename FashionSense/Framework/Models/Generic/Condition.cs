@@ -19,7 +19,10 @@ namespace FashionSense.Framework.Models.Generic
             MovementDuration,
             IsElapsedTimeMultipleOf,
             DidPreviousFrameDisplay,
-            RidingHorse
+            RidingHorse,
+            MinimumInventoryItemCount,
+            ExactInventoryItemCount,
+            IsInventoryFull
         }
 
         public Type Name { get; set; }
