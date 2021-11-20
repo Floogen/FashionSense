@@ -216,11 +216,11 @@ namespace FashionSense.Framework.Patches.Renderer
                 var passedCheck = false;
                 if (condition.Name is Condition.Type.MovementDuration)
                 {
-                    passedCheck = FashionSense.conditionData.IsMovingLongEnough(condition.GetParsedValue<long>(!probe));
+                    passedCheck = condition.IsValid(true, FashionSense.conditionData.IsMovingLongEnough(condition.GetParsedValue<long>(!probe)));
                 }
                 else if (condition.Name is Condition.Type.IsElapsedTimeMultipleOf)
                 {
-                    passedCheck = FashionSense.conditionData.IsElapsedTimeMultipleOf(condition, probe);
+                    passedCheck = condition.IsValid(true, FashionSense.conditionData.IsElapsedTimeMultipleOf(condition, probe));
                 }
                 else if (condition.Name is Condition.Type.DidPreviousFrameDisplay)
                 {
@@ -233,26 +233,24 @@ namespace FashionSense.Framework.Patches.Renderer
                     {
                         passedCheck = (condition.GetParsedValue<bool>(!probe) && previousAnimationModel.WasDisplayed) || (!condition.GetParsedValue<bool>(!probe) && !previousAnimationModel.WasDisplayed);
                     }
+
+                    passedCheck = condition.IsValid(true, passedCheck);
                 }
                 else if (condition.Name is Condition.Type.MovementSpeed)
                 {
-                    passedCheck = FashionSense.conditionData.IsMovingFastEnough(condition.GetParsedValue<long>(!probe));
+                    passedCheck = condition.IsValid(true, FashionSense.conditionData.IsMovingFastEnough(condition.GetParsedValue<long>(!probe)));
                 }
                 else if (condition.Name is Condition.Type.RidingHorse)
                 {
-                    passedCheck = Game1.player.isRidingHorse();
+                    passedCheck = condition.IsValid(Game1.player.isRidingHorse());
                 }
-                else if (condition.Name is Condition.Type.MinimumInventoryItemCount)
+                else if (condition.Name is Condition.Type.InventoryItemCount)
                 {
-                    passedCheck = FashionSense.conditionData.GetActualPlayerInventoryCount(Game1.player) >= condition.GetParsedValue<long>(!probe);
-                }
-                else if (condition.Name is Condition.Type.ExactInventoryItemCount)
-                {
-                    passedCheck = Game1.player.numberOfItemsInInventory() == condition.GetParsedValue<long>(!probe);
+                    passedCheck = condition.IsValid(FashionSense.conditionData.GetActualPlayerInventoryCount(Game1.player));
                 }
                 else if (condition.Name is Condition.Type.IsInventoryFull)
                 {
-                    passedCheck = Game1.player.isInventoryFull() == condition.GetParsedValue<bool>(!probe);
+                    passedCheck = condition.IsValid(Game1.player.isInventoryFull());
                 }
 
                 // If the condition is independent and is true, then skip rest of evaluations
