@@ -60,6 +60,7 @@
     <Compile Include="Framework\Managers\ApiManager.cs" />
     <Compile Include="Framework\Managers\AssetManager.cs" />
     <Compile Include="Framework\Managers\TextureManager.cs" />
+    <Compile Include="Framework\Models\LightModel.cs" />
     <Compile Include="Framework\Models\AppearanceModel.cs" />
     <Compile Include="Framework\Models\Accessory\AccessoryContentPack.cs" />
     <Compile Include="Framework\Models\Accessory\AccessoryModel.cs" />

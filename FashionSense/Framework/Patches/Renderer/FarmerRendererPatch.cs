@@ -557,6 +557,9 @@ namespace FashionSense.Framework.Patches.Renderer
                 UpdatePlayerAnimationData(model, who, type, animations, facingDirection, iterator, startingIndex);
             }
 
+            // Update the light, if any is given
+            UpdateLight(model, animationModel, who);
+
             // Perform time based logic for elapsed animations
             // Note: ANIMATION_ELAPSED_DURATION is updated via UpdateTicked event
             if (elapsedDuration >= frameDuration)
@@ -580,6 +583,92 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             sourceRectangle.X += sourceRectangle.Width * animationModel.Frame;
+        }
+
+        private static void UpdateLight(AppearanceModel model, AnimationModel animationModel, Farmer who)
+        {
+            if (Game1.currentLocation is null)
+            {
+                return;
+            }
+
+            int indexOffset = 0;
+            string lightIdKey = null;
+            switch (model)
+            {
+                case AccessoryModel accessoryModel:
+                    if (accessoryModel.Priority == AccessoryModel.Type.Secondary)
+                    {
+                        indexOffset = 1;
+                        lightIdKey = ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_LIGHT_ID;
+                    }
+                    else if (accessoryModel.Priority == AccessoryModel.Type.Tertiary)
+                    {
+                        indexOffset = 2;
+                        lightIdKey = ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_LIGHT_ID;
+                    }
+                    else
+                    {
+                        indexOffset = 3;
+                        lightIdKey = ModDataKeys.ANIMATION_ACCESSORY_LIGHT_ID;
+                    }
+                    break;
+                case HatModel hatModel:
+                    indexOffset = 4;
+                    lightIdKey = ModDataKeys.ANIMATION_HAT_LIGHT_ID;
+                    break;
+                case ShirtModel shirtModel:
+                    indexOffset = 5;
+                    lightIdKey = ModDataKeys.ANIMATION_SHIRT_LIGHT_ID;
+                    break;
+            }
+
+            if (!who.modData.ContainsKey(lightIdKey) || who.modData[lightIdKey] == "0")
+            {
+                who.modData[lightIdKey] = GenerateLightId(indexOffset).ToString();
+
+                if (who.modData[lightIdKey] == "0")
+                {
+                    return;
+                }
+            }
+
+            var lightModel = animationModel.Light;
+            int lightIdentifier = Int32.Parse(who.modData[lightIdKey]);
+            if (lightModel is null)
+            {
+                if (Game1.currentLocation.sharedLights.ContainsKey(lightIdentifier))
+                {
+                    Game1.currentLocation.sharedLights.Remove(lightIdentifier);
+                }
+                return;
+            }
+
+            // Handle updating the position and other values of the light
+            if (!Game1.currentLocation.sharedLights.ContainsKey(lightIdentifier))
+            {
+                Game1.currentLocation.sharedLights[lightIdentifier] = new LightSource(1, who.position - new Vector2(lightModel.Position.X, lightModel.Position.Y), lightModel.Radius, lightModel.GetColor(), LightSource.LightContext.None);
+            }
+            else
+            {
+                Game1.currentLocation.sharedLights[lightIdentifier].position.Value = who.position - new Vector2(lightModel.Position.X, lightModel.Position.Y);
+                Game1.currentLocation.sharedLights[lightIdentifier].radius.Value = lightModel.Radius;
+                Game1.currentLocation.sharedLights[lightIdentifier].color.Value = lightModel.GetColor();
+            }
+        }
+
+        private static int GenerateLightId(int offset)
+        {
+            var baseKeyId = -1 * offset * 5000;
+            for (int x = 0; x < 10; x++)
+            {
+                if (!Game1.currentLocation.sharedLights.ContainsKey(baseKeyId + x))
+                {
+                    return baseKeyId + x;
+                }
+            }
+
+            return 0;
         }
 
         private static bool IsWaitingOnRequiredAnimation(Farmer who, AppearanceModel model)

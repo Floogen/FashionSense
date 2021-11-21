@@ -36,6 +36,7 @@ namespace FashionSense.Framework.Utilities
         internal const string ANIMATION_HAIR_STARTING_INDEX = "FashionSense.Animation.Hair.StartingIndex";
         internal const string ANIMATION_HAIR_FRAME_DURATION = "FashionSense.Animation.Hair.FrameDuration";
         internal const string ANIMATION_HAIR_ELAPSED_DURATION = "FashionSense.Animation.Hair.ElapsedDuration";
+        internal const string ANIMATION_HAIR_LIGHT_ID = "FashionSense.Animation.Hair.Light.Id";
 
         // Accessory animation related keys
         internal const string ANIMATION_ACCESSORY_TYPE = "FashionSense.Animation.Accessory.Type";
@@ -43,6 +44,7 @@ namespace FashionSense.Framework.Utilities
         internal const string ANIMATION_ACCESSORY_STARTING_INDEX = "FashionSense.Animation.Accessory.StartingIndex";
         internal const string ANIMATION_ACCESSORY_FRAME_DURATION = "FashionSense.Animation.Accessory.FrameDuration";
         internal const string ANIMATION_ACCESSORY_ELAPSED_DURATION = "FashionSense.Animation.Accessory.ElapsedDuration";
+        internal const string ANIMATION_ACCESSORY_LIGHT_ID = "FashionSense.Animation.Accessory.Light.Id";
 
         // Accessory animation related keys
         internal const string ANIMATION_ACCESSORY_SECONDARY_TYPE = "FashionSense.Animation.Accessory.Secondary.Type";
@@ -50,6 +52,7 @@ namespace FashionSense.Framework.Utilities
         internal const string ANIMATION_ACCESSORY_SECONDARY_STARTING_INDEX = "FashionSense.Animation.Accessory.Secondary.StartingIndex";
         internal const string ANIMATION_ACCESSORY_SECONDARY_FRAME_DURATION = "FashionSense.Animation.Accessory.Secondary.FrameDuration";
         internal const string ANIMATION_ACCESSORY_SECONDARY_ELAPSED_DURATION = "FashionSense.Animation.Accessory.Secondary.ElapsedDuration";
+        internal const string ANIMATION_ACCESSORY_SECONDARY_LIGHT_ID = "FashionSense.Animation.Accessory.Secondary.Light.Id";
 
         // Accessory animation related keys
         internal const string ANIMATION_ACCESSORY_TERTIARY_TYPE = "FashionSense.Animation.Accessory.Tertiary.Type";
@@ -57,6 +60,7 @@ namespace FashionSense.Framework.Utilities
         internal const string ANIMATION_ACCESSORY_TERTIARY_STARTING_INDEX = "FashionSense.Animation.Accessory.Tertiary.StartingIndex";
         internal const string ANIMATION_ACCESSORY_TERTIARY_FRAME_DURATION = "FashionSense.Animation.Accessory.Tertiary.FrameDuration";
         internal const string ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION = "FashionSense.Animation.Accessory.Tertiary.ElapsedDuration";
+        internal const string ANIMATION_ACCESSORY_TERTIARY_LIGHT_ID = "FashionSense.Animation.Accessory.Tertiary.Light.Id";
 
         // Hat animation related keys
         internal const string ANIMATION_HAT_TYPE = "FashionSense.Animation.Hat.Type";
@@ -64,6 +68,7 @@ namespace FashionSense.Framework.Utilities
         internal const string ANIMATION_HAT_STARTING_INDEX = "FashionSense.Animation.Hat.StartingIndex";
         internal const string ANIMATION_HAT_FRAME_DURATION = "FashionSense.Animation.Hat.FrameDuration";
         internal const string ANIMATION_HAT_ELAPSED_DURATION = "FashionSense.Animation.Hat.ElapsedDuration";
+        internal const string ANIMATION_HAT_LIGHT_ID = "FashionSense.Animation.Hat.Light.Id";
 
         // Hat animation related keys
         internal const string ANIMATION_SHIRT_TYPE = "FashionSense.Animation.Shirt.Type";
@@ -71,5 +76,6 @@ namespace FashionSense.Framework.Utilities
         internal const string ANIMATION_SHIRT_STARTING_INDEX = "FashionSense.Animation.Shirt.StartingIndex";
         internal const string ANIMATION_SHIRT_FRAME_DURATION = "FashionSense.Animation.Shirt.FrameDuration";
         internal const string ANIMATION_SHIRT_ELAPSED_DURATION = "FashionSense.Animation.Shirt.ElapsedDuration";
+        internal const string ANIMATION_SHIRT_LIGHT_ID = "FashionSense.Animation.Shirt.Light.Id";
     }
 }

@@ -19,6 +19,7 @@ using FashionSense.Framework.Models.Accessory;
 using FashionSense.Framework.External.ContentPatcher;
 using FashionSense.Framework.Models.Hat;
 using FashionSense.Framework.Models.Shirt;
+using StardewModdingAPI.Events;
 
 namespace FashionSense
 {
@@ -86,6 +87,7 @@ namespace FashionSense
             modHelper.Events.GameLoop.GameLaunched += OnGameLaunched;
             modHelper.Events.GameLoop.SaveLoaded += OnSaveLoaded;
             modHelper.Events.GameLoop.DayStarted += OnDayStarted;
+            modHelper.Events.Player.Warped += OnWarped;
             modHelper.Events.GameLoop.UpdateTicked += OnUpdateTicked;
             modHelper.Events.Display.Rendered += OnRendered;
         }
@@ -113,6 +115,35 @@ namespace FashionSense
             UpdateElapsedDuration(ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION);
             UpdateElapsedDuration(ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION);
             UpdateElapsedDuration(ModDataKeys.ANIMATION_SHIRT_ELAPSED_DURATION);
+        }
+
+        private void OnWarped(object sender, StardewModdingAPI.Events.WarpedEventArgs e)
+        {
+            // Remove old lights
+            if (e.Player.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_LIGHT_ID) && Int32.TryParse(e.Player.modData[ModDataKeys.ANIMATION_HAIR_LIGHT_ID], out int hair_id))
+            {
+                e.OldLocation.sharedLights.Remove(hair_id);
+            }
+            if (e.Player.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_LIGHT_ID) && Int32.TryParse(e.Player.modData[ModDataKeys.ANIMATION_ACCESSORY_LIGHT_ID], out int acc_id))
+            {
+                e.OldLocation.sharedLights.Remove(acc_id);
+            }
+            if (e.Player.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_LIGHT_ID) && Int32.TryParse(e.Player.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_LIGHT_ID], out int acc_sec_id))
+            {
+                e.OldLocation.sharedLights.Remove(acc_sec_id);
+            }
+            if (e.Player.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_LIGHT_ID) && Int32.TryParse(e.Player.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_LIGHT_ID], out int acc_ter_id))
+            {
+                e.OldLocation.sharedLights.Remove(acc_ter_id);
+            }
+            if (e.Player.modData.ContainsKey(ModDataKeys.ANIMATION_HAT_LIGHT_ID) && Int32.TryParse(e.Player.modData[ModDataKeys.ANIMATION_HAT_LIGHT_ID], out int hat_id))
+            {
+                e.OldLocation.sharedLights.Remove(hat_id);
+            }
+            if (e.Player.modData.ContainsKey(ModDataKeys.ANIMATION_SHIRT_LIGHT_ID) && Int32.TryParse(e.Player.modData[ModDataKeys.ANIMATION_SHIRT_LIGHT_ID], out int shirt_id))
+            {
+                e.OldLocation.sharedLights.Remove(shirt_id);
+            }
         }
 
         private void OnGameLaunched(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
