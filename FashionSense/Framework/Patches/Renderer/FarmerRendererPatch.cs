@@ -558,7 +558,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             // Update the light, if any is given
-            UpdateLight(model, animationModel, who);
+            UpdateLight(model, animationModel, who, false);
 
             // Perform time based logic for elapsed animations
             // Note: ANIMATION_ELAPSED_DURATION is updated via UpdateTicked event
@@ -566,6 +566,7 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 // Force the frame's condition to evalute and update any caches
                 IsFrameValid(animations, iterator);
+                UpdateLight(model, animationModel, who, true);
 
                 iterator = iterator + 1 >= animations.Count() ? startingIndex : iterator + 1;
 
@@ -585,7 +586,7 @@ namespace FashionSense.Framework.Patches.Renderer
             sourceRectangle.X += sourceRectangle.Width * animationModel.Frame;
         }
 
-        private static void UpdateLight(AppearanceModel model, AnimationModel animationModel, Farmer who)
+        private static void UpdateLight(AppearanceModel model, AnimationModel animationModel, Farmer who, bool recalculateLight)
         {
             if (Game1.currentLocation is null)
             {
@@ -647,12 +648,12 @@ namespace FashionSense.Framework.Patches.Renderer
             // Handle updating the position and other values of the light
             if (!Game1.currentLocation.sharedLights.ContainsKey(lightIdentifier))
             {
-                Game1.currentLocation.sharedLights[lightIdentifier] = new LightSource(1, who.position - new Vector2(lightModel.Position.X, lightModel.Position.Y), lightModel.Radius, lightModel.GetColor(), LightSource.LightContext.None);
+                Game1.currentLocation.sharedLights[lightIdentifier] = new LightSource(1, who.position - new Vector2(lightModel.Position.X, lightModel.Position.Y), lightModel.GetRadius(recalculateLight), lightModel.GetColor(), LightSource.LightContext.None);
             }
             else
             {
                 Game1.currentLocation.sharedLights[lightIdentifier].position.Value = who.position - new Vector2(lightModel.Position.X, lightModel.Position.Y);
-                Game1.currentLocation.sharedLights[lightIdentifier].radius.Value = lightModel.Radius;
+                Game1.currentLocation.sharedLights[lightIdentifier].radius.Value = lightModel.GetRadius(recalculateLight);
                 Game1.currentLocation.sharedLights[lightIdentifier].color.Value = lightModel.GetColor();
             }
         }
