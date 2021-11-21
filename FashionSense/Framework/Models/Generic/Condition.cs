@@ -28,7 +28,8 @@ namespace FashionSense.Framework.Models.Generic
             DidPreviousFrameDisplay,
             RidingHorse,
             InventoryItemCount,
-            IsInventoryFull
+            IsInventoryFull,
+            IsDarkOut
         }
 
         public Type Name { get; set; }
