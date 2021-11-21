@@ -13,8 +13,6 @@ namespace FashionSense.Framework.Models
         public int[] Color { get; set; }
         public float Radius { get; set; }
         public Position Position { get; set; }
-        public int PulseSpeed { get; set; }
-        public float PulseMinRadius { get; set; }
 
         internal Color GetColor()
         {
