@@ -29,7 +29,8 @@ namespace FashionSense.Framework.Models.Generic
             RidingHorse,
             InventoryItemCount,
             IsInventoryFull,
-            IsDarkOut
+            IsDarkOut,
+            IsRaining
         }
 
         public Type Name { get; set; }

@@ -256,6 +256,10 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     passedCheck = condition.IsValid(Game1.isDarkOut() || Game1.IsRainingHere(Game1.currentLocation));
                 }
+                else if (condition.Name is Condition.Type.IsRaining)
+                {
+                    passedCheck = condition.IsValid(Game1.IsRainingHere(Game1.currentLocation));
+                }
 
                 // If the condition is independent and is true, then skip rest of evaluations
                 if (condition.Independent && passedCheck)
