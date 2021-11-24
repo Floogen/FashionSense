@@ -626,8 +626,16 @@ namespace FashionSense.Framework.Patches.Renderer
                     indexOffset = 5;
                     lightIdKey = ModDataKeys.ANIMATION_SHIRT_LIGHT_ID;
                     break;
+                case HairModel hairModel:
+                    indexOffset = 9;
+                    lightIdKey = ModDataKeys.ANIMATION_HAIR_LIGHT_ID;
+                    break;
+                default:
+                    // Unhandled model type
+                    return;
             }
 
+            // Handle any missing key value
             if (!who.modData.ContainsKey(lightIdKey) || who.modData[lightIdKey] == "0")
             {
                 who.modData[lightIdKey] = GenerateLightId(indexOffset).ToString();
