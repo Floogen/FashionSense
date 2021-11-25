@@ -108,7 +108,7 @@ namespace FashionSense.Framework.Patches.Renderer
 
         private static void DrawHairVanilla(SpriteBatch b, Texture2D hair_texture, Rectangle hairstyleSourceRect, FarmerRenderer renderer, Farmer who, int currentFrame, int facingDirection, float rotation, float scale, float layerDepth, Vector2 position, Vector2 origin, Vector2 positionOffset, Color overrideColor)
         {
-            float hair_draw_layer = 2.2E-05f;
+            float hair_draw_layer = 2.1E-05f;
 
             int hair_style = who.getHair();
             HairStyleMetadata hair_metadata = Farmer.GetHairStyleMetadata(who.hair.Value);
