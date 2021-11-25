@@ -14,6 +14,7 @@ namespace FashionSense.Framework.Models
 {
     public class LightModel
     {
+        public int TextureId { get; set; } = 4;
         public int[] Color { get; set; }
         public object Radius { get; set; }
         public Position Position { get; set; }
@@ -47,9 +48,29 @@ namespace FashionSense.Framework.Models
             return ParsedRadius;
         }
 
+        internal int GetTextureSource()
+        {
+            int source = TextureId;
+            if (TextureId == 3)
+            {
+                source = 2;
+            }
+            else if (TextureId < 1 || TextureId > 8)
+            {
+                source = 1;
+            }
+
+            return source;
+        }
+
         internal Color GetColor()
         {
-            return new Color(Color[0], Color[1], Color[2]);
+            int alpha = 255;
+            if (3 < Color.Length)
+            {
+                alpha = Color[3];
+            }
+            return new Color(byte.MaxValue - Color[0], byte.MaxValue - Color[1], byte.MaxValue - Color[2], alpha);
         }
     }
 }

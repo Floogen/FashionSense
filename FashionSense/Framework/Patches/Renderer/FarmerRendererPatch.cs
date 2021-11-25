@@ -660,7 +660,7 @@ namespace FashionSense.Framework.Patches.Renderer
             // Handle updating the position and other values of the light
             if (!Game1.currentLocation.sharedLights.ContainsKey(lightIdentifier))
             {
-                Game1.currentLocation.sharedLights[lightIdentifier] = new LightSource(1, who.position - new Vector2(lightModel.Position.X, lightModel.Position.Y), lightModel.GetRadius(recalculateLight), lightModel.GetColor(), LightSource.LightContext.None);
+                Game1.currentLocation.sharedLights[lightIdentifier] = new LightSource(lightModel.GetTextureSource(), who.position - new Vector2(lightModel.Position.X, lightModel.Position.Y), lightModel.GetRadius(recalculateLight), lightModel.GetColor(), LightSource.LightContext.None);
             }
             else
             {
