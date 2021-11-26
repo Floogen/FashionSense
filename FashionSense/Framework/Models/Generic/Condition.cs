@@ -30,7 +30,20 @@ namespace FashionSense.Framework.Models.Generic
             InventoryItemCount,
             IsInventoryFull,
             IsDarkOut,
-            IsRaining
+            IsRaining,
+            IsWalking,
+            IsRunning,
+            IsEating,
+            IsDrinking,
+            IsFishing,
+            IsUsingHeavyTool,
+            IsUsingMilkPail,
+            IsUsingShears,
+            IsUsingPan,
+            IsUsingScythe,
+            IsUsingMeleeWeapon,
+            IsUsingSlingshot,
+            IsHarvesting
         }
 
         public Type Name { get; set; }

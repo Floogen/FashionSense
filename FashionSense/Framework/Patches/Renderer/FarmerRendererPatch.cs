@@ -263,6 +263,58 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     passedCheck = condition.IsValid(Game1.IsRainingHere(Game1.currentLocation));
                 }
+                else if (condition.Name is Condition.Type.IsWalking)
+                {
+                    passedCheck = condition.IsValid(!Game1.player.running);
+                }
+                else if (condition.Name is Condition.Type.IsRunning)
+                {
+                    passedCheck = condition.IsValid(Game1.player.running);
+                }
+                else if (condition.Name is Condition.Type.IsEating)
+                {
+                    passedCheck = condition.IsValid(Game1.player.isEating && Game1.player.FarmerSprite.CurrentSingleAnimation == FarmerSprite.eat);
+                }
+                else if (condition.Name is Condition.Type.IsDrinking)
+                {
+                    passedCheck = condition.IsValid(Game1.player.isEating && Game1.player.FarmerSprite.CurrentSingleAnimation == FarmerSprite.drink);
+                }
+                else if (condition.Name is Condition.Type.IsFishing)
+                {
+                    passedCheck = condition.IsValid(Game1.player.CurrentTool is FishingRod fishingRod && fishingRod.isFishing);
+                }
+                else if (condition.Name is Condition.Type.IsUsingHeavyTool)
+                {
+                    passedCheck = condition.IsValid(Game1.player.UsingTool && (Game1.player.CurrentTool is Hoe || Game1.player.CurrentTool is Pickaxe || Game1.player.CurrentTool is Axe));
+                }
+                else if (condition.Name is Condition.Type.IsUsingMilkPail)
+                {
+                    passedCheck = condition.IsValid(Game1.player.UsingTool && Game1.player.CurrentTool is MilkPail);
+                }
+                else if (condition.Name is Condition.Type.IsUsingShears)
+                {
+                    passedCheck = condition.IsValid(Game1.player.UsingTool && Game1.player.CurrentTool is Shears);
+                }
+                else if (condition.Name is Condition.Type.IsUsingPan)
+                {
+                    passedCheck = condition.IsValid(Game1.player.UsingTool && Game1.player.CurrentTool is Pan);
+                }
+                else if (condition.Name is Condition.Type.IsUsingScythe)
+                {
+                    passedCheck = condition.IsValid(Game1.player.UsingTool && Game1.player.CurrentTool is MeleeWeapon weapon && weapon.isScythe());
+                }
+                else if (condition.Name is Condition.Type.IsUsingMeleeWeapon)
+                {
+                    passedCheck = condition.IsValid(Game1.player.UsingTool && Game1.player.CurrentTool is MeleeWeapon weapon);
+                }
+                else if (condition.Name is Condition.Type.IsUsingSlingshot)
+                {
+                    passedCheck = condition.IsValid(Game1.player.UsingTool && Game1.player.CurrentTool is Slingshot);
+                }
+                else if (condition.Name is Condition.Type.IsHarvesting)
+                {
+                    passedCheck = condition.IsValid(279 + Game1.player.FacingDirection == Game1.player.FarmerSprite.CurrentSingleAnimation);
+                }
 
                 // If the condition is independent and is true, then skip rest of evaluations
                 if (condition.Independent && passedCheck)
