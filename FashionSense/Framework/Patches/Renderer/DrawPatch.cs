@@ -176,14 +176,16 @@ namespace FashionSense.Framework.Patches.Renderer
                 b.Draw(Game1.staminaRect, new Rectangle((int)position.X + (int)who.yOffset + 8, (int)position.Y - 128 + sourceRect.Height * 4 + (int)origin.Y - (int)who.yOffset, sourceRect.Width * 4 - (int)who.yOffset * 2 - 16, 4), Game1.staminaRect.Bounds, Color.White * 0.75f, 0f, Vector2.Zero, SpriteEffects.None, layerDepth + 0.001f);
                 return;
             }
-            Rectangle pants_rect = new Rectangle(sourceRect.X, sourceRect.Y, sourceRect.Width, sourceRect.Height);
-            pants_rect.X += __instance.ClampPants(who.GetPantsIndex()) % 10 * 192;
-            pants_rect.Y += __instance.ClampPants(who.GetPantsIndex()) / 10 * 688;
-            if (!who.IsMale)
+
+            if ()
             {
-                pants_rect.X += 96;
+
             }
-            b.Draw(FarmerRenderer.pantsTexture, position + origin + ___positionOffset, pants_rect, overrideColor.Equals(Color.White) ? Utility.MakeCompletelyOpaque(who.GetPantsColor()) : overrideColor, rotation, origin, 4f * scale, animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + ((who.FarmerSprite.CurrentAnimationFrame.frame == 5) ? 0.00092f : 9.2E-08f));
+            else
+            {
+                DrawPantsVanilla(b, sourceRect, __instance, who, animationFrame, currentFrame, facingDirection, rotation, scale, layerDepth, position, origin, ___positionOffset, ___rotationAdjustment, overrideColor);
+            }
+
             sourceRect.Offset(288, 0);
             FishingRod fishing_rod;
             if (who.currentEyes != 0 && facingDirection != 0 && (Game1.timeOfDay < 2600 || (who.isInBed.Value && who.timeWentToBed.Value != 0)) && ((!who.FarmerSprite.PauseForSingleAnimation && !who.UsingTool) || (who.UsingTool && who.CurrentTool is FishingRod)) && (!who.UsingTool || (fishing_rod = who.CurrentTool as FishingRod) == null || fishing_rod.isFishing))
@@ -212,6 +214,20 @@ namespace FashionSense.Framework.Patches.Renderer
             sourceRect.Offset(-288 + (animationFrame.secondaryArm ? 192 : 96), 0);
 
             b.Draw(baseTexture, position + origin + ___positionOffset + who.armOffset, sourceRect, overrideColor, rotation, origin, 4f * scale, animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + arm_layer_offset);
+        }
+
+        private static void DrawPantsVanilla(SpriteBatch b, Rectangle sourceRect, FarmerRenderer renderer, Farmer who, FarmerSprite.AnimationFrame animationFrame, int currentFrame, int facingDirection, float rotation, float scale, float layerDepth, Vector2 position, Vector2 origin, Vector2 positionOffset, Vector2 rotationAdjustment, Color overrideColor)
+        {
+            Rectangle pants_rect = new Rectangle(sourceRect.X, sourceRect.Y, sourceRect.Width, sourceRect.Height);
+            pants_rect.X += renderer.ClampPants(who.GetPantsIndex()) % 10 * 192;
+            pants_rect.Y += renderer.ClampPants(who.GetPantsIndex()) / 10 * 688;
+
+            if (!who.IsMale)
+            {
+                pants_rect.X += 96;
+            }
+
+            b.Draw(FarmerRenderer.pantsTexture, position + origin + positionOffset, pants_rect, overrideColor.Equals(Color.White) ? Utility.MakeCompletelyOpaque(who.GetPantsColor()) : overrideColor, rotation, origin, 4f * scale, animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + ((who.FarmerSprite.CurrentAnimationFrame.frame == 5) ? 0.00092f : 9.2E-08f));
         }
 
         internal static void ExecuteRecolorActionsReversePatch(FarmerRenderer __instance, Farmer who)

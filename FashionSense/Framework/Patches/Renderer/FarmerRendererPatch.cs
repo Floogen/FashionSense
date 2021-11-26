@@ -22,6 +22,7 @@ using FashionSense.Framework.Models.Accessory;
 using StardewValley.Tools;
 using FashionSense.Framework.Models.Hat;
 using FashionSense.Framework.Models.Shirt;
+using FashionSense.Framework.Models.Pants;
 
 namespace FashionSense.Framework.Patches.Renderer
 {
@@ -197,6 +198,8 @@ namespace FashionSense.Framework.Patches.Renderer
                     return who.modData.ContainsKey(ModDataKeys.ANIMATION_HAT_ITERATOR) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAT_FRAME_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAT_TYPE) && who.modData.ContainsKey(ModDataKeys.ANIMATION_FACING_DIRECTION);
                 case ShirtModel shirtModel:
                     return who.modData.ContainsKey(ModDataKeys.ANIMATION_SHIRT_ITERATOR) && who.modData.ContainsKey(ModDataKeys.ANIMATION_SHIRT_FRAME_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_SHIRT_ELAPSED_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_SHIRT_TYPE) && who.modData.ContainsKey(ModDataKeys.ANIMATION_FACING_DIRECTION);
+                case PantsModel pantsModel:
+                    return who.modData.ContainsKey(ModDataKeys.ANIMATION_PANTS_ITERATOR) && who.modData.ContainsKey(ModDataKeys.ANIMATION_PANTS_FRAME_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_PANTS_ELAPSED_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_PANTS_TYPE) && who.modData.ContainsKey(ModDataKeys.ANIMATION_FACING_DIRECTION);
             }
 
             return who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_ITERATOR) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_FRAME_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_TYPE) && who.modData.ContainsKey(ModDataKeys.ANIMATION_FACING_DIRECTION);
@@ -324,6 +327,13 @@ namespace FashionSense.Framework.Patches.Renderer
                     who.modData[ModDataKeys.ANIMATION_SHIRT_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
                     who.modData[ModDataKeys.ANIMATION_SHIRT_ELAPSED_DURATION] = "0";
                     break;
+                case PantsModel pantsModel:
+                    who.modData[ModDataKeys.ANIMATION_PANTS_TYPE] = type.ToString();
+                    who.modData[ModDataKeys.ANIMATION_PANTS_ITERATOR] = iterator.ToString();
+                    who.modData[ModDataKeys.ANIMATION_PANTS_STARTING_INDEX] = startingIndex.ToString();
+                    who.modData[ModDataKeys.ANIMATION_PANTS_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
+                    who.modData[ModDataKeys.ANIMATION_PANTS_ELAPSED_DURATION] = "0";
+                    break;
                 default:
                     who.modData[ModDataKeys.ANIMATION_HAIR_TYPE] = type.ToString();
                     who.modData[ModDataKeys.ANIMATION_HAIR_ITERATOR] = iterator.ToString();
@@ -358,6 +368,11 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 size.Width = shirtModel.ShirtSize.Width;
                 size.Length = shirtModel.ShirtSize.Length;
+            }
+            else if (model is PantsModel pantsModel)
+            {
+                size.Width = pantsModel.PantSize.Width;
+                size.Length = pantsModel.PantSize.Length;
             }
 
             // Reset any cached animation data, if needd
@@ -411,6 +426,8 @@ namespace FashionSense.Framework.Patches.Renderer
                     return who.modData.ContainsKey(ModDataKeys.ANIMATION_HAT_TYPE) ? who.modData[ModDataKeys.ANIMATION_HAT_TYPE] == type.ToString() : false;
                 case ShirtModel shirtModel:
                     return who.modData.ContainsKey(ModDataKeys.ANIMATION_SHIRT_TYPE) ? who.modData[ModDataKeys.ANIMATION_SHIRT_TYPE] == type.ToString() : false;
+                case PantsModel pantsModel:
+                    return who.modData.ContainsKey(ModDataKeys.ANIMATION_PANTS_TYPE) ? who.modData[ModDataKeys.ANIMATION_PANTS_TYPE] == type.ToString() : false;
                 default:
                     return who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_TYPE) ? who.modData[ModDataKeys.ANIMATION_HAIR_TYPE] == type.ToString() : false;
             }
@@ -439,6 +456,9 @@ namespace FashionSense.Framework.Patches.Renderer
                     break;
                 case ShirtModel shirtModel:
                     who.modData[ModDataKeys.ANIMATION_SHIRT_TYPE] = type.ToString();
+                    break;
+                case PantsModel pantsModel:
+                    who.modData[ModDataKeys.ANIMATION_PANTS_TYPE] = type.ToString();
                     break;
                 default:
                     who.modData[ModDataKeys.ANIMATION_HAIR_TYPE] = type.ToString();
@@ -497,6 +517,12 @@ namespace FashionSense.Framework.Patches.Renderer
                     startingIndex = Int32.Parse(who.modData[ModDataKeys.ANIMATION_SHIRT_STARTING_INDEX]);
                     frameDuration = Int32.Parse(who.modData[ModDataKeys.ANIMATION_SHIRT_FRAME_DURATION]);
                     elapsedDuration = Int32.Parse(who.modData[ModDataKeys.ANIMATION_SHIRT_ELAPSED_DURATION]);
+                    break;
+                case PantsModel pantsModel:
+                    iterator = Int32.Parse(who.modData[ModDataKeys.ANIMATION_PANTS_ITERATOR]);
+                    startingIndex = Int32.Parse(who.modData[ModDataKeys.ANIMATION_PANTS_STARTING_INDEX]);
+                    frameDuration = Int32.Parse(who.modData[ModDataKeys.ANIMATION_PANTS_FRAME_DURATION]);
+                    elapsedDuration = Int32.Parse(who.modData[ModDataKeys.ANIMATION_PANTS_ELAPSED_DURATION]);
                     break;
             }
 
@@ -626,6 +652,10 @@ namespace FashionSense.Framework.Patches.Renderer
                     indexOffset = 5;
                     lightIdKey = ModDataKeys.ANIMATION_SHIRT_LIGHT_ID;
                     break;
+                case PantsModel pantsModel:
+                    indexOffset = 6;
+                    lightIdKey = ModDataKeys.ANIMATION_PANTS_LIGHT_ID;
+                    break;
                 case HairModel hairModel:
                     indexOffset = 9;
                     lightIdKey = ModDataKeys.ANIMATION_HAIR_LIGHT_ID;
@@ -711,6 +741,9 @@ namespace FashionSense.Framework.Patches.Renderer
                     break;
                 case ShirtModel shirtModel:
                     iteratorKey = ModDataKeys.ANIMATION_SHIRT_ITERATOR;
+                    break;
+                case PantsModel pantsModel:
+                    iteratorKey = ModDataKeys.ANIMATION_PANTS_ITERATOR;
                     break;
             }
 
@@ -980,7 +1013,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 hatModel = tPack.GetHatFromFacingDirection(facingDirection);
             }
 
-            // Short pack
+            // Shirt pack
             ShirtContentPack shirtPack = null;
             ShirtModel shirtModel = null;
             if (who.modData.ContainsKey(ModDataKeys.CUSTOM_SHIRT_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<ShirtContentPack>(who.modData[ModDataKeys.CUSTOM_SHIRT_ID]) is ShirtContentPack sPack && sPack != null)

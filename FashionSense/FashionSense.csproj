@@ -74,6 +74,8 @@
     <Compile Include="Framework\Models\Hair\HairModel.cs" />
     <Compile Include="Framework\Models\Hat\HatContentPack.cs" />
     <Compile Include="Framework\Models\Hat\HatModel.cs" />
+    <Compile Include="Framework\Models\Pants\PantsContentPack.cs" />
+    <Compile Include="Framework\Models\Pants\PantsModel.cs" />
     <Compile Include="Framework\Models\Shirt\ShirtContentPack.cs" />
     <Compile Include="Framework\Models\Shirt\ShirtModel.cs" />
     <Compile Include="Framework\Patches\Menus\CharacterCustomizationPatch.cs" />
