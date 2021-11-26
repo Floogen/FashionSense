@@ -31,6 +31,7 @@ namespace FashionSense.Framework.Utilities
 
         // General animation related keys
         internal const string ANIMATION_FACING_DIRECTION = "FashionSense.Animation.FacingDirection";
+        internal const string ANIMATION_FARMER_FRAME = "FashionSense.Animation.FarmerFrame";
 
         // Hair animation related keys
         internal const string ANIMATION_HAIR_TYPE = "FashionSense.Animation.Hair.Type";

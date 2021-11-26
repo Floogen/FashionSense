@@ -754,6 +754,7 @@ namespace FashionSense
             who.modData[ModDataKeys.ANIMATION_PANTS_ELAPSED_DURATION] = "0";
 
             who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] = facingDirection.ToString();
+            who.modData[ModDataKeys.ANIMATION_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
 
             if (!ignoreAnimationType)
             {
