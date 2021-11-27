@@ -17,6 +17,8 @@ namespace FashionSense.Framework.External.ContentPatcher
         {
             "Hairstyle",
             "Accessory",
+            "AccessorySecondary",
+            "AccessoryTertiary",
             "Hat",
             "Shirt",
             "Pants"
@@ -88,6 +90,12 @@ namespace FashionSense.Framework.External.ContentPatcher
                     break;
                 case "accessory":
                     targetKey = ModDataKeys.CUSTOM_ACCESSORY_ID;
+                    break;
+                case "accessorysecondary":
+                    targetKey = ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID;
+                    break;
+                case "accessorytertiary":
+                    targetKey = ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID;
                     break;
                 case "hat":
                     targetKey = ModDataKeys.CUSTOM_HAT_ID;
