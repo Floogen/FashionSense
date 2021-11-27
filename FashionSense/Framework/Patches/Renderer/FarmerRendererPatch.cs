@@ -524,7 +524,7 @@ namespace FashionSense.Framework.Patches.Renderer
             if (!HasRequiredModDataKeys(model, who) || !HasCorrectAnimationTypeCached(model, who, type) || who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] != facingDirection.ToString())
             {
                 SetAnimationType(model, who, type);
-                FashionSense.ResetAnimationModDataFields(who, animations.ElementAt(0).Duration, type, facingDirection, true);
+                FashionSense.ResetAnimationModDataFields(who, animations.ElementAt(0).Duration, type, facingDirection, true, model);
             }
 
             // Utilize the default modData key properties (HairModel)

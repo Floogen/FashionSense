@@ -716,42 +716,61 @@ namespace FashionSense
             shirtDirty.SetValue(true);
         }
 
-        internal static void ResetAnimationModDataFields(Farmer who, int duration, AnimationModel.Type animationType, int facingDirection, bool ignoreAnimationType = false)
+        internal static void ResetAnimationModDataFields(Farmer who, int duration, AnimationModel.Type animationType, int facingDirection, bool ignoreAnimationType = false, AppearanceModel model = null)
         {
-            who.modData[ModDataKeys.ANIMATION_HAIR_ITERATOR] = "0";
-            who.modData[ModDataKeys.ANIMATION_HAIR_STARTING_INDEX] = "0";
-            who.modData[ModDataKeys.ANIMATION_HAIR_FRAME_DURATION] = duration.ToString();
-            who.modData[ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION] = "0";
+            if (model is null || model is HairModel)
+            {
+                who.modData[ModDataKeys.ANIMATION_HAIR_ITERATOR] = "0";
+                who.modData[ModDataKeys.ANIMATION_HAIR_STARTING_INDEX] = "0";
+                who.modData[ModDataKeys.ANIMATION_HAIR_FRAME_DURATION] = duration.ToString();
+                who.modData[ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION] = "0";
+            }
 
-            who.modData[ModDataKeys.ANIMATION_ACCESSORY_ITERATOR] = "0";
-            who.modData[ModDataKeys.ANIMATION_ACCESSORY_STARTING_INDEX] = "0";
-            who.modData[ModDataKeys.ANIMATION_ACCESSORY_FRAME_DURATION] = duration.ToString();
-            who.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION] = "0";
+            if (model is null || (model is AccessoryModel accessoryModel && accessoryModel.Priority == AccessoryModel.Type.Primary))
+            {
+                who.modData[ModDataKeys.ANIMATION_ACCESSORY_ITERATOR] = "0";
+                who.modData[ModDataKeys.ANIMATION_ACCESSORY_STARTING_INDEX] = "0";
+                who.modData[ModDataKeys.ANIMATION_ACCESSORY_FRAME_DURATION] = duration.ToString();
+                who.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION] = "0";
+            }
+            if (model is null || (model is AccessoryModel secondaryAccessoryModel && secondaryAccessoryModel.Priority == AccessoryModel.Type.Secondary))
+            {
+                who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ITERATOR] = "0";
+                who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_STARTING_INDEX] = "0";
+                who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_FRAME_DURATION] = duration.ToString();
+                who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ELAPSED_DURATION] = "0";
+            }
+            if (model is null || (model is AccessoryModel tertiaryAccessoryModel && tertiaryAccessoryModel.Priority == AccessoryModel.Type.Tertiary))
+            {
+                who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ITERATOR] = "0";
+                who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_STARTING_INDEX] = "0";
+                who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_FRAME_DURATION] = duration.ToString();
+                who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION] = "0";
+            }
 
-            who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ITERATOR] = "0";
-            who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_STARTING_INDEX] = "0";
-            who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_FRAME_DURATION] = duration.ToString();
-            who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ELAPSED_DURATION] = "0";
+            if (model is null || model is HatModel)
+            {
+                who.modData[ModDataKeys.ANIMATION_HAT_ITERATOR] = "0";
+                who.modData[ModDataKeys.ANIMATION_HAT_STARTING_INDEX] = "0";
+                who.modData[ModDataKeys.ANIMATION_HAT_FRAME_DURATION] = duration.ToString();
+                who.modData[ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION] = "0";
+            }
 
-            who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ITERATOR] = "0";
-            who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_STARTING_INDEX] = "0";
-            who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_FRAME_DURATION] = duration.ToString();
-            who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION] = "0";
+            if (model is null || model is ShirtModel)
+            {
+                who.modData[ModDataKeys.ANIMATION_SHIRT_ITERATOR] = "0";
+                who.modData[ModDataKeys.ANIMATION_SHIRT_STARTING_INDEX] = "0";
+                who.modData[ModDataKeys.ANIMATION_SHIRT_FRAME_DURATION] = duration.ToString();
+                who.modData[ModDataKeys.ANIMATION_SHIRT_ELAPSED_DURATION] = "0";
+            }
 
-            who.modData[ModDataKeys.ANIMATION_HAT_ITERATOR] = "0";
-            who.modData[ModDataKeys.ANIMATION_HAT_STARTING_INDEX] = "0";
-            who.modData[ModDataKeys.ANIMATION_HAT_FRAME_DURATION] = duration.ToString();
-            who.modData[ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION] = "0";
-
-            who.modData[ModDataKeys.ANIMATION_SHIRT_ITERATOR] = "0";
-            who.modData[ModDataKeys.ANIMATION_SHIRT_STARTING_INDEX] = "0";
-            who.modData[ModDataKeys.ANIMATION_SHIRT_FRAME_DURATION] = duration.ToString();
-            who.modData[ModDataKeys.ANIMATION_SHIRT_ELAPSED_DURATION] = "0";
-
-            who.modData[ModDataKeys.ANIMATION_PANTS_ITERATOR] = "0";
-            who.modData[ModDataKeys.ANIMATION_PANTS_STARTING_INDEX] = "0";
-            who.modData[ModDataKeys.ANIMATION_PANTS_FRAME_DURATION] = duration.ToString();
-            who.modData[ModDataKeys.ANIMATION_PANTS_ELAPSED_DURATION] = "0";
+            if (model is null || model is PantsModel)
+            {
+                who.modData[ModDataKeys.ANIMATION_PANTS_ITERATOR] = "0";
+                who.modData[ModDataKeys.ANIMATION_PANTS_STARTING_INDEX] = "0";
+                who.modData[ModDataKeys.ANIMATION_PANTS_FRAME_DURATION] = duration.ToString();
+                who.modData[ModDataKeys.ANIMATION_PANTS_ELAPSED_DURATION] = "0";
+            }
 
             who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] = facingDirection.ToString();
             who.modData[ModDataKeys.ANIMATION_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
