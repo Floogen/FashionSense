@@ -645,7 +645,8 @@ namespace FashionSense.Framework.Patches.Renderer
 
             // Perform time based logic for elapsed animations
             // Note: ANIMATION_ELAPSED_DURATION is updated via UpdateTicked event
-            if (elapsedDuration >= frameDuration)
+            var lastFarmerFrame = Int32.Parse(who.modData[ModDataKeys.ANIMATION_FARMER_FRAME]);
+            if ((elapsedDuration >= frameDuration && !animationModel.EndWhenFarmerFrameUpdates) || (animationModel.EndWhenFarmerFrameUpdates && who.FarmerSprite.CurrentFrame != lastFarmerFrame))
             {
                 // Force the frame's condition to evalute and update any caches
                 IsFrameValid(animations, iterator);
@@ -663,6 +664,12 @@ namespace FashionSense.Framework.Patches.Renderer
                     {
                         animation.Reset();
                     }
+                }
+
+                // Force the animationModel to update if using AnimationModel.EndWhenFarmerFrameUpdates
+                if (animationModel.EndWhenFarmerFrameUpdates)
+                {
+                    animationModel = animations.ElementAtOrDefault(iterator) is null ? animations.ElementAtOrDefault(0) : animations.ElementAtOrDefault(iterator);
                 }
             }
 
@@ -1157,8 +1164,6 @@ namespace FashionSense.Framework.Patches.Renderer
             }
             else
             {
-                float layerOffset = who.FacingDirection > 1 ? 1.5E-07f : 1.8E-07f;
-
                 var pantsColor = new Color() { PackedValue = Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR) ? uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR]) : who.hairstyleColor.Value.PackedValue };
                 if (pantsModel.DisableGrayscale)
                 {
@@ -1170,11 +1175,13 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
 
                 var featureOffset = GetFeatureOffset(facingDirection, currentFrame, scale, __instance, pantsPack.PackType, false);
-                b.Draw(pantsPack.Texture, position + origin + ___positionOffset + featureOffset, customPantsSourceRect, pantsModel.HasColorMask() ? Color.White : pantsColor, rotation, origin + new Vector2(pantsModel.BodyPosition.X, pantsModel.BodyPosition.Y), 4f * scale, pantsModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + layerOffset);
+                featureOffset.Y -= who.isMale ? 4 : 0;
+
+                b.Draw(pantsPack.Texture, position + origin + ___positionOffset + featureOffset, customPantsSourceRect, pantsModel.HasColorMask() ? Color.White : pantsColor, rotation, origin + new Vector2(pantsModel.BodyPosition.X, pantsModel.BodyPosition.Y), 4f * scale, pantsModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
 
                 if (pantsModel.HasColorMask())
                 {
-                    DrawColorMask(b, pantsPack, pantsModel, position + origin + ___positionOffset + featureOffset, customPantsSourceRect, pantsColor, rotation, origin + new Vector2(pantsModel.BodyPosition.X, pantsModel.BodyPosition.Y), 4f * scale, layerDepth + layerOffset + 0.01E-05f);
+                    DrawColorMask(b, pantsPack, pantsModel, position + origin + ___positionOffset + featureOffset, customPantsSourceRect, pantsColor, rotation, origin + new Vector2(pantsModel.BodyPosition.X, pantsModel.BodyPosition.Y), 4f * scale, layerDepth);
                 }
             }
 
