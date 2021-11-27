@@ -28,7 +28,22 @@ namespace FashionSense.Framework.Models.Generic
             DidPreviousFrameDisplay,
             RidingHorse,
             InventoryItemCount,
-            IsInventoryFull
+            IsInventoryFull,
+            IsDarkOut,
+            IsRaining,
+            IsWalking,
+            IsRunning,
+            IsEating,
+            IsDrinking,
+            IsFishing,
+            IsUsingHeavyTool,
+            IsUsingMilkPail,
+            IsUsingShears,
+            IsUsingPan,
+            IsUsingScythe,
+            IsUsingMeleeWeapon,
+            IsUsingSlingshot,
+            IsHarvesting
         }
 
         public Type Name { get; set; }

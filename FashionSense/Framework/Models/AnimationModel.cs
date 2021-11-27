@@ -21,6 +21,7 @@ namespace FashionSense.Framework.Models
         public bool OverrideStartingIndex { get; set; }
         public List<Condition> Conditions { get; set; } = new List<Condition>();
         public int Duration { get; set; } = 1000;
+        public bool EndWhenFarmerFrameUpdates { get; set; }
         internal bool WasDisplayed { get; set; }
 
         internal bool HasCondition(Condition.Type type)
