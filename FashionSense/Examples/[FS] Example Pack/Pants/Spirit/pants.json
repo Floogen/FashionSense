@@ -1,0 +1,18 @@
+{
+  "Name": "Spirit",
+  "FrontPants": {
+    "HideLegs": true,
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "BodyPosition": {
+      "X": 3,
+      "Y": 2
+    },
+    "PantsSize": {
+      "Width": 16,
+      "Length": 8
+    }
+  }
+}
