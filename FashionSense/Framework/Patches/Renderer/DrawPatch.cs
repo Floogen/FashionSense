@@ -22,6 +22,7 @@ using FashionSense.Framework.Models.Accessory;
 using StardewValley.Tools;
 using FashionSense.Framework.Models.Hat;
 using FashionSense.Framework.Models.Shirt;
+using FashionSense.Framework.Models.Pants;
 
 namespace FashionSense.Framework.Patches.Renderer
 {
@@ -164,7 +165,103 @@ namespace FashionSense.Framework.Patches.Renderer
                 facingDirection = ((!animationFrame.flip) ? 1 : 3);
             }
 
-            b.Draw(baseTexture, position + origin + ___positionOffset, sourceRect, overrideColor, rotation, origin, 4f * scale, animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
+            // Get the pants model, if applicable
+            PantsModel pantsModel = null;
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_PANTS_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<PantsContentPack>(who.modData[ModDataKeys.CUSTOM_PANTS_ID]) is PantsContentPack pPack && pPack != null)
+            {
+                pantsModel = pPack.GetPantsFromFacingDirection(facingDirection);
+            }
+
+            var adjustedBaseRectangle = sourceRect;
+            if (pantsModel != null && pantsModel.HideLegs)
+            {
+                switch (who.FarmerSprite.CurrentFrame)
+                {
+                    case 2:
+                    case 16:
+                    case 54:
+                    case 57:
+                    case 62:
+                    case 66:
+                    case 84:
+                    case 90:
+                    case 124:
+                    case 125:
+                        adjustedBaseRectangle.Height -= 6;
+                        break;
+                    case 6:
+                    case 7:
+                    case 9:
+                    case 19:
+                    case 20:
+                    case 21:
+                    case 30:
+                    case 31:
+                    case 32:
+                    case 33:
+                    case 43:
+                    case 45:
+                    case 55:
+                    case 59:
+                    case 61:
+                    case 64:
+                    case 68:
+                    case 72:
+                    case 74:
+                    case 76:
+                    case 94:
+                    case 95:
+                    case 97:
+                    case 99:
+                    case 105:
+                        adjustedBaseRectangle.Height -= 8;
+                        break;
+                    case 11:
+                    case 17:
+                    case 22:
+                    case 23:
+                    case 49:
+                    case 50:
+                    case 53:
+                    case 56:
+                    case 60:
+                    case 69:
+                    case 70:
+                    case 71:
+                    case 73:
+                    case 75:
+                    case 112:
+                        adjustedBaseRectangle.Height -= 9;
+                        break;
+                    case 51:
+                    case 106:
+                        adjustedBaseRectangle.Height -= 12;
+                        break;
+                    case 52:
+                        adjustedBaseRectangle.Height -= 11;
+                        break;
+                    case 77:
+                        adjustedBaseRectangle.Height -= 10;
+                        break;
+                    case 107:
+                    case 113:
+                        adjustedBaseRectangle.Height -= 14;
+                        break;
+                    case 117:
+                        adjustedBaseRectangle.Height -= 13;
+                        break;
+                    default:
+                        adjustedBaseRectangle.Height -= 7;
+                        break;
+                }
+
+                if (who.isMale)
+                {
+                    adjustedBaseRectangle.Height -= 1;
+                }
+            }
+            b.Draw(baseTexture, position + origin + ___positionOffset, adjustedBaseRectangle, overrideColor, rotation, origin, 4f * scale, animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
+
             if (!FarmerRenderer.isDrawingForUI && (bool)who.swimming)
             {
                 if (who.currentEyes != 0 && who.FacingDirection != 0 && (Game1.timeOfDay < 2600 || (who.isInBed.Value && who.timeWentToBed.Value != 0)) && ((!who.FarmerSprite.PauseForSingleAnimation && !who.UsingTool) || (who.UsingTool && who.CurrentTool is FishingRod)))
@@ -176,14 +273,13 @@ namespace FashionSense.Framework.Patches.Renderer
                 b.Draw(Game1.staminaRect, new Rectangle((int)position.X + (int)who.yOffset + 8, (int)position.Y - 128 + sourceRect.Height * 4 + (int)origin.Y - (int)who.yOffset, sourceRect.Width * 4 - (int)who.yOffset * 2 - 16, 4), Game1.staminaRect.Bounds, Color.White * 0.75f, 0f, Vector2.Zero, SpriteEffects.None, layerDepth + 0.001f);
                 return;
             }
-            Rectangle pants_rect = new Rectangle(sourceRect.X, sourceRect.Y, sourceRect.Width, sourceRect.Height);
-            pants_rect.X += __instance.ClampPants(who.GetPantsIndex()) % 10 * 192;
-            pants_rect.Y += __instance.ClampPants(who.GetPantsIndex()) / 10 * 688;
-            if (!who.IsMale)
+
+            // Utilize vanilla logic if no valid PantsModel is given
+            if (pantsModel is null)
             {
-                pants_rect.X += 96;
+                DrawPantsVanilla(b, sourceRect, __instance, who, animationFrame, currentFrame, facingDirection, rotation, scale, layerDepth, position, origin, ___positionOffset, ___rotationAdjustment, overrideColor);
             }
-            b.Draw(FarmerRenderer.pantsTexture, position + origin + ___positionOffset, pants_rect, overrideColor.Equals(Color.White) ? Utility.MakeCompletelyOpaque(who.GetPantsColor()) : overrideColor, rotation, origin, 4f * scale, animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + ((who.FarmerSprite.CurrentAnimationFrame.frame == 5) ? 0.00092f : 9.2E-08f));
+
             sourceRect.Offset(288, 0);
             FishingRod fishing_rod;
             if (who.currentEyes != 0 && facingDirection != 0 && (Game1.timeOfDay < 2600 || (who.isInBed.Value && who.timeWentToBed.Value != 0)) && ((!who.FarmerSprite.PauseForSingleAnimation && !who.UsingTool) || (who.UsingTool && who.CurrentTool is FishingRod)) && (!who.UsingTool || (fishing_rod = who.CurrentTool as FishingRod) == null || fishing_rod.isFishing))
@@ -212,6 +308,20 @@ namespace FashionSense.Framework.Patches.Renderer
             sourceRect.Offset(-288 + (animationFrame.secondaryArm ? 192 : 96), 0);
 
             b.Draw(baseTexture, position + origin + ___positionOffset + who.armOffset, sourceRect, overrideColor, rotation, origin, 4f * scale, animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + arm_layer_offset);
+        }
+
+        private static void DrawPantsVanilla(SpriteBatch b, Rectangle sourceRect, FarmerRenderer renderer, Farmer who, FarmerSprite.AnimationFrame animationFrame, int currentFrame, int facingDirection, float rotation, float scale, float layerDepth, Vector2 position, Vector2 origin, Vector2 positionOffset, Vector2 rotationAdjustment, Color overrideColor)
+        {
+            Rectangle pants_rect = new Rectangle(sourceRect.X, sourceRect.Y, sourceRect.Width, sourceRect.Height);
+            pants_rect.X += renderer.ClampPants(who.GetPantsIndex()) % 10 * 192;
+            pants_rect.Y += renderer.ClampPants(who.GetPantsIndex()) / 10 * 688;
+
+            if (!who.IsMale)
+            {
+                pants_rect.X += 96;
+            }
+
+            b.Draw(FarmerRenderer.pantsTexture, position + origin + positionOffset, pants_rect, overrideColor.Equals(Color.White) ? Utility.MakeCompletelyOpaque(who.GetPantsColor()) : overrideColor, rotation, origin, 4f * scale, animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + ((who.FarmerSprite.CurrentAnimationFrame.frame == 5) ? 0.00092f : 9.2E-08f));
         }
 
         internal static void ExecuteRecolorActionsReversePatch(FarmerRenderer __instance, Farmer who)
