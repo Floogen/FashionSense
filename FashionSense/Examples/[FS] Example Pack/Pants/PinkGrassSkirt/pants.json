@@ -359,47 +359,7 @@
         ]
       },
       {
-        "Frame": 1,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "IsRunning",
-            "Value": true
-          }
-        ]
-      },
-      {
         "Frame": 3,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "IsRunning",
-            "Value": true
-          }
-        ]
-      },
-      {
-        "Frame": 1,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "IsRunning",
-            "Value": true
-          }
-        ]
-      },
-      {
-        "Frame": 0,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "IsRunning",
-            "Value": true
-          }
-        ]
-      },
-      {
-        "Frame": 2,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -417,17 +377,7 @@
             "Value": true
           }
         ]
-      },
-      {
-        "Frame": 2,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "IsRunning",
-            "Value": true
-          }
-        ]
-      },
+      }
     ]
   },
   "LeftPants": {
@@ -502,47 +452,7 @@
         ]
       },
       {
-        "Frame": 1,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "IsRunning",
-            "Value": true
-          }
-        ]
-      },
-      {
         "Frame": 3,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "IsRunning",
-            "Value": true
-          }
-        ]
-      },
-      {
-        "Frame": 1,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "IsRunning",
-            "Value": true
-          }
-        ]
-      },
-      {
-        "Frame": 0,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "IsRunning",
-            "Value": true
-          }
-        ]
-      },
-      {
-        "Frame": 2,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -560,17 +470,7 @@
             "Value": true
           }
         ]
-      },
-      {
-        "Frame": 2,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "IsRunning",
-            "Value": true
-          }
-        ]
-      },
+      }
     ]
   }
 }
