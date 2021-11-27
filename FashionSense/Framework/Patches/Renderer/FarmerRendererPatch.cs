@@ -424,8 +424,8 @@ namespace FashionSense.Framework.Patches.Renderer
             }
             else if (model is PantsModel pantsModel)
             {
-                size.Width = pantsModel.PantSize.Width;
-                size.Length = pantsModel.PantSize.Length;
+                size.Width = pantsModel.PantsSize.Width;
+                size.Length = pantsModel.PantsSize.Length;
             }
 
             // Reset any cached animation data, if needd
@@ -1008,6 +1008,15 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             // Set up each AppearanceModel
+            // Pants pack
+            PantsContentPack pantsPack = null;
+            PantsModel pantsModel = null;
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_PANTS_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<PantsContentPack>(who.modData[ModDataKeys.CUSTOM_PANTS_ID]) is PantsContentPack pPack && pPack != null)
+            {
+                pantsPack = pPack;
+                pantsModel = pPack.GetPantsFromFacingDirection(facingDirection);
+            }
+
             // Hair pack
             HairContentPack hairPack = null;
             HairModel hairModel = null;
@@ -1076,12 +1085,13 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             // Check if all the models are null, if so revert back to vanilla logic
-            if (hairModel is null && accessoryModel is null && secondaryAccessoryModel is null && tertiaryAccessoryModel is null && hatModel is null && shirtModel is null)
+            if (pantsModel is null && hairModel is null && accessoryModel is null && secondaryAccessoryModel is null && tertiaryAccessoryModel is null && hatModel is null && shirtModel is null)
             {
                 return true;
             }
 
             // Set up source rectangles
+            Rectangle customPantsSourceRect = new Rectangle();
             Rectangle customHairSourceRect = new Rectangle();
             Rectangle customAccessorySourceRect = new Rectangle();
             Rectangle customSecondaryAccessorySourceRect = new Rectangle();
@@ -1090,6 +1100,10 @@ namespace FashionSense.Framework.Patches.Renderer
             Rectangle customShirtSourceRect = new Rectangle();
 
             // Handle any animations
+            if (pantsModel != null)
+            {
+                HandleAppearanceAnimation(pantsModel, who, facingDirection, ref customPantsSourceRect);
+            }
             if (hairModel != null)
             {
                 HandleAppearanceAnimation(hairModel, who, facingDirection, ref customHairSourceRect);
@@ -1135,6 +1149,34 @@ namespace FashionSense.Framework.Patches.Renderer
 
             // Offset the source rectangles for shirts, accessories and hats according to facingDirection
             OffsetSourceRectangles(who, facingDirection, rotation, ref ___shirtSourceRect, ref dyed_shirt_source_rect, ref ___accessorySourceRect, ref ___hatSourceRect, ref ___rotationAdjustment);
+
+            // Draw the pants
+            if (pantsModel is null || who.bathingClothes)
+            {
+                // Handled in DrawPatch.HandleCustomDraw
+            }
+            else
+            {
+                float layerOffset = who.FacingDirection > 1 ? 1.5E-07f : 1.8E-07f;
+
+                var pantsColor = new Color() { PackedValue = Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR) ? uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR]) : who.hairstyleColor.Value.PackedValue };
+                if (pantsModel.DisableGrayscale)
+                {
+                    pantsColor = Color.White;
+                }
+                else if (pantsModel.IsPrismatic)
+                {
+                    pantsColor = Utility.GetPrismaticColor(speedMultiplier: pantsModel.PrismaticAnimationSpeedMultiplier);
+                }
+
+                var featureOffset = GetFeatureOffset(facingDirection, currentFrame, scale, __instance, pantsPack.PackType, false);
+                b.Draw(pantsPack.Texture, position + origin + ___positionOffset + featureOffset, customPantsSourceRect, pantsModel.HasColorMask() ? Color.White : pantsColor, rotation, origin + new Vector2(pantsModel.BodyPosition.X, pantsModel.BodyPosition.Y), 4f * scale, pantsModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + layerOffset);
+
+                if (pantsModel.HasColorMask())
+                {
+                    DrawColorMask(b, pantsPack, pantsModel, position + origin + ___positionOffset + featureOffset, customPantsSourceRect, pantsColor, rotation, origin + new Vector2(pantsModel.BodyPosition.X, pantsModel.BodyPosition.Y), 4f * scale, layerDepth + layerOffset + 0.01E-05f);
+                }
+            }
 
             // Draw the shirt
             if (shirtModel is null || who.bathingClothes)

@@ -22,6 +22,7 @@ using FashionSense.Framework.Models.Accessory;
 using StardewValley.Tools;
 using FashionSense.Framework.Models.Hat;
 using FashionSense.Framework.Models.Shirt;
+using FashionSense.Framework.Models.Pants;
 
 namespace FashionSense.Framework.Patches.Renderer
 {
@@ -164,7 +165,16 @@ namespace FashionSense.Framework.Patches.Renderer
                 facingDirection = ((!animationFrame.flip) ? 1 : 3);
             }
 
-            b.Draw(baseTexture, position + origin + ___positionOffset, sourceRect, overrideColor, rotation, origin, 4f * scale, animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
+            // Get the pants model, if applicable
+            PantsModel pantsModel = null;
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_PANTS_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<PantsContentPack>(who.modData[ModDataKeys.CUSTOM_PANTS_ID]) is PantsContentPack pPack && pPack != null)
+            {
+                pantsModel = pPack.GetPantsFromFacingDirection(facingDirection);
+            }
+
+            var adjustedBaseRectangle = sourceRect;
+            b.Draw(baseTexture, position + origin + ___positionOffset, adjustedBaseRectangle, overrideColor, rotation, origin, 4f * scale, animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
+
             if (!FarmerRenderer.isDrawingForUI && (bool)who.swimming)
             {
                 if (who.currentEyes != 0 && who.FacingDirection != 0 && (Game1.timeOfDay < 2600 || (who.isInBed.Value && who.timeWentToBed.Value != 0)) && ((!who.FarmerSprite.PauseForSingleAnimation && !who.UsingTool) || (who.UsingTool && who.CurrentTool is FishingRod)))
@@ -177,11 +187,8 @@ namespace FashionSense.Framework.Patches.Renderer
                 return;
             }
 
-            if ()
-            {
-
-            }
-            else
+            // Utilize vanilla logic if no valid PantsModel is given
+            if (pantsModel is null)
             {
                 DrawPantsVanilla(b, sourceRect, __instance, who, animationFrame, currentFrame, facingDirection, rotation, scale, layerDepth, position, origin, ___positionOffset, ___rotationAdjustment, overrideColor);
             }
