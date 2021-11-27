@@ -164,6 +164,9 @@
     <Content Include="Framework\Assets\UI\OptionTwoButton.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Framework\Assets\UI\PantsButton.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Framework\Assets\UI\ShirtButton.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
