@@ -173,6 +173,93 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             var adjustedBaseRectangle = sourceRect;
+            if (pantsModel != null && pantsModel.HideLegs)
+            {
+                switch (who.FarmerSprite.CurrentFrame)
+                {
+                    case 2:
+                    case 16:
+                    case 54:
+                    case 57:
+                    case 62:
+                    case 66:
+                    case 84:
+                    case 90:
+                    case 124:
+                    case 125:
+                        adjustedBaseRectangle.Height -= 6;
+                        break;
+                    case 6:
+                    case 7:
+                    case 9:
+                    case 19:
+                    case 20:
+                    case 21:
+                    case 30:
+                    case 31:
+                    case 32:
+                    case 33:
+                    case 43:
+                    case 45:
+                    case 55:
+                    case 59:
+                    case 61:
+                    case 64:
+                    case 68:
+                    case 72:
+                    case 74:
+                    case 76:
+                    case 94:
+                    case 95:
+                    case 97:
+                    case 99:
+                    case 105:
+                        adjustedBaseRectangle.Height -= 8;
+                        break;
+                    case 11:
+                    case 17:
+                    case 22:
+                    case 23:
+                    case 49:
+                    case 50:
+                    case 53:
+                    case 56:
+                    case 60:
+                    case 69:
+                    case 70:
+                    case 71:
+                    case 73:
+                    case 75:
+                    case 112:
+                        adjustedBaseRectangle.Height -= 9;
+                        break;
+                    case 51:
+                    case 106:
+                        adjustedBaseRectangle.Height -= 12;
+                        break;
+                    case 52:
+                        adjustedBaseRectangle.Height -= 11;
+                        break;
+                    case 77:
+                        adjustedBaseRectangle.Height -= 10;
+                        break;
+                    case 107:
+                    case 113:
+                        adjustedBaseRectangle.Height -= 14;
+                        break;
+                    case 117:
+                        adjustedBaseRectangle.Height -= 13;
+                        break;
+                    default:
+                        adjustedBaseRectangle.Height -= 7;
+                        break;
+                }
+
+                if (who.isMale)
+                {
+                    adjustedBaseRectangle.Height -= 1;
+                }
+            }
             b.Draw(baseTexture, position + origin + ___positionOffset, adjustedBaseRectangle, overrideColor, rotation, origin, 4f * scale, animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
 
             if (!FarmerRenderer.isDrawingForUI && (bool)who.swimming)
