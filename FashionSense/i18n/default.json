@@ -20,6 +20,7 @@
   "ui.fashion_sense.color_active.hair": "Hair Color",
   "ui.fashion_sense.color_active.hat": "Hat Color",
   "ui.fashion_sense.color_active.shirt": "Shirt Color",
+  "ui.fashion_sense.color_active.pants": "Pants Color",
   "ui.fashion_sense.color_active.accessory": "Acc. Color",
   "ui.fashion_sense.color_disabled.generic": "(Ignored)",
   "ui.fashion_sense.color_info.hair": "Color overlays will not affect this hairstyle.",
