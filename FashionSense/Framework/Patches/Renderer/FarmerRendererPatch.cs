@@ -319,6 +319,10 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     passedCheck = condition.IsValid(Game1.mine != null);
                 }
+                else if (condition.Name is Condition.Type.IsOutdoors)
+                {
+                    passedCheck = condition.IsValid(Game1.currentLocation.IsOutdoors);
+                }
 
                 // If the condition is independent and is true, then skip rest of evaluations
                 if (condition.Independent && passedCheck)
