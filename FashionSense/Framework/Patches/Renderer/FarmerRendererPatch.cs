@@ -315,6 +315,10 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     passedCheck = condition.IsValid(279 + Game1.player.FacingDirection == Game1.player.FarmerSprite.CurrentSingleAnimation);
                 }
+                else if (condition.Name is Condition.Type.IsInMines)
+                {
+                    passedCheck = condition.IsValid(Game1.mine != null);
+                }
 
                 // If the condition is independent and is true, then skip rest of evaluations
                 if (condition.Independent && passedCheck)

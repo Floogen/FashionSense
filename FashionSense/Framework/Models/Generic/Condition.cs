@@ -43,7 +43,8 @@ namespace FashionSense.Framework.Models.Generic
             IsUsingScythe,
             IsUsingMeleeWeapon,
             IsUsingSlingshot,
-            IsHarvesting
+            IsHarvesting,
+            IsInMines
         }
 
         public Type Name { get; set; }
