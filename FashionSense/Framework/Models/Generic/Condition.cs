@@ -45,7 +45,9 @@ namespace FashionSense.Framework.Models.Generic
             IsUsingSlingshot,
             IsHarvesting,
             IsInMines,
-            IsOutdoors
+            IsOutdoors,
+            HealthLevel,
+            StaminaLevel
         }
 
         public Type Name { get; set; }

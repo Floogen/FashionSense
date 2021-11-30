@@ -323,6 +323,14 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     passedCheck = condition.IsValid(Game1.currentLocation.IsOutdoors);
                 }
+                else if (condition.Name is Condition.Type.HealthLevel)
+                {
+                    passedCheck = condition.IsValid(Game1.player.health);
+                }
+                else if (condition.Name is Condition.Type.StaminaLevel)
+                {
+                    passedCheck = condition.IsValid((long)Game1.player.stamina);
+                }
 
                 // If the condition is independent and is true, then skip rest of evaluations
                 if (condition.Independent && passedCheck)
