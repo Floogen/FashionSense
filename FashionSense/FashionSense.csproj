@@ -1,148 +1,24 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <Version>3.0.0-beta.3</Version>
+    <TargetFramework>net5.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <EnableHarmony>true</EnableHarmony>
     <EnableModZip>false</EnableModZip>
     <EnableModDeploy>false</EnableModDeploy>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D355DA25-1F65-48F1-8F8A-3805E17A6CB6}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FashionSense</RootNamespace>
-    <AssemblyName>FashionSense</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <GameModsPath>E:\SteamLibrary\steamapps\common\Stardew Valley\Mods</GameModsPath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Build" />
-    <Reference Include="Microsoft.Build.Framework" />
-    <Reference Include="Microsoft.Build.Utilities.v4.0" />
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <Compile Remove="releases\**" />
+    <EmbeddedResource Remove="releases\**" />
+    <None Remove="releases\**" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Framework\External\ContentPatcher\AppearanceToken.cs" />
-    <Compile Include="Framework\Interfaces\IContentPatcherApi.cs" />
-    <Compile Include="Framework\Managers\ApiManager.cs" />
-    <Compile Include="Framework\Managers\AssetManager.cs" />
-    <Compile Include="Framework\Managers\TextureManager.cs" />
-    <Compile Include="Framework\Models\LightModel.cs" />
-    <Compile Include="Framework\Models\AppearanceModel.cs" />
-    <Compile Include="Framework\Models\Accessory\AccessoryContentPack.cs" />
-    <Compile Include="Framework\Models\Accessory\AccessoryModel.cs" />
-    <Compile Include="Framework\Models\AnimationModel.cs" />
-    <Compile Include="Framework\Models\AppearanceContentPack.cs" />
-    <Compile Include="Framework\Models\Generic\Random\RandomRange.cs" />
-    <Compile Include="Framework\Models\Hair\HairContentPack.cs" />
-    <Compile Include="Framework\Models\Generic\Condition.cs" />
-    <Compile Include="Framework\Models\Generic\Position.cs" />
-    <Compile Include="Framework\Models\Generic\Size.cs" />
-    <Compile Include="Framework\Models\Hair\HairModel.cs" />
-    <Compile Include="Framework\Models\Hat\HatContentPack.cs" />
-    <Compile Include="Framework\Models\Hat\HatModel.cs" />
-    <Compile Include="Framework\Models\Pants\PantsContentPack.cs" />
-    <Compile Include="Framework\Models\Pants\PantsModel.cs" />
-    <Compile Include="Framework\Models\Shirt\ShirtContentPack.cs" />
-    <Compile Include="Framework\Models\Shirt\ShirtModel.cs" />
-    <Compile Include="Framework\Patches\Menus\CharacterCustomizationPatch.cs" />
-    <Compile Include="Framework\Patches\Renderer\DrawPatch.cs" />
-    <Compile Include="Framework\Patches\Renderer\FarmerRendererPatch.cs" />
-    <Compile Include="Framework\Patches\PatchTemplate.cs" />
-    <Compile Include="Framework\Patches\ShopLocations\SeedShopPatch.cs" />
-    <Compile Include="Framework\Patches\Tools\ToolPatch.cs" />
-    <Compile Include="Framework\UI\FilterMenu.cs" />
-    <Compile Include="Framework\UI\HandMirrorMenu.cs" />
-    <Compile Include="Framework\Utilities\ModDataKeys.cs" />
-    <Compile Include="Framework\Utilities\ConditionData.cs" />
-    <Compile Include="FashionSense.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.0.0-beta.20210916" />
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="Examples\[FS] Example Pack\Accessories\FlowingCape\accessory.json" />
-    <None Include="Examples\[FS] Example Pack\Accessories\FlowingScarf\accessory.json" />
-    <None Include="Examples\[FS] Example Pack\Accessories\Priestess\accessory.json" />
-    <None Include="Examples\[FS] Example Pack\Accessories\OneWingedAngel\accessory.json" />
-    <None Include="Examples\[FS] Example Pack\Accessories\TwoToneGlasses\accessory.json" />
-    <None Include="Examples\[FS] Example Pack\Accessories\ShinySunglasses\accessory.json" />
-    <None Include="Examples\[FS] Example Pack\Hairs\LongHair\hair.json" />
-    <None Include="Examples\[FS] Example Pack\Hairs\Magic Sword\hair.json" />
-    <None Include="Examples\[FS] Example Pack\Hairs\Priestess\hair.json" />
-    <None Include="Examples\[FS] Example Pack\Hairs\ShortHairWithCurlStatic\hair.json" />
-    <None Include="Examples\[FS] Example Pack\Hairs\ShortHairWithCurl\hair.json" />
-    <None Include="Examples\[FS] Example Pack\Hairs\ShortHairWithFleas\hair.json" />
-    <None Include="Examples\[FS] Example Pack\Hats\ColorableMouseEars\hat.json" />
-    <None Include="Examples\[FS] Example Pack\Hats\PrismaticDinoHead\hat.json" />
-    <None Include="Examples\[FS] Example Pack\Hats\AnimatedPumpkinHead\hat.json" />
-    <None Include="Examples\[FS] Example Pack\manifest.json" />
-    <None Include="Examples\[FS] Example Pack\Pants\PinkGrassSkirt\pants.json" />
-    <None Include="Examples\[FS] Example Pack\Pants\Spirit\pants.json" />
-    <None Include="Examples\[FS] Example Pack\Shirts\Blinky\shirt.json" />
-    <None Include="Examples\[FS] Example Pack\Shirts\ColorableSmiley\shirt.json" />
-    <None Include="Examples\[FS] Example Pack\Shirts\MageRobe\shirt.json" />
-    <None Include="i18n\default.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="manifest.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Examples\[FS] Example Pack\Accessories\FlowingCape\accessory.png" />
-    <Content Include="Examples\[FS] Example Pack\Accessories\FlowingScarf\accessory.png" />
-    <Content Include="Examples\[FS] Example Pack\Accessories\Priestess\accessory.png" />
-    <Content Include="Examples\[FS] Example Pack\Accessories\OneWingedAngel\accessory.png" />
-    <Content Include="Examples\[FS] Example Pack\Accessories\TwoToneGlasses\accessory.png" />
-    <Content Include="Examples\[FS] Example Pack\Accessories\ShinySunglasses\accessory.png" />
-    <Content Include="Examples\[FS] Example Pack\Hairs\LongHair\hair.png" />
-    <Content Include="Examples\[FS] Example Pack\Hairs\Magic Sword\hair.png" />
-    <Content Include="Examples\[FS] Example Pack\Hairs\Priestess\hair.png" />
-    <Content Include="Examples\[FS] Example Pack\Hairs\ShortHairWithCurlStatic\hair.png" />
-    <Content Include="Examples\[FS] Example Pack\Hairs\ShortHairWithCurl\hair.png" />
-    <Content Include="Examples\[FS] Example Pack\Hairs\ShortHairWithFleas\hair.png" />
-    <Content Include="Examples\[FS] Example Pack\Hats\ColorableMouseEars\hat.png" />
-    <Content Include="Examples\[FS] Example Pack\Hats\PrismaticDinoHead\hat.png" />
-    <Content Include="Examples\[FS] Example Pack\Hats\AnimatedPumpkinHead\hat.png" />
-    <Content Include="Examples\[FS] Example Pack\Pants\PinkGrassSkirt\pants.png" />
-    <Content Include="Examples\[FS] Example Pack\Pants\Spirit\pants.png" />
-    <Content Include="Examples\[FS] Example Pack\Shirts\Blinky\shirt.png" />
-    <Content Include="Examples\[FS] Example Pack\Shirts\ColorableSmiley\shirt.png" />
-    <Content Include="Examples\[FS] Example Pack\Shirts\MageRobe\shirt.png" />
     <Content Include="Framework\Assets\HandMirror.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -171,37 +47,33 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="packages\Pathoschild.Stardew.ModBuildConfig.3.3.0\build\Pathoschild.Stardew.ModBuildConfig.targets" Condition="Exists('packages\Pathoschild.Stardew.ModBuildConfig.3.3.0\build\Pathoschild.Stardew.ModBuildConfig.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('packages\Pathoschild.Stardew.ModBuildConfig.3.3.0\build\Pathoschild.Stardew.ModBuildConfig.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Pathoschild.Stardew.ModBuildConfig.3.3.0\build\Pathoschild.Stardew.ModBuildConfig.targets'))" />
-  </Target>
-  <Target Name="PostBuildMacros">
-    <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
-      <Output TaskParameter="Assemblies" ItemName="Targets" />
-    </GetAssemblyIdentity>
-    <ItemGroup>
-      <VersionNumber Include="$([System.Text.RegularExpressions.Regex]::Replace(&quot;%(Targets.Version)&quot;, &quot;^(.+?)(\.0+)$&quot;, &quot;$1&quot;))" />
-    </ItemGroup>
-  </Target>
+
+  <ItemGroup>
+    <None Update="i18n\default.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="manifest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
   <PropertyGroup>
     <PostBuildEventDependsOn>
-    $(PostBuildEventDependsOn);
-    PostBuildMacros;
-  </PostBuildEventDependsOn>
-    <PostBuildEvent>powershell -Command "(ls *manifest.json -rec | foreach-object { $f=$_.FullName; (gc -LiteralPath \"$f\") -replace 'REPLACE_ME_WITH_VERSION',  '@(VersionNumber)' | sc -LiteralPath \"$f\" })"
+      $(PostBuildEventDependsOn);
+      PostBuildMacros;
+    </PostBuildEventDependsOn>
+    <PostBuildEvent>
+      powershell -Command "(ls *manifest.json -rec | foreach-object { $f=$_.FullName; (gc -LiteralPath \"$f\") -replace 'REPLACE_ME_WITH_VERSION',  '$(Version)' | sc -LiteralPath \"$f\" })"
 
-powershell Remove-Item -Path '$(SolutionDir)releases\latest\$(SolutionName)"' -Recurse -Force
-xcopy /s /y /i "$(TargetDir)" "$(SolutionDir)releases\latest\$(SolutionName)"
-7z a -tzip "$(SolutionDir)releases\$(SolutionName)-@(VersionNumber).zip" "$(SolutionDir)releases\latest\$(SolutionName)"
+      powershell Remove-Item -Path 'C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\releases\latest\FashionSense"' -Recurse -Force
+      xcopy /s /y /i "C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\bin\Debug\net5.0" "C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\releases\latest\FashionSense"
+      7z a -tzip "C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\releases\FashionSense-$(Version).zip" "C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\releases\latest\FashionSense"
 
-powershell Remove-Item -Path '$(GameModsPath)\$(SolutionName)' -Recurse -Force
-powershell Remove-Item -Path '$(GameModsPath)\Fashion Sense Examples' -Recurse -Force
+      powershell Remove-Item -Path '$(GameModsPath)\FashionSense' -Recurse -Force
+      powershell Remove-Item -Path '$(GameModsPath)\Fashion Sense Examples' -Recurse -Force
 
-xcopy /s /y /i "$(SolutionDir)releases\latest\$(SolutionName)" "$(GameModsPath)\$(SolutionName)"
-xcopy /s /y /i "$(SolutionDir)Examples\*" "$(GameModsPath)\Fashion Sense Examples"</PostBuildEvent>
+      xcopy /s /y /i "C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\releases\latest\FashionSense" "$(GameModsPath)\FashionSense"
+      xcopy /s /y /i "C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\Examples\*" "$(GameModsPath)\Fashion Sense Examples"
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
