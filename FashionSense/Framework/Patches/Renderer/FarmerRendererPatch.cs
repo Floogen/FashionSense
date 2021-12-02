@@ -1233,7 +1233,7 @@ namespace FashionSense.Framework.Patches.Renderer
                     DrawColorMask(b, shirtPack, shirtModel, position + origin + ___positionOffset + featureOffset, customShirtSourceRect, shirtColor, rotation, origin + new Vector2(shirtModel.BodyPosition.X, shirtModel.BodyPosition.Y), 4f * scale, layerDepth + layerOffset + 0.01E-05f);
                 }
             }
-            layerDepth += 0.01E-05f;
+            layerDepth += 0.02E-05f;
 
             // Draw accessory
             if (accessoryModel is null && secondaryAccessoryModel is null && tertiaryAccessoryModel is null)
