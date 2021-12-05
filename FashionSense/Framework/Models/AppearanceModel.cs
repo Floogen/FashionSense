@@ -28,6 +28,11 @@ namespace FashionSense.Framework.Models
 
         internal bool IsMaskedColor(Color color)
         {
+            if (!HasColorMask())
+            {
+                return false;
+            }
+
             foreach (Color maskedColor in ColorMasks.Select(c => new Color(c[0], c[1], c[2])))
             {
                 if (maskedColor == color)

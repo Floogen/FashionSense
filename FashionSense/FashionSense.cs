@@ -21,6 +21,7 @@ using FashionSense.Framework.Models.Hat;
 using FashionSense.Framework.Models.Shirt;
 using StardewModdingAPI.Events;
 using FashionSense.Framework.Models.Pants;
+using FashionSense.Framework.Patches.Entities;
 
 namespace FashionSense
 {
@@ -73,6 +74,9 @@ namespace FashionSense
 
                 // Apply UI related patches
                 new CharacterCustomizationPatch(monitor, modHelper).Apply(harmony);
+
+                // Apply entity related patches
+                new FarmerPatch(monitor, modHelper).Apply(harmony);
             }
             catch (Exception e)
             {

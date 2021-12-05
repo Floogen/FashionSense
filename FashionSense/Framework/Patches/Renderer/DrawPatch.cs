@@ -91,9 +91,19 @@ namespace FashionSense.Framework.Patches.Renderer
             }
             else
             {
-                SwapColorReversePatch(__instance, texture_name, pixels, 256, shirtModel.GetSleeveColor(0));
-                SwapColorReversePatch(__instance, texture_name, pixels, 257, shirtModel.GetSleeveColor(1));
-                SwapColorReversePatch(__instance, texture_name, pixels, 258, shirtModel.GetSleeveColor(2));
+                var shirtColor = new Color() { PackedValue = Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR) ? uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR]) : who.hairstyleColor.Value.PackedValue };
+                if (shirtModel.DisableGrayscale)
+                {
+                    shirtColor = Color.White;
+                }
+                else if (shirtModel.IsPrismatic)
+                {
+                    shirtColor = Utility.GetPrismaticColor(speedMultiplier: shirtModel.PrismaticAnimationSpeedMultiplier);
+                }
+
+                SwapColorReversePatch(__instance, texture_name, pixels, 256, shirtModel.IsMaskedColor(shirtModel.GetSleeveColor(0)) ? shirtColor : shirtModel.GetSleeveColor(0));
+                SwapColorReversePatch(__instance, texture_name, pixels, 257, shirtModel.IsMaskedColor(shirtModel.GetSleeveColor(1)) ? shirtColor : shirtModel.GetSleeveColor(1));
+                SwapColorReversePatch(__instance, texture_name, pixels, 258, shirtModel.IsMaskedColor(shirtModel.GetSleeveColor(2)) ? shirtColor : shirtModel.GetSleeveColor(2));
             }
 
             return false;

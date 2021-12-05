@@ -664,6 +664,7 @@ namespace FashionSense.Framework.UI
                         break;
                     case SHIRT_FILTER_BUTTON:
                         Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR] = color2.PackedValue.ToString();
+                        FashionSense.SetSpriteDirty();
                         break;
                     case PANTS_FILTER_BUTTON:
                         Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR] = color2.PackedValue.ToString();
