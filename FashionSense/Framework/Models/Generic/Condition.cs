@@ -47,7 +47,8 @@ namespace FashionSense.Framework.Models.Generic
             IsInMines,
             IsOutdoors,
             HealthLevel,
-            StaminaLevel
+            StaminaLevel,
+            IsSitting
         }
 
         public Type Name { get; set; }
