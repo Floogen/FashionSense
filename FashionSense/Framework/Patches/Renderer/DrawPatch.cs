@@ -101,9 +101,9 @@ namespace FashionSense.Framework.Patches.Renderer
                     shirtColor = Utility.GetPrismaticColor(speedMultiplier: shirtModel.PrismaticAnimationSpeedMultiplier);
                 }
 
-                SwapColorReversePatch(__instance, texture_name, pixels, 256, shirtModel.IsMaskedColor(shirtModel.GetSleeveColor(0)) ? shirtColor : shirtModel.GetSleeveColor(0));
-                SwapColorReversePatch(__instance, texture_name, pixels, 257, shirtModel.IsMaskedColor(shirtModel.GetSleeveColor(1)) ? shirtColor : shirtModel.GetSleeveColor(1));
-                SwapColorReversePatch(__instance, texture_name, pixels, 258, shirtModel.IsMaskedColor(shirtModel.GetSleeveColor(2)) ? shirtColor : shirtModel.GetSleeveColor(2));
+                SwapColorReversePatch(__instance, texture_name, pixels, 256, shirtModel.IsMaskedColor(shirtModel.GetSleeveColor(0)) ? Utility.MultiplyColor(shirtColor, shirtModel.GetSleeveColor(0)) : shirtModel.GetSleeveColor(0));
+                SwapColorReversePatch(__instance, texture_name, pixels, 257, shirtModel.IsMaskedColor(shirtModel.GetSleeveColor(1)) ? Utility.MultiplyColor(shirtColor, shirtModel.GetSleeveColor(1)) : shirtModel.GetSleeveColor(1));
+                SwapColorReversePatch(__instance, texture_name, pixels, 258, shirtModel.IsMaskedColor(shirtModel.GetSleeveColor(2)) ? Utility.MultiplyColor(shirtColor, shirtModel.GetSleeveColor(2)) : shirtModel.GetSleeveColor(2));
             }
 
             return false;
