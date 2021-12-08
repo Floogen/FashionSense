@@ -1429,6 +1429,7 @@ namespace FashionSense.Framework.Patches.Renderer
                     }
 
                     hairLayer = layerDepth + hair_draw_layer + (hairModel.HasColorMask() ? 0.01E-05f : 0);
+                    layerDepth = hairLayer;
                 }
             }
 
@@ -1452,15 +1453,15 @@ namespace FashionSense.Framework.Patches.Renderer
                 // Adjust the sleevesLayer according to model's adjustment properties
                 if (sleevesModel.DrawBeforeShirt)
                 {
-                    sleevesLayer = shirtLayer - 0.01E-05f;
+                    sleevesLayer = hairModel is not null ? shirtLayer - 0.01E-05f : sleevesLayer - 0.01E-05f;
                 }
                 else if (sleevesModel.DrawBeforeHair)
                 {
-                    sleevesLayer = hairLayer - 2E-05f;
+                    sleevesLayer = hairModel is not null ? hairLayer - 2E-05f : sleevesLayer - 0.01E-05f;
                 }
                 else
                 {
-                    sleevesLayer = hairLayer;
+                    sleevesLayer = layerDepth;
                 }
                 sleevesLayer = sleevesLayer + 0.01E-05f;
 
