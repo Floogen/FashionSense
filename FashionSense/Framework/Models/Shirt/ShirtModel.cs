@@ -29,14 +29,14 @@ namespace FashionSense.Framework.Models.Shirt
             return sleeveColor;
         }
 
-        private int GetColorIndex(int[] colorArray, int position)
+        internal bool HasSleeveColorAtLayer(int layer = 0)
         {
-            if (position >= colorArray.Length)
+            if (SleeveColors is null)
             {
-                return 255;
+                return false;
             }
 
-            return colorArray[position];
+            return SleeveColors.Count > layer;
         }
     }
 }

@@ -26,6 +26,28 @@ namespace FashionSense.Framework.Models
             return DisableGrayscale || IsPrismatic;
         }
 
+        internal int GetColorIndex(int[] colorArray, int position)
+        {
+            if (position >= colorArray.Length)
+            {
+                return 255;
+            }
+
+            return colorArray[position];
+        }
+
+        internal Color GetColor(int[] colorArray)
+        {
+            if (3 < colorArray.Length)
+            {
+                return new Color(GetColorIndex(colorArray, 0), GetColorIndex(colorArray, 1), GetColorIndex(colorArray, 2), GetColorIndex(colorArray, 3));
+            }
+            else
+            {
+                return new Color(GetColorIndex(colorArray, 0), GetColorIndex(colorArray, 1), GetColorIndex(colorArray, 2), 255);
+            }
+        }
+
         internal bool IsMaskedColor(Color color)
         {
             if (!HasColorMask())
