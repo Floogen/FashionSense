@@ -14,9 +14,13 @@ namespace FashionSense.Framework.Models
         public bool Flipped { get; set; }
         public bool RequireAnimationToFinish { get; set; }
         public bool DisableGrayscale { get; set; }
+        public bool DisableSkinGrayscale { get; set; }
         public bool IsPrismatic { get; set; }
         public float PrismaticAnimationSpeedMultiplier { get; set; } = 1f;
         public List<int[]> ColorMasks { get; set; } = new List<int[]>();
+        public int[] DarkestSkinToneMask { get; set; }
+        public int[] MediumSkinToneMask { get; set; }
+        public int[] LightestSkinToneMask { get; set; }
         public List<AnimationModel> UniformAnimation { get; set; } = new List<AnimationModel>();
         public List<AnimationModel> IdleAnimation { get; set; } = new List<AnimationModel>();
         public List<AnimationModel> MovementAnimation { get; set; } = new List<AnimationModel>();
@@ -66,9 +70,37 @@ namespace FashionSense.Framework.Models
             return false;
         }
 
+        internal bool IsSkinToneMaskColor(Color color)
+        {
+            if (!HasSkinToneMask())
+            {
+                return false;
+            }
+
+            if (LightestSkinToneMask is not null && color == new Color(GetColorIndex(LightestSkinToneMask, 0), GetColorIndex(LightestSkinToneMask, 1), GetColorIndex(LightestSkinToneMask, 2), GetColorIndex(LightestSkinToneMask, 3)))
+            {
+                return true;
+            }
+            else if (MediumSkinToneMask is not null && color == new Color(GetColorIndex(MediumSkinToneMask, 0), GetColorIndex(MediumSkinToneMask, 1), GetColorIndex(MediumSkinToneMask, 2), GetColorIndex(MediumSkinToneMask, 3)))
+            {
+                return true;
+            }
+            else if (DarkestSkinToneMask is not null && color == new Color(GetColorIndex(DarkestSkinToneMask, 0), GetColorIndex(DarkestSkinToneMask, 1), GetColorIndex(DarkestSkinToneMask, 2), GetColorIndex(DarkestSkinToneMask, 3)))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         internal bool HasColorMask()
         {
             return ColorMasks.Count > 0;
+        }
+
+        internal bool HasSkinToneMask()
+        {
+            return DarkestSkinToneMask is not null || MediumSkinToneMask is not null || LightestSkinToneMask is not null;
         }
 
         internal bool HasUniformAnimation()

@@ -61,34 +61,12 @@ namespace FashionSense.Framework.Patches.Renderer
 
             if (shirtModel.SleeveColors is null)
             {
-                Texture2D skinColors = ___farmerTextureManager.Load<Texture2D>("Characters\\Farmer\\skinColors");
-                Color[] skinColorsData = new Color[skinColors.Width * skinColors.Height];
-                int skin_index = ___skin.Value;
+                var skinTone = GetSkinTone(___farmerTextureManager, ___baseTexture, pixels, ___skin, ____sickFrame);
 
-                if (skin_index < 0)
-                {
-                    skin_index = skinColors.Height - 1;
-                }
-                if (skin_index > skinColors.Height - 1)
-                {
-                    skin_index = 0;
-                }
-
-                skinColors.GetData(skinColorsData);
-                Color darkest = skinColorsData[skin_index * 3 % (skinColors.Height * 3)];
-                Color medium = skinColorsData[skin_index * 3 % (skinColors.Height * 3) + 1];
-                Color lightest = skinColorsData[skin_index * 3 % (skinColors.Height * 3) + 2];
-
-                if (____sickFrame)
-                {
-                    darkest = pixels[260 + ___baseTexture.Width];
-                    medium = pixels[261 + ___baseTexture.Width];
-                    lightest = pixels[262 + ___baseTexture.Width];
-                }
-
-                SwapColorReversePatch(__instance, texture_name, pixels, 256, darkest);
-                SwapColorReversePatch(__instance, texture_name, pixels, 257, medium);
-                SwapColorReversePatch(__instance, texture_name, pixels, 258, lightest);
+                Game1.player.hidden.Value = true;
+                SwapColorReversePatch(__instance, texture_name, pixels, 256, skinTone.Darkest);
+                SwapColorReversePatch(__instance, texture_name, pixels, 257, skinTone.Medium);
+                SwapColorReversePatch(__instance, texture_name, pixels, 258, skinTone.Lightest);
             }
             else
             {
@@ -364,6 +342,40 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             b.Draw(FarmerRenderer.pantsTexture, position + origin + positionOffset, pants_rect, overrideColor.Equals(Color.White) ? Utility.MakeCompletelyOpaque(who.GetPantsColor()) : overrideColor, rotation, origin, 4f * scale, animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + ((who.FarmerSprite.CurrentAnimationFrame.frame == 5) ? 0.00092f : 9.2E-08f));
+        }
+
+        internal static SkinToneModel GetSkinTone(LocalizedContentManager farmerTextureManager, Texture2D baseTexture, Color[] pixels, NetInt skin, bool sickFrame)
+        {
+            Texture2D skinColors = farmerTextureManager.Load<Texture2D>("Characters\\Farmer\\skinColors");
+            Color[] skinColorsData = new Color[skinColors.Width * skinColors.Height];
+            int skin_index = skin.Value;
+
+            if (skin_index < 0)
+            {
+                skin_index = skinColors.Height - 1;
+            }
+            if (skin_index > skinColors.Height - 1)
+            {
+                skin_index = 0;
+            }
+
+            skinColors.GetData(skinColorsData);
+            Color darkest = skinColorsData[skin_index * 3 % (skinColors.Height * 3)];
+            Color medium = skinColorsData[skin_index * 3 % (skinColors.Height * 3) + 1];
+            Color lightest = skinColorsData[skin_index * 3 % (skinColors.Height * 3) + 2];
+
+            if (sickFrame)
+            {
+                if (pixels is null)
+                {
+                    pixels = new Color[baseTexture.Width * baseTexture.Height];
+                }
+                darkest = pixels[260 + baseTexture.Width];
+                medium = pixels[261 + baseTexture.Width];
+                lightest = pixels[262 + baseTexture.Width];
+            }
+
+            return new SkinToneModel() { Darkest = darkest, Medium = medium, Lightest = lightest };
         }
 
         internal static void ExecuteRecolorActionsReversePatch(FarmerRenderer __instance, Farmer who)
