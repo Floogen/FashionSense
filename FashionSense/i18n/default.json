@@ -13,6 +13,7 @@
   "ui.fashion_sense.title.hat": "Hats",
   "ui.fashion_sense.title.shirt": "Shirts",
   "ui.fashion_sense.title.pants": "Pants",
+  "ui.fashion_sense.title.sleeves": "Sleeves",
 
   // UI - Etc
   "ui.fashion_sense.search_button": "Search for a specific Fashion Sense pack.",
@@ -23,10 +24,12 @@
   "ui.fashion_sense.color_active.shirt": "Shirt Color",
   "ui.fashion_sense.color_active.pants": "Pants Color",
   "ui.fashion_sense.color_active.accessory": "Acc. Color",
+  "ui.fashion_sense.color_active.sleeves": "Sleeve Color",
   "ui.fashion_sense.color_disabled.generic": "(Ignored)",
   "ui.fashion_sense.color_info.hair": "Color overlays will not affect this hairstyle.",
   "ui.fashion_sense.color_info.hat": "Color overlays will not affect this hat.",
   "ui.fashion_sense.color_info.shirt": "Color overlays will not affect this shirt.",
   "ui.fashion_sense.color_info.pants": "Color overlays will not affect these pants.",
-  "ui.fashion_sense.color_info.accessory": "Color overlays will not affect this accessory."
+  "ui.fashion_sense.color_info.accessory": "Color overlays will not affect this accessory.",
+  "ui.fashion_sense.color_info.sleeves": "Color overlays will not affect these sleeves."
 }

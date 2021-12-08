@@ -4,6 +4,7 @@ using FashionSense.Framework.Models.Hair;
 using FashionSense.Framework.Models.Hat;
 using FashionSense.Framework.Models.Pants;
 using FashionSense.Framework.Models.Shirt;
+using FashionSense.Framework.Models.Sleeves;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -96,6 +97,9 @@ namespace FashionSense.Framework.UI
                     break;
                 case HandMirrorMenu.PANTS_FILTER_BUTTON:
                     appearancePacks = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is PantsContentPack).ToList();
+                    break;
+                case HandMirrorMenu.SLEEVES_FILTER_BUTTON:
+                    appearancePacks = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is SleevesContentPack).ToList();
                     break;
             }
             _pages = new List<List<AppearanceContentPack>>();
