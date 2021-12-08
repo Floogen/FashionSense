@@ -268,11 +268,11 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
                 else if (condition.Name is Condition.Type.IsWalking)
                 {
-                    passedCheck = condition.IsValid(!Game1.player.running);
+                    passedCheck = condition.IsValid(!FashionSense.conditionData.IsRunning(Game1.player));
                 }
                 else if (condition.Name is Condition.Type.IsRunning)
                 {
-                    passedCheck = condition.IsValid(Game1.player.running);
+                    passedCheck = condition.IsValid(FashionSense.conditionData.IsRunning(Game1.player));
                 }
                 else if (condition.Name is Condition.Type.IsEating)
                 {
