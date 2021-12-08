@@ -23,6 +23,7 @@ using StardewValley.Tools;
 using FashionSense.Framework.Models.Hat;
 using FashionSense.Framework.Models.Shirt;
 using FashionSense.Framework.Models.Pants;
+using FashionSense.Framework.Models.Sleeves;
 
 namespace FashionSense.Framework.Patches.Renderer
 {
@@ -138,20 +139,26 @@ namespace FashionSense.Framework.Patches.Renderer
 
         private static void HandleConditionalDraw(FarmerRenderer __instance, ref Vector2 ___positionOffset, ref Vector2 ___rotationAdjustment, ref bool ____sickFrame, ref bool ____shirtDirty, ref bool ____spriteDirty, SpriteBatch b, FarmerSprite.AnimationFrame animationFrame, int currentFrame, Rectangle sourceRect, Vector2 position, Vector2 origin, float layerDepth, int facingDirection, Color overrideColor, float rotation, float scale, Farmer who)
         {
-            ShirtContentPack sPack = null;
+            ShirtContentPack shirtPack = null;
             if (who.modData.ContainsKey(ModDataKeys.CUSTOM_PANTS_ID))
             {
-                sPack = FashionSense.textureManager.GetSpecificAppearanceModel<ShirtContentPack>(who.modData[ModDataKeys.CUSTOM_SHIRT_ID]);
+                shirtPack = FashionSense.textureManager.GetSpecificAppearanceModel<ShirtContentPack>(who.modData[ModDataKeys.CUSTOM_SHIRT_ID]);
             }
 
-            PantsContentPack pPack = null;
+            SleevesContentPack sleevesPack = null;
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_SLEEVES_ID))
+            {
+                sleevesPack = FashionSense.textureManager.GetSpecificAppearanceModel<SleevesContentPack>(who.modData[ModDataKeys.CUSTOM_SLEEVES_ID]);
+            }
+
+            PantsContentPack pantsPack = null;
             if (who.modData.ContainsKey(ModDataKeys.CUSTOM_PANTS_ID))
             {
-                pPack = FashionSense.textureManager.GetSpecificAppearanceModel<PantsContentPack>(who.modData[ModDataKeys.CUSTOM_PANTS_ID]);
+                pantsPack = FashionSense.textureManager.GetSpecificAppearanceModel<PantsContentPack>(who.modData[ModDataKeys.CUSTOM_PANTS_ID]);
             }
 
             // Check if we need to utilize custom draw logic
-            if (sPack != null || pPack != null)
+            if (shirtPack is not null || sleevesPack is not null || pantsPack is not null)
             {
                 HandleCustomDraw(__instance, ref ___positionOffset, ref ___rotationAdjustment, ref ____sickFrame, ref ____shirtDirty, ref ____spriteDirty, b, animationFrame, currentFrame, sourceRect, position, origin, layerDepth, facingDirection, overrideColor, rotation, scale, who);
             }
@@ -323,14 +330,26 @@ namespace FashionSense.Framework.Patches.Renderer
                 b.Draw(baseTexture, position + origin + ___positionOffset + new Vector2(x_adjustment, FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + ((who.FacingDirection == 1 || who.FacingDirection == 3) ? 40 : 44)), new Rectangle(264 + ((facingDirection == 3) ? 4 : 0), 2 + (who.currentEyes - 1) * 2, (facingDirection == 2) ? 6 : 2, 2), overrideColor, 0f, origin, 4f * scale, SpriteEffects.None, layerDepth + 1.2E-07f);
             }
             __instance.drawHairAndAccesories(b, facingDirection, who, position, origin, scale, currentFrame, rotation, overrideColor, layerDepth);
-            float arm_layer_offset = 4.9E-05f;
-            if (facingDirection == 0)
-            {
-                arm_layer_offset = -1E-07f;
-            }
-            sourceRect.Offset(-288 + (animationFrame.secondaryArm ? 192 : 96), 0);
 
-            b.Draw(baseTexture, position + origin + ___positionOffset + who.armOffset, sourceRect, overrideColor, rotation, origin, 4f * scale, animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + arm_layer_offset);
+            // Get the sleeves model, if applicable
+            SleevesModel sleevesModel = null;
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_SLEEVES_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<SleevesContentPack>(who.modData[ModDataKeys.CUSTOM_SLEEVES_ID]) is SleevesContentPack sleevesPack && sleevesPack != null)
+            {
+                sleevesModel = sleevesPack.GetSleevesFromFacingDirection(facingDirection);
+            }
+
+            // Handle the vanilla sleeve / arm drawing, if a custom sleeve model isn't given
+            if (sleevesModel is null)
+            {
+                float arm_layer_offset = 4.9E-05f;
+                if (facingDirection == 0)
+                {
+                    arm_layer_offset = -1E-07f;
+                }
+                sourceRect.Offset(-288 + (animationFrame.secondaryArm ? 192 : 96), 0);
+
+                b.Draw(baseTexture, position + origin + ___positionOffset + who.armOffset, sourceRect, overrideColor, rotation, origin, 4f * scale, animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + arm_layer_offset);
+            }
         }
 
         private static void DrawPantsVanilla(SpriteBatch b, Rectangle sourceRect, FarmerRenderer renderer, Farmer who, FarmerSprite.AnimationFrame animationFrame, int currentFrame, int facingDirection, float rotation, float scale, float layerDepth, Vector2 position, Vector2 origin, Vector2 positionOffset, Vector2 rotationAdjustment, Color overrideColor)

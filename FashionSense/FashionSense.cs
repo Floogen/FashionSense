@@ -22,6 +22,7 @@ using FashionSense.Framework.Models.Shirt;
 using StardewModdingAPI.Events;
 using FashionSense.Framework.Models.Pants;
 using FashionSense.Framework.Patches.Entities;
+using FashionSense.Framework.Models.Sleeves;
 
 namespace FashionSense
 {
@@ -121,6 +122,7 @@ namespace FashionSense
             UpdateElapsedDuration(ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION);
             UpdateElapsedDuration(ModDataKeys.ANIMATION_SHIRT_ELAPSED_DURATION);
             UpdateElapsedDuration(ModDataKeys.ANIMATION_PANTS_ELAPSED_DURATION);
+            UpdateElapsedDuration(ModDataKeys.ANIMATION_SLEEVES_ELAPSED_DURATION);
         }
 
         private void OnWarped(object sender, StardewModdingAPI.Events.WarpedEventArgs e)
@@ -154,6 +156,10 @@ namespace FashionSense
             {
                 e.OldLocation.sharedLights.Remove(pants_id);
             }
+            if (e.Player.modData.ContainsKey(ModDataKeys.ANIMATION_SLEEVES_LIGHT_ID) && Int32.TryParse(e.Player.modData[ModDataKeys.ANIMATION_SLEEVES_LIGHT_ID], out int sleeves_id))
+            {
+                e.OldLocation.sharedLights.Remove(sleeves_id);
+            }
         }
 
         private void OnGameLaunched(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
@@ -180,6 +186,7 @@ namespace FashionSense
             SetCachedColor(ModDataKeys.UI_HAND_MIRROR_HAT_COLOR);
             SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR);
             SetCachedColor(ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR);
+            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR);
         }
 
         private void OnDayStarted(object sender, StardewModdingAPI.Events.DayStartedEventArgs e)
@@ -191,6 +198,7 @@ namespace FashionSense
             EnsureKeyExists(ModDataKeys.CUSTOM_HAT_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_SHIRT_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_PANTS_ID);
+            EnsureKeyExists(ModDataKeys.CUSTOM_SLEEVES_ID);
 
             // Set sprite to dirty in order to refresh sleeves and other tied-in appearances
             SetSpriteDirty();
@@ -253,6 +261,10 @@ namespace FashionSense
                 // Load Pants
                 Monitor.Log($"Loading pants from pack: {contentPack.Manifest.Name} {contentPack.Manifest.Version} by {contentPack.Manifest.Author}", LogLevel.Trace);
                 AddPantsContentPacks(contentPack);
+
+                // Load Sleeves
+                Monitor.Log($"Loading sleeves from pack: {contentPack.Manifest.Name} {contentPack.Manifest.Version} by {contentPack.Manifest.Author}", LogLevel.Trace);
+                AddSleevesContentPacks(contentPack);
             }
 
             if (Context.IsWorldReady)
@@ -712,6 +724,97 @@ namespace FashionSense
             }
         }
 
+
+        private void AddSleevesContentPacks(IContentPack contentPack)
+        {
+            try
+            {
+                var directoryPath = new DirectoryInfo(Path.Combine(contentPack.DirectoryPath, "Sleeves"));
+                if (!directoryPath.Exists)
+                {
+                    Monitor.Log($"No Sleeves folder found for the content pack {contentPack.Manifest.Name}", LogLevel.Trace);
+                    return;
+                }
+
+                var sleevesFolders = directoryPath.GetDirectories("*", SearchOption.AllDirectories);
+                if (sleevesFolders.Count() == 0)
+                {
+                    Monitor.Log($"No sub-folders found under Sleeves for the content pack {contentPack.Manifest.Name}", LogLevel.Warn);
+                    return;
+                }
+
+                // Load in the accessories
+                foreach (var textureFolder in sleevesFolders)
+                {
+                    if (!File.Exists(Path.Combine(textureFolder.FullName, "sleeves.json")))
+                    {
+                        if (textureFolder.GetDirectories().Count() == 0)
+                        {
+                            Monitor.Log($"Content pack {contentPack.Manifest.Name} is missing a sleeves.json under {textureFolder.Name}", LogLevel.Warn);
+                        }
+
+                        continue;
+                    }
+
+                    var parentFolderName = textureFolder.Parent.FullName.Replace(contentPack.DirectoryPath + Path.DirectorySeparatorChar, String.Empty);
+                    var modelPath = Path.Combine(parentFolderName, textureFolder.Name, "sleeves.json");
+
+                    // Parse the model and assign it the content pack's owner
+                    SleevesContentPack appearanceModel = contentPack.ReadJsonFile<SleevesContentPack>(modelPath);
+                    appearanceModel.Author = contentPack.Manifest.Author;
+                    appearanceModel.Owner = contentPack.Manifest.UniqueID;
+
+                    // Verify the required Name property is set
+                    if (String.IsNullOrEmpty(appearanceModel.Name))
+                    {
+                        Monitor.Log($"Unable to add sleeves from {appearanceModel.Owner}: Missing the Name property", LogLevel.Warn);
+                        continue;
+                    }
+
+                    // Set the model type
+                    appearanceModel.PackType = AppearanceContentPack.Type.Sleeves;
+
+                    // Set the PackName and Id
+                    appearanceModel.PackName = contentPack.Manifest.Name;
+                    appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.PackType, "/", appearanceModel.Name);
+
+                    // Verify that a sleeves with the name doesn't exist in this pack
+                    if (textureManager.GetSpecificAppearanceModel<SleevesContentPack>(appearanceModel.Id) != null)
+                    {
+                        Monitor.Log($"Unable to add sleeves from {contentPack.Manifest.Name}: This pack already contains a sleeves with the name of {appearanceModel.Name}", LogLevel.Warn);
+                        continue;
+                    }
+
+                    // Verify that at least one SleevesModel is given
+                    if (appearanceModel.BackSleeves is null && appearanceModel.RightSleeves is null && appearanceModel.FrontSleeves is null && appearanceModel.LeftSleeves is null)
+                    {
+                        Monitor.Log($"Unable to add sleeves for {appearanceModel.Name} from {contentPack.Manifest.Name}: No sleeves models given (FrontSleeves, BackSleeves, etc.)", LogLevel.Warn);
+                        continue;
+                    }
+
+                    // Verify we are given a texture and if so, track it
+                    if (!File.Exists(Path.Combine(textureFolder.FullName, "sleeves.png")))
+                    {
+                        Monitor.Log($"Unable to add sleeves for {appearanceModel.Name} from {contentPack.Manifest.Name}: No associated sleeves.png given", LogLevel.Warn);
+                        continue;
+                    }
+
+                    // Load in the texture
+                    appearanceModel.Texture = contentPack.LoadAsset<Texture2D>(contentPack.GetActualAssetKey(Path.Combine(parentFolderName, textureFolder.Name, "sleeves.png")));
+
+                    // Track the model
+                    textureManager.AddAppearanceModel(appearanceModel);
+
+                    // Log it
+                    Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
+                }
+            }
+            catch (Exception ex)
+            {
+                Monitor.Log($"Error loading sleeves from content pack {contentPack.Manifest.Name}: {ex}", LogLevel.Error);
+            }
+        }
+
         internal static void SetSpriteDirty()
         {
             var spriteDirty = modHelper.Reflection.GetField<bool>(Game1.player.FarmerRenderer, "_spriteDirty");
@@ -776,6 +879,14 @@ namespace FashionSense
                 who.modData[ModDataKeys.ANIMATION_PANTS_ELAPSED_DURATION] = "0";
             }
 
+            if (model is null || model is SleevesModel)
+            {
+                who.modData[ModDataKeys.ANIMATION_SLEEVES_ITERATOR] = "0";
+                who.modData[ModDataKeys.ANIMATION_SLEEVES_STARTING_INDEX] = "0";
+                who.modData[ModDataKeys.ANIMATION_SLEEVES_FRAME_DURATION] = duration.ToString();
+                who.modData[ModDataKeys.ANIMATION_SLEEVES_ELAPSED_DURATION] = "0";
+            }
+
             who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] = facingDirection.ToString();
             who.modData[ModDataKeys.ANIMATION_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
 
@@ -788,6 +899,7 @@ namespace FashionSense
                 who.modData[ModDataKeys.ANIMATION_HAT_TYPE] = animationType.ToString();
                 who.modData[ModDataKeys.ANIMATION_SHIRT_TYPE] = animationType.ToString();
                 who.modData[ModDataKeys.ANIMATION_PANTS_TYPE] = animationType.ToString();
+                who.modData[ModDataKeys.ANIMATION_SLEEVES_TYPE] = animationType.ToString();
             }
         }
     }
