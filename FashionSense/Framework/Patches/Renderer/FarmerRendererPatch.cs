@@ -335,6 +335,10 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     passedCheck = condition.IsValid(Game1.player.IsSitting());
                 }
+                else if (condition.Name is Condition.Type.IsCarrying)
+                {
+                    passedCheck = condition.IsValid(Game1.player.IsCarrying());
+                }
 
                 // If the condition is independent and is true, then skip rest of evaluations
                 if (condition.Independent && passedCheck)
