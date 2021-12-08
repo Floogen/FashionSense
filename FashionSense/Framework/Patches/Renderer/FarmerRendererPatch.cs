@@ -224,6 +224,10 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     passedCheck = condition.IsValid(true, FashionSense.conditionData.IsMovingLongEnough(condition.GetParsedValue<long>(!probe)));
                 }
+                else if (condition.Name is Condition.Type.MovementDurationLogical)
+                {
+                    passedCheck = condition.IsValid(FashionSense.conditionData.GetMovementDuration(Game1.player));
+                }
                 else if (condition.Name is Condition.Type.IsElapsedTimeMultipleOf)
                 {
                     passedCheck = condition.IsValid(true, FashionSense.conditionData.IsElapsedTimeMultipleOf(condition, probe));
@@ -245,6 +249,10 @@ namespace FashionSense.Framework.Patches.Renderer
                 else if (condition.Name is Condition.Type.MovementSpeed)
                 {
                     passedCheck = condition.IsValid(true, FashionSense.conditionData.IsMovingFastEnough(condition.GetParsedValue<long>(!probe)));
+                }
+                else if (condition.Name is Condition.Type.MovementSpeedLogical)
+                {
+                    passedCheck = condition.IsValid(FashionSense.conditionData.GetMovementSpeed(Game1.player));
                 }
                 else if (condition.Name is Condition.Type.RidingHorse)
                 {

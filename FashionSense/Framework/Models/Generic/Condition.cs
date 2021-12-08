@@ -24,6 +24,8 @@ namespace FashionSense.Framework.Models.Generic
             Unknown,
             MovementSpeed,
             MovementDuration,
+            MovementSpeedLogical,
+            MovementDurationLogical,
             IsElapsedTimeMultipleOf,
             DidPreviousFrameDisplay,
             RidingHorse,

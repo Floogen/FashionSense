@@ -46,9 +46,24 @@ namespace FashionSense.Framework.Utilities
             return _movementDurationMilliseconds > 0;
         }
 
+        internal bool IsRunning(Farmer who)
+        {
+            return Math.Abs(_movementSpeed - 5f) < Math.Abs(_movementSpeed - 2f) && !who.bathingClothes && !who.onBridge.Value;
+        }
+
         internal int GetActualPlayerInventoryCount(Farmer who)
         {
             return who.items.Where(o => o != null).Count();
+        }
+
+        internal long GetMovementSpeed(Farmer who)
+        {
+            return (long)who.getMovementSpeed();
+        }
+
+        internal long GetMovementDuration(Farmer who)
+        {
+            return (long)_movementDurationMilliseconds;
         }
 
         internal void Update(Farmer who, GameTime time)
