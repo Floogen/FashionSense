@@ -1433,7 +1433,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
                 else if (sleevesModel.DrawBeforeHair)
                 {
-                    sleevesLayer = hairLayer - 0.01E-05f;
+                    sleevesLayer = hairLayer - 2E-05f;
                 }
                 else
                 {
