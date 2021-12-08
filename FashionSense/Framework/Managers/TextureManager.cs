@@ -2,6 +2,7 @@
 using FashionSense.Framework.Models.Hair;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
+using StardewValley;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,6 +53,18 @@ namespace FashionSense.Framework.Managers
         public T GetSpecificAppearanceModel<T>(string appearanceId) where T : AppearanceContentPack
         {
             return (T)_appearanceTextures.FirstOrDefault(t => String.Equals(t.Id, appearanceId, StringComparison.OrdinalIgnoreCase) && t is T);
+        }
+
+        public AppearanceContentPack GetRandomAppearanceModel<T>()
+        {
+            var typedAppearanceModels = GetAllAppearanceModels().Where(m => m is T).ToList();
+            if (typedAppearanceModels.Count() == 0)
+            {
+                return null;
+            }
+
+            var randomModelIndex = Game1.random.Next(typedAppearanceModels.Count());
+            return typedAppearanceModels[randomModelIndex];
         }
     }
 }

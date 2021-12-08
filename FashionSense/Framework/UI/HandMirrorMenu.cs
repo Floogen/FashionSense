@@ -47,6 +47,7 @@ namespace FashionSense.Framework.UI
         public List<ClickableComponent> colorPickerCCs = new List<ClickableComponent>();
 
         public ColorPicker colorPicker;
+        private ClickableTextureComponent randomButton;
         private ClickableTextureComponent clearButton;
         private ClickableTextureComponent searchButton;
         public ClickableTextureComponent okButton;
@@ -191,8 +192,8 @@ namespace FashionSense.Framework.UI
                 downNeighborID = -99998
             });
 
-            // Add the left over buttons
-            okButton = new ClickableTextureComponent("OK", new Rectangle(base.xPositionOnScreen + base.width - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder - 32, base.yPositionOnScreen + base.height - IClickableMenu.borderWidth - IClickableMenu.spaceToClearTopBorder + 28, 64, 64), null, null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46), 1f)
+            // Add the leftover buttons
+            okButton = new ClickableTextureComponent("OK", new Rectangle(base.xPositionOnScreen + base.width - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder - 56, base.yPositionOnScreen + base.height - IClickableMenu.borderWidth - IClickableMenu.spaceToClearTopBorder + 28, 64, 64), null, null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46), 1f)
             {
                 myID = 505,
                 upNeighborID = -99998,
@@ -201,7 +202,7 @@ namespace FashionSense.Framework.UI
                 downNeighborID = -99998
             };
 
-            searchButton = new ClickableTextureComponent("Search", new Rectangle(okButton.bounds.X - 50, okButton.bounds.Y - 6, 32, 32), null, null, Game1.mouseCursors, new Rectangle(208, 320, 16, 16), 2f)
+            searchButton = new ClickableTextureComponent("Search", new Rectangle(base.xPositionOnScreen + base.width + IClickableMenu.spaceToClearSideBorder - 16, base.yPositionOnScreen + IClickableMenu.spaceToClearTopBorder - 40, 32, 32), null, null, Game1.mouseCursors, new Rectangle(208, 320, 16, 16), 2f)
             {
                 myID = 701,
                 upNeighborID = -99998,
@@ -209,9 +210,17 @@ namespace FashionSense.Framework.UI
                 rightNeighborID = -99998,
                 downNeighborID = -99998
             };
-            clearButton = new ClickableTextureComponent("Clear", new Rectangle(okButton.bounds.X - 50, okButton.bounds.Y + 38, 32, 32), null, null, Game1.mouseCursors, new Rectangle(323, 433, 9, 10), 3f)
+            clearButton = new ClickableTextureComponent("Clear", new Rectangle(searchButton.bounds.X, searchButton.bounds.Y + 96, 32, 32), null, null, Game1.mouseCursors, new Rectangle(323, 433, 9, 10), 3f)
             {
-                myID = 701,
+                myID = 702,
+                upNeighborID = -99998,
+                leftNeighborID = -99998,
+                rightNeighborID = -99998,
+                downNeighborID = -99998
+            };
+            randomButton = new ClickableTextureComponent("Randomize", new Rectangle(searchButton.bounds.X, searchButton.bounds.Y + 48, 32, 32), null, null, Game1.mouseCursors, new Rectangle(50, 428, 10, 10), 3f)
+            {
+                myID = 703,
                 upNeighborID = -99998,
                 leftNeighborID = -99998,
                 rightNeighborID = -99998,
@@ -703,6 +712,41 @@ namespace FashionSense.Framework.UI
                 FashionSense.SetSpriteDirty();
             }
 
+            if (randomButton.containsPoint(x, y))
+            {
+                string modDataKey = String.Empty;
+                AppearanceContentPack randomContentPack = null;
+                switch (GetNameOfEnabledFilter())
+                {
+                    case HAIR_FILTER_BUTTON:
+                        modDataKey = ModDataKeys.CUSTOM_HAIR_ID;
+                        randomContentPack = FashionSense.textureManager.GetRandomAppearanceModel<HairContentPack>();
+                        break;
+                    case ACCESSORY_FILTER_BUTTON:
+                        modDataKey = GetCurrentAccessorySlotKey();
+                        randomContentPack = FashionSense.textureManager.GetRandomAppearanceModel<AccessoryContentPack>();
+                        break;
+                    case HAT_FILTER_BUTTON:
+                        modDataKey = ModDataKeys.CUSTOM_HAT_ID;
+                        randomContentPack = FashionSense.textureManager.GetRandomAppearanceModel<HatContentPack>();
+                        break;
+                    case SHIRT_FILTER_BUTTON:
+                        modDataKey = ModDataKeys.CUSTOM_SHIRT_ID;
+                        randomContentPack = FashionSense.textureManager.GetRandomAppearanceModel<ShirtContentPack>();
+                        break;
+                    case PANTS_FILTER_BUTTON:
+                        modDataKey = ModDataKeys.CUSTOM_PANTS_ID;
+                        randomContentPack = FashionSense.textureManager.GetRandomAppearanceModel<PantsContentPack>();
+                        break;
+                }
+
+                if (randomContentPack is not null)
+                {
+                    Game1.player.modData[modDataKey] = randomContentPack.Id;
+                    FashionSense.SetSpriteDirty();
+                }
+            }
+
             if (okButton.containsPoint(x, y))
             {
                 okButton.scale -= 0.25f;
@@ -887,6 +931,16 @@ namespace FashionSense.Framework.UI
                 clearButton.scale = Math.Max(clearButton.scale - 0.02f, clearButton.baseScale);
             }
 
+            if (randomButton.containsPoint(x, y))
+            {
+                hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.random_button");
+                randomButton.scale = Math.Min(randomButton.scale + 0.02f, 3.2f);
+            }
+            else
+            {
+                randomButton.scale = Math.Max(randomButton.scale - 0.02f, randomButton.baseScale);
+            }
+
             if (okButton.containsPoint(x, y))
             {
                 okButton.scale = Math.Min(okButton.scale + 0.02f, okButton.baseScale + 0.1f);
@@ -958,6 +1012,30 @@ namespace FashionSense.Framework.UI
                     optionButton.draw(b, optionButton.hoverText == "enabled" ? Color.White : Color.Gray, 1f);
                 }
             }
+
+            // Draw the top side bar
+            var sideBarPosition = new Vector2(base.xPositionOnScreen + width - IClickableMenu.spaceToClearSideBorder + 12, base.yPositionOnScreen + 24);
+            b.Draw(Game1.mouseCursors, sideBarPosition, new Rectangle(316, 361, 13, 8), Color.White, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.75f);
+
+            // Draw the side bar background for each button
+            sideBarPosition.Y += 8 * 4;
+            b.Draw(Game1.mouseCursors, sideBarPosition, new Rectangle(316, 369, 13, 8), Color.White, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.75f);
+
+            sideBarPosition.Y += 8 * 4;
+            b.Draw(Game1.mouseCursors, sideBarPosition, new Rectangle(316, 369, 13, 8), Color.White, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.75f);
+
+            sideBarPosition.Y += 8 * 4;
+            b.Draw(Game1.mouseCursors, sideBarPosition, new Rectangle(316, 369, 13, 8), Color.White, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.75f);
+
+            sideBarPosition.Y += 8 * 4;
+            b.Draw(Game1.mouseCursors, sideBarPosition, new Rectangle(316, 369, 13, 8), Color.White, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.75f);
+
+            // Draw the bottom side bar
+            sideBarPosition.Y += 8 * 4;
+            b.Draw(Game1.mouseCursors, sideBarPosition, new Rectangle(316, 377, 13, 6), Color.White, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.75f);
+
+            // Draw the buttons
+            randomButton.draw(b);
             searchButton.draw(b);
             clearButton.draw(b);
             okButton.draw(b);
