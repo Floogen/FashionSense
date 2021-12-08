@@ -1052,17 +1052,17 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     data[i] = Color.Transparent;
                 }
-                else
+                else if (appearanceModel.SkinToneMasks is not null)
                 {
-                    if (appearanceModel.LightestSkinToneMask is not null && data[i] == appearanceModel.GetColor(appearanceModel.LightestSkinToneMask))
+                    if (appearanceModel.SkinToneMasks.LightTone is not null && data[i] == appearanceModel.SkinToneMasks.Lightest)
                     {
                         data[i] = skinTone.Lightest;
                     }
-                    else if (appearanceModel.MediumSkinToneMask is not null && data[i] == appearanceModel.GetColor(appearanceModel.MediumSkinToneMask))
+                    else if (appearanceModel.SkinToneMasks.MediumTone is not null && data[i] == appearanceModel.SkinToneMasks.Medium)
                     {
                         data[i] = skinTone.Medium;
                     }
-                    else if (appearanceModel.DarkestSkinToneMask is not null && data[i] == appearanceModel.GetColor(appearanceModel.DarkestSkinToneMask))
+                    else if (appearanceModel.SkinToneMasks.DarkTone is not null && data[i] == appearanceModel.SkinToneMasks.Darkest)
                     {
                         data[i] = skinTone.Darkest;
                     }

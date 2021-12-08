@@ -7,11 +7,13 @@
       [212, 208, 197]
     ],
     "UseShirtColors": true,
-    "DisableGrayscale": true,
+    "DisableGrayscale": false,
     "DisableSkinGrayscale": true,
-    "LightestSkinToneMask": [144, 144, 144],
-    "MediumSkinToneMask": [121, 121, 121],
-    "DarkestSkinToneMask": [73, 73, 73],
+    "SkinToneMasks": {
+      "LightTone": [144, 144, 144],
+      "MediumTone": [121, 121, 121],
+      "DarkTone": [73, 73, 73],
+    },
     "DrawBeforeShirt": false,
     "DrawBeforeHair": false,
     "IsPrismatic": false,

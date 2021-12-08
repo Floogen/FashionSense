@@ -18,9 +18,7 @@ namespace FashionSense.Framework.Models
         public bool IsPrismatic { get; set; }
         public float PrismaticAnimationSpeedMultiplier { get; set; } = 1f;
         public List<int[]> ColorMasks { get; set; } = new List<int[]>();
-        public int[] DarkestSkinToneMask { get; set; }
-        public int[] MediumSkinToneMask { get; set; }
-        public int[] LightestSkinToneMask { get; set; }
+        public SkinToneModel SkinToneMasks { get; set; }
         public List<AnimationModel> UniformAnimation { get; set; } = new List<AnimationModel>();
         public List<AnimationModel> IdleAnimation { get; set; } = new List<AnimationModel>();
         public List<AnimationModel> MovementAnimation { get; set; } = new List<AnimationModel>();
@@ -28,28 +26,6 @@ namespace FashionSense.Framework.Models
         internal bool IsPlayerColorChoiceIgnored()
         {
             return DisableGrayscale || IsPrismatic;
-        }
-
-        internal int GetColorIndex(int[] colorArray, int position)
-        {
-            if (position >= colorArray.Length)
-            {
-                return 255;
-            }
-
-            return colorArray[position];
-        }
-
-        internal Color GetColor(int[] colorArray)
-        {
-            if (3 < colorArray.Length)
-            {
-                return new Color(GetColorIndex(colorArray, 0), GetColorIndex(colorArray, 1), GetColorIndex(colorArray, 2), GetColorIndex(colorArray, 3));
-            }
-            else
-            {
-                return new Color(GetColorIndex(colorArray, 0), GetColorIndex(colorArray, 1), GetColorIndex(colorArray, 2), 255);
-            }
         }
 
         internal bool IsMaskedColor(Color color)
@@ -72,20 +48,20 @@ namespace FashionSense.Framework.Models
 
         internal bool IsSkinToneMaskColor(Color color)
         {
-            if (!HasSkinToneMask())
+            if (!HasSkinToneMask() || SkinToneMasks is null)
             {
                 return false;
             }
 
-            if (LightestSkinToneMask is not null && color == new Color(GetColorIndex(LightestSkinToneMask, 0), GetColorIndex(LightestSkinToneMask, 1), GetColorIndex(LightestSkinToneMask, 2), GetColorIndex(LightestSkinToneMask, 3)))
+            if (SkinToneMasks.LightTone is not null && color == SkinToneMasks.Lightest)
             {
                 return true;
             }
-            else if (MediumSkinToneMask is not null && color == new Color(GetColorIndex(MediumSkinToneMask, 0), GetColorIndex(MediumSkinToneMask, 1), GetColorIndex(MediumSkinToneMask, 2), GetColorIndex(MediumSkinToneMask, 3)))
+            else if (SkinToneMasks.MediumTone is not null && color == SkinToneMasks.Medium)
             {
                 return true;
             }
-            else if (DarkestSkinToneMask is not null && color == new Color(GetColorIndex(DarkestSkinToneMask, 0), GetColorIndex(DarkestSkinToneMask, 1), GetColorIndex(DarkestSkinToneMask, 2), GetColorIndex(DarkestSkinToneMask, 3)))
+            else if (SkinToneMasks.DarkTone is not null && color == SkinToneMasks.Darkest)
             {
                 return true;
             }
@@ -100,7 +76,12 @@ namespace FashionSense.Framework.Models
 
         internal bool HasSkinToneMask()
         {
-            return DarkestSkinToneMask is not null || MediumSkinToneMask is not null || LightestSkinToneMask is not null;
+            if (SkinToneMasks is null)
+            {
+                return false;
+
+            }
+            return SkinToneMasks.LightTone is not null || SkinToneMasks.MediumTone is not null || SkinToneMasks.DarkTone is not null;
         }
 
         internal bool HasUniformAnimation()
@@ -136,6 +117,28 @@ namespace FashionSense.Framework.Models
         internal AnimationModel GetMovementAnimationAtFrame(int frame)
         {
             return GetAnimationData(MovementAnimation, frame);
+        }
+
+        internal static int GetColorIndex(int[] colorArray, int position)
+        {
+            if (position >= colorArray.Length)
+            {
+                return 255;
+            }
+
+            return colorArray[position];
+        }
+
+        internal static Color GetColor(int[] colorArray)
+        {
+            if (3 < colorArray.Length)
+            {
+                return new Color(GetColorIndex(colorArray, 0), GetColorIndex(colorArray, 1), GetColorIndex(colorArray, 2), GetColorIndex(colorArray, 3));
+            }
+            else
+            {
+                return new Color(GetColorIndex(colorArray, 0), GetColorIndex(colorArray, 1), GetColorIndex(colorArray, 2), 255);
+            }
         }
     }
 }

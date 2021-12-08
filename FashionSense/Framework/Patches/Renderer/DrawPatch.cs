@@ -375,7 +375,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 lightest = pixels[262 + baseTexture.Width];
             }
 
-            return new SkinToneModel() { Darkest = darkest, Medium = medium, Lightest = lightest };
+            return new SkinToneModel(lightest, medium, darkest);
         }
 
         internal static void ExecuteRecolorActionsReversePatch(FarmerRenderer __instance, Farmer who)
