@@ -1194,6 +1194,18 @@ namespace FashionSense.Framework.UI
                         {
                             name = GetColorPickerLabel(true, enabledFilterName: GetNameOfEnabledFilter());
                         }
+                        else if (contentPack is ShirtContentPack shirtPack && shirtPack.GetShirtFromFacingDirection(Game1.player.facingDirection) is ShirtModel shModel && shModel != null && shModel.IsPlayerColorChoiceIgnored())
+                        {
+                            name = GetColorPickerLabel(true, enabledFilterName: GetNameOfEnabledFilter());
+                        }
+                        else if (contentPack is PantsContentPack pantsPack && pantsPack.GetPantsFromFacingDirection(Game1.player.facingDirection) is PantsModel pModel && pModel != null && pModel.IsPlayerColorChoiceIgnored())
+                        {
+                            name = GetColorPickerLabel(true, enabledFilterName: GetNameOfEnabledFilter());
+                        }
+                        else if (contentPack is SleevesContentPack sleevesPack && sleevesPack.GetSleevesFromFacingDirection(Game1.player.facingDirection) is SleevesModel slModel && slModel != null && slModel.IsPlayerColorChoiceIgnored())
+                        {
+                            name = GetColorPickerLabel(true, enabledFilterName: GetNameOfEnabledFilter());
+                        }
                     }
 
                     colorLabel.name = name;
