@@ -49,6 +49,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Framework\Assets\UI\CheckButton.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="i18n\default.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

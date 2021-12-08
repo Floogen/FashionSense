@@ -218,8 +218,14 @@ namespace FashionSense.Framework.UI
             {
                 if (_pages.Count() > 0 && _pages[_currentPage].Count() > j)
                 {
+                    var packName = _pages[_currentPage][j].PackName;
+                    if (packName.Length > 23)
+                    {
+                        packName = $"{packName.Substring(0, 23).TrimEnd()}...";
+                    }
+
                     IClickableMenu.drawTextureBox(b, Game1.mouseCursors, new Rectangle(384, 396, 15, 15), packButtons[j].bounds.X, packButtons[j].bounds.Y, packButtons[j].bounds.Width, packButtons[j].bounds.Height, packButtons[j].containsPoint(Game1.getOldMouseX(), Game1.getOldMouseY()) ? Color.Wheat : Color.White, 4f, drawShadow: false);
-                    SpriteText.drawStringHorizontallyCenteredAt(b, _pages[_currentPage][j].PackName, packButtons[j].bounds.X + packButtons[j].bounds.Width / 2, packButtons[j].bounds.Y + 20);
+                    SpriteText.drawStringHorizontallyCenteredAt(b, packName, packButtons[j].bounds.X + packButtons[j].bounds.Width / 2, packButtons[j].bounds.Y + 20);
                 }
             }
 
