@@ -7,6 +7,97 @@
       [212, 208, 197]
     ],
     "UseShirtColors": true,
+    "DisableSkinGrayscale": true,
+    "SkinToneMasks": {
+      "LightTone": [144, 144, 144],
+      "MediumTone": [121, 121, 121],
+      "DarkTone": [73, 73, 73],
+    },
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "BodyPosition": {
+      "X": 11,
+      "Y": -5
+    },
+    "SleevesSize": {
+      "Width": 48,
+      "Length": 32
+    },
+    "UniformAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 125,
+        "Conditions": [
+          {
+            "Name": "IsCarrying",
+            "Value": false
+          }
+        ]
+      },
+      {
+        "Frame": 1,
+        "Duration": 125,
+        "Conditions": [
+          {
+            "Name": "DidPreviousFrameDisplay",
+            "Value": true
+          },
+          {
+            "Name": "IsCarrying",
+            "Value": false
+          }
+        ]
+      },
+      {
+        "Frame": 2,
+        "Duration": 125,
+        "Conditions": [
+          {
+            "Name": "DidPreviousFrameDisplay",
+            "Value": true
+          },
+          {
+            "Name": "IsCarrying",
+            "Value": false
+          }
+        ]
+      },
+      {
+        "Frame": 1,
+        "Duration": 125,
+        "Conditions": [
+          {
+            "Name": "DidPreviousFrameDisplay",
+            "Value": true
+          },
+          {
+            "Name": "IsCarrying",
+            "Value": false
+          }
+        ]
+      },
+      {
+        "Frame": 2,
+        "Duration": 125,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsCarrying",
+            "Value": true
+          }
+        ]
+      }
+    ]
+  },
+  "BackSleeves": {
+    "ColorMasks": [
+      [56, 56, 56],
+      [114, 110, 100],
+      [212, 208, 197]
+    ],
+    "UseShirtColors": true,
     "DisableGrayscale": false,
     "DisableSkinGrayscale": true,
     "SkinToneMasks": {
@@ -14,9 +105,7 @@
       "MediumTone": [121, 121, 121],
       "DarkTone": [73, 73, 73],
     },
-    "DrawBeforeShirt": false,
-    "DrawBeforeHair": false,
-    "IsPrismatic": false,
+    "DrawBeforeHair": true,
     "StartingPosition": {
       "X": 0,
       "Y": 0
