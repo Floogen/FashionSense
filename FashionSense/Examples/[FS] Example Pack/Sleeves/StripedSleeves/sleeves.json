@@ -1,0 +1,452 @@
+{
+  "Name": "Striped Sleeves",
+  "FrontSleeves": {
+    "ColorMasks": [
+      [ 212, 208, 197 ]
+    ],
+    "UseShirtColors": true,
+    "DisableSkinGrayscale": true,
+    "SkinToneMasks": {
+      "LightTone": [ 249, 174, 137 ],
+      "MediumTone": [ 224, 107, 101 ],
+      "DarkTone": [ 107, 0, 58 ]
+    },
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "SleevesSize": {
+      "Width": 16,
+      "Length": 32
+    },
+    "IdleAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 125
+      }
+    ],
+    "MovementAnimation": [
+      {
+        "Frame": 0,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 0,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 1,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 1,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 0,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 0,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 2,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 2,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      }
+    ]
+  },
+  "BackSleeves": {
+    "ColorMasks": [
+      [ 212, 208, 197 ]
+    ],
+    "UseShirtColors": true,
+    "DisableSkinGrayscale": true,
+    "SkinToneMasks": {
+      "LightTone": [ 249, 174, 137 ],
+      "MediumTone": [ 224, 107, 101 ],
+      "DarkTone": [ 107, 0, 58 ]
+    },
+    "StartingPosition": {
+      "X": 0,
+      "Y": 64
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "SleevesSize": {
+      "Width": 16,
+      "Length": 32
+    },
+    "IdleAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 125
+      }
+    ],
+    "MovementAnimation": [
+      {
+        "Frame": 0,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 0,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 1,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 1,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 0,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 0,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 2,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 2,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      }
+    ]
+  },
+  "RightSleeves": {
+    "ColorMasks": [
+      [ 212, 208, 197 ]
+    ],
+    "UseShirtColors": true,
+    "DisableSkinGrayscale": true,
+    "SkinToneMasks": {
+      "LightTone": [ 249, 174, 137 ],
+      "MediumTone": [ 224, 107, 101 ],
+      "DarkTone": [ 107, 0, 58 ]
+    },
+    "StartingPosition": {
+      "X": 0,
+      "Y": 32
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": 2
+    },
+    "SleevesSize": {
+      "Width": 16,
+      "Length": 32
+    },
+    "IdleAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 125
+      }
+    ],
+    "MovementAnimation": [
+      {
+        "Frame": 0,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 0,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 1,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 1,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 0,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 0,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 2,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 2,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      }
+    ]
+  },
+  "LeftSleeves": {
+    "Flipped": true,
+    "ColorMasks": [
+      [ 212, 208, 197 ]
+    ],
+    "UseShirtColors": true,
+    "DisableSkinGrayscale": true,
+    "SkinToneMasks": {
+      "LightTone": [ 249, 174, 137 ],
+      "MediumTone": [ 224, 107, 101 ],
+      "DarkTone": [ 107, 0, 58 ]
+    },
+    "StartingPosition": {
+      "X": 0,
+      "Y": 32
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": 2
+    },
+    "SleevesSize": {
+      "Width": 16,
+      "Length": 32
+    },
+    "IdleAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 125
+      }
+    ],
+    "MovementAnimation": [
+      {
+        "Frame": 0,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 0,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 1,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 1,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 0,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 0,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 2,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 2,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      }
+    ]
+  }
+}
