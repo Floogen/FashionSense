@@ -831,6 +831,7 @@ namespace FashionSense
                 who.modData[ModDataKeys.ANIMATION_HAIR_STARTING_INDEX] = "0";
                 who.modData[ModDataKeys.ANIMATION_HAIR_FRAME_DURATION] = duration.ToString();
                 who.modData[ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION] = "0";
+                who.modData[ModDataKeys.ANIMATION_HAIR_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
             }
 
             if (model is null || (model is AccessoryModel accessoryModel && accessoryModel.Priority == AccessoryModel.Type.Primary))
@@ -839,6 +840,7 @@ namespace FashionSense
                 who.modData[ModDataKeys.ANIMATION_ACCESSORY_STARTING_INDEX] = "0";
                 who.modData[ModDataKeys.ANIMATION_ACCESSORY_FRAME_DURATION] = duration.ToString();
                 who.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION] = "0";
+                who.modData[ModDataKeys.ANIMATION_ACCESSORY_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
             }
             if (model is null || (model is AccessoryModel secondaryAccessoryModel && secondaryAccessoryModel.Priority == AccessoryModel.Type.Secondary))
             {
@@ -846,6 +848,7 @@ namespace FashionSense
                 who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_STARTING_INDEX] = "0";
                 who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_FRAME_DURATION] = duration.ToString();
                 who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ELAPSED_DURATION] = "0";
+                who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
             }
             if (model is null || (model is AccessoryModel tertiaryAccessoryModel && tertiaryAccessoryModel.Priority == AccessoryModel.Type.Tertiary))
             {
@@ -853,6 +856,7 @@ namespace FashionSense
                 who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_STARTING_INDEX] = "0";
                 who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_FRAME_DURATION] = duration.ToString();
                 who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION] = "0";
+                who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
             }
 
             if (model is null || model is HatModel)
@@ -861,6 +865,7 @@ namespace FashionSense
                 who.modData[ModDataKeys.ANIMATION_HAT_STARTING_INDEX] = "0";
                 who.modData[ModDataKeys.ANIMATION_HAT_FRAME_DURATION] = duration.ToString();
                 who.modData[ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION] = "0";
+                who.modData[ModDataKeys.ANIMATION_HAT_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
             }
 
             if (model is null || model is ShirtModel)
@@ -869,6 +874,7 @@ namespace FashionSense
                 who.modData[ModDataKeys.ANIMATION_SHIRT_STARTING_INDEX] = "0";
                 who.modData[ModDataKeys.ANIMATION_SHIRT_FRAME_DURATION] = duration.ToString();
                 who.modData[ModDataKeys.ANIMATION_SHIRT_ELAPSED_DURATION] = "0";
+                who.modData[ModDataKeys.ANIMATION_SHIRT_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
             }
 
             if (model is null || model is PantsModel)
@@ -877,6 +883,7 @@ namespace FashionSense
                 who.modData[ModDataKeys.ANIMATION_PANTS_STARTING_INDEX] = "0";
                 who.modData[ModDataKeys.ANIMATION_PANTS_FRAME_DURATION] = duration.ToString();
                 who.modData[ModDataKeys.ANIMATION_PANTS_ELAPSED_DURATION] = "0";
+                who.modData[ModDataKeys.ANIMATION_PANTS_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
             }
 
             if (model is null || model is SleevesModel)
@@ -885,10 +892,10 @@ namespace FashionSense
                 who.modData[ModDataKeys.ANIMATION_SLEEVES_STARTING_INDEX] = "0";
                 who.modData[ModDataKeys.ANIMATION_SLEEVES_FRAME_DURATION] = duration.ToString();
                 who.modData[ModDataKeys.ANIMATION_SLEEVES_ELAPSED_DURATION] = "0";
+                who.modData[ModDataKeys.ANIMATION_SLEEVES_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
             }
 
             who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] = facingDirection.ToString();
-            who.modData[ModDataKeys.ANIMATION_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
 
             if (!ignoreAnimationType)
             {
