@@ -2,16 +2,16 @@
   "Name": "Tentacles",
   "FrontSleeves": {
     "ColorMasks": [
-      [56, 56, 56],
-      [114, 110, 100],
-      [212, 208, 197]
+      [ 56, 56, 56 ],
+      [ 114, 110, 100 ],
+      [ 212, 208, 197 ]
     ],
     "UseShirtColors": true,
     "DisableSkinGrayscale": true,
     "SkinToneMasks": {
-      "LightTone": [144, 144, 144],
-      "MediumTone": [121, 121, 121],
-      "DarkTone": [73, 73, 73],
+      "LightTone": [ 144, 144, 144 ],
+      "MediumTone": [ 121, 121, 121 ],
+      "DarkTone": [ 73, 73, 73 ]
     },
     "StartingPosition": {
       "X": 0,
@@ -81,7 +81,6 @@
       {
         "Frame": 2,
         "Duration": 125,
-        "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
             "Name": "IsCarrying",
@@ -93,17 +92,17 @@
   },
   "BackSleeves": {
     "ColorMasks": [
-      [56, 56, 56],
-      [114, 110, 100],
-      [212, 208, 197]
+      [ 56, 56, 56 ],
+      [ 114, 110, 100 ],
+      [ 212, 208, 197 ]
     ],
     "UseShirtColors": true,
     "DisableGrayscale": false,
     "DisableSkinGrayscale": true,
     "SkinToneMasks": {
-      "LightTone": [144, 144, 144],
-      "MediumTone": [121, 121, 121],
-      "DarkTone": [73, 73, 73],
+      "LightTone": [ 144, 144, 144 ],
+      "MediumTone": [ 121, 121, 121 ],
+      "DarkTone": [ 73, 73, 73 ]
     },
     "DrawBeforeHair": true,
     "StartingPosition": {
@@ -174,7 +173,6 @@
       {
         "Frame": 2,
         "Duration": 125,
-        "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
             "Name": "IsCarrying",
