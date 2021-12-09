@@ -1182,7 +1182,15 @@ namespace FashionSense.Framework.UI
                     var name = GetColorPickerLabel(false, enabledFilterName: GetNameOfEnabledFilter());
                     if (contentPack != null)
                     {
-                        if (contentPack is HairContentPack hairPack && hairPack.GetHairFromFacingDirection(Game1.player.facingDirection) is HairModel hModel && hModel != null && hModel.IsPlayerColorChoiceIgnored())
+                        ShirtContentPack sPack = FashionSense.textureManager.GetSpecificAppearanceModel<ShirtContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_SHIRT_ID]);
+                        if (contentPack is SleevesContentPack sleevesPack && sleevesPack.GetSleevesFromFacingDirection(Game1.player.facingDirection) is SleevesModel slModel && slModel != null)
+                        {
+                            if (slModel.IsPlayerColorChoiceIgnored() || (sPack is not null && sPack.GetShirtFromFacingDirection(Game1.player.facingDirection) is ShirtModel shModel && shModel is not null && shModel.SleeveColors is not null && slModel.UseShirtColors))
+                            {
+                                name = GetColorPickerLabel(true, enabledFilterName: GetNameOfEnabledFilter());
+                            }
+                        }
+                        else if (contentPack is HairContentPack hairPack && hairPack.GetHairFromFacingDirection(Game1.player.facingDirection) is HairModel hModel && hModel != null && hModel.IsPlayerColorChoiceIgnored())
                         {
                             name = GetColorPickerLabel(true, enabledFilterName: GetNameOfEnabledFilter());
                         }
@@ -1199,10 +1207,6 @@ namespace FashionSense.Framework.UI
                             name = GetColorPickerLabel(true, enabledFilterName: GetNameOfEnabledFilter());
                         }
                         else if (contentPack is PantsContentPack pantsPack && pantsPack.GetPantsFromFacingDirection(Game1.player.facingDirection) is PantsModel pModel && pModel != null && pModel.IsPlayerColorChoiceIgnored())
-                        {
-                            name = GetColorPickerLabel(true, enabledFilterName: GetNameOfEnabledFilter());
-                        }
-                        else if (contentPack is SleevesContentPack sleevesPack && sleevesPack.GetSleevesFromFacingDirection(Game1.player.facingDirection) is SleevesModel slModel && slModel != null && slModel.IsPlayerColorChoiceIgnored())
                         {
                             name = GetColorPickerLabel(true, enabledFilterName: GetNameOfEnabledFilter());
                         }
