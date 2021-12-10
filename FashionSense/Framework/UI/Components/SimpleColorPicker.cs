@@ -50,6 +50,10 @@ namespace FashionSense.Framework.UI.Components
                     lightnessSlider.ApplyMovementKey(delta > 0 ? 1 : -1);
                 }
             }
+            else
+            {
+                hueSlider.ApplyMovementKey(delta > 0 ? 1 : -1);
+            }
         }
 
         public bool Click(int x, int y)

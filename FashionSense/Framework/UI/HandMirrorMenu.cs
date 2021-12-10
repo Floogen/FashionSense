@@ -1045,6 +1045,12 @@ namespace FashionSense.Framework.UI
             }
         }
 
+        public override void receiveScrollWheelAction(int direction)
+        {
+            colorPicker.Scroll(direction);
+            HandleColorPicker();
+        }
+
         public override void draw(SpriteBatch b)
         {
             if (Game1.dialogueUp || Game1.IsFading())
