@@ -24,7 +24,7 @@ namespace FashionSense.Framework.UI.Components
         public const int MAX_LIGHTNESS = 100;
 
 
-        public SimpleColorPicker(string name, int x, int y)
+        public SimpleColorPicker(int x, int y)
         {
             hueSlider = new SimpleSlider(new Rectangle(x, y + 5, SliderBar.defaultWidth, 10), 0, 360) { getDrawColor = ((float val) => GetColorForValues(val, 100f)) };
             saturationSlider = new SimpleSlider(new Rectangle(x, y + 25, SliderBar.defaultWidth, 10), 0, 75) { getDrawColor = ((float val) => GetColorForValues(hueSlider.GetValue(), val)) };

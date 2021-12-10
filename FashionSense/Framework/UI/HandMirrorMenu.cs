@@ -246,7 +246,7 @@ namespace FashionSense.Framework.UI
             labels.Add(colorLabel = new ClickableComponent(new Rectangle(base.xPositionOnScreen + 48, base.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + yOffset, (int)measuredStringSize.X, (int)measuredStringSize.Y), GetColorPickerLabel(false)));
             yOffset += 32;
             var top = new Point(base.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + 32, base.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + yOffset);
-            colorPicker = new SimpleColorPicker("Hair", top.X, top.Y);
+            colorPicker = new SimpleColorPicker(top.X, top.Y);
 
             switch (GetNameOfEnabledFilter())
             {
