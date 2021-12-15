@@ -201,7 +201,6 @@ namespace FashionSense.Framework.Patches.Renderer
                     case 7:
                     case 9:
                     case 19:
-                    case 20:
                     case 21:
                     case 30:
                     case 31:
@@ -226,6 +225,7 @@ namespace FashionSense.Framework.Patches.Renderer
                         break;
                     case 11:
                     case 17:
+                    case 20:
                     case 22:
                     case 23:
                     case 49:
