@@ -78,6 +78,7 @@ namespace FashionSense
 
                 // Apply entity related patches
                 new FarmerPatch(monitor, modHelper).Apply(harmony);
+                new CharacterPatch(monitor, modHelper).Apply(harmony);
             }
             catch (Exception e)
             {
