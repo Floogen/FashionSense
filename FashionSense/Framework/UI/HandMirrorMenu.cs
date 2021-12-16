@@ -54,6 +54,7 @@ namespace FashionSense.Framework.UI
         private ClickableTextureComponent randomButton;
         private ClickableTextureComponent clearButton;
         private ClickableTextureComponent searchButton;
+        private ClickableTextureComponent outfitButton;
         public ClickableTextureComponent okButton;
 
         public HandMirrorMenu() : base(0, 0, 375, 550, showUpperRightCloseButton: true)
@@ -215,7 +216,7 @@ namespace FashionSense.Framework.UI
                 downNeighborID = -99998
             };
 
-            searchButton = new ClickableTextureComponent("Search", new Rectangle(base.xPositionOnScreen + base.width + IClickableMenu.spaceToClearSideBorder - 16, base.yPositionOnScreen + IClickableMenu.spaceToClearTopBorder - 40, 32, 32), null, null, Game1.mouseCursors, new Rectangle(208, 320, 16, 16), 2f)
+            searchButton = new ClickableTextureComponent("Search", new Rectangle(base.xPositionOnScreen + base.width + IClickableMenu.spaceToClearSideBorder - 16, base.yPositionOnScreen + IClickableMenu.spaceToClearTopBorder - 48, 32, 32), null, null, Game1.mouseCursors, new Rectangle(208, 320, 16, 16), 2f)
             {
                 myID = 701,
                 upNeighborID = -99998,
@@ -223,17 +224,25 @@ namespace FashionSense.Framework.UI
                 rightNeighborID = -99998,
                 downNeighborID = -99998
             };
-            clearButton = new ClickableTextureComponent("Clear", new Rectangle(searchButton.bounds.X, searchButton.bounds.Y + 96, 32, 32), null, null, Game1.mouseCursors, new Rectangle(323, 433, 9, 10), 3f)
+            outfitButton = new ClickableTextureComponent("Outfits", new Rectangle(searchButton.bounds.X, searchButton.bounds.Y + 48, 32, 32), null, null, Game1.mouseCursors2, new Rectangle(6, 52, 7, 8), 4f)
             {
-                myID = 702,
+                myID = 701,
                 upNeighborID = -99998,
                 leftNeighborID = -99998,
                 rightNeighborID = -99998,
                 downNeighborID = -99998
             };
-            randomButton = new ClickableTextureComponent("Randomize", new Rectangle(searchButton.bounds.X, searchButton.bounds.Y + 48, 32, 32), null, null, Game1.mouseCursors, new Rectangle(50, 428, 10, 10), 3f)
+            randomButton = new ClickableTextureComponent("Randomize", new Rectangle(searchButton.bounds.X, searchButton.bounds.Y + 96, 32, 32), null, null, Game1.mouseCursors, new Rectangle(50, 428, 10, 10), 3f)
             {
                 myID = 703,
+                upNeighborID = -99998,
+                leftNeighborID = -99998,
+                rightNeighborID = -99998,
+                downNeighborID = -99998
+            };
+            clearButton = new ClickableTextureComponent("Clear", new Rectangle(searchButton.bounds.X, searchButton.bounds.Y + 144, 32, 32), null, null, Game1.mouseCursors, new Rectangle(323, 433, 9, 10), 3f)
+            {
+                myID = 702,
                 upNeighborID = -99998,
                 leftNeighborID = -99998,
                 rightNeighborID = -99998,
@@ -746,6 +755,12 @@ namespace FashionSense.Framework.UI
                 Game1.activeClickableMenu = new FilterMenu(GetNameOfEnabledFilter(), this);
             }
 
+            if (outfitButton.containsPoint(x, y))
+            {
+                // TODO: Create outfit menu
+                Game1.activeClickableMenu = new FilterMenu(GetNameOfEnabledFilter(), this);
+            }
+
             if (clearButton.containsPoint(x, y))
             {
                 string modDataKey = String.Empty;
@@ -1015,6 +1030,16 @@ namespace FashionSense.Framework.UI
                 searchButton.scale = Math.Max(searchButton.scale - 0.02f, searchButton.baseScale);
             }
 
+            if (outfitButton.containsPoint(x, y))
+            {
+                hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.outfit_button");
+                outfitButton.scale = Math.Min(outfitButton.scale + 0.02f, outfitButton.baseScale + 0.1f);
+            }
+            else
+            {
+                outfitButton.scale = Math.Max(outfitButton.scale - 0.02f, outfitButton.baseScale);
+            }
+
             if (clearButton.containsPoint(x, y))
             {
                 hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.clear_button");
@@ -1133,13 +1158,17 @@ namespace FashionSense.Framework.UI
             sideBarPosition.Y += 8 * 4;
             b.Draw(Game1.mouseCursors, sideBarPosition, new Rectangle(316, 369, 13, 8), Color.White, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.75f);
 
+            sideBarPosition.Y += 8 * 4;
+            b.Draw(Game1.mouseCursors, sideBarPosition, new Rectangle(316, 369, 13, 8), Color.White, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.75f);
+
             // Draw the bottom side bar
             sideBarPosition.Y += 8 * 4;
             b.Draw(Game1.mouseCursors, sideBarPosition, new Rectangle(316, 377, 13, 6), Color.White, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.75f);
 
             // Draw the buttons
-            randomButton.draw(b);
             searchButton.draw(b);
+            outfitButton.draw(b);
+            randomButton.draw(b);
             clearButton.draw(b);
             okButton.draw(b);
 
