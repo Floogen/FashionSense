@@ -107,6 +107,11 @@ namespace FashionSense.Framework.UI
                 TextBoxEnter(_textBox);
                 Game1.playSound("smallSelect");
             }
+            else if (key == Keys.Escape && base.readyToClose())
+            {
+                Game1.activeClickableMenu = _callbackMenu;
+                base.exitThisMenu();
+            }
             else if (!_textBox.Selected && !Game1.options.doesInputListContain(Game1.options.menuButton, key))
             {
                 base.receiveKeyPress(key);

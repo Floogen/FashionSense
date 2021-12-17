@@ -169,7 +169,7 @@ namespace FashionSense.Framework.UI
         {
             if (key != 0)
             {
-                if (Game1.options.doesInputListContain(Game1.options.menuButton, key) && base.readyToClose())
+                if (key == Keys.Escape && base.readyToClose())
                 {
                     Game1.activeClickableMenu = _callbackMenu;
                     base.exitThisMenu();
@@ -307,8 +307,11 @@ namespace FashionSense.Framework.UI
                         return;
                     }
 
-                    _hoverText = $"{ _pages[_currentPage][i].Name}";
-                    return;
+                    if (_pages[_currentPage][i].Name.Length > 18)
+                    {
+                        _hoverText = $"{ _pages[_currentPage][i].Name}";
+                        return;
+                    }
                 }
             }
         }
