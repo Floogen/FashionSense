@@ -8,6 +8,7 @@ using FashionSense.Framework.Models.Sleeves;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Menus;
@@ -136,6 +137,22 @@ namespace FashionSense.Framework.UI
             {
                 _currentPage++;
                 Game1.playSound("shiny4");
+            }
+        }
+
+        public override void receiveKeyPress(Keys key)
+        {
+            if (key != 0)
+            {
+                if (Game1.options.doesInputListContain(Game1.options.menuButton, key) && base.readyToClose())
+                {
+                    Game1.activeClickableMenu = _callbackMenu;
+                    base.exitThisMenu();
+                }
+                else if (Game1.options.snappyMenus && Game1.options.gamepadControls && !base.overrideSnappyMenuCursorMovementBan())
+                {
+                    this.applyMovementKey(key);
+                }
             }
         }
 
