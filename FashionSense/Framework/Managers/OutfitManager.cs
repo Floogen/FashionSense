@@ -45,11 +45,11 @@ namespace FashionSense.Framework.Managers
             // Get the current outfits
             var outfits = GetOutfits(who);
 
-            if (!outfits.Any(o => o.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+            if (!outfits.Any(o => o.Name.Equals(name, StringComparison.Ordinal)))
             {
                 return;
             }
-            outfits.RemoveAt(outfits.FindIndex(o => o.Name.Equals(name, StringComparison.OrdinalIgnoreCase)));
+            outfits.RemoveAt(outfits.FindIndex(o => o.Name.Equals(name, StringComparison.Ordinal)));
 
             // Serialize the changes
             who.modData[ModDataKeys.OUTFITS] = JsonSerializer.Serialize(outfits);
@@ -60,7 +60,7 @@ namespace FashionSense.Framework.Managers
             // Get the current outfits
             var outfits = GetOutfits(who);
 
-            return outfits.Any(o => o.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return outfits.Any(o => o.Name.Equals(name, StringComparison.Ordinal));
         }
 
         public List<Outfit> GetOutfits(Farmer who)
@@ -78,11 +78,11 @@ namespace FashionSense.Framework.Managers
             // Get the current outfits
             var outfits = GetOutfits(who);
 
-            if (!outfits.Any(o => o.Name.Equals(originalName, StringComparison.OrdinalIgnoreCase)))
+            if (!outfits.Any(o => o.Name.Equals(originalName, StringComparison.Ordinal)))
             {
                 return;
             }
-            outfits.First(o => o.Name.Equals(originalName, StringComparison.OrdinalIgnoreCase)).Name = currentName;
+            outfits.First(o => o.Name.Equals(originalName, StringComparison.Ordinal)).Name = currentName;
 
             // Serialize the changes
             who.modData[ModDataKeys.OUTFITS] = JsonSerializer.Serialize(outfits);
@@ -114,12 +114,12 @@ namespace FashionSense.Framework.Managers
             // Get the current outfits
             var outfits = GetOutfits(who);
 
-            if (!outfits.Any(o => o.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+            if (!outfits.Any(o => o.Name.Equals(name, StringComparison.Ordinal)))
             {
                 CreateOutfit(who, name);
                 return;
             }
-            outfits[outfits.FindIndex(o => o.Name.Equals(name, StringComparison.OrdinalIgnoreCase))] = new Outfit(who, name);
+            outfits[outfits.FindIndex(o => o.Name.Equals(name, StringComparison.Ordinal))] = new Outfit(who, name);
 
             // Serialize the changes
             who.modData[ModDataKeys.OUTFITS] = JsonSerializer.Serialize(outfits);
