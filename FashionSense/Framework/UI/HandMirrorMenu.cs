@@ -757,8 +757,7 @@ namespace FashionSense.Framework.UI
 
             if (outfitButton.containsPoint(x, y))
             {
-                // TODO: Create outfit menu
-                Game1.activeClickableMenu = new FilterMenu(GetNameOfEnabledFilter(), this);
+                Game1.activeClickableMenu = new OutfitsMenu(this);
             }
 
             if (clearButton.containsPoint(x, y))

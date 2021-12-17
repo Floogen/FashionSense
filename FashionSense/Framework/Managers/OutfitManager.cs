@@ -1,0 +1,118 @@
+﻿using FashionSense.Framework.Models;
+using FashionSense.Framework.Models.Hair;
+using FashionSense.Framework.Utilities;
+using Microsoft.Xna.Framework.Graphics;
+using StardewModdingAPI;
+using StardewValley;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+
+namespace FashionSense.Framework.Managers
+{
+    class OutfitManager
+    {
+        private IMonitor _monitor;
+
+        public OutfitManager(IMonitor monitor, IModHelper helper)
+        {
+            _monitor = monitor;
+        }
+
+        public Outfit CreateOutfit(Farmer who, string name)
+        {
+            // Get the current outfits
+            var outfits = GetOutfits(who);
+
+            // Create the outfit
+            var outfit = new Outfit(who, name);
+
+            // Add it to the current listing
+            outfits.Add(outfit);
+
+            // Serialize the changes
+            who.modData[ModDataKeys.OUTFITS] = JsonSerializer.Serialize(outfits);
+
+            return outfit;
+        }
+
+        public void DeleteOutfit(Farmer who, string name)
+        {
+            // Get the current outfits
+            var outfits = GetOutfits(who);
+
+            if (!outfits.Any(o => o.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+            {
+                return;
+            }
+            outfits.RemoveAt(outfits.FindIndex(o => o.Name.Equals(name, StringComparison.OrdinalIgnoreCase)));
+
+            // Serialize the changes
+            who.modData[ModDataKeys.OUTFITS] = JsonSerializer.Serialize(outfits);
+        }
+
+        public bool DoesOutfitExist(Farmer who, string name)
+        {
+            // Get the current outfits
+            var outfits = GetOutfits(who);
+
+            return outfits.Any(o => o.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public List<Outfit> GetOutfits(Farmer who)
+        {
+            if (!who.modData.ContainsKey(ModDataKeys.OUTFITS))
+            {
+                return new List<Outfit>();
+            }
+
+            return JsonSerializer.Deserialize<List<Outfit>>(who.modData[ModDataKeys.OUTFITS]);
+        }
+
+        public void RenameOutfit(Farmer who, string originalName, string currentName)
+        {
+            // Get the current outfits
+            var outfits = GetOutfits(who);
+
+            if (!outfits.Any(o => o.Name.Equals(originalName, StringComparison.OrdinalIgnoreCase)))
+            {
+                return;
+            }
+            outfits.First(o => o.Name.Equals(originalName, StringComparison.OrdinalIgnoreCase)).Name = currentName;
+
+            // Serialize the changes
+            who.modData[ModDataKeys.OUTFITS] = JsonSerializer.Serialize(outfits);
+        }
+
+        public void SetOutfit(Farmer who, Outfit outfit)
+        {
+            who.modData[ModDataKeys.CUSTOM_ACCESSORY_ID] = String.IsNullOrEmpty(outfit.AccessoryOneId) ? "None" : outfit.AccessoryOneId;
+            who.modData[ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID] = String.IsNullOrEmpty(outfit.AccessoryTwoId) ? "None" : outfit.AccessoryOneId;
+            who.modData[ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID] = String.IsNullOrEmpty(outfit.AccessoryThreeId) ? "None" : outfit.AccessoryOneId;
+            who.modData[ModDataKeys.CUSTOM_HAIR_ID] = String.IsNullOrEmpty(outfit.HairId) ? "None" : outfit.HairId;
+            who.modData[ModDataKeys.CUSTOM_HAT_ID] = String.IsNullOrEmpty(outfit.HatId) ? "None" : outfit.HatId;
+            who.modData[ModDataKeys.CUSTOM_SHIRT_ID] = String.IsNullOrEmpty(outfit.ShirtId) ? "None" : outfit.ShirtId;
+            who.modData[ModDataKeys.CUSTOM_SLEEVES_ID] = String.IsNullOrEmpty(outfit.SleevesId) ? "None" : outfit.SleevesId;
+            who.modData[ModDataKeys.CUSTOM_PANTS_ID] = String.IsNullOrEmpty(outfit.PantsId) ? "None" : outfit.PantsId;
+        }
+
+        public void OverrideOutfit(Farmer who, string name)
+        {
+            // Get the current outfits
+            var outfits = GetOutfits(who);
+
+            if (!outfits.Any(o => o.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+            {
+                CreateOutfit(who, name);
+                return;
+            }
+            outfits[outfits.FindIndex(o => o.Name.Equals(name, StringComparison.OrdinalIgnoreCase))] = new Outfit(who, name);
+
+            // Serialize the changes
+            who.modData[ModDataKeys.OUTFITS] = JsonSerializer.Serialize(outfits);
+        }
+    }
+}

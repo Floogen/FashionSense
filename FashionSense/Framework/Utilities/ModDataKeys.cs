@@ -31,6 +31,10 @@ namespace FashionSense.Framework.Utilities
         // Tool related keys
         internal const string HAND_MIRROR_FLAG = "FashionSense.Tools.HandMirror";
 
+        // Outfit related keys
+        internal const string OUTFITS = "FashionSense.Outfit.Collection";
+        internal const string CURRENT_OUTFIT_ID = "FashionSense.Outfit.CurrentId";
+
         // General animation related keys
         internal const string ANIMATION_FACING_DIRECTION = "FashionSense.Animation.FacingDirection";
 

@@ -36,6 +36,7 @@ namespace FashionSense
         internal static ApiManager apiManager;
         internal static AssetManager assetManager;
         internal static TextureManager textureManager;
+        internal static OutfitManager outfitManager;
 
         // Utilities
         internal static ConditionData conditionData;
@@ -56,6 +57,7 @@ namespace FashionSense
             apiManager = new ApiManager(monitor);
             assetManager = new AssetManager(modHelper);
             textureManager = new TextureManager(monitor, modHelper);
+            outfitManager = new OutfitManager(monitor, modHelper);
 
             // Setup our utilities
             conditionData = new ConditionData();
