@@ -30,10 +30,10 @@ namespace FashionSense.Framework.UI
             _title = title;
 
             _textBox = new TextBox(null, null, Game1.dialogueFont, Game1.textColor);
-            _textBox.X = Game1.uiViewport.Width / 2 - ((Game1.uiViewport.Width / 6) / 2);
-            _textBox.Y = Game1.uiViewport.Height / 2;
-            _textBox.Width = Game1.uiViewport.Width / 6;
+            _textBox.Width = Game1.uiViewport.Width / 2;
             _textBox.Height = 192;
+            _textBox.X = (Game1.uiViewport.Width / 2) - _textBox.Width / 2;
+            _textBox.Y = Game1.uiViewport.Height / 2;
             e = TextBoxEnter;
             _textBox.OnEnterPressed += e;
             Game1.keyboardDispatcher.Subscriber = _textBox;
@@ -124,7 +124,7 @@ namespace FashionSense.Framework.UI
             }
             else
             {
-                if (!_isNewNameValid)
+                if (!_isNewNameValid && _doneNamingButton.containsPoint(x, y))
                 {
                     _hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.warning.name");
                 }
