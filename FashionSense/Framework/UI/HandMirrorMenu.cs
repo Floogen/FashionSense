@@ -23,6 +23,7 @@ namespace FashionSense.Framework.UI
     public class HandMirrorMenu : IClickableMenu
     {
         private Rectangle _portraitBox;
+        private Color? _cachedColor;
         private Farmer _displayFarmer;
         private string hoverText = "";
         private int colorPickerTimer;
@@ -55,6 +56,8 @@ namespace FashionSense.Framework.UI
         private ClickableTextureComponent clearButton;
         private ClickableTextureComponent searchButton;
         private ClickableTextureComponent outfitButton;
+        private ClickableTextureComponent colorCopyButton;
+        private ClickableTextureComponent colorPasteButton;
         public ClickableTextureComponent okButton;
 
         public HandMirrorMenu() : base(0, 0, 375, 550, showUpperRightCloseButton: true)
@@ -232,7 +235,23 @@ namespace FashionSense.Framework.UI
                 rightNeighborID = -99998,
                 downNeighborID = -99998
             };
-            randomButton = new ClickableTextureComponent("Randomize", new Rectangle(searchButton.bounds.X, searchButton.bounds.Y + 96, 32, 32), null, null, Game1.mouseCursors, new Rectangle(50, 428, 10, 10), 3f)
+            colorCopyButton = new ClickableTextureComponent("Copy", new Rectangle(searchButton.bounds.X + 3, searchButton.bounds.Y + 96, 32, 32), null, null, Game1.mouseCursors, new Rectangle(278, 288, 5, 6), 4f)
+            {
+                myID = 701,
+                upNeighborID = -99998,
+                leftNeighborID = -99998,
+                rightNeighborID = -99998,
+                downNeighborID = -99998
+            };
+            colorPasteButton = new ClickableTextureComponent("Paste", new Rectangle(searchButton.bounds.X + 3, searchButton.bounds.Y + 136, 32, 32), null, null, Game1.mouseCursors, new Rectangle(296, 504, 5, 5), 4f)
+            {
+                myID = 701,
+                upNeighborID = -99998,
+                leftNeighborID = -99998,
+                rightNeighborID = -99998,
+                downNeighborID = -99998
+            };
+            randomButton = new ClickableTextureComponent("Randomize", new Rectangle(searchButton.bounds.X, searchButton.bounds.Y + 170, 32, 32), null, null, Game1.mouseCursors, new Rectangle(50, 428, 10, 10), 3f)
             {
                 myID = 703,
                 upNeighborID = -99998,
@@ -240,7 +259,7 @@ namespace FashionSense.Framework.UI
                 rightNeighborID = -99998,
                 downNeighborID = -99998
             };
-            clearButton = new ClickableTextureComponent("Clear", new Rectangle(searchButton.bounds.X, searchButton.bounds.Y + 144, 32, 32), null, null, Game1.mouseCursors, new Rectangle(323, 433, 9, 10), 3f)
+            clearButton = new ClickableTextureComponent("Clear", new Rectangle(searchButton.bounds.X + 1, searchButton.bounds.Y + 208, 32, 32), null, null, Game1.mouseCursors, new Rectangle(323, 433, 9, 10), 3f)
             {
                 myID = 702,
                 upNeighborID = -99998,
@@ -760,6 +779,17 @@ namespace FashionSense.Framework.UI
                 Game1.activeClickableMenu = new OutfitsMenu(this);
             }
 
+            if (colorCopyButton.containsPoint(x, y))
+            {
+                _cachedColor = colorPicker.GetCurrentColor();
+            }
+
+            if (colorPasteButton.containsPoint(x, y) && _cachedColor is not null)
+            {
+                colorPicker.SetColor(_cachedColor.Value);
+                HandleColorPicker();
+            }
+
             if (clearButton.containsPoint(x, y))
             {
                 string modDataKey = String.Empty;
@@ -1032,11 +1062,35 @@ namespace FashionSense.Framework.UI
             if (outfitButton.containsPoint(x, y))
             {
                 hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.outfit_button");
-                outfitButton.scale = Math.Min(outfitButton.scale + 0.02f, outfitButton.baseScale + 0.1f);
+                outfitButton.scale = Math.Min(outfitButton.scale + 0.02f, outfitButton.baseScale + 0.3f);
             }
             else
             {
                 outfitButton.scale = Math.Max(outfitButton.scale - 0.02f, outfitButton.baseScale);
+            }
+
+            if (colorCopyButton.containsPoint(x, y))
+            {
+                hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_copy_button");
+                colorCopyButton.scale = Math.Min(colorCopyButton.scale + 0.02f, colorCopyButton.baseScale + 0.3f);
+            }
+            else
+            {
+                colorCopyButton.scale = Math.Max(colorCopyButton.scale - 0.02f, colorCopyButton.baseScale);
+            }
+
+            if (colorPasteButton.containsPoint(x, y))
+            {
+                hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_paste_button");
+                if (_cachedColor is null)
+                {
+                    hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_paste_button_empty");
+                }
+                colorPasteButton.scale = Math.Min(colorPasteButton.scale + 0.05f, colorPasteButton.baseScale + 0.3f);
+            }
+            else
+            {
+                colorPasteButton.scale = Math.Max(colorPasteButton.scale - 0.05f, colorPasteButton.baseScale);
             }
 
             if (clearButton.containsPoint(x, y))
@@ -1160,6 +1214,12 @@ namespace FashionSense.Framework.UI
             sideBarPosition.Y += 8 * 4;
             b.Draw(Game1.mouseCursors, sideBarPosition, new Rectangle(316, 369, 13, 8), Color.White, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.75f);
 
+            sideBarPosition.Y += 8 * 4;
+            b.Draw(Game1.mouseCursors, sideBarPosition, new Rectangle(316, 369, 13, 8), Color.White, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.75f);
+
+            sideBarPosition.Y += 8 * 4;
+            b.Draw(Game1.mouseCursors, sideBarPosition, new Rectangle(316, 369, 13, 8), Color.White, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.75f);
+
             // Draw the bottom side bar
             sideBarPosition.Y += 8 * 4;
             b.Draw(Game1.mouseCursors, sideBarPosition, new Rectangle(316, 377, 13, 6), Color.White, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.75f);
@@ -1167,6 +1227,13 @@ namespace FashionSense.Framework.UI
             // Draw the buttons
             searchButton.draw(b);
             outfitButton.draw(b);
+            colorCopyButton.draw(b);
+            colorPasteButton.draw(b);
+            if (_cachedColor is not null)
+            {
+                b.Draw(Game1.mouseCursors2, new Vector2(colorPasteButton.bounds.X, colorPasteButton.bounds.Y), new Rectangle(99, 146, 5, 5), _cachedColor.Value, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0f);
+            }
+            // TODO: Handle drawing color square of _cachedColor
             randomButton.draw(b);
             clearButton.draw(b);
             okButton.draw(b);
