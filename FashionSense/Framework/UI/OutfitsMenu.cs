@@ -68,18 +68,7 @@ namespace FashionSense.Framework.UI
                 };
                 outfitButtons.Add(packButton);
 
-                ClickableTextureComponent saveButton = new ClickableTextureComponent(new Rectangle(packButton.bounds.Right - 192, packButton.bounds.Y + packButton.bounds.Height / 4, 56, 48), Game1.mouseCursors, new Rectangle(240, 320, 16, 16), 3f)
-                {
-                    myID = i + 100,
-                    downNeighborID = -7777,
-                    upNeighborID = ((i > 0) ? (i + 100 - 1) : (-1)),
-                    rightNeighborID = -7777,
-                    leftNeighborID = -7777,
-                    fullyImmutable = true
-                };
-                saveButtons.Add(saveButton);
-
-                ClickableTextureComponent renameButton = new ClickableTextureComponent(new Rectangle(saveButton.bounds.X + 64, packButton.bounds.Y + packButton.bounds.Height / 4 + 8, 56, 48), Game1.mouseCursors, new Rectangle(66, 4, 14, 12), 3f)
+                ClickableTextureComponent renameButton = new ClickableTextureComponent(new Rectangle(packButton.bounds.Right - 192, packButton.bounds.Y + packButton.bounds.Height / 4 + 8, 56, 48), Game1.mouseCursors, new Rectangle(66, 4, 14, 12), 3f)
                 {
                     myID = i + 200,
                     downNeighborID = -7777,
@@ -90,7 +79,18 @@ namespace FashionSense.Framework.UI
                 };
                 renameButtons.Add(renameButton);
 
-                ClickableTextureComponent deleteButton = new ClickableTextureComponent(new Rectangle(saveButton.bounds.X + 128, packButton.bounds.Y + packButton.bounds.Height / 4 + 6, 56, 48), Game1.mouseCursors, new Rectangle(323, 433, 9, 10), 4f)
+                ClickableTextureComponent saveButton = new ClickableTextureComponent(new Rectangle(renameButton.bounds.X + 64, packButton.bounds.Y + packButton.bounds.Height / 4 - 2, 56, 48), Game1.mouseCursors, new Rectangle(240, 320, 16, 16), 3f)
+                {
+                    myID = i + 100,
+                    downNeighborID = -7777,
+                    upNeighborID = ((i > 0) ? (i + 100 - 1) : (-1)),
+                    rightNeighborID = -7777,
+                    leftNeighborID = -7777,
+                    fullyImmutable = true
+                };
+                saveButtons.Add(saveButton);
+
+                ClickableTextureComponent deleteButton = new ClickableTextureComponent(new Rectangle(renameButton.bounds.X + 128, packButton.bounds.Y + packButton.bounds.Height / 4 + 4, 56, 48), Game1.mouseCursors, new Rectangle(323, 433, 9, 10), 4f)
                 {
                     myID = i + 300,
                     downNeighborID = -7777,
