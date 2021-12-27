@@ -1328,7 +1328,7 @@ namespace FashionSense.Framework.Patches.Renderer
             // Offset the source rectangles for shirts, accessories and hats according to facingDirection
             OffsetSourceRectangles(who, facingDirection, rotation, ref ___shirtSourceRect, ref dyed_shirt_source_rect, ref ___accessorySourceRect, ref ___hatSourceRect, ref ___rotationAdjustment);
 
-            // Prepapre the layer offsets
+            // Prepare the layer offsets
             float sleevesLayer = 0f;
             float shirtLayer = 0f;
             float hairLayer = 0f;
@@ -1338,7 +1338,7 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 // Handled in DrawPatch.HandleCustomDraw
             }
-            else
+            else if (!(pantsModel.HideWhileSwimming && who.swimming.Value))
             {
                 var pantsColor = new Color() { PackedValue = Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR) ? uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR]) : who.hairstyleColor.Value.PackedValue };
                 if (pantsModel.DisableGrayscale)
@@ -1371,7 +1371,7 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 DrawShirtVanilla(b, ___shirtSourceRect, dyed_shirt_source_rect, __instance, who, currentFrame, facingDirection, rotation, scale, layerDepth, position, origin, ___positionOffset, ___rotationAdjustment, overrideColor);
             }
-            else
+            else if (!(shirtModel.HideWhileSwimming && who.swimming.Value))
             {
                 float layerOffset = 1.5E-07f;
 
@@ -1409,15 +1409,15 @@ namespace FashionSense.Framework.Patches.Renderer
             else
             {
                 var accessoryLayer = who.FacingDirection == 2 ? layerDepth - 1E-5f : layerDepth;
-                if (accessoryModel != null)
+                if (accessoryModel != null && !(accessoryModel.HideWhileSwimming && who.swimming.Value))
                 {
                     DrawCustomAccessory(accessoryPack, accessoryModel, customAccessorySourceRect, ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR, skinTone, __instance, ___isDrawingForUI, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, accessoryLayer);
                 }
-                if (secondaryAccessoryModel != null)
+                if (secondaryAccessoryModel != null && !(secondaryAccessoryModel.HideWhileSwimming && who.swimming.Value))
                 {
                     DrawCustomAccessory(secondaryAccessoryPack, secondaryAccessoryModel, customSecondaryAccessorySourceRect, ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR, skinTone, __instance, ___isDrawingForUI, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, accessoryLayer + 0.01E-05f);
                 }
-                if (tertiaryAccessoryModel != null)
+                if (tertiaryAccessoryModel != null && !(tertiaryAccessoryModel.HideWhileSwimming && who.swimming.Value))
                 {
                     DrawCustomAccessory(tertiaryAccessoryPack, tertiaryAccessoryModel, customTertiaryAccessorySourceRect, ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR, skinTone, __instance, ___isDrawingForUI, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, accessoryLayer + 0.02E-05f);
                 }
@@ -1431,7 +1431,7 @@ namespace FashionSense.Framework.Patches.Renderer
                     DrawHairVanilla(b, FarmerRenderer.hairStylesTexture, ___hairstyleSourceRect, __instance, who, currentFrame, facingDirection, rotation, scale, layerDepth, position, origin, ___positionOffset, overrideColor);
                 }
             }
-            else
+            else if (!(hairModel.HideWhileSwimming && who.swimming.Value))
             {
                 float hair_draw_layer = 2.2E-05f;
                 var hairColor = overrideColor.Equals(Color.White) ? ((Color)who.hairstyleColor) : overrideColor;
@@ -1471,7 +1471,7 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 // Handled in DrawPatch.HandleCustomDraw
             }
-            else
+            else if (!(sleevesModel.HideWhileSwimming && who.swimming.Value))
             {
                 var sleevesColor = new Color() { PackedValue = Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR) ? uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR]) : who.hairstyleColor.Value.PackedValue };
                 if (sleevesModel.DisableGrayscale)
@@ -1528,7 +1528,7 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 DrawHatVanilla(b, ___hatSourceRect, __instance, who, currentFrame, facingDirection, rotation, scale, layerDepth, position, origin, ___positionOffset);
             }
-            else
+            else if (!(hatModel.HideWhileSwimming && who.swimming.Value))
             {
                 var hatColor = new Color() { PackedValue = Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_HAT_COLOR) ? uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_HAT_COLOR]) : who.hairstyleColor.Value.PackedValue };
                 if (hatModel.DisableGrayscale)
