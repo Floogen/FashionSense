@@ -15,10 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.0.0-beta.20210916" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="Framework\Assets\HandMirror.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -46,6 +42,10 @@
     <Content Include="Framework\Assets\UI\ShirtButton.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup>
