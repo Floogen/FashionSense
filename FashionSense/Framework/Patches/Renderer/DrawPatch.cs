@@ -63,14 +63,14 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 var skinTone = GetSkinTone(___farmerTextureManager, ___baseTexture, pixels, ___skin, ____sickFrame);
 
-                Game1.player.hidden.Value = true;
+                who.hidden.Value = true;
                 SwapColorReversePatch(__instance, texture_name, pixels, 256, skinTone.Darkest);
                 SwapColorReversePatch(__instance, texture_name, pixels, 257, skinTone.Medium);
                 SwapColorReversePatch(__instance, texture_name, pixels, 258, skinTone.Lightest);
             }
             else
             {
-                var shirtColor = new Color() { PackedValue = Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR) ? uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR]) : who.hairstyleColor.Value.PackedValue };
+                var shirtColor = new Color() { PackedValue = who.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR) ? uint.Parse(who.modData[ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR]) : who.hairstyleColor.Value.PackedValue };
                 if (shirtModel.DisableGrayscale)
                 {
                     shirtColor = Color.White;

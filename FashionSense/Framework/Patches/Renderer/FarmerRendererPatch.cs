@@ -208,7 +208,7 @@ namespace FashionSense.Framework.Patches.Renderer
             return who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_ITERATOR) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_FRAME_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_TYPE) && who.modData.ContainsKey(ModDataKeys.ANIMATION_FACING_DIRECTION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_FARMER_FRAME);
         }
 
-        private static bool IsFrameValid(List<AnimationModel> animations, int iterator, bool probe = false)
+        private static bool IsFrameValid(Farmer who, List<AnimationModel> animations, int iterator, bool probe = false)
         {
             AnimationModel animationModel = animations.ElementAtOrDefault(iterator);
             if (animationModel is null)
@@ -226,7 +226,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
                 else if (condition.Name is Condition.Type.MovementDurationLogical)
                 {
-                    passedCheck = condition.IsValid(FashionSense.conditionData.GetMovementDuration(Game1.player));
+                    passedCheck = condition.IsValid(FashionSense.conditionData.GetMovementDuration(who));
                 }
                 else if (condition.Name is Condition.Type.IsElapsedTimeMultipleOf)
                 {
@@ -252,19 +252,19 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
                 else if (condition.Name is Condition.Type.MovementSpeedLogical)
                 {
-                    passedCheck = condition.IsValid(FashionSense.conditionData.GetMovementSpeed(Game1.player));
+                    passedCheck = condition.IsValid(FashionSense.conditionData.GetMovementSpeed(who));
                 }
                 else if (condition.Name is Condition.Type.RidingHorse)
                 {
-                    passedCheck = condition.IsValid(Game1.player.isRidingHorse());
+                    passedCheck = condition.IsValid(who.isRidingHorse());
                 }
                 else if (condition.Name is Condition.Type.InventoryItemCount)
                 {
-                    passedCheck = condition.IsValid(FashionSense.conditionData.GetActualPlayerInventoryCount(Game1.player));
+                    passedCheck = condition.IsValid(FashionSense.conditionData.GetActualPlayerInventoryCount(who));
                 }
                 else if (condition.Name is Condition.Type.IsInventoryFull)
                 {
-                    passedCheck = condition.IsValid(Game1.player.isInventoryFull());
+                    passedCheck = condition.IsValid(who.isInventoryFull());
                 }
                 else if (condition.Name is Condition.Type.IsDarkOut)
                 {
@@ -276,55 +276,55 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
                 else if (condition.Name is Condition.Type.IsWalking)
                 {
-                    passedCheck = condition.IsValid(!FashionSense.conditionData.IsRunning(Game1.player));
+                    passedCheck = condition.IsValid(!FashionSense.conditionData.IsRunning(who));
                 }
                 else if (condition.Name is Condition.Type.IsRunning)
                 {
-                    passedCheck = condition.IsValid(FashionSense.conditionData.IsRunning(Game1.player));
+                    passedCheck = condition.IsValid(FashionSense.conditionData.IsRunning(who));
                 }
                 else if (condition.Name is Condition.Type.IsEating)
                 {
-                    passedCheck = condition.IsValid(Game1.player.isEating && Game1.player.FarmerSprite.CurrentSingleAnimation == FarmerSprite.eat);
+                    passedCheck = condition.IsValid(who.isEating && who.FarmerSprite.CurrentSingleAnimation == FarmerSprite.eat);
                 }
                 else if (condition.Name is Condition.Type.IsDrinking)
                 {
-                    passedCheck = condition.IsValid(Game1.player.isEating && Game1.player.FarmerSprite.CurrentSingleAnimation == FarmerSprite.drink);
+                    passedCheck = condition.IsValid(who.isEating && who.FarmerSprite.CurrentSingleAnimation == FarmerSprite.drink);
                 }
                 else if (condition.Name is Condition.Type.IsFishing)
                 {
-                    passedCheck = condition.IsValid(Game1.player.CurrentTool is FishingRod fishingRod && fishingRod.isFishing);
+                    passedCheck = condition.IsValid(who.CurrentTool is FishingRod fishingRod && fishingRod.isFishing);
                 }
                 else if (condition.Name is Condition.Type.IsUsingHeavyTool)
                 {
-                    passedCheck = condition.IsValid(Game1.player.UsingTool && (Game1.player.CurrentTool is Hoe || Game1.player.CurrentTool is Pickaxe || Game1.player.CurrentTool is Axe));
+                    passedCheck = condition.IsValid(who.UsingTool && (who.CurrentTool is Hoe || who.CurrentTool is Pickaxe || who.CurrentTool is Axe));
                 }
                 else if (condition.Name is Condition.Type.IsUsingMilkPail)
                 {
-                    passedCheck = condition.IsValid(Game1.player.UsingTool && Game1.player.CurrentTool is MilkPail);
+                    passedCheck = condition.IsValid(who.UsingTool && who.CurrentTool is MilkPail);
                 }
                 else if (condition.Name is Condition.Type.IsUsingShears)
                 {
-                    passedCheck = condition.IsValid(Game1.player.UsingTool && Game1.player.CurrentTool is Shears);
+                    passedCheck = condition.IsValid(who.UsingTool && who.CurrentTool is Shears);
                 }
                 else if (condition.Name is Condition.Type.IsUsingPan)
                 {
-                    passedCheck = condition.IsValid(Game1.player.UsingTool && Game1.player.CurrentTool is Pan);
+                    passedCheck = condition.IsValid(who.UsingTool && who.CurrentTool is Pan);
                 }
                 else if (condition.Name is Condition.Type.IsUsingScythe)
                 {
-                    passedCheck = condition.IsValid(Game1.player.UsingTool && Game1.player.CurrentTool is MeleeWeapon weapon && weapon.isScythe());
+                    passedCheck = condition.IsValid(who.UsingTool && who.CurrentTool is MeleeWeapon weapon && weapon.isScythe());
                 }
                 else if (condition.Name is Condition.Type.IsUsingMeleeWeapon)
                 {
-                    passedCheck = condition.IsValid(Game1.player.UsingTool && Game1.player.CurrentTool is MeleeWeapon weapon);
+                    passedCheck = condition.IsValid(who.UsingTool && who.CurrentTool is MeleeWeapon weapon);
                 }
                 else if (condition.Name is Condition.Type.IsUsingSlingshot)
                 {
-                    passedCheck = condition.IsValid(Game1.player.UsingTool && Game1.player.CurrentTool is Slingshot);
+                    passedCheck = condition.IsValid(who.UsingTool && who.CurrentTool is Slingshot);
                 }
                 else if (condition.Name is Condition.Type.IsHarvesting)
                 {
-                    passedCheck = condition.IsValid(279 + Game1.player.FacingDirection == Game1.player.FarmerSprite.CurrentSingleAnimation);
+                    passedCheck = condition.IsValid(279 + who.FacingDirection == who.FarmerSprite.CurrentSingleAnimation);
                 }
                 else if (condition.Name is Condition.Type.IsInMines)
                 {
@@ -336,19 +336,19 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
                 else if (condition.Name is Condition.Type.HealthLevel)
                 {
-                    passedCheck = condition.IsValid(Game1.player.health);
+                    passedCheck = condition.IsValid(who.health);
                 }
                 else if (condition.Name is Condition.Type.StaminaLevel)
                 {
-                    passedCheck = condition.IsValid((long)Game1.player.stamina);
+                    passedCheck = condition.IsValid((long)who.stamina);
                 }
                 else if (condition.Name is Condition.Type.IsSitting)
                 {
-                    passedCheck = condition.IsValid(Game1.player.IsSitting());
+                    passedCheck = condition.IsValid(who.IsSitting());
                 }
                 else if (condition.Name is Condition.Type.IsCarrying)
                 {
-                    passedCheck = condition.IsValid(Game1.player.IsCarrying());
+                    passedCheck = condition.IsValid(who.IsCarrying());
                 }
 
                 // If the condition is independent and is true, then skip rest of evaluations
@@ -657,7 +657,7 @@ namespace FashionSense.Framework.Patches.Renderer
             var animationModel = animations.ElementAtOrDefault(iterator) is null ? animations.ElementAtOrDefault(0) : animations.ElementAtOrDefault(iterator);
 
             // Check if frame is valid
-            if (IsFrameValid(animations, iterator, probe: true))
+            if (IsFrameValid(who, animations, iterator, probe: true))
             {
                 if (animationModel.OverrideStartingIndex && startingIndex != iterator)
                 {
@@ -673,7 +673,7 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 // Frame isn't valid, get the next available frame starting from iterator
                 var hasFoundNextFrame = false;
-                foreach (var animation in animations.Skip(iterator + 1).Where(a => IsFrameValid(animations, animations.IndexOf(a), probe: true)))
+                foreach (var animation in animations.Skip(iterator + 1).Where(a => IsFrameValid(who, animations, animations.IndexOf(a), probe: true)))
                 {
                     iterator = animations.IndexOf(animation);
 
@@ -690,7 +690,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 // If no frames are available from iterator onwards, then check backwards for the next available frame with OverrideStartingIndex
                 if (!hasFoundNextFrame)
                 {
-                    foreach (var animation in animations.Take(iterator + 1).Reverse().Where(a => a.OverrideStartingIndex && IsFrameValid(animations, animations.IndexOf(a), probe: true)))
+                    foreach (var animation in animations.Take(iterator + 1).Reverse().Where(a => a.OverrideStartingIndex && IsFrameValid(who, animations, animations.IndexOf(a), probe: true)))
                     {
                         iterator = animations.IndexOf(animation);
                         startingIndex = iterator;
@@ -722,7 +722,7 @@ namespace FashionSense.Framework.Patches.Renderer
             if ((elapsedDuration >= frameDuration && !animationModel.EndWhenFarmerFrameUpdates) || (animationModel.EndWhenFarmerFrameUpdates && who.FarmerSprite.CurrentFrame != lastFarmerFrame))
             {
                 // Force the frame's condition to evalute and update any caches
-                IsFrameValid(animations, iterator);
+                IsFrameValid(who, animations, iterator);
                 UpdateLight(model, animationModel, who, true);
 
                 iterator = iterator + 1 >= animations.Count() ? startingIndex : iterator + 1;
@@ -1131,7 +1131,7 @@ namespace FashionSense.Framework.Patches.Renderer
 
         private static void DrawCustomAccessory(AccessoryContentPack accessoryPack, AccessoryModel accessoryModel, Rectangle customAccessorySourceRect, string colorModDataKey, SkinToneModel skinTone, FarmerRenderer renderer, bool isDrawingForUI, SpriteBatch b, Farmer who, int facingDirection, Vector2 position, Vector2 origin, Vector2 positionOffset, Vector2 rotationAdjustment, float scale, int currentFrame, float rotation, float layerDepth)
         {
-            var accessoryColor = new Color() { PackedValue = Game1.player.modData.ContainsKey(colorModDataKey) ? uint.Parse(Game1.player.modData[colorModDataKey]) : who.hairstyleColor.Value.PackedValue };
+            var accessoryColor = new Color() { PackedValue = who.modData.ContainsKey(colorModDataKey) ? uint.Parse(who.modData[colorModDataKey]) : who.hairstyleColor.Value.PackedValue };
             if (accessoryModel.DisableGrayscale)
             {
                 accessoryColor = Color.White;
@@ -1340,7 +1340,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
             else if (!(pantsModel.HideWhileSwimming && who.swimming.Value))
             {
-                var pantsColor = new Color() { PackedValue = Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR) ? uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR]) : who.hairstyleColor.Value.PackedValue };
+                var pantsColor = new Color() { PackedValue = who.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR) ? uint.Parse(who.modData[ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR]) : who.hairstyleColor.Value.PackedValue };
                 if (pantsModel.DisableGrayscale)
                 {
                     pantsColor = Color.White;
@@ -1375,7 +1375,7 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 float layerOffset = 1.5E-07f;
 
-                var shirtColor = new Color() { PackedValue = Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR) ? uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR]) : who.hairstyleColor.Value.PackedValue };
+                var shirtColor = new Color() { PackedValue = who.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR) ? uint.Parse(who.modData[ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR]) : who.hairstyleColor.Value.PackedValue };
                 if (shirtModel.DisableGrayscale)
                 {
                     shirtColor = Color.White;
@@ -1473,7 +1473,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
             else if (!(sleevesModel.HideWhileSwimming && who.swimming.Value))
             {
-                var sleevesColor = new Color() { PackedValue = Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR) ? uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR]) : who.hairstyleColor.Value.PackedValue };
+                var sleevesColor = new Color() { PackedValue = who.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR) ? uint.Parse(who.modData[ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR]) : who.hairstyleColor.Value.PackedValue };
                 if (sleevesModel.DisableGrayscale)
                 {
                     sleevesColor = Color.White;
@@ -1530,7 +1530,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
             else if (!(hatModel.HideWhileSwimming && who.swimming.Value))
             {
-                var hatColor = new Color() { PackedValue = Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_HAT_COLOR) ? uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_HAT_COLOR]) : who.hairstyleColor.Value.PackedValue };
+                var hatColor = new Color() { PackedValue = who.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_HAT_COLOR) ? uint.Parse(who.modData[ModDataKeys.UI_HAND_MIRROR_HAT_COLOR]) : who.hairstyleColor.Value.PackedValue };
                 if (hatModel.DisableGrayscale)
                 {
                     hatColor = Color.White;
