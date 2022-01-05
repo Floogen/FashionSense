@@ -1147,7 +1147,15 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 layerFix = facingDirection == 0 ? (accessoryModel.DrawBeforeHair ? 3.9E-05f : 2E-05f) : (accessoryModel.DrawBeforeHair ? -0.1E-05f : 3.9E-05f);
             }
-            layerFix += accessoryModel.DrawAfterPlayer ? 0.5E-05f : 0;
+
+            if (accessoryModel.DrawAfterSleeves)
+            {
+                layerFix += 3E-05f;
+            }
+            else if (accessoryModel.DrawAfterPlayer)
+            {
+                layerFix += 0.5E-05f;
+            }
 
             b.Draw(accessoryPack.Texture, position + origin + positionOffset + rotationAdjustment + GetFeatureOffset(facingDirection, currentFrame, scale, renderer, accessoryPack.PackType), customAccessorySourceRect, accessoryModel.HasColorMask() ? Color.White : accessoryColor, rotation, origin + new Vector2(accessoryModel.HeadPosition.X, accessoryModel.HeadPosition.Y), 4f * scale + ((rotation != 0f) ? 0f : 0f), accessoryModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + layerFix);
 
