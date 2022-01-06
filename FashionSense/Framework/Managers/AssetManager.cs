@@ -24,7 +24,9 @@ namespace FashionSense.Framework.Managers
         internal readonly Texture2D hatButtonTexture;
         internal readonly Texture2D shirtButtonTexture;
         internal readonly Texture2D pantsButtonTexture;
+        internal readonly Texture2D sleevesAndShoesButtonTexture;
         internal readonly Texture2D sleevesButtonTexture;
+        internal readonly Texture2D shoesButtonTexture;
         internal readonly Texture2D optionOneButton;
         internal readonly Texture2D optionTwoButton;
         internal readonly Texture2D optionThreeButton;
@@ -42,6 +44,8 @@ namespace FashionSense.Framework.Managers
             shirtButtonTexture = helper.Content.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "ShirtButton.png"));
             pantsButtonTexture = helper.Content.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "PantsButton.png"));
             sleevesButtonTexture = helper.Content.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "SleevesButton.png"));
+            sleevesAndShoesButtonTexture = helper.Content.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "SleevesShoesButton.png"));
+            shoesButtonTexture = helper.Content.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "ShoesButton.png"));
             optionOneButton = helper.Content.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "OptionOneButton.png"));
             optionTwoButton = helper.Content.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "OptionTwoButton.png"));
             optionThreeButton = helper.Content.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "OptionThreeButton.png"));

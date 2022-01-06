@@ -107,6 +107,8 @@ namespace FashionSense.Framework.Managers
             who.modData[ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR] = outfit.ShirtColor;
             who.modData[ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR] = outfit.SleevesColor;
             who.modData[ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR] = outfit.PantsColor;
+            who.modData[ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR] = outfit.ShoesColor;
+
             FashionSense.SetSpriteDirty();
         }
 

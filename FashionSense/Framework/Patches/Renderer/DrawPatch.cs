@@ -39,11 +39,34 @@ namespace FashionSense.Framework.Patches.Renderer
         internal void Apply(Harmony harmony)
         {
             harmony.Patch(AccessTools.Method(_entity, nameof(FarmerRenderer.ApplySleeveColor), new[] { typeof(string), typeof(Color[]), typeof(Farmer) }), prefix: new HarmonyMethod(GetType(), nameof(ApplySleeveColorPrefix)));
+            harmony.Patch(AccessTools.Method(_entity, "ApplyShoeColor", new[] { typeof(string), typeof(Color[]) }), prefix: new HarmonyMethod(GetType(), nameof(ApplyShoeColorPrefix)));
             harmony.Patch(AccessTools.Method(_entity, nameof(FarmerRenderer.draw), new[] { typeof(SpriteBatch), typeof(FarmerSprite.AnimationFrame), typeof(int), typeof(Rectangle), typeof(Vector2), typeof(Vector2), typeof(float), typeof(int), typeof(Color), typeof(float), typeof(float), typeof(Farmer) }), prefix: new HarmonyMethod(GetType(), nameof(DrawPrefix)));
 
             harmony.CreateReversePatcher(AccessTools.Method(_entity, "executeRecolorActions", new[] { typeof(Farmer) }), new HarmonyMethod(GetType(), nameof(ExecuteRecolorActionsReversePatch))).Patch();
             harmony.CreateReversePatcher(AccessTools.Method(_entity, "_SwapColor", new[] { typeof(string), typeof(Color[]), typeof(int), typeof(Color) }), new HarmonyMethod(GetType(), nameof(SwapColorReversePatch))).Patch();
             harmony.CreateReversePatcher(AccessTools.Method(_entity, nameof(FarmerRenderer.draw), new[] { typeof(SpriteBatch), typeof(FarmerSprite.AnimationFrame), typeof(int), typeof(Rectangle), typeof(Vector2), typeof(Vector2), typeof(float), typeof(int), typeof(Color), typeof(float), typeof(float), typeof(Farmer) }), new HarmonyMethod(GetType(), nameof(DrawReversePatch))).Patch();
+        }
+
+        private static bool ApplyShoeColorPrefix(FarmerRenderer __instance, LocalizedContentManager ___farmerTextureManager, Texture2D ___baseTexture, NetInt ___skin, bool ____sickFrame, string texture_name, Color[] pixels)
+        {
+            Farmer who = Game1.player;
+            if (!who.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR) || !who.modData.ContainsKey(ModDataKeys.CUSTOM_SHOES_ID) || who.modData[ModDataKeys.CUSTOM_SHOES_ID] is null || who.modData[ModDataKeys.CUSTOM_SHOES_ID] == "None")
+            {
+                return true;
+            }
+
+            var shoeColor = new Color() { PackedValue = uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR]) };
+            var darkestColor = new Color(57, 57, 57);
+            var mediumColor = new Color(81, 81, 81);
+            var lightColor = new Color(119, 119, 119);
+            var lightestColor = new Color(158, 158, 158);
+
+            SwapColorReversePatch(__instance, texture_name, pixels, 268, Utility.MultiplyColor(darkestColor, shoeColor));
+            SwapColorReversePatch(__instance, texture_name, pixels, 269, Utility.MultiplyColor(mediumColor, shoeColor));
+            SwapColorReversePatch(__instance, texture_name, pixels, 270, Utility.MultiplyColor(lightColor, shoeColor));
+            SwapColorReversePatch(__instance, texture_name, pixels, 271, Utility.MultiplyColor(lightestColor, shoeColor));
+
+            return false;
         }
 
         private static bool ApplySleeveColorPrefix(FarmerRenderer __instance, LocalizedContentManager ___farmerTextureManager, Texture2D ___baseTexture, NetInt ___skin, bool ____sickFrame, string texture_name, Color[] pixels, Farmer who)

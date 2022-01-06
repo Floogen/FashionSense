@@ -17,6 +17,7 @@ namespace FashionSense.Framework.Utilities
         internal const string CUSTOM_SHIRT_ID = "FashionSense.CustomShirt.Id";
         internal const string CUSTOM_PANTS_ID = "FashionSense.CustomPants.Id";
         internal const string CUSTOM_SLEEVES_ID = "FashionSense.CustomSleeves.Id";
+        internal const string CUSTOM_SHOES_ID = "FashionSense.CustomShoes.Id";
 
         // UI related keys
         internal const string UI_HAND_MIRROR_FILTER_BUTTON = "FashionSense.UI.HandMirror.SelectedFilterButton";
@@ -27,6 +28,7 @@ namespace FashionSense.Framework.Utilities
         internal const string UI_HAND_MIRROR_SHIRT_COLOR = "FashionSense.UI.HandMirror.Color.Shirt";
         internal const string UI_HAND_MIRROR_PANTS_COLOR = "FashionSense.UI.HandMirror.Color.Pants";
         internal const string UI_HAND_MIRROR_SLEEVES_COLOR = "FashionSense.UI.HandMirror.Color.Sleeves";
+        internal const string UI_HAND_MIRROR_SHOES_COLOR = "FashionSense.UI.HandMirror.Color.Shoes";
 
         // Tool related keys
         internal const string HAND_MIRROR_FLAG = "FashionSense.Tools.HandMirror";
@@ -109,5 +111,14 @@ namespace FashionSense.Framework.Utilities
         internal const string ANIMATION_SLEEVES_ELAPSED_DURATION = "FashionSense.Animation.Sleeves.ElapsedDuration";
         internal const string ANIMATION_SLEEVES_LIGHT_ID = "FashionSense.Animation.Sleeves.Light.Id";
         internal const string ANIMATION_SLEEVES_FARMER_FRAME = "FashionSense.Animation.Sleeves.FarmerFrame";
+
+        // Shoes animation related keys
+        internal const string ANIMATION_SHOES_TYPE = "FashionSense.Animation.Shoes.Type";
+        internal const string ANIMATION_SHOES_ITERATOR = "FashionSense.Animation.Shoes.Iterator";
+        internal const string ANIMATION_SHOES_STARTING_INDEX = "FashionSense.Animation.Shoes.StartingIndex";
+        internal const string ANIMATION_SHOES_FRAME_DURATION = "FashionSense.Animation.Shoes.FrameDuration";
+        internal const string ANIMATION_SHOES_ELAPSED_DURATION = "FashionSense.Animation.Shoes.ElapsedDuration";
+        internal const string ANIMATION_SHOES_LIGHT_ID = "FashionSense.Animation.Shoes.Light.Id";
+        internal const string ANIMATION_SHOES_FARMER_FRAME = "FashionSense.Animation.Shoes.FarmerFrame";
     }
 }

@@ -190,6 +190,7 @@ namespace FashionSense
             SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR);
             SetCachedColor(ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR);
             SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR);
+            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR);
         }
 
         private void OnDayStarted(object sender, StardewModdingAPI.Events.DayStartedEventArgs e)
@@ -202,6 +203,7 @@ namespace FashionSense
             EnsureKeyExists(ModDataKeys.CUSTOM_SHIRT_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_PANTS_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_SLEEVES_ID);
+            EnsureKeyExists(ModDataKeys.CUSTOM_SHOES_ID);
 
             // Set sprite to dirty in order to refresh sleeves and other tied-in appearances
             SetSpriteDirty();
@@ -824,6 +826,8 @@ namespace FashionSense
             spriteDirty.SetValue(true);
             var shirtDirty = modHelper.Reflection.GetField<bool>(Game1.player.FarmerRenderer, "_shirtDirty");
             shirtDirty.SetValue(true);
+            var shoeDirty = modHelper.Reflection.GetField<bool>(Game1.player.FarmerRenderer, "_shoesDirty");
+            shoeDirty.SetValue(true);
         }
 
         internal static void ResetAnimationModDataFields(Farmer who, int duration, AnimationModel.Type animationType, int facingDirection, bool ignoreAnimationType = false, AppearanceModel model = null)
