@@ -14,6 +14,7 @@ namespace FashionSense.Framework.Models
         public bool Flipped { get; set; }
         public bool RequireAnimationToFinish { get; set; }
         public bool HideWhileSwimming { get; set; }
+        public bool HideSleeves { get; set; }
         public bool DisableGrayscale { get; set; }
         public bool DisableSkinGrayscale { get; set; }
         public bool IsPrismatic { get; set; }

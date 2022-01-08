@@ -159,7 +159,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             // Check if we need to utilize custom draw logic
-            if (shirtPack is not null || sleevesPack is not null || pantsPack is not null)
+            if (shirtPack is not null || sleevesPack is not null || pantsPack is not null || ShouldSleevesBeHidden(who, facingDirection))
             {
                 HandleCustomDraw(__instance, ref ___positionOffset, ref ___rotationAdjustment, ref ____sickFrame, ref ____shirtDirty, ref ____spriteDirty, b, animationFrame, currentFrame, sourceRect, position, origin, layerDepth, facingDirection, overrideColor, rotation, scale, who);
             }
@@ -340,7 +340,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             // Handle the vanilla sleeve / arm drawing, if a custom sleeve model isn't given
-            if (sleevesModel is null)
+            if (sleevesModel is null && !ShouldSleevesBeHidden(who, facingDirection))
             {
                 float arm_layer_offset = 4.9E-05f;
                 if (facingDirection == 0)
@@ -351,6 +351,73 @@ namespace FashionSense.Framework.Patches.Renderer
 
                 b.Draw(baseTexture, position + origin + ___positionOffset + who.armOffset, sourceRect, overrideColor, rotation, origin, 4f * scale, animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + arm_layer_offset);
             }
+        }
+
+        private static bool ShouldSleevesBeHidden(Farmer who, int facingDirection)
+        {
+            // Pants pack
+            PantsModel pantsModel = null;
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_PANTS_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<PantsContentPack>(who.modData[ModDataKeys.CUSTOM_PANTS_ID]) is PantsContentPack pPack && pPack != null)
+            {
+                pantsModel = pPack.GetPantsFromFacingDirection(facingDirection);
+            }
+
+            // Hair pack
+            HairModel hairModel = null;
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_HAIR_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(who.modData[ModDataKeys.CUSTOM_HAIR_ID]) is HairContentPack hPack && hPack != null)
+            {
+                hairModel = hPack.GetHairFromFacingDirection(facingDirection);
+            }
+
+            // Accessory pack
+            AccessoryModel accessoryModel = null;
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(who.modData[ModDataKeys.CUSTOM_ACCESSORY_ID]) is AccessoryContentPack aPack && aPack != null)
+            {
+                accessoryModel = aPack.GetAccessoryFromFacingDirection(facingDirection);
+
+                if (accessoryModel != null)
+                {
+                    accessoryModel.Priority = AccessoryModel.Type.Primary;
+                }
+            }
+
+            AccessoryModel secondaryAccessoryModel = null;
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(who.modData[ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID]) is AccessoryContentPack secAPack && secAPack != null)
+            {
+                secondaryAccessoryModel = secAPack.GetAccessoryFromFacingDirection(facingDirection);
+
+                if (secondaryAccessoryModel != null)
+                {
+                    secondaryAccessoryModel.Priority = AccessoryModel.Type.Secondary;
+                }
+            }
+
+            AccessoryModel tertiaryAccessoryModel = null;
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(who.modData[ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID]) is AccessoryContentPack triAPack && triAPack != null)
+            {
+                tertiaryAccessoryModel = triAPack.GetAccessoryFromFacingDirection(facingDirection);
+
+                if (tertiaryAccessoryModel != null)
+                {
+                    tertiaryAccessoryModel.Priority = AccessoryModel.Type.Tertiary;
+                }
+            }
+
+            // Hat pack
+            HatModel hatModel = null;
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_HAT_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<HatContentPack>(who.modData[ModDataKeys.CUSTOM_HAT_ID]) is HatContentPack tPack && tPack != null)
+            {
+                hatModel = tPack.GetHatFromFacingDirection(facingDirection);
+            }
+
+            // Shirt pack
+            ShirtModel shirtModel = null;
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_SHIRT_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<ShirtContentPack>(who.modData[ModDataKeys.CUSTOM_SHIRT_ID]) is ShirtContentPack sPack && sPack != null)
+            {
+                shirtModel = sPack.GetShirtFromFacingDirection(facingDirection);
+            }
+
+            return FarmerRendererPatch.AreSleevesForcedHidden(pantsModel, hairModel, accessoryModel, secondaryAccessoryModel, tertiaryAccessoryModel, hatModel, shirtModel);
         }
 
         private static void DrawPantsVanilla(SpriteBatch b, Rectangle sourceRect, FarmerRenderer renderer, Farmer who, FarmerSprite.AnimationFrame animationFrame, int currentFrame, int facingDirection, float rotation, float scale, float layerDepth, Vector2 position, Vector2 origin, Vector2 positionOffset, Vector2 rotationAdjustment, Color overrideColor)

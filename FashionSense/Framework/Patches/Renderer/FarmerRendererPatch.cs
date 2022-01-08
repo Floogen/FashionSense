@@ -851,6 +851,19 @@ namespace FashionSense.Framework.Patches.Renderer
             return 0;
         }
 
+        internal static bool AreSleevesForcedHidden(params AppearanceModel[] models)
+        {
+            foreach (var model in models.Where(m => m is not null))
+            {
+                if (model.HideSleeves)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private static bool IsWaitingOnRequiredAnimation(Farmer who, AppearanceModel model)
         {
             // Utilize the default modData key properties (HairModel)
@@ -1475,7 +1488,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             // Draw the sleeves
-            if (sleevesModel is null)
+            if (sleevesModel is null || AreSleevesForcedHidden(pantsModel, hairModel, accessoryModel, secondaryAccessoryModel, tertiaryAccessoryModel, hatModel, shirtModel))
             {
                 // Handled in DrawPatch.HandleCustomDraw
             }
