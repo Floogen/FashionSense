@@ -46,6 +46,7 @@ namespace FashionSense
 
         // Debugging flags
         private bool _displayMovementData = false;
+        private bool _continuousReloading = false;
 
         public override void Entry(IModHelper helper)
         {
@@ -91,6 +92,7 @@ namespace FashionSense
             // Add in our debug commands
             helper.ConsoleCommands.Add("fs_display_movement", "Displays debug info related to player movement. Use again to disable. \n\nUsage: fs_display_movement", delegate { _displayMovementData = !_displayMovementData; });
             helper.ConsoleCommands.Add("fs_reload", "Reloads all Fashion Sense content packs.\n\nUsage: fs_reload", delegate { this.LoadContentPacks(); });
+            helper.ConsoleCommands.Add("fs_reload_continuous", "Debug usage only: reloads all Fashion Sense content packs every 2 seconds. Use the command again to stop the continuous reloading.\n\nUsage: fs_reload_continuous", delegate { _continuousReloading = !_continuousReloading; });
             helper.ConsoleCommands.Add("fs_add_mirror", "Gives you a Hand Mirror tool.\n\nUsage: fs_add_mirror", delegate { Game1.player.addItemToInventory(SeedShopPatch.GetHandMirrorTool()); });
 
             modHelper.Events.GameLoop.GameLaunched += OnGameLaunched;
@@ -115,6 +117,11 @@ namespace FashionSense
             {
                 // Update movement trackers
                 conditionData.Update(Game1.player, Game1.currentGameTime);
+
+                if (_continuousReloading && e.IsMultipleOf(120))
+                {
+                    this.LoadContentPacks(true);
+                }
             }
 
             // Update elapsed durations
@@ -237,7 +244,7 @@ namespace FashionSense
             }
         }
 
-        private void LoadContentPacks()
+        private void LoadContentPacks(bool silent = false)
         {
             // Clear the existing cache of AppearanceModels
             textureManager.Reset();
@@ -245,7 +252,7 @@ namespace FashionSense
             // Load owned content packs
             foreach (IContentPack contentPack in Helper.ContentPacks.GetOwned())
             {
-                Monitor.Log($"Loading data from pack: {contentPack.Manifest.Name} {contentPack.Manifest.Version} by {contentPack.Manifest.Author}", LogLevel.Debug);
+                Monitor.Log($"Loading data from pack: {contentPack.Manifest.Name} {contentPack.Manifest.Version} by {contentPack.Manifest.Author}", silent ? LogLevel.Trace : LogLevel.Debug);
 
                 // Load Hairs
                 Monitor.Log($"Loading hairstyles from pack: {contentPack.Manifest.Name} {contentPack.Manifest.Version} by {contentPack.Manifest.Author}", LogLevel.Trace);
