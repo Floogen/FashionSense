@@ -1503,7 +1503,7 @@ namespace FashionSense.Framework.UI
                         {
                             name = GetColorPickerLabel(true, enabledFilterName: GetNameOfEnabledFilter());
                         }
-                        else
+                        else if (contentPack is not null && contentPack.PackType == AppearanceContentPack.Type.Unknown)
                         {
                             name = FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_active.shoes");
                         }
