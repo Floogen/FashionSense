@@ -482,21 +482,36 @@ namespace FashionSense.Framework.Patches.Renderer
                 size.Length = sleevesModel.SleevesSize.Length;
             }
 
-            // Reset any cached animation data, if needd
+            // Reset any cached animation data, if needed
             if (model.HasMovementAnimation() && FashionSense.conditionData.IsPlayerMoving() && !HasCorrectAnimationTypeCached(model, who, AnimationModel.Type.Moving))
             {
                 SetAnimationType(model, who, AnimationModel.Type.Moving);
-                FashionSense.ResetAnimationModDataFields(who, 0, AnimationModel.Type.Moving, facingDirection, true);
+                FashionSense.ResetAnimationModDataFields(who, 0, AnimationModel.Type.Moving, facingDirection, true, model);
+
+                foreach (var animation in model.MovementAnimation)
+                {
+                    animation.Reset();
+                }
             }
             else if (model.HasIdleAnimation() && !FashionSense.conditionData.IsPlayerMoving() && !HasCorrectAnimationTypeCached(model, who, AnimationModel.Type.Idle))
             {
                 SetAnimationType(model, who, AnimationModel.Type.Idle);
-                FashionSense.ResetAnimationModDataFields(who, 0, AnimationModel.Type.Idle, facingDirection, true);
+                FashionSense.ResetAnimationModDataFields(who, 0, AnimationModel.Type.Idle, facingDirection, true, model);
+
+                foreach (var animation in model.IdleAnimation)
+                {
+                    animation.Reset();
+                }
             }
             else if (!model.HasMovementAnimation() && !model.HasIdleAnimation() && !HasCorrectAnimationTypeCached(model, who, AnimationModel.Type.Uniform))
             {
                 SetAnimationType(model, who, AnimationModel.Type.Uniform);
-                FashionSense.ResetAnimationModDataFields(who, 0, AnimationModel.Type.Uniform, facingDirection, true);
+                FashionSense.ResetAnimationModDataFields(who, 0, AnimationModel.Type.Uniform, facingDirection, true, model);
+
+                foreach (var animation in model.UniformAnimation)
+                {
+                    animation.Reset();
+                }
             }
 
             // Update the animations
