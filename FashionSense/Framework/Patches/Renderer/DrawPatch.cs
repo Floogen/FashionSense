@@ -160,7 +160,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             // Check if we need to utilize custom draw logic
-            if (shirtPack is not null || sleevesPack is not null || pantsPack is not null || ShouldSleevesBeHidden(who, facingDirection))
+            if (GetCurrentlyEquippedModels(who, facingDirection).Count() > 0 || ShouldSleevesBeHidden(who, facingDirection))
             {
                 HandleCustomDraw(__instance, ref ___positionOffset, ref ___rotationAdjustment, ref ____sickFrame, ref ____shirtDirty, ref ____spriteDirty, b, animationFrame, currentFrame, sourceRect, position, origin, layerDepth, facingDirection, overrideColor, rotation, scale, who);
             }
@@ -301,8 +301,12 @@ namespace FashionSense.Framework.Patches.Renderer
                     b.Draw(baseTexture, position + origin + ___positionOffset + new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4 + 20 + ((who.FacingDirection == 1) ? 12 : ((who.FacingDirection == 3) ? 4 : 0)), FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + 40), new Rectangle(5, 16, (who.FacingDirection == 2) ? 6 : 2, 2), overrideColor, 0f, origin, 4f * scale, SpriteEffects.None, layerDepth + 5E-08f);
                     b.Draw(baseTexture, position + origin + ___positionOffset + new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4 + 20 + ((who.FacingDirection == 1) ? 12 : ((who.FacingDirection == 3) ? 4 : 0)), FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + 40), new Rectangle(264 + ((who.FacingDirection == 3) ? 4 : 0), 2 + (who.currentEyes - 1) * 2, (who.FacingDirection == 2) ? 6 : 2, 2), overrideColor, 0f, origin, 4f * scale, SpriteEffects.None, layerDepth + 1.2E-07f);
                 }
+
                 __instance.drawHairAndAccesories(b, facingDirection, who, position, origin, scale, currentFrame, rotation, overrideColor, layerDepth);
-                b.Draw(Game1.staminaRect, new Rectangle((int)position.X + (int)who.yOffset + 8, (int)position.Y - 128 + sourceRect.Height * 4 + (int)origin.Y - (int)who.yOffset, sourceRect.Width * 4 - (int)who.yOffset * 2 - 16, 4), Game1.staminaRect.Bounds, Color.White * 0.75f, 0f, Vector2.Zero, SpriteEffects.None, layerDepth + 0.001f);
+                if (!ShouldHideWaterLine(who, facingDirection))
+                {
+                    b.Draw(Game1.staminaRect, new Rectangle((int)position.X + (int)who.yOffset + 8, (int)position.Y - 128 + sourceRect.Height * 4 + (int)origin.Y - (int)who.yOffset, sourceRect.Width * 4 - (int)who.yOffset * 2 - 16, 4), Game1.staminaRect.Bounds, Color.White * 0.75f, 0f, Vector2.Zero, SpriteEffects.None, layerDepth + 0.001f);
+                }
                 return;
             }
 
@@ -359,6 +363,19 @@ namespace FashionSense.Framework.Patches.Renderer
             AppearanceModel[] appearances = GetCurrentlyEquippedModels(who, facingDirection);
 
             return FarmerRendererPatch.AreSleevesForcedHidden(appearances);
+        }
+
+        private static bool ShouldHideWaterLine(Farmer who, int facingDirection)
+        {
+            foreach (var model in GetCurrentlyEquippedModels(who, facingDirection).Where(m => m is not null))
+            {
+                if (model.HideWaterLine)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private static AppearanceModel[] GetCurrentlyEquippedModels(Farmer who, int facingDirection)

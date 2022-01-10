@@ -13,6 +13,7 @@ namespace FashionSense.Framework.Models
         public Position StartingPosition { get; set; }
         public bool Flipped { get; set; }
         public bool RequireAnimationToFinish { get; set; }
+        public virtual bool HideWaterLine { get; set; }
         public virtual bool HideWhileSwimming { get; set; } = true;
         public virtual bool HideWhileWearingBathingSuit { get; set; } = true;
         public bool HideSleeves { get; set; }
