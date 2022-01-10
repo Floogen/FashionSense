@@ -24,6 +24,9 @@ namespace FashionSense.Framework.Models.Accessory
         public bool DrawAfterPlayer { get; set; }
         public bool DrawAfterSleeves { get; set; }
 
+        public override bool HideWhileSwimming { get; set; } = false;
+        public override bool HideWhileWearingBathingSuit { get; set; } = false;
+
         // Old property, has been renamed to DrawAfterPlayer
         [Obsolete("Has been renamed to DrawAfterPlayer.")]
         public bool DrawBeforePlayer { set { DrawAfterPlayer = value; } }
