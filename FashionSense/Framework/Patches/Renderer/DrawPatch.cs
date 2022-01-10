@@ -111,6 +111,7 @@ namespace FashionSense.Framework.Patches.Renderer
             return false;
         }
 
+        [HarmonyAfter(new string[] { "aedenthorn.Swim" })]
         private static bool DrawPrefix(FarmerRenderer __instance, ref Vector2 ___positionOffset, ref Vector2 ___rotationAdjustment, ref bool ____sickFrame, ref bool ____shirtDirty, ref bool ____spriteDirty, SpriteBatch b, FarmerSprite.AnimationFrame animationFrame, int currentFrame, Rectangle sourceRect, Vector2 position, Vector2 origin, float layerDepth, int facingDirection, Color overrideColor, float rotation, float scale, Farmer who)
         {
             if (GetCurrentlyEquippedModels(who, facingDirection).Any(m => m is not null))
