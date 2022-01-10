@@ -113,29 +113,29 @@ namespace FashionSense.Framework.Patches.Renderer
 
         private static bool DrawPrefix(FarmerRenderer __instance, ref Vector2 ___positionOffset, ref Vector2 ___rotationAdjustment, ref bool ____sickFrame, ref bool ____shirtDirty, ref bool ____spriteDirty, SpriteBatch b, FarmerSprite.AnimationFrame animationFrame, int currentFrame, Rectangle sourceRect, Vector2 position, Vector2 origin, float layerDepth, int facingDirection, Color overrideColor, float rotation, float scale, Farmer who)
         {
-            if (!who.modData.ContainsKey(ModDataKeys.CUSTOM_HAIR_ID) || !who.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_ID) || !who.modData.ContainsKey(ModDataKeys.CUSTOM_HAT_ID) || !who.modData.ContainsKey(ModDataKeys.CUSTOM_SHIRT_ID))
+            if (GetCurrentlyEquippedModels(who, facingDirection).Any(m => m is not null))
             {
-                return true;
+                // Draw with modified SpriteSortMode method for UI to handle clipping issue
+                if (FarmerRenderer.isDrawingForUI)
+                {
+                    b.End();
+                    b.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
+
+                    HandleConditionalDraw(__instance, ref ___positionOffset, ref ___rotationAdjustment, ref ____sickFrame, ref ____shirtDirty, ref ____spriteDirty, b, animationFrame, currentFrame, sourceRect, position, origin, layerDepth, facingDirection, overrideColor, rotation, scale, who);
+
+                    b.End();
+                    b.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
+                }
+                else
+                {
+                    // Utilize standard SpriteSortMode if not using the UI
+                    HandleConditionalDraw(__instance, ref ___positionOffset, ref ___rotationAdjustment, ref ____sickFrame, ref ____shirtDirty, ref ____spriteDirty, b, animationFrame, currentFrame, sourceRect, position, origin, layerDepth, facingDirection, overrideColor, rotation, scale, who);
+                }
+
+                return false;
             }
 
-            // Draw with modified SpriteSortMode method for UI to handle clipping issue
-            if (FarmerRenderer.isDrawingForUI)
-            {
-                b.End();
-                b.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
-
-                HandleConditionalDraw(__instance, ref ___positionOffset, ref ___rotationAdjustment, ref ____sickFrame, ref ____shirtDirty, ref ____spriteDirty, b, animationFrame, currentFrame, sourceRect, position, origin, layerDepth, facingDirection, overrideColor, rotation, scale, who);
-
-                b.End();
-                b.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
-            }
-            else
-            {
-                // Utilize standard SpriteSortMode if not using the UI
-                HandleConditionalDraw(__instance, ref ___positionOffset, ref ___rotationAdjustment, ref ____sickFrame, ref ____shirtDirty, ref ____spriteDirty, b, animationFrame, currentFrame, sourceRect, position, origin, layerDepth, facingDirection, overrideColor, rotation, scale, who);
-            }
-
-            return false;
+            return true;
         }
 
         private static void HandleConditionalDraw(FarmerRenderer __instance, ref Vector2 ___positionOffset, ref Vector2 ___rotationAdjustment, ref bool ____sickFrame, ref bool ____shirtDirty, ref bool ____spriteDirty, SpriteBatch b, FarmerSprite.AnimationFrame animationFrame, int currentFrame, Rectangle sourceRect, Vector2 position, Vector2 origin, float layerDepth, int facingDirection, Color overrideColor, float rotation, float scale, Farmer who)
@@ -355,6 +355,13 @@ namespace FashionSense.Framework.Patches.Renderer
 
         private static bool ShouldSleevesBeHidden(Farmer who, int facingDirection)
         {
+            AppearanceModel[] appearances = GetCurrentlyEquippedModels(who, facingDirection);
+
+            return FarmerRendererPatch.AreSleevesForcedHidden(appearances);
+        }
+
+        private static AppearanceModel[] GetCurrentlyEquippedModels(Farmer who, int facingDirection)
+        {
             // Pants pack
             PantsModel pantsModel = null;
             if (who.modData.ContainsKey(ModDataKeys.CUSTOM_PANTS_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<PantsContentPack>(who.modData[ModDataKeys.CUSTOM_PANTS_ID]) is PantsContentPack pPack && pPack != null)
@@ -417,7 +424,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 shirtModel = sPack.GetShirtFromFacingDirection(facingDirection);
             }
 
-            return FarmerRendererPatch.AreSleevesForcedHidden(pantsModel, hairModel, accessoryModel, secondaryAccessoryModel, tertiaryAccessoryModel, hatModel, shirtModel);
+            return new AppearanceModel[] { pantsModel, hairModel, accessoryModel, secondaryAccessoryModel, tertiaryAccessoryModel, hatModel, shirtModel };
         }
 
         private static void DrawPantsVanilla(SpriteBatch b, Rectangle sourceRect, FarmerRenderer renderer, Farmer who, FarmerSprite.AnimationFrame animationFrame, int currentFrame, int facingDirection, float rotation, float scale, float layerDepth, Vector2 position, Vector2 origin, Vector2 positionOffset, Vector2 rotationAdjustment, Color overrideColor)
