@@ -350,6 +350,14 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     passedCheck = condition.IsValid(who.IsCarrying());
                 }
+                else if (condition.Name is Condition.Type.IsSwimming)
+                {
+                    passedCheck = condition.IsValid(who.swimming.Value);
+                }
+                else if (condition.Name is Condition.Type.IsInBathingSuit)
+                {
+                    passedCheck = condition.IsValid(who.bathingClothes.Value);
+                }
 
                 // If the condition is independent and is true, then skip rest of evaluations
                 if (condition.Independent && passedCheck)
