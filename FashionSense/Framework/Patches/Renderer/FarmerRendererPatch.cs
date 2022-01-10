@@ -1378,11 +1378,11 @@ namespace FashionSense.Framework.Patches.Renderer
             float hairLayer = 0f;
 
             // Draw the pants
-            if (pantsModel is null || who.bathingClothes)
+            if (pantsModel is null || (pantsModel.HideWhileWearingBathingSuit && who.bathingClothes.Value) || (pantsModel.HideWhileSwimming && who.swimming.Value))
             {
                 // Handled in DrawPatch.HandleCustomDraw
             }
-            else if (!(pantsModel.HideWhileSwimming && who.swimming.Value))
+            else
             {
                 var pantsColor = new Color() { PackedValue = who.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR) ? uint.Parse(who.modData[ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR]) : who.hairstyleColor.Value.PackedValue };
                 if (pantsModel.DisableGrayscale)
@@ -1411,11 +1411,11 @@ namespace FashionSense.Framework.Patches.Renderer
             layerDepth += 0.03E-05f;
 
             // Draw the shirt
-            if (shirtModel is null || who.bathingClothes)
+            if (shirtModel is null || (shirtModel.HideWhileWearingBathingSuit && who.bathingClothes.Value) || (shirtModel.HideWhileSwimming && who.swimming.Value))
             {
                 DrawShirtVanilla(b, ___shirtSourceRect, dyed_shirt_source_rect, __instance, who, currentFrame, facingDirection, rotation, scale, layerDepth, position, origin, ___positionOffset, ___rotationAdjustment, overrideColor);
             }
-            else if (!(shirtModel.HideWhileSwimming && who.swimming.Value))
+            else
             {
                 float layerOffset = 1.5E-07f;
 
@@ -1453,29 +1453,29 @@ namespace FashionSense.Framework.Patches.Renderer
             else
             {
                 var accessoryLayer = who.FacingDirection == 2 ? layerDepth - 1E-5f : layerDepth;
-                if (accessoryModel != null && !(accessoryModel.HideWhileSwimming && who.swimming.Value))
+                if (accessoryModel != null && !(accessoryModel.HideWhileSwimming && who.swimming.Value) && !(accessoryModel.HideWhileWearingBathingSuit && who.bathingClothes.Value))
                 {
                     DrawCustomAccessory(accessoryPack, accessoryModel, customAccessorySourceRect, ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR, skinTone, __instance, ___isDrawingForUI, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, accessoryLayer);
                 }
-                if (secondaryAccessoryModel != null && !(secondaryAccessoryModel.HideWhileSwimming && who.swimming.Value))
+                if (secondaryAccessoryModel != null && !(secondaryAccessoryModel.HideWhileSwimming && who.swimming.Value) && !(secondaryAccessoryModel.HideWhileWearingBathingSuit && who.bathingClothes.Value))
                 {
                     DrawCustomAccessory(secondaryAccessoryPack, secondaryAccessoryModel, customSecondaryAccessorySourceRect, ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR, skinTone, __instance, ___isDrawingForUI, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, accessoryLayer + 0.01E-05f);
                 }
-                if (tertiaryAccessoryModel != null && !(tertiaryAccessoryModel.HideWhileSwimming && who.swimming.Value))
+                if (tertiaryAccessoryModel != null && !(tertiaryAccessoryModel.HideWhileSwimming && who.swimming.Value) && !(tertiaryAccessoryModel.HideWhileWearingBathingSuit && who.bathingClothes.Value))
                 {
                     DrawCustomAccessory(tertiaryAccessoryPack, tertiaryAccessoryModel, customTertiaryAccessorySourceRect, ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR, skinTone, __instance, ___isDrawingForUI, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, accessoryLayer + 0.02E-05f);
                 }
             }
 
             // Draw hair
-            if (hairModel is null)
+            if (hairModel is null || (hairModel.HideWhileWearingBathingSuit && who.bathingClothes.Value) || (hairModel.HideWhileSwimming && who.swimming.Value))
             {
                 if (hatModel is null || !hatModel.HideHair)
                 {
                     DrawHairVanilla(b, FarmerRenderer.hairStylesTexture, ___hairstyleSourceRect, __instance, who, currentFrame, facingDirection, rotation, scale, layerDepth, position, origin, ___positionOffset, overrideColor);
                 }
             }
-            else if (!(hairModel.HideWhileSwimming && who.swimming.Value))
+            else
             {
                 float hair_draw_layer = 2.2E-05f;
                 var hairColor = overrideColor.Equals(Color.White) ? ((Color)who.hairstyleColor) : overrideColor;
@@ -1511,11 +1511,11 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             // Draw the sleeves
-            if (sleevesModel is null || AreSleevesForcedHidden(pantsModel, hairModel, accessoryModel, secondaryAccessoryModel, tertiaryAccessoryModel, hatModel, shirtModel))
+            if (sleevesModel is null || (sleevesModel.HideWhileWearingBathingSuit && who.bathingClothes.Value) || (sleevesModel.HideWhileSwimming && who.swimming.Value) || AreSleevesForcedHidden(pantsModel, hairModel, accessoryModel, secondaryAccessoryModel, tertiaryAccessoryModel, hatModel, shirtModel))
             {
                 // Handled in DrawPatch.HandleCustomDraw
             }
-            else if (!(sleevesModel.HideWhileSwimming && who.swimming.Value))
+            else
             {
                 var sleevesColor = new Color() { PackedValue = who.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR) ? uint.Parse(who.modData[ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR]) : who.hairstyleColor.Value.PackedValue };
                 if (sleevesModel.DisableGrayscale)
@@ -1568,11 +1568,11 @@ namespace FashionSense.Framework.Patches.Renderer
             layerDepth += 0.01E-05f;
 
             // Draw hat
-            if (hatModel is null)
+            if (hatModel is null || (hatModel.HideWhileWearingBathingSuit && who.bathingClothes.Value) || (hatModel.HideWhileSwimming && who.swimming.Value))
             {
                 DrawHatVanilla(b, ___hatSourceRect, __instance, who, currentFrame, facingDirection, rotation, scale, layerDepth, position, origin, ___positionOffset);
             }
-            else if (!(hatModel.HideWhileSwimming && who.swimming.Value))
+            else
             {
                 var hatColor = new Color() { PackedValue = who.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_HAT_COLOR) ? uint.Parse(who.modData[ModDataKeys.UI_HAND_MIRROR_HAT_COLOR]) : who.hairstyleColor.Value.PackedValue };
                 if (hatModel.DisableGrayscale)
