@@ -1,0 +1,54 @@
+{
+  // Tools
+  "tools.name.hand_mirror": "El Aynası",
+  "tools.description.hand_mirror": "Görünümünü daha canlı bir hale değiştirmeni sağlar.",
+
+  // Messages
+  "messages.warning.no_content_packs": "Kurulu hiçbir Fashion Sense paketin yok!",
+
+  // UI - Titles
+  "ui.fashion_sense.title.search": "Bir Fashion Sense paketi seçin",
+  "ui.fashion_sense.title.hair": "Saç Stilleri",
+  "ui.fashion_sense.title.accessory": "Aksesuarlar",
+  "ui.fashion_sense.title.hat": "Şapkalar",
+  "ui.fashion_sense.title.shirt": "Giysiler (Üst)",
+  "ui.fashion_sense.title.pants": "Giysiler (Alt)",
+  "ui.fashion_sense.title.sleeves": "Kollar",
+  "ui.fashion_sense.title.sleevesAndShoes": "Kollar & Ayakkabılar",
+  "ui.fashion_sense.title.shoes": "Ayakkabılar",
+
+  // UI - Outfits
+  "ui.fashion_sense.title.outfits": "Kıyafetler",
+  "ui.fashion_sense.title.outfit_naming": "Kıyafet İsmi",
+  "ui.fashion_sense.create_outfit_button": "Kıyafet Oluştur",
+  "ui.fashion_sense.create_outfit_hover": "Anlık görünümüne bağlı olarak yeni bir kıyafet oluştur.",
+  "ui.fashion_sense.outfit_info.save": "Anlık görünümünü bu kıyafete kaydeder.",
+  "ui.fashion_sense.outfit_info.rename": "Bu kıyafetin ismini değiştir.",
+  "ui.fashion_sense.outfit_info.delete": "Bu kıyafeti sil.",
+  "ui.fashion_sense.warning.name": "Kıyafet ismi boş veya zaten mevcut.",
+
+  // UI - Etc
+  "ui.fashion_sense.color_override.shoes": "Ayakkabı Renginin Üstüne Yaz",
+  "ui.fashion_sense.search_button": "Belli bir Fashion Sense paketini ara.",
+  "ui.fashion_sense.outfit_button": "Fashion Sense kıyafetlerine eriş.",
+  "ui.fashion_sense.color_copy_button": "Mevcut rengi kopyala.",
+  "ui.fashion_sense.color_paste_button": "Kopyalanan rengi yapıştır.",
+  "ui.fashion_sense.color_paste_button_empty": "Kopyalanan rengi yapıştır (boş).",
+  "ui.fashion_sense.clear_button": "Mevcut seçilen Fashion Sense nesnesini temizler.",
+  "ui.fashion_sense.random_button": "Rastgele bir Fashion Sense nesnesini seçer.",
+  "ui.fashion_sense.color_active.hair": "Saç Rengi",
+  "ui.fashion_sense.color_active.hat": "Hat Rengi",
+  "ui.fashion_sense.color_active.shirt": "Üst Rengi",
+  "ui.fashion_sense.color_active.pants": "Alt Rengi",
+  "ui.fashion_sense.color_active.accessory": "Aksesuar. Rengi",
+  "ui.fashion_sense.color_active.sleeves": "Elbise Kol Rengi",
+  "ui.fashion_sense.color_active.shoes": "Ayakkabı Rengi",
+  "ui.fashion_sense.color_disabled.generic": "(Umursanmıyor)",
+  "ui.fashion_sense.color_info.hair": "Renk kaplamaları bu saç stilini etkilemeyecek.",
+  "ui.fashion_sense.color_info.hat": "Renk kaplamaları bu şapkayı etkilemeyecek.",
+  "ui.fashion_sense.color_info.shirt": "Renk kaplamaları bu üstü etkilemeyecek.",
+  "ui.fashion_sense.color_info.pants": "Renk kaplamaları bu altı etkilemeyecek.",
+  "ui.fashion_sense.color_info.accessory": "Renk kaplamaları bu aksesuarı etkilemeyecek.",
+  "ui.fashion_sense.color_info.sleeves": "Renk kaplamaları bu kolları etkilemeyecek.",
+  "ui.fashion_sense.color_info.shoes": "Renk kaplamaları bu ayakkabıları etkilemeyecek."
+}
