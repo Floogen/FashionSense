@@ -16,6 +16,7 @@ namespace FashionSense.Framework.Models
         public virtual bool HideWaterLine { get; set; }
         public virtual bool HideWhileSwimming { get; set; } = true;
         public virtual bool HideWhileWearingBathingSuit { get; set; } = true;
+        public bool UseBaldHead { get; set; }
         public bool HideSleeves { get; set; }
         public bool DisableGrayscale { get; set; }
         public bool DisableSkinGrayscale { get; set; }

@@ -179,6 +179,20 @@ namespace FashionSense.Framework.Patches.Renderer
                 ____shirtDirty = true;
                 ____spriteDirty = true;
             }
+
+            // Check if one of the styles
+            if (ShouldUseBaldBase(who, facingDirection))
+            {
+                if (!__instance.textureName.Contains("_bald"))
+                {
+                    __instance.textureName.Set("Characters\\Farmer\\farmer_" + (who.IsMale ? "" : "girl_") + "base" + "_bald");
+                }
+            }
+            else if (__instance.textureName.Contains("_bald"))
+            {
+                __instance.textureName.Set("Characters\\Farmer\\farmer_" + (who.IsMale ? "" : "girl_") + "base");
+            }
+
             ExecuteRecolorActionsReversePatch(__instance, who);
             var baseTexture = _helper.Reflection.GetField<Texture2D>(__instance, "baseTexture").GetValue();
 
@@ -356,6 +370,30 @@ namespace FashionSense.Framework.Patches.Renderer
 
                 b.Draw(baseTexture, position + origin + ___positionOffset + who.armOffset, sourceRect, overrideColor, rotation, origin, 4f * scale, animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + arm_layer_offset);
             }
+        }
+
+        private static bool ShouldUseBaldBase(Farmer who, int facingDirection)
+        {
+            // Hair pack
+            HairModel hairModel = null;
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_HAIR_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(who.modData[ModDataKeys.CUSTOM_HAIR_ID]) is HairContentPack hPack && hPack != null)
+            {
+                hairModel = hPack.GetHairFromFacingDirection(facingDirection);
+            }
+
+            // Hat pack
+            HatModel hatModel = null;
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_HAT_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<HatContentPack>(who.modData[ModDataKeys.CUSTOM_HAT_ID]) is HatContentPack tPack && tPack != null)
+            {
+                hatModel = tPack.GetHatFromFacingDirection(facingDirection);
+            }
+
+            if ((hairModel is not null && hairModel.UseBaldHead) || (hatModel is not null && hatModel.UseBaldHead))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private static bool ShouldSleevesBeHidden(Farmer who, int facingDirection)
