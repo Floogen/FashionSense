@@ -1,0 +1,64 @@
+{
+  "Name": "Mohawk (Bald)",
+  "FrontHair": {
+    "UseBaldHead": true,
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "HeadPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "HairSize": {
+      "Width": 16,
+      "Length": 16
+    }
+  },
+  "BackHair": {
+    "UseBaldHead": true,
+    "StartingPosition": {
+      "X": 16,
+      "Y": 0
+    },
+    "HeadPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "HairSize": {
+      "Width": 16,
+      "Length": 16
+    }
+  },
+  "RightHair": {
+    "UseBaldHead": true,
+    "StartingPosition": {
+      "X": 32,
+      "Y": 0
+    },
+    "HeadPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "HairSize": {
+      "Width": 16,
+      "Length": 16
+    }
+  },
+  "LeftHair": {
+    "Flipped": true,
+    "UseBaldHead": true,
+    "StartingPosition": {
+      "X": 32,
+      "Y": 0
+    },
+    "HeadPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "HairSize": {
+      "Width": 16,
+      "Length": 16
+    }
+  }
+}
