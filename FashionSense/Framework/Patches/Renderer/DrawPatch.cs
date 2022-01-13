@@ -205,7 +205,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             var adjustedBaseRectangle = sourceRect;
-            if (pantsModel != null && pantsModel.HideLegs)
+            if (pantsModel != null && pantsModel.HideLegs && !(bool)who.swimming)
             {
                 switch (who.FarmerSprite.CurrentFrame)
                 {
