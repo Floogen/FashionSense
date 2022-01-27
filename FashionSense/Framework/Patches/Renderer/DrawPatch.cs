@@ -55,7 +55,13 @@ namespace FashionSense.Framework.Patches.Renderer
                 return true;
             }
 
-            var shoeColor = new Color() { PackedValue = uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR]) };
+            if (!uint.TryParse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR], out uint shoeColorValue))
+            {
+                shoeColorValue = Game1.player.hairstyleColor.Value.PackedValue;
+                Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR] = shoeColorValue.ToString();
+            }
+
+            var shoeColor = new Color() { PackedValue = shoeColorValue };
             var darkestColor = new Color(57, 57, 57);
             var mediumColor = new Color(81, 81, 81);
             var lightColor = new Color(119, 119, 119);
