@@ -23,14 +23,14 @@
   "ui.fashion_sense.create_outfit_button": "สร้างเครื่องแต่งกาย",
   "ui.fashion_sense.create_outfit_hover": "สร้างเครื่องแต่งกายใหม่ตามเสื้อผ้าปัจจุบันของคุณ",
   "ui.fashion_sense.outfit_info.save": "เซฟเครื่องแต่งกายชุดนี้เอาไว้",
-  "ui.fashion_sense.outfit_info.rename": "เปลี่ยนชื่อชุดนี้",
-  "ui.fashion_sense.outfit_info.delete": "ลบชุดนี้",
-  "ui.fashion_sense.warning.name": "ชื่อเครื่องแต่งกายว่างเปล่าหรือมีอยู่แล้ว",
+  "ui.fashion_sense.outfit_info.rename": "เปลี่ยนชื่อเครื่องแต่งกายนี้",
+  "ui.fashion_sense.outfit_info.delete": "ลบเครื่องแต่งกายนี้",
+  "ui.fashion_sense.warning.name": "ยังไม่ได้ตั้งชื่อเครื่องแต่งกายหรือตั้งชื่อที่มีอยู่แล้ว",
 
   // UI - Etc
   "ui.fashion_sense.color_override.shoes": "แทนที่สีรองเท้า",
   "ui.fashion_sense.search_button": "ค้นหาชุด Fashion Sense ที่เฉพาะเจาะจง",
-  "ui.fashion_sense.outfit_button": "เข้าถึงชุด Fashion Sense ของคุณ",
+  "ui.fashion_sense.outfit_button": "เข้าถึงเครื่องแต่งกาย Fashion Sense ของคุณ",
   "ui.fashion_sense.color_copy_button": "คัดลอกสีปัจจุบัน",
   "ui.fashion_sense.color_paste_button": "วางสีที่บันทึกไว้",
   "ui.fashion_sense.color_paste_button_empty": "วางสีที่บันทึกไว้ (ว่าง)",
