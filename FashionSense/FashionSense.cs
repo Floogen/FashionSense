@@ -23,6 +23,7 @@ using StardewModdingAPI.Events;
 using FashionSense.Framework.Models.Pants;
 using FashionSense.Framework.Patches.Entities;
 using FashionSense.Framework.Models.Sleeves;
+using FashionSense.Framework.UI;
 
 namespace FashionSense
 {
@@ -124,15 +125,17 @@ namespace FashionSense
                 }
             }
 
-            // Update elapsed durations
-            UpdateElapsedDuration(ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION);
-            UpdateElapsedDuration(ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION);
-            UpdateElapsedDuration(ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ELAPSED_DURATION);
-            UpdateElapsedDuration(ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION);
-            UpdateElapsedDuration(ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION);
-            UpdateElapsedDuration(ModDataKeys.ANIMATION_SHIRT_ELAPSED_DURATION);
-            UpdateElapsedDuration(ModDataKeys.ANIMATION_PANTS_ELAPSED_DURATION);
-            UpdateElapsedDuration(ModDataKeys.ANIMATION_SLEEVES_ELAPSED_DURATION);
+            // Update elapsed durations for the player
+            UpdateElapsedDuration(Game1.player);
+
+            // Update elapsed durations when the player is using the SearchMenu
+            if (Game1.activeClickableMenu is SearchMenu searchMenu && searchMenu is not null)
+            {
+                foreach (var fakeFarmer in searchMenu.fakeFarmers)
+                {
+                    UpdateElapsedDuration(fakeFarmer);
+                }
+            }
         }
 
         private void OnWarped(object sender, StardewModdingAPI.Events.WarpedEventArgs e)
@@ -216,14 +219,26 @@ namespace FashionSense
             SetSpriteDirty();
         }
 
-        private void UpdateElapsedDuration(string durationKey)
+        private void UpdateElapsedDuration(Farmer who)
         {
-            if (Game1.player.modData.ContainsKey(durationKey))
+            UpdateElapsedDuration(who, ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION);
+            UpdateElapsedDuration(who, ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION);
+            UpdateElapsedDuration(who, ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ELAPSED_DURATION);
+            UpdateElapsedDuration(who, ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION);
+            UpdateElapsedDuration(who, ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION);
+            UpdateElapsedDuration(who, ModDataKeys.ANIMATION_SHIRT_ELAPSED_DURATION);
+            UpdateElapsedDuration(who, ModDataKeys.ANIMATION_PANTS_ELAPSED_DURATION);
+            UpdateElapsedDuration(who, ModDataKeys.ANIMATION_SLEEVES_ELAPSED_DURATION);
+        }
+
+        private void UpdateElapsedDuration(Farmer who, string durationKey)
+        {
+            if (who.modData.ContainsKey(durationKey))
             {
-                var elapsedDuration = Int32.Parse(Game1.player.modData[durationKey]);
+                var elapsedDuration = Int32.Parse(who.modData[durationKey]);
                 if (elapsedDuration < MAX_TRACKED_MILLISECONDS)
                 {
-                    Game1.player.modData[durationKey] = (elapsedDuration + Game1.currentGameTime.ElapsedGameTime.Milliseconds).ToString();
+                    who.modData[durationKey] = (elapsedDuration + Game1.currentGameTime.ElapsedGameTime.Milliseconds).ToString();
                 }
             }
         }

@@ -514,7 +514,7 @@ namespace FashionSense.Framework.UI
             return enabledButton.name;
         }
 
-        private string GetCurrentAccessorySlotKey()
+        internal string GetCurrentAccessorySlotKey()
         {
             var enabledButton = optionButtons.FirstOrDefault(f => (f as ClickableTextureComponent).hoverText == "enabled");
             if (enabledButton is null)
@@ -533,7 +533,7 @@ namespace FashionSense.Framework.UI
             }
         }
 
-        private string GetCurrentFeatureSlotKey()
+        internal string GetCurrentFeatureSlotKey()
         {
             var enabledButton = featureButtons.FirstOrDefault(f => (f as ClickableTextureComponent).hoverText == "enabled");
             if (enabledButton is null)
@@ -876,7 +876,7 @@ namespace FashionSense.Framework.UI
 
             if (searchButton.containsPoint(x, y))
             {
-                Game1.activeClickableMenu = new FilterMenu(GetNameOfEnabledFilter(), this);
+                Game1.activeClickableMenu = new SearchMenu(Game1.player, GetNameOfEnabledFilter(), this);
             }
 
             if (outfitButton.containsPoint(x, y))
