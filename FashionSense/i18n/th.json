@@ -1,0 +1,54 @@
+{
+  // Tools
+  "tools.name.hand_mirror": "กระจก",
+  "tools.description.hand_mirror": "ให้คุณเปลี่ยนรูปร่างของคุณ ให้ดูมีชีวิตชีวามากขึ้น",
+
+  // Messages
+  "messages.warning.no_content_packs": "คุณไม่ได้ติดตั้งชุดเนื้อหาของ Fashion Sense!",
+
+  // UI - Titles
+  "ui.fashion_sense.title.search": "เลือก Fashion Sense Pack",
+  "ui.fashion_sense.title.hair": "ทรงผม",
+  "ui.fashion_sense.title.accessory": "เครื่องประดับ",
+  "ui.fashion_sense.title.hat": "หมวก",
+  "ui.fashion_sense.title.shirt": "เสื้อ",
+  "ui.fashion_sense.title.pants": "กางเกง",
+  "ui.fashion_sense.title.sleeves": "แขนเสื้อ",
+  "ui.fashion_sense.title.sleevesAndShoes": "แขนเสื้อ & รองเท้า",
+  "ui.fashion_sense.title.shoes": "รองเท้า",
+
+  // UI - Outfits
+  "ui.fashion_sense.title.outfits": "เครื่องแต่งกาย",
+  "ui.fashion_sense.title.outfit_naming": "ชื่อเครื่องแต่งกาย",
+  "ui.fashion_sense.create_outfit_button": "สร้างเครื่องแต่งกาย",
+  "ui.fashion_sense.create_outfit_hover": "สร้างเครื่องแต่งกายใหม่ตามเสื้อผ้าปัจจุบันของคุณ",
+  "ui.fashion_sense.outfit_info.save": "เซฟเครื่องแต่งกายชุดนี้เอาไว้",
+  "ui.fashion_sense.outfit_info.rename": "เปลี่ยนชื่อเครื่องแต่งกายนี้",
+  "ui.fashion_sense.outfit_info.delete": "ลบเครื่องแต่งกายนี้",
+  "ui.fashion_sense.warning.name": "ยังไม่ได้ตั้งชื่อเครื่องแต่งกายหรือตั้งชื่อที่มีอยู่แล้ว",
+
+  // UI - Etc
+  "ui.fashion_sense.color_override.shoes": "แทนที่สีรองเท้า",
+  "ui.fashion_sense.search_button": "ค้นหาชุด Fashion Sense ที่เฉพาะเจาะจง",
+  "ui.fashion_sense.outfit_button": "เข้าถึงเครื่องแต่งกาย Fashion Sense ของคุณ",
+  "ui.fashion_sense.color_copy_button": "คัดลอกสีปัจจุบัน",
+  "ui.fashion_sense.color_paste_button": "วางสีที่บันทึกไว้",
+  "ui.fashion_sense.color_paste_button_empty": "วางสีที่บันทึกไว้ (ว่าง)",
+  "ui.fashion_sense.clear_button": "ล้างไอเท็ม Fashion Sense ที่เลือกอยู่ในปัจจุบัน",
+  "ui.fashion_sense.random_button": "สุ่มเลือกไอเท็ม Fashion Sense",
+  "ui.fashion_sense.color_active.hair": "สีผม",
+  "ui.fashion_sense.color_active.hat": "หมวกสี",
+  "ui.fashion_sense.color_active.shirt": "สีเสื้อ",
+  "ui.fashion_sense.color_active.pants": "สีกางเกง",
+  "ui.fashion_sense.color_active.accessory": "สีเครื่องประดับ",
+  "ui.fashion_sense.color_active.sleeves": "สีแขนเสื้อ",
+  "ui.fashion_sense.color_active.shoes": "สีรองเท้า",
+  "ui.fashion_sense.color_disabled.generic": "(ละเว้น)",
+  "ui.fashion_sense.color_info.hair": "การซ้อนทับสีจะไม่ส่งผลต่อทรงผมนี้",
+  "ui.fashion_sense.color_info.hat": "การซ้อนทับสีจะไม่ส่งผลต่อหมวกใบนี้",
+  "ui.fashion_sense.color_info.shirt": "การซ้อนทับสีจะไม่ส่งผลต่อเสื้อตัวนี้",
+  "ui.fashion_sense.color_info.pants": "การซ้อนทับสีจะไม่ส่งผลต่อกางเกงเหล่านี้",
+  "ui.fashion_sense.color_info.accessory": "การซ้อนสีจะไม่ส่งผลต่ออุปกรณ์เสริมนี้",
+  "ui.fashion_sense.color_info.sleeves": "การซ้อนทับสีจะไม่ส่งผลต่อแขนเสื้อเหล่านี้",
+  "ui.fashion_sense.color_info.shoes": "การซ้อนทับสีจะไม่ส่งผลต่อรองเท้าเหล่านี้"
+}
