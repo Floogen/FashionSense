@@ -17,4 +17,5 @@ Some example fashion sense appearances are included in this repository, which ca
 ## Translations
 Translations have been generously provided by the following users:
 
+* **Thai** - ellipszist
 * **Turkish** - KediDili
