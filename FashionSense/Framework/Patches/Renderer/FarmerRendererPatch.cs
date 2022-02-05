@@ -1096,20 +1096,25 @@ namespace FashionSense.Framework.Patches.Renderer
 
         private static void DrawColorMask(SpriteBatch b, AppearanceContentPack appearancePack, AppearanceModel appearanceModel, Vector2 position, Rectangle sourceRect, Color color, float rotation, Vector2 origin, float scale, float layerDepth)
         {
-            Color[] data = new Color[appearancePack.Texture.Width * appearancePack.Texture.Height];
-            appearancePack.Texture.GetData(data);
-            Texture2D maskedTexture = new Texture2D(Game1.graphics.GraphicsDevice, appearancePack.Texture.Width, appearancePack.Texture.Height);
-
-            for (int i = 0; i < data.Length; i++)
+            if (appearancePack.ColorMaskTexture is null)
             {
-                if (!appearanceModel.IsMaskedColor(data[i]))
+                Color[] data = new Color[appearancePack.Texture.Width * appearancePack.Texture.Height];
+                appearancePack.Texture.GetData(data);
+                Texture2D maskedTexture = new Texture2D(Game1.graphics.GraphicsDevice, appearancePack.Texture.Width, appearancePack.Texture.Height);
+
+                for (int i = 0; i < data.Length; i++)
                 {
-                    data[i] = Color.Transparent;
+                    if (!appearanceModel.IsMaskedColor(data[i]))
+                    {
+                        data[i] = Color.Transparent;
+                    }
                 }
+
+                maskedTexture.SetData(data);
+                appearancePack.ColorMaskTexture = maskedTexture;
             }
 
-            maskedTexture.SetData(data);
-            b.Draw(maskedTexture, position, sourceRect, color, rotation, origin, scale, appearanceModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
+            b.Draw(appearancePack.ColorMaskTexture, position, sourceRect, color, rotation, origin, scale, appearanceModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
         }
 
         private static void DrawSleeveColorMask(SpriteBatch b, SleevesContentPack sleevesPack, SleevesModel sleevesModel, ShirtModel shirtModel, Vector2 position, Rectangle sourceRect, Color color, float rotation, Vector2 origin, float scale, float layerDepth)
@@ -1147,35 +1152,40 @@ namespace FashionSense.Framework.Patches.Renderer
 
         private static void DrawSkinToneMask(SpriteBatch b, AppearanceContentPack appearancePack, AppearanceModel appearanceModel, SkinToneModel skinTone, Vector2 position, Rectangle sourceRect, Color color, float rotation, Vector2 origin, float scale, float layerDepth)
         {
-            Color[] data = new Color[appearancePack.Texture.Width * appearancePack.Texture.Height];
-            appearancePack.Texture.GetData(data);
-            Texture2D maskedTexture = new Texture2D(Game1.graphics.GraphicsDevice, appearancePack.Texture.Width, appearancePack.Texture.Height);
-
-            for (int i = 0; i < data.Length; i++)
+            if (appearancePack.SkinMaskTexture is null)
             {
-                if (!appearanceModel.IsSkinToneMaskColor(data[i]))
+                Color[] data = new Color[appearancePack.Texture.Width * appearancePack.Texture.Height];
+                appearancePack.Texture.GetData(data);
+                Texture2D maskedTexture = new Texture2D(Game1.graphics.GraphicsDevice, appearancePack.Texture.Width, appearancePack.Texture.Height);
+
+                for (int i = 0; i < data.Length; i++)
                 {
-                    data[i] = Color.Transparent;
+                    if (!appearanceModel.IsSkinToneMaskColor(data[i]))
+                    {
+                        data[i] = Color.Transparent;
+                    }
+                    else if (appearanceModel.SkinToneMasks is not null)
+                    {
+                        if (appearanceModel.SkinToneMasks.LightTone is not null && data[i] == appearanceModel.SkinToneMasks.Lightest)
+                        {
+                            data[i] = skinTone.Lightest;
+                        }
+                        else if (appearanceModel.SkinToneMasks.MediumTone is not null && data[i] == appearanceModel.SkinToneMasks.Medium)
+                        {
+                            data[i] = skinTone.Medium;
+                        }
+                        else if (appearanceModel.SkinToneMasks.DarkTone is not null && data[i] == appearanceModel.SkinToneMasks.Darkest)
+                        {
+                            data[i] = skinTone.Darkest;
+                        }
+                    }
                 }
-                else if (appearanceModel.SkinToneMasks is not null)
-                {
-                    if (appearanceModel.SkinToneMasks.LightTone is not null && data[i] == appearanceModel.SkinToneMasks.Lightest)
-                    {
-                        data[i] = skinTone.Lightest;
-                    }
-                    else if (appearanceModel.SkinToneMasks.MediumTone is not null && data[i] == appearanceModel.SkinToneMasks.Medium)
-                    {
-                        data[i] = skinTone.Medium;
-                    }
-                    else if (appearanceModel.SkinToneMasks.DarkTone is not null && data[i] == appearanceModel.SkinToneMasks.Darkest)
-                    {
-                        data[i] = skinTone.Darkest;
-                    }
-                }
+
+                maskedTexture.SetData(data);
+                appearancePack.SkinMaskTexture = maskedTexture;
             }
 
-            maskedTexture.SetData(data);
-            b.Draw(maskedTexture, position, sourceRect, appearanceModel.DisableSkinGrayscale ? Color.White : color, rotation, origin, scale, appearanceModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
+            b.Draw(appearancePack.SkinMaskTexture, position, sourceRect, appearanceModel.DisableSkinGrayscale ? Color.White : color, rotation, origin, scale, appearanceModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
         }
 
         private static void DrawCustomAccessory(AccessoryContentPack accessoryPack, AccessoryModel accessoryModel, Rectangle customAccessorySourceRect, string colorModDataKey, SkinToneModel skinTone, FarmerRenderer renderer, bool isDrawingForUI, SpriteBatch b, Farmer who, int facingDirection, Vector2 position, Vector2 origin, Vector2 positionOffset, Vector2 rotationAdjustment, float scale, int currentFrame, float rotation, float layerDepth)
