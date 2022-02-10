@@ -24,6 +24,7 @@ using FashionSense.Framework.Models.Hat;
 using FashionSense.Framework.Models.Shirt;
 using FashionSense.Framework.Models.Pants;
 using FashionSense.Framework.Models.Sleeves;
+using FashionSense.Framework.Models.Shoes;
 
 namespace FashionSense.Framework.Patches.Renderer
 {
@@ -67,10 +68,16 @@ namespace FashionSense.Framework.Patches.Renderer
             var lightColor = new Color(119, 119, 119);
             var lightestColor = new Color(158, 158, 158);
 
-            SwapColorReversePatch(__instance, texture_name, pixels, 268, Utility.MultiplyColor(darkestColor, shoeColor));
-            SwapColorReversePatch(__instance, texture_name, pixels, 269, Utility.MultiplyColor(mediumColor, shoeColor));
-            SwapColorReversePatch(__instance, texture_name, pixels, 270, Utility.MultiplyColor(lightColor, shoeColor));
-            SwapColorReversePatch(__instance, texture_name, pixels, 271, Utility.MultiplyColor(lightestColor, shoeColor));
+            var isDoingVanillaOverride = false;
+            if (who.modData[ModDataKeys.CUSTOM_SHOES_ID] == FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_override.shoes"))
+            {
+                isDoingVanillaOverride = true;
+            }
+
+            SwapColorReversePatch(__instance, texture_name, pixels, 268, Utility.MultiplyColor(darkestColor, isDoingVanillaOverride ? shoeColor : Color.Transparent));
+            SwapColorReversePatch(__instance, texture_name, pixels, 269, Utility.MultiplyColor(mediumColor, isDoingVanillaOverride ? shoeColor : Color.Transparent));
+            SwapColorReversePatch(__instance, texture_name, pixels, 270, Utility.MultiplyColor(lightColor, isDoingVanillaOverride ? shoeColor : Color.Transparent));
+            SwapColorReversePatch(__instance, texture_name, pixels, 271, Utility.MultiplyColor(lightestColor, isDoingVanillaOverride ? shoeColor : Color.Transparent));
 
             return false;
         }
@@ -473,7 +480,21 @@ namespace FashionSense.Framework.Patches.Renderer
                 shirtModel = sPack.GetShirtFromFacingDirection(facingDirection);
             }
 
-            return new AppearanceModel[] { pantsModel, hairModel, accessoryModel, secondaryAccessoryModel, tertiaryAccessoryModel, hatModel, shirtModel };
+            // Sleeves pack
+            SleevesModel sleeveModel = null;
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_SLEEVES_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<SleevesContentPack>(who.modData[ModDataKeys.CUSTOM_SLEEVES_ID]) is SleevesContentPack slModel && slModel != null)
+            {
+                sleeveModel = slModel.GetSleevesFromFacingDirection(facingDirection);
+            }
+
+            // Shoes pack
+            ShoesModel shoesModel = null;
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_SHOES_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<ShoesContentPack>(who.modData[ModDataKeys.CUSTOM_SHOES_ID]) is ShoesContentPack shModel && shModel != null)
+            {
+                shoesModel = shModel.GetShoesFromFacingDirection(facingDirection);
+            }
+
+            return new AppearanceModel[] { pantsModel, hairModel, accessoryModel, secondaryAccessoryModel, tertiaryAccessoryModel, hatModel, shirtModel, sleeveModel, shoesModel };
         }
 
         private static void DrawPantsVanilla(SpriteBatch b, Rectangle sourceRect, FarmerRenderer renderer, Farmer who, FarmerSprite.AnimationFrame animationFrame, int currentFrame, int facingDirection, float rotation, float scale, float layerDepth, Vector2 position, Vector2 origin, Vector2 positionOffset, Vector2 rotationAdjustment, Color overrideColor)

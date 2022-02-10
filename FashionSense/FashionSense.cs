@@ -24,6 +24,7 @@ using FashionSense.Framework.Models.Pants;
 using FashionSense.Framework.Patches.Entities;
 using FashionSense.Framework.Models.Sleeves;
 using FashionSense.Framework.UI;
+using FashionSense.Framework.Models.Shoes;
 
 namespace FashionSense
 {
@@ -173,6 +174,10 @@ namespace FashionSense
             {
                 e.OldLocation.sharedLights.Remove(sleeves_id);
             }
+            if (e.Player.modData.ContainsKey(ModDataKeys.ANIMATION_SHOES_LIGHT_ID) && Int32.TryParse(e.Player.modData[ModDataKeys.ANIMATION_SHOES_LIGHT_ID], out int shoes_id))
+            {
+                e.OldLocation.sharedLights.Remove(shoes_id);
+            }
         }
 
         private void OnGameLaunched(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
@@ -229,6 +234,7 @@ namespace FashionSense
             UpdateElapsedDuration(who, ModDataKeys.ANIMATION_SHIRT_ELAPSED_DURATION);
             UpdateElapsedDuration(who, ModDataKeys.ANIMATION_PANTS_ELAPSED_DURATION);
             UpdateElapsedDuration(who, ModDataKeys.ANIMATION_SLEEVES_ELAPSED_DURATION);
+            UpdateElapsedDuration(who, ModDataKeys.ANIMATION_SHOES_ELAPSED_DURATION);
         }
 
         private void UpdateElapsedDuration(Farmer who, string durationKey)
@@ -292,6 +298,21 @@ namespace FashionSense
                 // Load Sleeves
                 Monitor.Log($"Loading sleeves from pack: {contentPack.Manifest.Name} {contentPack.Manifest.Version} by {contentPack.Manifest.Author}", LogLevel.Trace);
                 AddSleevesContentPacks(contentPack);
+
+                // Add internal shoe pack for recoloring of vanilla shoes
+                textureManager.AddAppearanceModel(new ShoesContentPack()
+                {
+                    Author = "PeacefulEnd",
+                    Owner = "PeacefulEnd",
+                    Name = modHelper.Translation.Get("ui.fashion_sense.color_override.shoes"),
+                    PackType = AppearanceContentPack.Type.Shoes,
+                    PackName = modHelper.Translation.Get("ui.fashion_sense.color_override.shoes"),
+                    Id = modHelper.Translation.Get("ui.fashion_sense.color_override.shoes")
+                });
+
+                // Load Shoes
+                Monitor.Log($"Loading shoes from pack: {contentPack.Manifest.Name} {contentPack.Manifest.Version} by {contentPack.Manifest.Author}", LogLevel.Trace);
+                AddShoesContentPacks(contentPack);
             }
 
             if (Context.IsWorldReady)
@@ -842,6 +863,97 @@ namespace FashionSense
             }
         }
 
+
+        private void AddShoesContentPacks(IContentPack contentPack)
+        {
+            try
+            {
+                var directoryPath = new DirectoryInfo(Path.Combine(contentPack.DirectoryPath, "Shoes"));
+                if (!directoryPath.Exists)
+                {
+                    Monitor.Log($"No Shoes folder found for the content pack {contentPack.Manifest.Name}", LogLevel.Trace);
+                    return;
+                }
+
+                var shoesFolders = directoryPath.GetDirectories("*", SearchOption.AllDirectories);
+                if (shoesFolders.Count() == 0)
+                {
+                    Monitor.Log($"No sub-folders found under Shoes for the content pack {contentPack.Manifest.Name}", LogLevel.Warn);
+                    return;
+                }
+
+                // Load in the accessories
+                foreach (var textureFolder in shoesFolders)
+                {
+                    if (!File.Exists(Path.Combine(textureFolder.FullName, "shoes.json")))
+                    {
+                        if (textureFolder.GetDirectories().Count() == 0)
+                        {
+                            Monitor.Log($"Content pack {contentPack.Manifest.Name} is missing a shoes.json under {textureFolder.Name}", LogLevel.Warn);
+                        }
+
+                        continue;
+                    }
+
+                    var parentFolderName = textureFolder.Parent.FullName.Replace(contentPack.DirectoryPath + Path.DirectorySeparatorChar, String.Empty);
+                    var modelPath = Path.Combine(parentFolderName, textureFolder.Name, "shoes.json");
+
+                    // Parse the model and assign it the content pack's owner
+                    ShoesContentPack appearanceModel = contentPack.ReadJsonFile<ShoesContentPack>(modelPath);
+                    appearanceModel.Author = contentPack.Manifest.Author;
+                    appearanceModel.Owner = contentPack.Manifest.UniqueID;
+
+                    // Verify the required Name property is set
+                    if (String.IsNullOrEmpty(appearanceModel.Name))
+                    {
+                        Monitor.Log($"Unable to add shoes from {appearanceModel.Owner}: Missing the Name property", LogLevel.Warn);
+                        continue;
+                    }
+
+                    // Set the model type
+                    appearanceModel.PackType = AppearanceContentPack.Type.Shoes;
+
+                    // Set the PackName and Id
+                    appearanceModel.PackName = contentPack.Manifest.Name;
+                    appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.PackType, "/", appearanceModel.Name);
+
+                    // Verify that a shoes with the name doesn't exist in this pack
+                    if (textureManager.GetSpecificAppearanceModel<ShoesContentPack>(appearanceModel.Id) != null)
+                    {
+                        Monitor.Log($"Unable to add shoes from {contentPack.Manifest.Name}: This pack already contains a shoes with the name of {appearanceModel.Name}", LogLevel.Warn);
+                        continue;
+                    }
+
+                    // Verify that at least one ShoesModel is given
+                    if (appearanceModel.BackShoes is null && appearanceModel.RightShoes is null && appearanceModel.FrontShoes is null && appearanceModel.LeftShoes is null)
+                    {
+                        Monitor.Log($"Unable to add shoes for {appearanceModel.Name} from {contentPack.Manifest.Name}: No shoes models given (FrontShoes, BackShoes, etc.)", LogLevel.Warn);
+                        continue;
+                    }
+
+                    // Verify we are given a texture and if so, track it
+                    if (!File.Exists(Path.Combine(textureFolder.FullName, "shoes.png")))
+                    {
+                        Monitor.Log($"Unable to add shoes for {appearanceModel.Name} from {contentPack.Manifest.Name}: No associated shoes.png given", LogLevel.Warn);
+                        continue;
+                    }
+
+                    // Load in the texture
+                    appearanceModel.Texture = contentPack.LoadAsset<Texture2D>(contentPack.GetActualAssetKey(Path.Combine(parentFolderName, textureFolder.Name, "shoes.png")));
+
+                    // Track the model
+                    textureManager.AddAppearanceModel(appearanceModel);
+
+                    // Log it
+                    Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
+                }
+            }
+            catch (Exception ex)
+            {
+                Monitor.Log($"Error loading shoes from content pack {contentPack.Manifest.Name}: {ex}", LogLevel.Error);
+            }
+        }
+
         internal static void SetSpriteDirty()
         {
             var spriteDirty = modHelper.Reflection.GetField<bool>(Game1.player.FarmerRenderer, "_spriteDirty");
@@ -922,6 +1034,15 @@ namespace FashionSense
                 who.modData[ModDataKeys.ANIMATION_SLEEVES_FRAME_DURATION] = duration.ToString();
                 who.modData[ModDataKeys.ANIMATION_SLEEVES_ELAPSED_DURATION] = "0";
                 who.modData[ModDataKeys.ANIMATION_SLEEVES_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
+            }
+
+            if (model is null || model is ShoesModel)
+            {
+                who.modData[ModDataKeys.ANIMATION_SHOES_ITERATOR] = "0";
+                who.modData[ModDataKeys.ANIMATION_SHOES_STARTING_INDEX] = "0";
+                who.modData[ModDataKeys.ANIMATION_SHOES_FRAME_DURATION] = duration.ToString();
+                who.modData[ModDataKeys.ANIMATION_SHOES_ELAPSED_DURATION] = "0";
+                who.modData[ModDataKeys.ANIMATION_SHOES_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
             }
 
             who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] = facingDirection.ToString();

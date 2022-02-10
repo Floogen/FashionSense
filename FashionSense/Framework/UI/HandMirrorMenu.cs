@@ -4,6 +4,7 @@ using FashionSense.Framework.Models.Hair;
 using FashionSense.Framework.Models.Hat;
 using FashionSense.Framework.Models.Pants;
 using FashionSense.Framework.Models.Shirt;
+using FashionSense.Framework.Models.Shoes;
 using FashionSense.Framework.Models.Sleeves;
 using FashionSense.Framework.UI.Components;
 using FashionSense.Framework.Utilities;
@@ -213,7 +214,7 @@ namespace FashionSense.Framework.UI
             });
 
             // Add the feature buttons
-            featureButtons.Add(new ClickableTextureComponent(SLEEVES_OPTION_BUTTON, new Rectangle(_portraitBox.Right - 130, _portraitBox.Y + yOffset - 10, 32, 32), null, "enabled", FashionSense.assetManager.sleevesButtonTexture, new Rectangle(0, 0, 15, 15), 2.75f)
+            featureButtons.Add(new ClickableTextureComponent(SLEEVES_OPTION_BUTTON, new Rectangle(_portraitBox.Right - 130, _portraitBox.Y + yOffset - 10, 32, 32), null, "enabled", FashionSense.assetManager.sleevesButtonTexture, new Rectangle(0, 0, 15, 15), 2f)
             {
                 myID = 613,
                 upNeighborID = -99998,
@@ -221,7 +222,7 @@ namespace FashionSense.Framework.UI
                 rightNeighborID = -99998,
                 downNeighborID = -99998
             });
-            featureButtons.Add(new ClickableTextureComponent(SHOES_OPTION_BUTTON, new Rectangle(_portraitBox.Right - 34, _portraitBox.Y + yOffset - 10, 32, 32), null, "disabled", FashionSense.assetManager.shoesButtonTexture, new Rectangle(0, 0, 15, 15), 2.75f)
+            featureButtons.Add(new ClickableTextureComponent(SHOES_OPTION_BUTTON, new Rectangle(_portraitBox.Right - 34, _portraitBox.Y + yOffset - 10, 32, 32), null, "disabled", FashionSense.assetManager.shoesButtonTexture, new Rectangle(0, 0, 15, 15), 2f)
             {
                 myID = 613,
                 upNeighborID = -99998,
@@ -640,17 +641,10 @@ namespace FashionSense.Framework.UI
                 case SLEEVES_FILTER_BUTTON:
                     if (GetCurrentFeatureSlotKey() == ModDataKeys.CUSTOM_SHOES_ID)
                     {
-                        if (Game1.player.modData[ModDataKeys.CUSTOM_SHOES_ID] is null || Game1.player.modData[ModDataKeys.CUSTOM_SHOES_ID] == "None")
-                        {
-                            Game1.player.modData[ModDataKeys.CUSTOM_SHOES_ID] = FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_override.shoes");
-                        }
-                        else
-                        {
-                            Game1.player.modData[ModDataKeys.CUSTOM_SHOES_ID] = "None";
-                        }
-                        Game1.playSound("grassyStep");
-                        FashionSense.SetSpriteDirty();
-                        return;
+                        modDataKey = ModDataKeys.CUSTOM_SHOES_ID;
+                        currentAppearance = FashionSense.textureManager.GetSpecificAppearanceModel<ShoesContentPack>(Game1.player.modData[modDataKey]);
+                        appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is ShoesContentPack).ToList();
+                        break;
                     }
                     modDataKey = ModDataKeys.CUSTOM_SLEEVES_ID;
                     currentAppearance = FashionSense.textureManager.GetSpecificAppearanceModel<SleevesContentPack>(Game1.player.modData[modDataKey]);
@@ -1296,12 +1290,8 @@ namespace FashionSense.Framework.UI
                     contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<SleevesContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_SLEEVES_ID]);
                     if (GetCurrentFeatureSlotKey() == ModDataKeys.CUSTOM_SHOES_ID)
                     {
-                        contentPack = new AppearanceContentPack() { Name = FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_override.shoes"), PackName = FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_override.shoes") };
-                        if (Game1.player.modData[ModDataKeys.CUSTOM_SHOES_ID] is null || Game1.player.modData[ModDataKeys.CUSTOM_SHOES_ID] == "None")
-                        {
-                            contentPack.Name = "None";
-                            contentPack.PackName = String.Empty;
-                        }
+                        contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<ShoesContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_SHOES_ID]);
+                        break;
                     }
                     break;
             }
@@ -1503,7 +1493,7 @@ namespace FashionSense.Framework.UI
                         {
                             name = GetColorPickerLabel(true, enabledFilterName: GetNameOfEnabledFilter());
                         }
-                        else if (contentPack is not null && contentPack.PackType == AppearanceContentPack.Type.Unknown)
+                        else if (contentPack is not null && contentPack.PackType == AppearanceContentPack.Type.Shoes)
                         {
                             name = FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_active.shoes");
                         }
