@@ -1489,6 +1489,7 @@ namespace FashionSense.Framework.Patches.Renderer
                     DrawCustomAccessory(tertiaryAccessoryPack, tertiaryAccessoryModel, customTertiaryAccessorySourceRect, ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR, skinTone, __instance, ___isDrawingForUI, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, accessoryLayer + 0.02E-05f);
                 }
             }
+            layerDepth += 0.02E-05f;
 
             // Draw hair
             if (hairModel is null || (hairModel.HideWhileWearingBathingSuit && who.bathingClothes.Value) || (hairModel.HideWhileSwimming && who.swimming.Value))
@@ -1500,7 +1501,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
             else
             {
-                float hair_draw_layer = 2.2E-05f;
+                float hairDrawLayer = 2.2E-05f;
                 var hairColor = overrideColor.Equals(Color.White) ? ((Color)who.hairstyleColor) : overrideColor;
                 if (hairModel.DisableGrayscale)
                 {
@@ -1517,19 +1518,18 @@ namespace FashionSense.Framework.Patches.Renderer
                     featureOffset.Y -= who.isMale ? 4 : 0;
 
                     // Draw the hair
-                    b.Draw(hairPack.Texture, position + origin + ___positionOffset + featureOffset, customHairSourceRect, hairModel.HasColorMask() ? Color.White : hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, hairModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + hair_draw_layer);
+                    b.Draw(hairPack.Texture, position + origin + ___positionOffset + featureOffset, customHairSourceRect, hairModel.HasColorMask() ? Color.White : hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, hairModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
 
                     if (hairModel.HasColorMask())
                     {
-                        DrawColorMask(b, hairPack, hairModel, position + origin + ___positionOffset + featureOffset, customHairSourceRect, hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, layerDepth + hair_draw_layer + 0.01E-05f);
+                        DrawColorMask(b, hairPack, hairModel, position + origin + ___positionOffset + featureOffset, customHairSourceRect, hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, layerDepth + hairDrawLayer + 0.01E-05f);
                     }
                     if (hairModel.HasSkinToneMask())
                     {
-                        DrawSkinToneMask(b, hairPack, hairModel, skinTone, position + origin + ___positionOffset + featureOffset, customHairSourceRect, hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, layerDepth + hair_draw_layer + 0.01E-05f);
+                        DrawSkinToneMask(b, hairPack, hairModel, skinTone, position + origin + ___positionOffset + featureOffset, customHairSourceRect, hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, layerDepth + hairDrawLayer + 0.01E-05f);
                     }
 
-                    hairLayer = layerDepth + hair_draw_layer + (hairModel.HasColorMask() ? 0.01E-05f : 0);
-                    layerDepth = hairLayer;
+                    layerDepth = layerDepth + hairDrawLayer + (hairModel.HasColorMask() ? 0.01E-05f : 0) + (hairModel.HasSkinToneMask() ? 0.01E-05f : 0);
                 }
             }
 
