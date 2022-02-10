@@ -152,24 +152,6 @@ namespace FashionSense.Framework.Patches.Renderer
 
         private static void HandleConditionalDraw(FarmerRenderer __instance, ref Vector2 ___positionOffset, ref Vector2 ___rotationAdjustment, ref bool ____sickFrame, ref bool ____shirtDirty, ref bool ____spriteDirty, SpriteBatch b, FarmerSprite.AnimationFrame animationFrame, int currentFrame, Rectangle sourceRect, Vector2 position, Vector2 origin, float layerDepth, int facingDirection, Color overrideColor, float rotation, float scale, Farmer who)
         {
-            ShirtContentPack shirtPack = null;
-            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_PANTS_ID))
-            {
-                shirtPack = FashionSense.textureManager.GetSpecificAppearanceModel<ShirtContentPack>(who.modData[ModDataKeys.CUSTOM_SHIRT_ID]);
-            }
-
-            SleevesContentPack sleevesPack = null;
-            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_SLEEVES_ID))
-            {
-                sleevesPack = FashionSense.textureManager.GetSpecificAppearanceModel<SleevesContentPack>(who.modData[ModDataKeys.CUSTOM_SLEEVES_ID]);
-            }
-
-            PantsContentPack pantsPack = null;
-            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_PANTS_ID))
-            {
-                pantsPack = FashionSense.textureManager.GetSpecificAppearanceModel<PantsContentPack>(who.modData[ModDataKeys.CUSTOM_PANTS_ID]);
-            }
-
             // Check if we need to utilize custom draw logic
             if (GetCurrentlyEquippedModels(who, facingDirection).Count() > 0 || ShouldSleevesBeHidden(who, facingDirection))
             {
