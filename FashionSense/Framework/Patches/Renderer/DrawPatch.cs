@@ -120,6 +120,11 @@ namespace FashionSense.Framework.Patches.Renderer
         [HarmonyAfter(new string[] { "aedenthorn.Swim" })]
         private static bool DrawPrefix(FarmerRenderer __instance, ref Vector2 ___positionOffset, ref Vector2 ___rotationAdjustment, ref bool ____sickFrame, ref bool ____shirtDirty, ref bool ____spriteDirty, SpriteBatch b, FarmerSprite.AnimationFrame animationFrame, int currentFrame, Rectangle sourceRect, Vector2 position, Vector2 origin, float layerDepth, int facingDirection, Color overrideColor, float rotation, float scale, Farmer who)
         {
+            if (who.isFakeEventActor && Game1.eventUp)
+            {
+                who = Game1.player;
+            }
+
             if (GetCurrentlyEquippedModels(who, facingDirection).Any(m => m is not null))
             {
                 // Draw with modified SpriteSortMode method for UI to handle clipping issue
