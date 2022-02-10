@@ -1705,13 +1705,13 @@ namespace FashionSense.Framework.Patches.Renderer
 
             if (hairModel.HasColorMask())
             {
-                DrawColorMask(b, hairPack, hairModel, position + new Vector2(0f, feature_y_offset * 4) * scale / 4f, sourceRect, hairColor, 0f, new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, layerDepth + hair_draw_layer + 0.01E-05f);
+                DrawColorMask(b, hairPack, hairModel, position + new Vector2(0f, feature_y_offset * 4) * scale / 4f, sourceRect, hairColor, 0f, new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), scale, layerDepth + hair_draw_layer + 0.01E-05f);
             }
             if (hairModel.HasSkinToneMask())
             {
                 // Get skin tone
                 var skinTone = DrawPatch.GetSkinTone(___farmerTextureManager, ___baseTexture, null, ___skin, ____sickFrame);
-                DrawSkinToneMask(b, hairPack, hairModel, skinTone, position + new Vector2(0f, feature_y_offset * 4) * scale / 4f, sourceRect, hairColor, 0f, new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, layerDepth + hair_draw_layer + 0.01E-05f);
+                DrawSkinToneMask(b, hairPack, hairModel, skinTone, position + new Vector2(0f, feature_y_offset * 4) * scale / 4f, sourceRect, hairColor, 0f, new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), scale, layerDepth + hair_draw_layer + 0.01E-05f);
             }
 
             return false;
