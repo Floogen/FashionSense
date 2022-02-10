@@ -76,7 +76,7 @@ namespace FashionSense.Framework.Models
 
         internal bool HasColorMask()
         {
-            return ColorMasks.Count > 0;
+            return DisableGrayscale is false && ColorMasks.Count > 0;
         }
 
         internal bool HasSkinToneMask()
