@@ -1505,13 +1505,10 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
 
                 // Adjust the shoesLayer according to model's adjustment properties
+                shoesLayer = layerDepth = who.FacingDirection == 0 ? layerDepth - 1E-5f : layerDepth;
                 if (shoesModel.DrawBeforePants)
                 {
-                    shoesLayer = pantsModel is not null ? layerDepth - 0.04E-05f : layerDepth - 0.1E-05f;
-                }
-                else
-                {
-                    shoesLayer = layerDepth;
+                    shoesLayer = pantsModel is not null ? shoesLayer - 0.4E-05f : shoesLayer - 1.1E-05f;
                 }
 
                 var featureOffset = GetFeatureOffset(facingDirection, currentFrame, scale, __instance, shoesPack.PackType, false);
