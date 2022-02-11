@@ -1488,7 +1488,7 @@ namespace FashionSense.Framework.Patches.Renderer
             layerDepth += 0.03E-05f;
 
             // Draw the shoes
-            if (shoesModel is null || (shoesModel.HideWhileWearingBathingSuit && who.bathingClothes.Value) || (shoesModel.HideWhileSwimming && who.swimming.Value))
+            if (shoesModel is null || (shoesModel.HideWhileWearingBathingSuit && who.bathingClothes.Value) || (shoesModel.HideWhileSwimming && who.swimming.Value) || DrawPatch.ShouldHideLegs(who, facingDirection))
             {
                 // Handled in DrawPatch.HandleCustomDraw
             }
@@ -1505,7 +1505,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
 
                 // Adjust the shoesLayer according to model's adjustment properties
-                shoesLayer = layerDepth = who.FacingDirection == 0 ? layerDepth - 1E-5f : layerDepth;
+                shoesLayer = layerDepth;
                 if (shoesModel.DrawBeforePants)
                 {
                     shoesLayer = pantsModel is not null ? shoesLayer - 0.4E-05f : shoesLayer - 1.1E-05f;
@@ -1525,7 +1525,7 @@ namespace FashionSense.Framework.Patches.Renderer
                     DrawSkinToneMask(b, shoesPack, shoesModel, skinTone, position + origin + ___positionOffset + featureOffset, customShoesSourceRect, shoesColor, rotation, origin + new Vector2(shoesModel.BodyPosition.X, shoesModel.BodyPosition.Y), 4f * scale, shoesLayer + 0.02E-05f);
                 }
             }
-            layerDepth += shoesLayer + 0.03E-05f;
+            layerDepth += 0.03E-05f;
 
             // Draw the shirt
             if (shirtModel is null || (shirtModel.HideWhileWearingBathingSuit && who.bathingClothes.Value) || (shirtModel.HideWhileSwimming && who.swimming.Value))

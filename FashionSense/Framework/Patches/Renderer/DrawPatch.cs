@@ -82,7 +82,7 @@ namespace FashionSense.Framework.Patches.Renderer
             var lightestColor = new Color(158, 158, 158);
 
             var isDoingVanillaOverride = false;
-            if (who.modData[ModDataKeys.CUSTOM_SHOES_ID] == FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_override.shoes"))
+            if (who.modData[ModDataKeys.CUSTOM_SHOES_ID] == FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_override.shoes") || ShouldHideLegs(who, who.FacingDirection))
             {
                 isDoingVanillaOverride = true;
             }
@@ -427,6 +427,18 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             return false;
+        }
+
+        internal static bool ShouldHideLegs(Farmer who, int facingDirection)
+        {
+            // Get the pants model, if applicable
+            PantsModel pantsModel = null;
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_PANTS_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<PantsContentPack>(who.modData[ModDataKeys.CUSTOM_PANTS_ID]) is PantsContentPack pPack && pPack != null)
+            {
+                pantsModel = pPack.GetPantsFromFacingDirection(facingDirection);
+            }
+
+            return pantsModel is not null && pantsModel.HideLegs;
         }
 
         private static AppearanceModel[] GetCurrentlyEquippedModels(Farmer who, int facingDirection)
