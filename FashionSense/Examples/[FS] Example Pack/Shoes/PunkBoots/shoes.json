@@ -1,0 +1,66 @@
+{
+  "Name": "Punk Boots",
+  "FrontShoes": {
+    "DisableGrayscale": true,
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": -20
+    },
+    "ShoesSize": {
+      "Width": 16,
+      "Length": 16
+    },
+    "IdleAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 100
+      }
+    ],
+    "MovementAnimation": [
+      {
+        "Frame": 2,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsWalking",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 1,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsWalking",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 2,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsWalking",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 3,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsWalking",
+            "Value": true
+          }
+        ]
+      }
+    ]
+  }
+}

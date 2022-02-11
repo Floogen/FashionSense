@@ -950,6 +950,11 @@ namespace FashionSense.Framework.UI
                             modDataKey = ModDataKeys.CUSTOM_SLEEVES_ID;
                             randomContentPack = FashionSense.textureManager.GetRandomAppearanceModel<SleevesContentPack>();
                         }
+                        else
+                        {
+                            modDataKey = ModDataKeys.CUSTOM_SHOES_ID;
+                            randomContentPack = FashionSense.textureManager.GetRandomAppearanceModel<ShoesContentPack>();
+                        }
                         break;
                 }
 
