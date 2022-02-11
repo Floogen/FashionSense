@@ -1,0 +1,196 @@
+{
+  "Name": "Sandals",
+  "FrontShoes": {
+    "DrawBeforePants": true,
+    "ColorMasks": [
+      [ 195, 195, 208 ],
+      [ 58, 58, 74 ]
+    ],
+    "DisableSkinGrayscale": true,
+    "SkinToneMasks": {
+      "LightTone": [ 249, 174, 137 ],
+      "MediumTone": [ 224, 107, 101 ],
+      "DarkTone": [ 107, 0, 58 ]
+    },
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": -20
+    },
+    "ShoesSize": {
+      "Width": 16,
+      "Length": 16
+    },
+    "IdleAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 100
+      }
+    ],
+    "MovementAnimation": [
+      {
+        "Frame": 2,
+        "EndWhenFarmerFrameUpdates": true
+      },
+      {
+        "Frame": 1,
+        "EndWhenFarmerFrameUpdates": true
+      },
+      {
+        "Frame": 3,
+        "EndWhenFarmerFrameUpdates": true
+      }
+    ]
+  },
+  "BackShoes": {
+    "DrawBeforePants": true,
+    "ColorMasks": [
+      [ 195, 195, 208 ],
+      [ 58, 58, 74 ]
+    ],
+    "DisableSkinGrayscale": true,
+    "SkinToneMasks": {
+      "LightTone": [ 249, 174, 137 ],
+      "MediumTone": [ 224, 107, 101 ],
+      "DarkTone": [ 107, 0, 58 ]
+    },
+    "StartingPosition": {
+      "X": 0,
+      "Y": 16
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": -20
+    },
+    "ShoesSize": {
+      "Width": 16,
+      "Length": 16
+    },
+    "IdleAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 100
+      }
+    ],
+    "MovementAnimation": [
+      {
+        "Frame": 2,
+        "EndWhenFarmerFrameUpdates": true
+      },
+      {
+        "Frame": 1,
+        "EndWhenFarmerFrameUpdates": true
+      },
+      {
+        "Frame": 2,
+        "EndWhenFarmerFrameUpdates": true
+      },
+      {
+        "Frame": 3,
+        "EndWhenFarmerFrameUpdates": true
+      }
+    ]
+  },
+  "RightShoes": {
+    "DrawBeforePants": true,
+    "ColorMasks": [
+      [ 195, 195, 208 ],
+      [ 58, 58, 74 ]
+    ],
+    "DisableSkinGrayscale": true,
+    "SkinToneMasks": {
+      "LightTone": [ 249, 174, 137 ],
+      "MediumTone": [ 224, 107, 101 ],
+      "DarkTone": [ 107, 0, 58 ]
+    },
+    "StartingPosition": {
+      "X": 0,
+      "Y": 32
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": -20
+    },
+    "ShoesSize": {
+      "Width": 16,
+      "Length": 16
+    },
+    "IdleAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 100
+      }
+    ],
+    "MovementAnimation": [
+      {
+        "Frame": 2,
+        "EndWhenFarmerFrameUpdates": true
+      },
+      {
+        "Frame": 1,
+        "EndWhenFarmerFrameUpdates": true
+      },
+      {
+        "Frame": 2,
+        "EndWhenFarmerFrameUpdates": true
+      },
+      {
+        "Frame": 3,
+        "EndWhenFarmerFrameUpdates": true
+      }
+    ]
+  },
+  "LeftShoes": {
+    "Flipped": true,
+    "DrawBeforePants": true,
+    "ColorMasks": [
+      [ 195, 195, 208 ],
+      [ 58, 58, 74 ]
+    ],
+    "DisableSkinGrayscale": true,
+    "SkinToneMasks": {
+      "LightTone": [ 249, 174, 137 ],
+      "MediumTone": [ 224, 107, 101 ],
+      "DarkTone": [ 107, 0, 58 ]
+    },
+    "StartingPosition": {
+      "X": 0,
+      "Y": 32
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": -20
+    },
+    "ShoesSize": {
+      "Width": 16,
+      "Length": 16
+    },
+    "IdleAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 100
+      }
+    ],
+    "MovementAnimation": [
+      {
+        "Frame": 2,
+        "EndWhenFarmerFrameUpdates": true
+      },
+      {
+        "Frame": 1,
+        "EndWhenFarmerFrameUpdates": true
+      },
+      {
+        "Frame": 2,
+        "EndWhenFarmerFrameUpdates": true
+      },
+      {
+        "Frame": 3,
+        "EndWhenFarmerFrameUpdates": true
+      }
+    ]
+  }
+}
