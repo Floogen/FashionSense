@@ -25,6 +25,7 @@ using FashionSense.Framework.Models.Shirt;
 using FashionSense.Framework.Models.Pants;
 using FashionSense.Framework.Models.Sleeves;
 using FashionSense.Framework.Models.Shoes;
+using FashionSense.Framework.UI;
 
 namespace FashionSense.Framework.Patches.Renderer
 {
@@ -50,7 +51,19 @@ namespace FashionSense.Framework.Patches.Renderer
 
         private static bool ApplyShoeColorPrefix(FarmerRenderer __instance, LocalizedContentManager ___farmerTextureManager, Texture2D ___baseTexture, NetInt ___skin, bool ____sickFrame, string texture_name, Color[] pixels)
         {
+            // Since the game doesn't pass the farmer over to the native ApplyShoeColor method, we have to find it by matching the FarmerRender instance
             Farmer who = Game1.player;
+            if (who.FarmerRenderer != __instance && Game1.activeClickableMenu is SearchMenu searchMenu && searchMenu is not null)
+            {
+                foreach (var fakeFarmer in searchMenu.fakeFarmers)
+                {
+                    if (fakeFarmer.FarmerRenderer == __instance)
+                    {
+                        who = fakeFarmer;
+                    }
+                }
+            }
+
             if (!who.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR) || !who.modData.ContainsKey(ModDataKeys.CUSTOM_SHOES_ID) || who.modData[ModDataKeys.CUSTOM_SHOES_ID] is null || who.modData[ModDataKeys.CUSTOM_SHOES_ID] == "None")
             {
                 return true;
