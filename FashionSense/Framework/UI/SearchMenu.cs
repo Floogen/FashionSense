@@ -229,11 +229,6 @@ namespace FashionSense.Framework.UI
                             break;
                     }
 
-                    if (appearanceModel is null)
-                    {
-                        continue;
-                    }
-
                     fakeFarmers[i].modData[modDataKey] = targetPack.Id;
                     FashionSense.ResetAnimationModDataFields(fakeFarmers[i], 0, AnimationModel.Type.Idle, fakeFarmers[i].facingDirection);
                     FashionSense.SetSpriteDirty();
