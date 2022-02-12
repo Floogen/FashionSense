@@ -485,38 +485,37 @@ namespace FashionSense.Framework.Patches.Renderer
             var size = new Size();
             if (model is HairModel hairModel)
             {
-                size.Width = hairModel.HairSize.Width;
-                size.Length = hairModel.HairSize.Length;
+                size = hairModel.HairSize;
             }
             else if (model is AccessoryModel accessoryModel)
             {
-                size.Width = accessoryModel.AccessorySize.Width;
-                size.Length = accessoryModel.AccessorySize.Length;
+                size = accessoryModel.AccessorySize;
             }
             else if (model is HatModel hatModel)
             {
-                size.Width = hatModel.HatSize.Width;
-                size.Length = hatModel.HatSize.Length;
+                size = hatModel.HatSize;
             }
             else if (model is ShirtModel shirtModel)
             {
-                size.Width = shirtModel.ShirtSize.Width;
-                size.Length = shirtModel.ShirtSize.Length;
+                size = shirtModel.ShirtSize;
             }
             else if (model is PantsModel pantsModel)
             {
-                size.Width = pantsModel.PantsSize.Width;
-                size.Length = pantsModel.PantsSize.Length;
+                size = pantsModel.PantsSize;
             }
             else if (model is SleevesModel sleevesModel)
             {
-                size.Width = sleevesModel.SleevesSize.Width;
-                size.Length = sleevesModel.SleevesSize.Length;
+                size = sleevesModel.SleevesSize;
             }
             else if (model is ShoesModel shoesModel)
             {
-                size.Width = shoesModel.ShoesSize.Width;
-                size.Length = shoesModel.ShoesSize.Length;
+                size = shoesModel.ShoesSize;
+            }
+
+            // Skip updating the animation if the Size is null
+            if (size is null)
+            {
+                return;
             }
 
             // Reset any cached animation data, if needed
