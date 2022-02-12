@@ -219,7 +219,6 @@ namespace FashionSense.Framework.UI
                             {
                                 modDataKey = ModDataKeys.CUSTOM_SHOES_ID;
                                 appearanceModel = (targetPack as ShoesContentPack).GetShoesFromFacingDirection(fakeFarmers[i].facingDirection);
-                                FashionSense.monitor.Log((appearanceModel is null).ToString(), StardewModdingAPI.LogLevel.Debug);
                             }
                             else
                             {
