@@ -966,6 +966,8 @@ namespace FashionSense
             shirtDirty.SetValue(true);
             var shoeDirty = modHelper.Reflection.GetField<bool>(Game1.player.FarmerRenderer, "_shoesDirty");
             shoeDirty.SetValue(true);
+
+            FarmerRendererPatch.AreColorMasksPendingRefresh = true;
         }
 
         internal static void ResetAnimationModDataFields(Farmer who, int duration, AnimationModel.Type animationType, int facingDirection, bool ignoreAnimationType = false, AppearanceModel model = null)

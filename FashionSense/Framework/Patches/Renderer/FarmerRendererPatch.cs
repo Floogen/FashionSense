@@ -30,6 +30,7 @@ namespace FashionSense.Framework.Patches.Renderer
 {
     internal class FarmerRendererPatch : PatchTemplate
     {
+        internal static bool AreColorMasksPendingRefresh = false;
         private readonly Type _entity = typeof(FarmerRenderer);
 
         internal FarmerRendererPatch(IMonitor modMonitor, IModHelper modHelper) : base(modMonitor, modHelper)
@@ -1130,7 +1131,7 @@ namespace FashionSense.Framework.Patches.Renderer
 
         private static void DrawColorMask(SpriteBatch b, AppearanceContentPack appearancePack, AppearanceModel appearanceModel, Vector2 position, Rectangle sourceRect, Color color, float rotation, Vector2 origin, float scale, float layerDepth)
         {
-            if (appearancePack.ColorMaskTexture is null)
+            if (appearancePack.ColorMaskTexture is null || AreColorMasksPendingRefresh)
             {
                 Color[] data = new Color[appearancePack.Texture.Width * appearancePack.Texture.Height];
                 appearancePack.Texture.GetData(data);
@@ -1714,6 +1715,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
             }
 
+            AreColorMasksPendingRefresh = false;
             return false;
         }
 
