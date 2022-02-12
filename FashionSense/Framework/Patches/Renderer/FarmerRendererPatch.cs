@@ -307,9 +307,21 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     passedCheck = condition.IsValid(who.isEating && who.FarmerSprite.CurrentSingleAnimation == FarmerSprite.drink);
                 }
+                else if (condition.Name is Condition.Type.IsCasting)
+                {
+                    passedCheck = condition.IsValid(who.CurrentTool is FishingRod fishingRod && (fishingRod.isCasting || fishingRod.isTimingCast));
+                }
                 else if (condition.Name is Condition.Type.IsFishing)
                 {
                     passedCheck = condition.IsValid(who.CurrentTool is FishingRod fishingRod && fishingRod.isFishing);
+                }
+                else if (condition.Name is Condition.Type.IsNibbling)
+                {
+                    passedCheck = condition.IsValid(who.CurrentTool is FishingRod fishingRod && fishingRod.isNibbling);
+                }
+                else if (condition.Name is Condition.Type.IsReeling)
+                {
+                    passedCheck = condition.IsValid(who.CurrentTool is FishingRod fishingRod && fishingRod.isReeling);
                 }
                 else if (condition.Name is Condition.Type.IsUsingHeavyTool)
                 {
