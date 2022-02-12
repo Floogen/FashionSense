@@ -392,6 +392,28 @@ namespace FashionSense
                         continue;
                     }
 
+                    // Verify the Size model is not null foreach given direction
+                    if (appearanceModel.FrontHair is not null && appearanceModel.FrontHair.HairSize is null)
+                    {
+                        Monitor.Log($"Unable to add hairstyle for {appearanceModel.Name} from {contentPack.Manifest.Name}: FrontHair is missing the required property HairSize", LogLevel.Warn);
+                        continue;
+                    }
+                    if (appearanceModel.BackHair is not null && appearanceModel.BackHair.HairSize is null)
+                    {
+                        Monitor.Log($"Unable to add hairstyle for {appearanceModel.Name} from {contentPack.Manifest.Name}: BackHair is missing the required property HairSize", LogLevel.Warn);
+                        continue;
+                    }
+                    if (appearanceModel.LeftHair is not null && appearanceModel.LeftHair.HairSize is null)
+                    {
+                        Monitor.Log($"Unable to add hairstyle for {appearanceModel.Name} from {contentPack.Manifest.Name}: LeftHair is missing the required property HairSize", LogLevel.Warn);
+                        continue;
+                    }
+                    if (appearanceModel.RightHair is not null && appearanceModel.RightHair.HairSize is null)
+                    {
+                        Monitor.Log($"Unable to add hairstyle for {appearanceModel.Name} from {contentPack.Manifest.Name}: RightHair is missing the required property HairSize", LogLevel.Warn);
+                        continue;
+                    }
+
                     // Verify we are given a texture and if so, track it
                     if (!File.Exists(Path.Combine(textureFolder.FullName, "hair.png")))
                     {
@@ -479,6 +501,28 @@ namespace FashionSense
                     if (appearanceModel.BackAccessory is null && appearanceModel.RightAccessory is null && appearanceModel.FrontAccessory is null && appearanceModel.LeftAccessory is null)
                     {
                         Monitor.Log($"Unable to add accessory for {appearanceModel.Name} from {contentPack.Manifest.Name}: No accessory models given (FrontAccessory, BackAccessory, etc.)", LogLevel.Warn);
+                        continue;
+                    }
+
+                    // Verify the Size model is not null foreach given direction
+                    if (appearanceModel.FrontAccessory is not null && appearanceModel.FrontAccessory.AccessorySize is null)
+                    {
+                        Monitor.Log($"Unable to add accessory for {appearanceModel.Name} from {contentPack.Manifest.Name}: FrontAccessory is missing the required property AccessorySize", LogLevel.Warn);
+                        continue;
+                    }
+                    if (appearanceModel.BackAccessory is not null && appearanceModel.BackAccessory.AccessorySize is null)
+                    {
+                        Monitor.Log($"Unable to add accessory for {appearanceModel.Name} from {contentPack.Manifest.Name}: BackAccessory is missing the required property AccessorySize", LogLevel.Warn);
+                        continue;
+                    }
+                    if (appearanceModel.LeftAccessory is not null && appearanceModel.LeftAccessory.AccessorySize is null)
+                    {
+                        Monitor.Log($"Unable to add accessory for {appearanceModel.Name} from {contentPack.Manifest.Name}: LeftAccessory is missing the required property AccessorySize", LogLevel.Warn);
+                        continue;
+                    }
+                    if (appearanceModel.RightAccessory is not null && appearanceModel.RightAccessory.AccessorySize is null)
+                    {
+                        Monitor.Log($"Unable to add accessory for {appearanceModel.Name} from {contentPack.Manifest.Name}: RightAccessory is missing the required property AccessorySize", LogLevel.Warn);
                         continue;
                     }
 
@@ -572,6 +616,28 @@ namespace FashionSense
                         continue;
                     }
 
+                    // Verify the Size model is not null foreach given direction
+                    if (appearanceModel.FrontHat is not null && appearanceModel.FrontHat.HatSize is null)
+                    {
+                        Monitor.Log($"Unable to add hat for {appearanceModel.Name} from {contentPack.Manifest.Name}: FrontHat is missing the required property HatSize", LogLevel.Warn);
+                        continue;
+                    }
+                    if (appearanceModel.BackHat is not null && appearanceModel.BackHat.HatSize is null)
+                    {
+                        Monitor.Log($"Unable to add hat for {appearanceModel.Name} from {contentPack.Manifest.Name}: BackHat is missing the required property HatSize", LogLevel.Warn);
+                        continue;
+                    }
+                    if (appearanceModel.LeftHat is not null && appearanceModel.LeftHat.HatSize is null)
+                    {
+                        Monitor.Log($"Unable to add hat for {appearanceModel.Name} from {contentPack.Manifest.Name}: LeftHat is missing the required property HatSize", LogLevel.Warn);
+                        continue;
+                    }
+                    if (appearanceModel.RightHat is not null && appearanceModel.RightHat.HatSize is null)
+                    {
+                        Monitor.Log($"Unable to add hat for {appearanceModel.Name} from {contentPack.Manifest.Name}: RightHat is missing the required property HatSize", LogLevel.Warn);
+                        continue;
+                    }
+
                     // Verify we are given a texture and if so, track it
                     if (!File.Exists(Path.Combine(textureFolder.FullName, "hat.png")))
                     {
@@ -659,6 +725,28 @@ namespace FashionSense
                     if (appearanceModel.BackShirt is null && appearanceModel.RightShirt is null && appearanceModel.FrontShirt is null && appearanceModel.LeftShirt is null)
                     {
                         Monitor.Log($"Unable to add shirt for {appearanceModel.Name} from {contentPack.Manifest.Name}: No shirt models given (FrontShirt, BackShirt, etc.)", LogLevel.Warn);
+                        continue;
+                    }
+
+                    // Verify the Size model is not null foreach given direction
+                    if (appearanceModel.FrontShirt is not null && appearanceModel.FrontShirt.ShirtSize is null)
+                    {
+                        Monitor.Log($"Unable to add shirt for {appearanceModel.Name} from {contentPack.Manifest.Name}: FrontShirt is missing the required property ShirtSize", LogLevel.Warn);
+                        continue;
+                    }
+                    if (appearanceModel.BackShirt is not null && appearanceModel.BackShirt.ShirtSize is null)
+                    {
+                        Monitor.Log($"Unable to add shirt for {appearanceModel.Name} from {contentPack.Manifest.Name}: BackShirt is missing the required property ShirtSize", LogLevel.Warn);
+                        continue;
+                    }
+                    if (appearanceModel.LeftShirt is not null && appearanceModel.LeftShirt.ShirtSize is null)
+                    {
+                        Monitor.Log($"Unable to add shirt for {appearanceModel.Name} from {contentPack.Manifest.Name}: LeftShirt is missing the required property ShirtSize", LogLevel.Warn);
+                        continue;
+                    }
+                    if (appearanceModel.RightShirt is not null && appearanceModel.RightShirt.ShirtSize is null)
+                    {
+                        Monitor.Log($"Unable to add shirt for {appearanceModel.Name} from {contentPack.Manifest.Name}: RightShirt is missing the required property ShirtSize", LogLevel.Warn);
                         continue;
                     }
 
@@ -753,6 +841,28 @@ namespace FashionSense
                         continue;
                     }
 
+                    // Verify the Size model is not null foreach given direction
+                    if (appearanceModel.FrontPants is not null && appearanceModel.FrontPants.PantsSize is null)
+                    {
+                        Monitor.Log($"Unable to add pants for {appearanceModel.Name} from {contentPack.Manifest.Name}: FrontPants is missing the required property PantsSize", LogLevel.Warn);
+                        continue;
+                    }
+                    if (appearanceModel.BackPants is not null && appearanceModel.BackPants.PantsSize is null)
+                    {
+                        Monitor.Log($"Unable to add pants for {appearanceModel.Name} from {contentPack.Manifest.Name}: BackPants is missing the required property PantsSize", LogLevel.Warn);
+                        continue;
+                    }
+                    if (appearanceModel.LeftPants is not null && appearanceModel.LeftPants.PantsSize is null)
+                    {
+                        Monitor.Log($"Unable to add pants for {appearanceModel.Name} from {contentPack.Manifest.Name}: LeftPants is missing the required property PantsSize", LogLevel.Warn);
+                        continue;
+                    }
+                    if (appearanceModel.RightPants is not null && appearanceModel.RightPants.PantsSize is null)
+                    {
+                        Monitor.Log($"Unable to add pants for {appearanceModel.Name} from {contentPack.Manifest.Name}: RightPants is missing the required property PantsSize", LogLevel.Warn);
+                        continue;
+                    }
+
                     // Verify we are given a texture and if so, track it
                     if (!File.Exists(Path.Combine(textureFolder.FullName, "pants.png")))
                     {
@@ -844,6 +954,28 @@ namespace FashionSense
                         continue;
                     }
 
+                    // Verify the Size model is not null foreach given direction
+                    if (appearanceModel.FrontSleeves is not null && appearanceModel.FrontSleeves.SleevesSize is null)
+                    {
+                        Monitor.Log($"Unable to add sleeves for {appearanceModel.Name} from {contentPack.Manifest.Name}: FrontSleeves is missing the required property SleevesSize", LogLevel.Warn);
+                        continue;
+                    }
+                    if (appearanceModel.BackSleeves is not null && appearanceModel.BackSleeves.SleevesSize is null)
+                    {
+                        Monitor.Log($"Unable to add sleeves for {appearanceModel.Name} from {contentPack.Manifest.Name}: BackSleeves is missing the required property SleevesSize", LogLevel.Warn);
+                        continue;
+                    }
+                    if (appearanceModel.LeftSleeves is not null && appearanceModel.LeftSleeves.SleevesSize is null)
+                    {
+                        Monitor.Log($"Unable to add sleeves for {appearanceModel.Name} from {contentPack.Manifest.Name}: LeftSleeves is missing the required property SleevesSize", LogLevel.Warn);
+                        continue;
+                    }
+                    if (appearanceModel.RightSleeves is not null && appearanceModel.RightSleeves.SleevesSize is null)
+                    {
+                        Monitor.Log($"Unable to add sleeves for {appearanceModel.Name} from {contentPack.Manifest.Name}: RightSleeves is missing the required property SleevesSize", LogLevel.Warn);
+                        continue;
+                    }
+
                     // Verify we are given a texture and if so, track it
                     if (!File.Exists(Path.Combine(textureFolder.FullName, "sleeves.png")))
                     {
@@ -932,6 +1064,28 @@ namespace FashionSense
                     if (appearanceModel.BackShoes is null && appearanceModel.RightShoes is null && appearanceModel.FrontShoes is null && appearanceModel.LeftShoes is null)
                     {
                         Monitor.Log($"Unable to add shoes for {appearanceModel.Name} from {contentPack.Manifest.Name}: No shoes models given (FrontShoes, BackShoes, etc.)", LogLevel.Warn);
+                        continue;
+                    }
+
+                    // Verify the Size model is not null foreach given direction
+                    if (appearanceModel.FrontShoes is not null && appearanceModel.FrontShoes.ShoesSize is null)
+                    {
+                        Monitor.Log($"Unable to add shoes for {appearanceModel.Name} from {contentPack.Manifest.Name}: FrontShoes is missing the required property ShoesSize", LogLevel.Warn);
+                        continue;
+                    }
+                    if (appearanceModel.BackShoes is not null && appearanceModel.BackShoes.ShoesSize is null)
+                    {
+                        Monitor.Log($"Unable to add shoes for {appearanceModel.Name} from {contentPack.Manifest.Name}: BackShoes is missing the required property ShoesSize", LogLevel.Warn);
+                        continue;
+                    }
+                    if (appearanceModel.LeftShoes is not null && appearanceModel.LeftShoes.ShoesSize is null)
+                    {
+                        Monitor.Log($"Unable to add shoes for {appearanceModel.Name} from {contentPack.Manifest.Name}: LeftShoes is missing the required property ShoesSize", LogLevel.Warn);
+                        continue;
+                    }
+                    if (appearanceModel.RightShoes is not null && appearanceModel.RightShoes.ShoesSize is null)
+                    {
+                        Monitor.Log($"Unable to add shoes for {appearanceModel.Name} from {contentPack.Manifest.Name}: RightShoes is missing the required property ShoesSize", LogLevel.Warn);
                         continue;
                     }
 
