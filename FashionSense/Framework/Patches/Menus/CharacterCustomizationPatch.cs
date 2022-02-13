@@ -48,7 +48,7 @@ namespace FashionSense.Framework.Patches.Menus
                 Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID] = null;
             }
 
-            ___leftSelectionButtons.Add(new ClickableTextureComponent("fashion_sense", new Rectangle(__instance.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + 280 - 48 + IClickableMenu.borderWidth, ___leftSelectionButtons.First(b => b.name == "Acc").bounds.Y, 64, 64), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 44), 1f)
+            ___leftSelectionButtons.Add(new ClickableTextureComponent("start_with_hand_mirror", new Rectangle(__instance.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + 280 - 48 + IClickableMenu.borderWidth, ___leftSelectionButtons.First(b => b.name == "Acc").bounds.Y, 36, 36), null, _helper.Translation.Get("ui.fashion_sense.start_with_hand_mirror"), Game1.mouseCursors, new Rectangle(227, 425, 9, 9), 4f)
             {
                 myID = 516,
                 upNeighborID = -99998,
@@ -56,18 +56,9 @@ namespace FashionSense.Framework.Patches.Menus
                 rightNeighborID = -99998,
                 downNeighborID = -99998
             });
-            ___labels.Add(new ClickableComponent(new Rectangle(__instance.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + 280 - 48 + IClickableMenu.borderWidth + 64 + 8, ___accLabel.bounds.Y, 1, 1), _helper.Translation.Get("ui.fashion_sense.title.hair")));
-            ___rightSelectionButtons.Add(new ClickableTextureComponent("fashion_sense", new Rectangle(__instance.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + 280 - 48 + IClickableMenu.borderWidth + 200, ___leftSelectionButtons.First(b => b.name == "Acc").bounds.Y, 64, 64), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 33), 1f)
-            {
-                myID = 517,
-                upNeighborID = -99998,
-                leftNeighborID = -99998,
-                rightNeighborID = -99998,
-                downNeighborID = -99998
-            });
         }
 
-        private static void SelectionClickPostfix(CharacterCustomization __instance, string name, int change)
+        private static void SelectionClickPostfix(CharacterCustomization __instance, string name, int change, List<ClickableComponent> ___leftSelectionButtons)
         {
             if (__instance.source != Source.NewGame)
             {
@@ -76,105 +67,52 @@ namespace FashionSense.Framework.Patches.Menus
 
             switch (name)
             {
-                case "fashion_sense":
+                case "start_with_hand_mirror":
                     {
-                        var hairModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is HairContentPack).ToList();
-                        var currentCustomHair = FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID]);
+                        var button = ___leftSelectionButtons.First(c => c.name == "start_with_hand_mirror") as ClickableTextureComponent;
 
-                        int current_index = -1;
-                        if (currentCustomHair != null)
+                        Game1.playSound("drumkit6");
+                        button.sourceRect.X = ((button.sourceRect.X == 227) ? 236 : 227);
+                        if (!Game1.player.modData.ContainsKey(ModDataKeys.STARTS_WITH_HAND_MIRROR) || !bool.Parse(Game1.player.modData[ModDataKeys.STARTS_WITH_HAND_MIRROR]))
                         {
-                            current_index = hairModels.IndexOf(currentCustomHair);
+                            Game1.player.modData[ModDataKeys.STARTS_WITH_HAND_MIRROR] = true.ToString();
                         }
-                        current_index += change;
-                        if (current_index >= hairModels.Count)
+                        else
                         {
-                            current_index = -1;
+                            Game1.player.modData[ModDataKeys.STARTS_WITH_HAND_MIRROR] = false.ToString();
                         }
-                        else if (current_index < -1)
-                        {
-                            current_index = hairModels.Count() - 1;
-                        }
-
-                        Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID] = current_index == -1 ? "None" : hairModels[current_index].Id;
-                        FashionSense.ResetAnimationModDataFields(Game1.player, 0, AnimationModel.Type.Idle, Game1.player.facingDirection);
-                        Game1.playSound("grassyStep");
                         break;
                     }
             }
         }
 
-        private static void PerformHoverActionPostfix(CharacterCustomization __instance, List<ClickableComponent> ___labels, ref string ___hoverText, int x, int y)
+        private static void PerformHoverActionPostfix(CharacterCustomization __instance, List<ClickableComponent> ___leftSelectionButtons, ref string ___hoverText, int x, int y)
         {
             if (__instance.source != Source.NewGame)
             {
                 return;
             }
 
-            foreach (ClickableComponent label in ___labels)
+            var button = ___leftSelectionButtons.FirstOrDefault(c => c.name == "start_with_hand_mirror") as ClickableTextureComponent;
+            if (button is not null && button.containsPoint(x, y))
             {
-                if (label.name == HandMirrorMenu.GetColorPickerLabel(true, true) && label.containsPoint(x, y))
-                {
-                    ___hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_info.hair");
-                }
+                ___hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.start_with_hand_mirror.description");
             }
         }
 
-        private static void DrawPostfix(CharacterCustomization __instance, List<ClickableComponent> ___labels, string ___hoverText, SpriteBatch b)
+        private static void DrawPostfix(CharacterCustomization __instance, List<ClickableComponent> ___leftSelectionButtons, string ___hoverText, SpriteBatch b)
         {
             if (__instance.source != Source.NewGame)
             {
                 return;
             }
 
-            // Get the custom hair object, if it exists
-            var currentCustomHair = FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID]);
+            var button = ___leftSelectionButtons.First(c => c.name == "start_with_hand_mirror") as ClickableTextureComponent;
+            Utility.drawTextWithShadow(b, button.hoverText, Game1.smallFont, new Vector2(button.bounds.X + button.bounds.Width + 8, button.bounds.Y + 8), Game1.textColor);
 
-            // Draw labels
-            foreach (ClickableComponent c in ___labels)
+            if (___hoverText == FashionSense.modHelper.Translation.Get("ui.fashion_sense.start_with_hand_mirror.description"))
             {
-                if (!c.visible)
-                {
-                    continue;
-                }
-                string sub = "";
-                float offset = 0f;
-                float subYOffset = 0f;
-                Color color = Game1.textColor;
-                if (c.name == _helper.Translation.Get("ui.fashion_sense.title.hair"))
-                {
-                    offset = Game1.smallFont.MeasureString(c.name).X / 2f - 20;
-                    if (!c.name.Contains("Color"))
-                    {
-                        sub = "None";
-                        if (currentCustomHair != null)
-                        {
-                            sub = currentCustomHair.Name;
-                        }
-                    }
-                }
-                else if (c.name == HandMirrorMenu.GetColorPickerLabel(false, true) || c.name == HandMirrorMenu.GetColorPickerLabel(true, true))
-                {
-                    var name = HandMirrorMenu.GetColorPickerLabel(false, true);
-                    if (currentCustomHair != null && currentCustomHair.GetHairFromFacingDirection(Game1.player.facingDirection) is HairModel model && model != null && model.IsPlayerColorChoiceIgnored())
-                    {
-                        name = HandMirrorMenu.GetColorPickerLabel(true, true);
-                    }
-
-                    var measuredStringSize = Game1.smallFont.MeasureString(name);
-                    c.bounds.Width = (int)measuredStringSize.X;
-                    c.bounds.Height = (int)measuredStringSize.Y;
-                    c.name = name;
-                }
-                else
-                {
-                    color = Game1.textColor;
-                }
-
-                if (sub.Length > 0)
-                {
-                    Utility.drawTextWithShadow(b, sub, Game1.smallFont, new Vector2(((float)(c.bounds.X + 21) - Game1.smallFont.MeasureString(sub).X / 2f) + offset, (float)(c.bounds.Y + 32) + subYOffset), color);
-                }
+                IClickableMenu.drawHoverText(b, Game1.parseText(___hoverText, Game1.smallFont, 256), Game1.smallFont, 0, 0, -1);
             }
         }
     }

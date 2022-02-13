@@ -98,11 +98,20 @@ namespace FashionSense
             helper.ConsoleCommands.Add("fs_add_mirror", "Gives you a Hand Mirror tool.\n\nUsage: fs_add_mirror", delegate { Game1.player.addItemToInventory(SeedShopPatch.GetHandMirrorTool()); });
 
             modHelper.Events.GameLoop.GameLaunched += OnGameLaunched;
+            modHelper.Events.GameLoop.SaveCreated += OnSaveCreated;
             modHelper.Events.GameLoop.SaveLoaded += OnSaveLoaded;
             modHelper.Events.GameLoop.DayStarted += OnDayStarted;
             modHelper.Events.Player.Warped += OnWarped;
             modHelper.Events.GameLoop.UpdateTicked += OnUpdateTicked;
             modHelper.Events.Display.Rendered += OnRendered;
+        }
+
+        private void OnSaveCreated(object sender, SaveCreatedEventArgs e)
+        {
+            if (Game1.player.modData.ContainsKey(ModDataKeys.STARTS_WITH_HAND_MIRROR) && bool.Parse(Game1.player.modData[ModDataKeys.STARTS_WITH_HAND_MIRROR]))
+            {
+                Game1.player.addItemByMenuIfNecessary(SeedShopPatch.GetHandMirrorTool());
+            }
         }
 
         private void OnRendered(object sender, StardewModdingAPI.Events.RenderedEventArgs e)
@@ -206,6 +215,13 @@ namespace FashionSense
             SetCachedColor(ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR);
             SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR);
             SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR);
+
+            // Reset the name of the internal shoe override pack
+            if (textureManager.GetSpecificAppearanceModel<ShoesContentPack>(ModDataKeys.INTERNAL_COLOR_OVERRIDE_SHOE_ID) is ShoesContentPack shoePack && shoePack is not null)
+            {
+                shoePack.Name = modHelper.Translation.Get("ui.fashion_sense.color_override.shoes");
+                shoePack.PackName = modHelper.Translation.Get("ui.fashion_sense.color_override.shoes");
+            }
         }
 
         private void OnDayStarted(object sender, StardewModdingAPI.Events.DayStartedEventArgs e)
