@@ -1572,7 +1572,7 @@ namespace FashionSense.Framework.Patches.Renderer
 
                 shirtLayer = layerDepth + layerOffset + (shirtModel.HasColorMask() ? 0.01E-05f : 0);
             }
-            layerDepth += 0.02E-05f;
+            layerDepth += shirtLayer;
 
             // Draw accessory
             if (accessoryModel is null && secondaryAccessoryModel is null && tertiaryAccessoryModel is null)

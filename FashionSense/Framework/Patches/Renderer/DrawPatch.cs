@@ -152,6 +152,7 @@ namespace FashionSense.Framework.Patches.Renderer
             if (GetCurrentlyEquippedModels(who, facingDirection).Any(m => m is not null))
             {
                 // Draw with modified SpriteSortMode method for UI to handle clipping issue
+                //_monitor.Log(_helper.Reflection.GetField<SpriteSortMode>(b, "_sortMode").GetValue().ToString(), LogLevel.Debug);
                 if (FarmerRenderer.isDrawingForUI)
                 {
                     b.End();
