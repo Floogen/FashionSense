@@ -68,6 +68,10 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 return true;
             }
+            else if (who.modData.ContainsKey(ModDataKeys.CUSTOM_SHOES_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<ShoesContentPack>(who.modData[ModDataKeys.CUSTOM_SHOES_ID]) is null)
+            {
+                return true;
+            }
 
             if (!uint.TryParse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR], out uint shoeColorValue))
             {
@@ -82,7 +86,7 @@ namespace FashionSense.Framework.Patches.Renderer
             var lightestColor = new Color(158, 158, 158);
 
             var isDoingVanillaOverride = false;
-            if (who.modData[ModDataKeys.CUSTOM_SHOES_ID] == FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_override.shoes") || ShouldHideLegs(who, who.FacingDirection))
+            if (who.modData[ModDataKeys.CUSTOM_SHOES_ID] == FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_override.shoes") && ShouldHideLegs(who, who.FacingDirection) is false)
             {
                 isDoingVanillaOverride = true;
             }
