@@ -64,6 +64,12 @@
 		<None Update="i18n\default.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="i18n\th.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="i18n\tr.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="manifest.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
