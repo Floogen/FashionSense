@@ -307,7 +307,7 @@ namespace FashionSense
                     Name = modHelper.Translation.Get("ui.fashion_sense.color_override.shoes"),
                     PackType = AppearanceContentPack.Type.Shoes,
                     PackName = modHelper.Translation.Get("ui.fashion_sense.color_override.shoes"),
-                    Id = modHelper.Translation.Get("ui.fashion_sense.color_override.shoes"),
+                    Id = ModDataKeys.INTERNAL_COLOR_OVERRIDE_SHOE_ID,
                     FrontShoes = new ShoesModel(),
                     BackShoes = new ShoesModel(),
                     LeftShoes = new ShoesModel(),

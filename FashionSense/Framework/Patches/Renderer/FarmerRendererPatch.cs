@@ -1374,7 +1374,7 @@ namespace FashionSense.Framework.Patches.Renderer
             if (who.modData.ContainsKey(ModDataKeys.CUSTOM_SHOES_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<ShoesContentPack>(who.modData[ModDataKeys.CUSTOM_SHOES_ID]) is ShoesContentPack bootPack && bootPack != null)
             {
                 // Ignore our internal color override pack
-                if (bootPack.Id != FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_override.shoes"))
+                if (bootPack.Id != ModDataKeys.INTERNAL_COLOR_OVERRIDE_SHOE_ID)
                 {
                     shoesPack = bootPack;
                     shoesModel = bootPack.GetShoesFromFacingDirection(facingDirection);

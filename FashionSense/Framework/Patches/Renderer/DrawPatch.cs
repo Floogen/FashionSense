@@ -86,7 +86,7 @@ namespace FashionSense.Framework.Patches.Renderer
             var lightestColor = new Color(158, 158, 158);
 
             var isDoingVanillaOverride = false;
-            if (who.modData[ModDataKeys.CUSTOM_SHOES_ID] == FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_override.shoes") && ShouldHideLegs(who, who.FacingDirection) is false)
+            if (who.modData[ModDataKeys.CUSTOM_SHOES_ID] == ModDataKeys.INTERNAL_COLOR_OVERRIDE_SHOE_ID && ShouldHideLegs(who, who.FacingDirection) is false)
             {
                 isDoingVanillaOverride = true;
             }
