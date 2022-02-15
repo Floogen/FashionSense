@@ -1573,6 +1573,7 @@ namespace FashionSense.Framework.Patches.Renderer
 
                 layerDepth = shirtLayer;
             }
+            layerDepth += 0.01E-05f;
 
             // Draw accessory
             if (accessoryModel is null && secondaryAccessoryModel is null && tertiaryAccessoryModel is null)
@@ -1617,7 +1618,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     hairColor = Utility.GetPrismaticColor(speedMultiplier: hairModel.PrismaticAnimationSpeedMultiplier);
                 }
-                hairLayer = layerDepth;
+                hairLayer = layerDepth + hairOffset;
 
                 if (hatModel is null || !hatModel.HideHair)
                 {
@@ -1627,21 +1628,21 @@ namespace FashionSense.Framework.Patches.Renderer
                     // Draw the hair
                     b.Draw(hairPack.Texture, position + origin + ___positionOffset + featureOffset, customHairSourceRect, hairModel.HasColorMask() ? Color.White : hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, hairModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, hairLayer);
                     
-                    hairLayer += hairOffset;
                     if (hairModel.HasColorMask())
                     {
-                        hairLayer += 0.01E-05f;
+                        hairLayer += 2.2E-05f + 0.01E-05f;
                         DrawColorMask(b, hairPack, hairModel, position + origin + ___positionOffset + featureOffset, customHairSourceRect, hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, hairLayer);
                     }
                     if (hairModel.HasSkinToneMask())
                     {
-                        hairLayer += 0.01E-05f;
+                        hairLayer += 2.2E-05f + 0.01E-05f;
                         DrawSkinToneMask(b, hairPack, hairModel, skinTone, position + origin + ___positionOffset + featureOffset, customHairSourceRect, hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, hairLayer);
                     }
 
                     layerDepth = hairLayer;
                 }
             }
+            layerDepth += 0.01E-05f;
 
             // Draw the sleeves
             if (sleevesModel is null || (sleevesModel.HideWhileWearingBathingSuit && who.bathingClothes.Value) || (sleevesModel.HideWhileSwimming && who.swimming.Value) || AreSleevesForcedHidden(pantsModel, hairModel, accessoryModel, secondaryAccessoryModel, tertiaryAccessoryModel, hatModel, shirtModel))
@@ -1664,13 +1665,12 @@ namespace FashionSense.Framework.Patches.Renderer
                 sleevesLayer = layerDepth;
                 if (sleevesModel.DrawBeforeShirt)
                 {
-                    sleevesLayer = hairModel is not null ? shirtLayer - 0.01E-05f : sleevesLayer - 0.01E-05f;
+                    sleevesLayer = hairModel is not null ? shirtLayer - 0.03E-05f : sleevesLayer;
                 }
                 else if (sleevesModel.DrawBeforeHair)
                 {
-                    sleevesLayer = hairModel is not null ? hairLayer - 4E-05f : sleevesLayer - 0.01E-05f;
+                    sleevesLayer = hairModel is not null ? layerDepth - hairLayer : sleevesLayer;
                 }
-                sleevesLayer = sleevesLayer + 0.01E-05f;
 
                 var featureOffset = GetFeatureOffset(facingDirection, currentFrame, scale, __instance, sleevesPack.PackType, false);
                 featureOffset.Y -= who.isMale ? 4 : 0;
@@ -1681,18 +1681,19 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     if (sleevesModel.UseShirtColors && shirtModel is not null && shirtModel.SleeveColors is not null)
                     {
-                        DrawSleeveColorMask(b, sleevesPack, sleevesModel, shirtModel, position + origin + ___positionOffset + featureOffset, customSleevesSourceRect, sleevesColor, rotation, origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), 4f * scale, sleevesLayer + 0.02E-05f);
+                        sleevesLayer += 0.01E-05f;
+                        DrawSleeveColorMask(b, sleevesPack, sleevesModel, shirtModel, position + origin + ___positionOffset + featureOffset, customSleevesSourceRect, sleevesColor, rotation, origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), 4f * scale, sleevesLayer);
                     }
                     else
                     {
-                        DrawColorMask(b, sleevesPack, sleevesModel, position + origin + ___positionOffset + featureOffset, customSleevesSourceRect, sleevesColor, rotation, origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), 4f * scale, sleevesLayer + 0.02E-05f);
+                        sleevesLayer += 0.01E-05f;
+                        DrawColorMask(b, sleevesPack, sleevesModel, position + origin + ___positionOffset + featureOffset, customSleevesSourceRect, sleevesColor, rotation, origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), 4f * scale, sleevesLayer);
                     }
-
-                    sleevesLayer = sleevesLayer + 0.02E-05f;
                 }
                 if (sleevesModel.HasSkinToneMask())
                 {
-                    DrawSkinToneMask(b, sleevesPack, sleevesModel, skinTone, position + origin + ___positionOffset + featureOffset, customSleevesSourceRect, sleevesColor, rotation, origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), 4f * scale, sleevesLayer + 0.01E-05f);
+                    sleevesLayer += 0.01E-05f;
+                    DrawSkinToneMask(b, sleevesPack, sleevesModel, skinTone, position + origin + ___positionOffset + featureOffset, customSleevesSourceRect, sleevesColor, rotation, origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), 4f * scale, sleevesLayer);
                 }
             }
             layerDepth += 0.01E-05f;
