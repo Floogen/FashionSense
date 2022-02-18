@@ -410,6 +410,10 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 return true;
             }
+            else if (hairModel is null && who.IsBaldHairStyle(who.getHair()) && (hatModel is null || hatModel.HideHair is false))
+            {
+                return true;
+            }
 
             return false;
         }
