@@ -1573,7 +1573,7 @@ namespace FashionSense.Framework.Patches.Renderer
 
                 layerDepth = shirtLayer;
             }
-            layerDepth += 0.01E-05f;
+            layerDepth += 0.02E-05f;
 
             // Draw accessory
             if (accessoryModel is null && secondaryAccessoryModel is null && tertiaryAccessoryModel is null)
