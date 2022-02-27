@@ -489,8 +489,6 @@ namespace FashionSense.Framework.Patches.Renderer
                     who.modData[ModDataKeys.ANIMATION_HAIR_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
                     break;
             }
-
-            who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] = facingDirection.ToString();
         }
 
         private static void HandleAppearanceAnimation(AppearanceModel model, Farmer who, int facingDirection, ref Rectangle sourceRectangle)
@@ -535,7 +533,7 @@ namespace FashionSense.Framework.Patches.Renderer
             if (model.HasMovementAnimation() && FashionSense.conditionData.IsPlayerMoving() && !HasCorrectAnimationTypeCached(model, who, AnimationModel.Type.Moving))
             {
                 SetAnimationType(model, who, AnimationModel.Type.Moving);
-                FashionSense.ResetAnimationModDataFields(who, 0, AnimationModel.Type.Moving, facingDirection, true, model);
+                FashionSense.ResetAnimationModDataFields(who, model.MovementAnimation.ElementAt(0).Duration, AnimationModel.Type.Moving, facingDirection, true, model);
 
                 foreach (var animation in model.MovementAnimation)
                 {
@@ -545,17 +543,17 @@ namespace FashionSense.Framework.Patches.Renderer
             else if (model.HasIdleAnimation() && !FashionSense.conditionData.IsPlayerMoving() && !HasCorrectAnimationTypeCached(model, who, AnimationModel.Type.Idle))
             {
                 SetAnimationType(model, who, AnimationModel.Type.Idle);
-                FashionSense.ResetAnimationModDataFields(who, 0, AnimationModel.Type.Idle, facingDirection, true, model);
+                FashionSense.ResetAnimationModDataFields(who, model.IdleAnimation.ElementAt(0).Duration, AnimationModel.Type.Idle, facingDirection, true, model);
 
                 foreach (var animation in model.IdleAnimation)
                 {
                     animation.Reset();
                 }
             }
-            else if (!model.HasMovementAnimation() && !model.HasIdleAnimation() && !HasCorrectAnimationTypeCached(model, who, AnimationModel.Type.Uniform))
+            else if (model.HasUniformAnimation() && !model.HasMovementAnimation() && !model.HasIdleAnimation() && !HasCorrectAnimationTypeCached(model, who, AnimationModel.Type.Uniform))
             {
                 SetAnimationType(model, who, AnimationModel.Type.Uniform);
-                FashionSense.ResetAnimationModDataFields(who, 0, AnimationModel.Type.Uniform, facingDirection, true, model);
+                FashionSense.ResetAnimationModDataFields(who, model.UniformAnimation.ElementAt(0).Duration, AnimationModel.Type.Uniform, facingDirection, true, model);
 
                 foreach (var animation in model.UniformAnimation)
                 {
@@ -813,12 +811,6 @@ namespace FashionSense.Framework.Patches.Renderer
                     {
                         animation.Reset();
                     }
-                }
-
-                // Force the animationModel to update if using AnimationModel.EndWhenFarmerFrameUpdates
-                if (animationModel.EndWhenFarmerFrameUpdates)
-                {
-                    animationModel = animations.ElementAtOrDefault(iterator) is null ? animations.ElementAtOrDefault(0) : animations.ElementAtOrDefault(iterator);
                 }
             }
 
@@ -1437,6 +1429,12 @@ namespace FashionSense.Framework.Patches.Renderer
             if (shoesModel != null)
             {
                 HandleAppearanceAnimation(shoesModel, who, facingDirection, ref customShoesSourceRect);
+            }
+
+            // Check if the cached facing direction needs to be updated
+            if (who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] != facingDirection.ToString())
+            {
+                who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] = facingDirection.ToString();
             }
 
             // Execute recolor

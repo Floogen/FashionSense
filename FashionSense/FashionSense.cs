@@ -1221,7 +1221,10 @@ namespace FashionSense
                 who.modData[ModDataKeys.ANIMATION_SHOES_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
             }
 
-            who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] = facingDirection.ToString();
+            if (model is null)
+            {
+                who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] = facingDirection.ToString();
+            }
 
             if (!ignoreAnimationType)
             {
