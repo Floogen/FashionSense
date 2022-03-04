@@ -1,4 +1,11 @@
-﻿using FashionSense.Framework.Models.Generic;
+﻿using FashionSense.Framework.Models.Accessory;
+using FashionSense.Framework.Models.Generic;
+using FashionSense.Framework.Models.Hair;
+using FashionSense.Framework.Models.Hat;
+using FashionSense.Framework.Models.Pants;
+using FashionSense.Framework.Models.Shirt;
+using FashionSense.Framework.Models.Shoes;
+using FashionSense.Framework.Models.Sleeves;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -24,6 +31,7 @@ namespace FashionSense.Framework.Models
         public float PrismaticAnimationSpeedMultiplier { get; set; } = 1f;
         public List<int[]> ColorMasks { get; set; } = new List<int[]>();
         public SkinToneModel SkinToneMasks { get; set; }
+        public List<AppearanceSync> AppearanceSyncing { get; set; } = new List<AppearanceSync>();
         public List<AnimationModel> UniformAnimation { get; set; } = new List<AnimationModel>();
         public List<AnimationModel> IdleAnimation { get; set; } = new List<AnimationModel>();
         public List<AnimationModel> MovementAnimation { get; set; } = new List<AnimationModel>();
@@ -122,6 +130,45 @@ namespace FashionSense.Framework.Models
         internal AnimationModel GetMovementAnimationAtFrame(int frame)
         {
             return GetAnimationData(MovementAnimation, frame);
+        }
+
+        internal AppearanceContentPack.Type GetPackType()
+        {
+            var packType = AppearanceContentPack.Type.Unknown;
+            switch (this)
+            {
+                case AccessoryModel accessoryModel:
+                    packType = AppearanceContentPack.Type.Accessory;
+                    if (accessoryModel.Priority == AccessoryModel.Type.Secondary)
+                    {
+                        packType = AppearanceContentPack.Type.AccessorySecondary;
+                    }
+                    else if (accessoryModel.Priority == AccessoryModel.Type.Tertiary)
+                    {
+                        packType = AppearanceContentPack.Type.AccessoryTertiary;
+                    }
+                    break;
+                case HatModel hatModel:
+                    packType = AppearanceContentPack.Type.Hat;
+                    break;
+                case ShirtModel shirtModel:
+                    packType = AppearanceContentPack.Type.Shirt;
+                    break;
+                case PantsModel pantsModel:
+                    packType = AppearanceContentPack.Type.Pants;
+                    break;
+                case SleevesModel sleevesModel:
+                    packType = AppearanceContentPack.Type.Sleeves;
+                    break;
+                case ShoesModel shoesModel:
+                    packType = AppearanceContentPack.Type.Shoes;
+                    break;
+                case HairModel hairModel:
+                    packType = AppearanceContentPack.Type.Hair;
+                    break;
+            }
+
+            return packType;
         }
 
         internal static int GetColorIndex(int[] colorArray, int position)

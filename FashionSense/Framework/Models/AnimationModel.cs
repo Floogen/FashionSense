@@ -9,7 +9,7 @@ namespace FashionSense.Framework.Models
 {
     public class AnimationModel
     {
-        internal enum Type
+        public enum Type
         {
             Unknown,
             Idle,

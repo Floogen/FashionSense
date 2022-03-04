@@ -491,7 +491,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
         }
 
-        private static void HandleAppearanceAnimation(AppearanceModel model, Farmer who, int facingDirection, ref Rectangle sourceRectangle)
+        private static void HandleAppearanceAnimation(List<AppearanceModel> models, AppearanceModel model, Farmer who, int facingDirection, ref Dictionary<AppearanceContentPack.Type, Rectangle> appearanceTypeToSourceRectangles, bool forceUpdate = false)
         {
             var size = new Size();
             if (model is HairModel hairModel)
@@ -562,18 +562,18 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             // Update the animations
-            sourceRectangle = new Rectangle(model.StartingPosition.X, model.StartingPosition.Y, size.Width, size.Length);
+            appearanceTypeToSourceRectangles[model.GetPackType()] = new Rectangle(model.StartingPosition.X, model.StartingPosition.Y, size.Width, size.Length);
             if (model.HasMovementAnimation() && (FashionSense.conditionData.IsPlayerMoving() || IsWaitingOnRequiredAnimation(who, model)))
             {
-                HandleAppearanceAnimation(model, who, AnimationModel.Type.Moving, model.MovementAnimation, facingDirection, ref sourceRectangle, !FashionSense.conditionData.IsPlayerMoving() && IsWaitingOnRequiredAnimation(who, model));
+                HandleAppearanceAnimation(models, model, who, AnimationModel.Type.Moving, model.MovementAnimation, facingDirection, ref appearanceTypeToSourceRectangles, !FashionSense.conditionData.IsPlayerMoving() && IsWaitingOnRequiredAnimation(who, model), forceUpdate);
             }
             else if (model.HasIdleAnimation() && !FashionSense.conditionData.IsPlayerMoving())
             {
-                HandleAppearanceAnimation(model, who, AnimationModel.Type.Idle, model.IdleAnimation, facingDirection, ref sourceRectangle);
+                HandleAppearanceAnimation(models, model, who, AnimationModel.Type.Idle, model.IdleAnimation, facingDirection, ref appearanceTypeToSourceRectangles, forceUpdate);
             }
             else if (model.HasUniformAnimation())
             {
-                HandleAppearanceAnimation(model, who, AnimationModel.Type.Uniform, model.UniformAnimation, facingDirection, ref sourceRectangle);
+                HandleAppearanceAnimation(models, model, who, AnimationModel.Type.Uniform, model.UniformAnimation, facingDirection, ref appearanceTypeToSourceRectangles, forceUpdate);
             }
         }
 
@@ -645,17 +645,17 @@ namespace FashionSense.Framework.Patches.Renderer
             }
         }
 
-        private static void HandleAppearanceAnimation(AppearanceModel model, Farmer who, AnimationModel.Type type, List<AnimationModel> animations, int facingDirection, ref Rectangle sourceRectangle, bool isAnimationFinishing = false)
+        private static void HandleAppearanceAnimation(List<AppearanceModel> activeModels, AppearanceModel appearanceModel, Farmer who, AnimationModel.Type animationType, List<AnimationModel> animations, int facingDirection, ref Dictionary<AppearanceContentPack.Type, Rectangle> appearanceTypeToSourceRectangles, bool isAnimationFinishing = false, bool forceUpdate = false)
         {
-            if (!HasRequiredModDataKeys(model, who) || !HasCorrectAnimationTypeCached(model, who, type) || who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] != facingDirection.ToString())
+            if (!HasRequiredModDataKeys(appearanceModel, who) || !HasCorrectAnimationTypeCached(appearanceModel, who, animationType) || who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] != facingDirection.ToString())
             {
-                SetAnimationType(model, who, type);
-                FashionSense.ResetAnimationModDataFields(who, animations.ElementAt(0).Duration, type, facingDirection, true, model);
+                SetAnimationType(appearanceModel, who, animationType);
+                FashionSense.ResetAnimationModDataFields(who, animations.ElementAt(0).Duration, animationType, facingDirection, true, appearanceModel);
             }
 
             // Determine the modData keys to use based on AppearanceModel
             int iterator, startingIndex, frameDuration, elapsedDuration, lastFarmerFrame;
-            switch (model)
+            switch (appearanceModel)
             {
                 case AccessoryModel accessoryModel:
                     if (accessoryModel.Priority == AccessoryModel.Type.Secondary)
@@ -730,6 +730,25 @@ namespace FashionSense.Framework.Patches.Renderer
             // Get AnimationModel for this index
             var animationModel = animations.ElementAtOrDefault(iterator) is null ? animations.ElementAtOrDefault(0) : animations.ElementAtOrDefault(iterator);
 
+            // Handle animations that are syncing with other appearances 
+            bool defaultToEndWhenFarmerFrameUpdates = false;
+            var appearancePackType = appearanceModel.GetPackType();
+            if (appearanceModel.AppearanceSyncing.FirstOrDefault(a => a.AnimationType == animationType) is AppearanceSync appearanceSync && appearanceSync is not null)
+            {
+                if (HasModelOfType(activeModels, appearanceSync.TargetAppearanceType) && forceUpdate is false)
+                {
+                    var rectangle = appearanceTypeToSourceRectangles[appearancePackType];
+                    rectangle.X += appearanceTypeToSourceRectangles[appearancePackType].Width * animationModel.Frame;
+                    appearanceTypeToSourceRectangles[appearancePackType] = rectangle;
+
+                    return;
+                }
+                else
+                {
+                    defaultToEndWhenFarmerFrameUpdates = true;
+                }
+            }
+
             // Check if frame is valid
             if (IsFrameValid(who, animations, iterator, probe: true))
             {
@@ -785,23 +804,23 @@ namespace FashionSense.Framework.Patches.Renderer
 
                 animationModel = animations.ElementAt(iterator);
 
-                UpdatePlayerAnimationData(model, who, type, animations, facingDirection, iterator, startingIndex);
+                UpdatePlayerAnimationData(appearanceModel, who, animationType, animations, facingDirection, iterator, startingIndex);
             }
 
             // Update the light, if any is given
-            UpdateLight(model, animationModel, who, false);
+            UpdateLight(appearanceModel, animationModel, who, false);
 
             // Perform time based logic for elapsed animations
             // Note: ANIMATION_ELAPSED_DURATION is updated via UpdateTicked event
-            if ((elapsedDuration >= frameDuration && !animationModel.EndWhenFarmerFrameUpdates) || (animationModel.EndWhenFarmerFrameUpdates && who.FarmerSprite.CurrentFrame != lastFarmerFrame))
+            if ((elapsedDuration >= frameDuration && !animationModel.EndWhenFarmerFrameUpdates) || ((animationModel.EndWhenFarmerFrameUpdates || defaultToEndWhenFarmerFrameUpdates) && who.FarmerSprite.CurrentFrame != lastFarmerFrame) || forceUpdate)
             {
                 // Force the frame's condition to evalute and update any caches
                 IsFrameValid(who, animations, iterator);
-                UpdateLight(model, animationModel, who, true);
+                UpdateLight(appearanceModel, animationModel, who, true);
 
                 iterator = iterator + 1 >= animations.Count() ? startingIndex : iterator + 1;
 
-                UpdatePlayerAnimationData(model, who, type, animations, facingDirection, iterator, startingIndex);
+                UpdatePlayerAnimationData(appearanceModel, who, animationType, animations, facingDirection, iterator, startingIndex);
 
                 animationModel.WasDisplayed = true;
                 if (iterator == startingIndex)
@@ -812,9 +831,32 @@ namespace FashionSense.Framework.Patches.Renderer
                         animation.Reset();
                     }
                 }
+
+                foreach (var model in activeModels.Where(m => m is not null))
+                {
+                    if (model.AppearanceSyncing.FirstOrDefault(a => a.AnimationType == animationType && a.TargetAppearanceType == appearancePackType) is not null)
+                    {
+                        HandleAppearanceAnimation(activeModels, model, who, facingDirection, ref appearanceTypeToSourceRectangles, forceUpdate: true);
+                    }
+                }
             }
 
-            sourceRectangle.X += sourceRectangle.Width * animationModel.Frame;
+            var sourceRect = appearanceTypeToSourceRectangles[appearancePackType];
+            sourceRect.X += appearanceTypeToSourceRectangles[appearancePackType].Width * animationModel.Frame;
+            appearanceTypeToSourceRectangles[appearancePackType] = sourceRect;
+        }
+
+        private static bool HasModelOfType(List<AppearanceModel> models, AppearanceContentPack.Type appearanceType)
+        {
+            foreach (var model in models)
+            {
+                if (model.GetPackType() == appearanceType)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private static void UpdateLight(AppearanceModel model, AnimationModel animationModel, Farmer who, bool recalculateLight)
@@ -1275,6 +1317,8 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             // Set up each AppearanceModel
+            List<AppearanceModel> models = new List<AppearanceModel>();
+
             // Pants pack
             PantsContentPack pantsPack = null;
             PantsModel pantsModel = null;
@@ -1282,6 +1326,8 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 pantsPack = pPack;
                 pantsModel = pPack.GetPantsFromFacingDirection(facingDirection);
+
+                models.Add(pantsModel);
             }
 
             // Hair pack
@@ -1291,6 +1337,8 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 hairPack = hPack;
                 hairModel = hPack.GetHairFromFacingDirection(facingDirection);
+
+                models.Add(hairModel);
             }
 
             // Accessory pack
@@ -1305,6 +1353,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     accessoryModel.Priority = AccessoryModel.Type.Primary;
                 }
+                models.Add(accessoryModel);
             }
 
             AccessoryContentPack secondaryAccessoryPack = null;
@@ -1318,6 +1367,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     secondaryAccessoryModel.Priority = AccessoryModel.Type.Secondary;
                 }
+                models.Add(secondaryAccessoryModel);
             }
 
             AccessoryContentPack tertiaryAccessoryPack = null;
@@ -1331,6 +1381,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     tertiaryAccessoryModel.Priority = AccessoryModel.Type.Tertiary;
                 }
+                models.Add(tertiaryAccessoryModel);
             }
 
             // Hat pack
@@ -1340,6 +1391,8 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 hatPack = tPack;
                 hatModel = tPack.GetHatFromFacingDirection(facingDirection);
+
+                models.Add(hatModel);
             }
 
             // Shirt pack
@@ -1349,6 +1402,8 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 shirtPack = sPack;
                 shirtModel = sPack.GetShirtFromFacingDirection(facingDirection);
+
+                models.Add(shirtModel);
             }
 
             // Sleeves pack
@@ -1358,6 +1413,8 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 sleevesPack = armPack;
                 sleevesModel = armPack.GetSleevesFromFacingDirection(facingDirection);
+
+                models.Add(sleevesModel);
             }
 
             // Shoes pack
@@ -1370,6 +1427,8 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     shoesPack = bootPack;
                     shoesModel = bootPack.GetShoesFromFacingDirection(facingDirection);
+
+                    models.Add(shoesModel);
                 }
             }
 
@@ -1383,53 +1442,67 @@ namespace FashionSense.Framework.Patches.Renderer
             var skinTone = DrawPatch.GetSkinTone(___farmerTextureManager, ___baseTexture, null, ___skin, ____sickFrame);
 
             // Set up source rectangles
-            Rectangle customPantsSourceRect = new Rectangle();
-            Rectangle customHairSourceRect = new Rectangle();
-            Rectangle customAccessorySourceRect = new Rectangle();
-            Rectangle customSecondaryAccessorySourceRect = new Rectangle();
-            Rectangle customTertiaryAccessorySourceRect = new Rectangle();
-            Rectangle customHatSourceRect = new Rectangle();
-            Rectangle customShirtSourceRect = new Rectangle();
-            Rectangle customSleevesSourceRect = new Rectangle();
-            Rectangle customShoesSourceRect = new Rectangle();
+            Dictionary<AppearanceContentPack.Type, Rectangle> appearanceTypeToSourceRectangles = new Dictionary<AppearanceContentPack.Type, Rectangle>()
+            {
+                { AppearanceContentPack.Type.Pants, new Rectangle() },
+                { AppearanceContentPack.Type.Hair, new Rectangle() },
+                { AppearanceContentPack.Type.Accessory, new Rectangle() },
+                { AppearanceContentPack.Type.AccessorySecondary, new Rectangle() },
+                { AppearanceContentPack.Type.AccessoryTertiary, new Rectangle() },
+                { AppearanceContentPack.Type.Hat, new Rectangle() },
+                { AppearanceContentPack.Type.Shirt, new Rectangle() },
+                { AppearanceContentPack.Type.Sleeves, new Rectangle() },
+                { AppearanceContentPack.Type.Shoes, new Rectangle() }
+            };
 
             // Handle any animations
             if (pantsModel != null)
             {
-                HandleAppearanceAnimation(pantsModel, who, facingDirection, ref customPantsSourceRect);
+                HandleAppearanceAnimation(models, pantsModel, who, facingDirection, ref appearanceTypeToSourceRectangles);
             }
             if (hairModel != null)
             {
-                HandleAppearanceAnimation(hairModel, who, facingDirection, ref customHairSourceRect);
+                HandleAppearanceAnimation(models, hairModel, who, facingDirection, ref appearanceTypeToSourceRectangles);
             }
             if (accessoryModel != null)
             {
-                HandleAppearanceAnimation(accessoryModel, who, facingDirection, ref customAccessorySourceRect);
+                HandleAppearanceAnimation(models, accessoryModel, who, facingDirection, ref appearanceTypeToSourceRectangles);
             }
             if (secondaryAccessoryModel != null)
             {
-                HandleAppearanceAnimation(secondaryAccessoryModel, who, facingDirection, ref customSecondaryAccessorySourceRect);
+                HandleAppearanceAnimation(models, secondaryAccessoryModel, who, facingDirection, ref appearanceTypeToSourceRectangles);
             }
             if (tertiaryAccessoryModel != null)
             {
-                HandleAppearanceAnimation(tertiaryAccessoryModel, who, facingDirection, ref customTertiaryAccessorySourceRect);
+                HandleAppearanceAnimation(models, tertiaryAccessoryModel, who, facingDirection, ref appearanceTypeToSourceRectangles);
             }
             if (hatModel != null)
             {
-                HandleAppearanceAnimation(hatModel, who, facingDirection, ref customHatSourceRect);
+                HandleAppearanceAnimation(models, hatModel, who, facingDirection, ref appearanceTypeToSourceRectangles);
             }
             if (shirtModel != null)
             {
-                HandleAppearanceAnimation(shirtModel, who, facingDirection, ref customShirtSourceRect);
+                HandleAppearanceAnimation(models, shirtModel, who, facingDirection, ref appearanceTypeToSourceRectangles);
             }
             if (sleevesModel != null)
             {
-                HandleAppearanceAnimation(sleevesModel, who, facingDirection, ref customSleevesSourceRect);
+                HandleAppearanceAnimation(models, sleevesModel, who, facingDirection, ref appearanceTypeToSourceRectangles);
             }
             if (shoesModel != null)
             {
-                HandleAppearanceAnimation(shoesModel, who, facingDirection, ref customShoesSourceRect);
+                HandleAppearanceAnimation(models, shoesModel, who, facingDirection, ref appearanceTypeToSourceRectangles);
             }
+
+            // Set the source rectangles
+            Rectangle customPantsSourceRect = appearanceTypeToSourceRectangles[AppearanceContentPack.Type.Pants];
+            Rectangle customHairSourceRect = appearanceTypeToSourceRectangles[AppearanceContentPack.Type.Hair];
+            Rectangle customAccessorySourceRect = appearanceTypeToSourceRectangles[AppearanceContentPack.Type.Accessory];
+            Rectangle customSecondaryAccessorySourceRect = appearanceTypeToSourceRectangles[AppearanceContentPack.Type.AccessorySecondary];
+            Rectangle customTertiaryAccessorySourceRect = appearanceTypeToSourceRectangles[AppearanceContentPack.Type.AccessoryTertiary];
+            Rectangle customHatSourceRect = appearanceTypeToSourceRectangles[AppearanceContentPack.Type.Hat];
+            Rectangle customShirtSourceRect = appearanceTypeToSourceRectangles[AppearanceContentPack.Type.Shirt];
+            Rectangle customSleevesSourceRect = appearanceTypeToSourceRectangles[AppearanceContentPack.Type.Sleeves];
+            Rectangle customShoesSourceRect = appearanceTypeToSourceRectangles[AppearanceContentPack.Type.Shoes];
 
             // Check if the cached facing direction needs to be updated
             if (who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] != facingDirection.ToString())
@@ -1555,7 +1628,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
                 shirtLayer = layerDepth + 0.01E-05f;
 
-               var featureOffset = GetFeatureOffset(facingDirection, currentFrame, scale, __instance, shirtPack.PackType, false);
+                var featureOffset = GetFeatureOffset(facingDirection, currentFrame, scale, __instance, shirtPack.PackType, false);
                 b.Draw(shirtPack.Texture, position + origin + ___positionOffset + featureOffset, customShirtSourceRect, shirtModel.HasColorMask() ? Color.White : shirtColor, rotation, origin + new Vector2(shirtModel.BodyPosition.X, shirtModel.BodyPosition.Y), 4f * scale, shirtModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, shirtLayer);
 
                 if (shirtModel.HasColorMask())
@@ -1625,7 +1698,7 @@ namespace FashionSense.Framework.Patches.Renderer
 
                     // Draw the hair
                     b.Draw(hairPack.Texture, position + origin + ___positionOffset + featureOffset, customHairSourceRect, hairModel.HasColorMask() ? Color.White : hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), 4f * scale, hairModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, hairLayer);
-                    
+
                     if (hairModel.HasColorMask())
                     {
                         hairLayer += 2.2E-05f + 0.01E-05f;
