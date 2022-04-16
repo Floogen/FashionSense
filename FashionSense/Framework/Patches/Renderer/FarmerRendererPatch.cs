@@ -1247,12 +1247,8 @@ namespace FashionSense.Framework.Patches.Renderer
                 accessoryColor = Utility.GetPrismaticColor(speedMultiplier: accessoryModel.PrismaticAnimationSpeedMultiplier);
             }
 
-            // Correct how the accessory is drawn according to facingDirection and AccessoryModel.DrawBehindHair
-            var layerFix = facingDirection == 0 ? (accessoryModel.DrawBeforeHair ? 3.9E-05f : 0) : (accessoryModel.DrawBeforeHair ? -0.1E-05f : 2.9E-05f);
-            if (isDrawingForUI)
-            {
-                layerFix = facingDirection == 0 ? (accessoryModel.DrawBeforeHair ? 3.9E-05f : 2E-05f) : (accessoryModel.DrawBeforeHair ? -0.1E-05f : 3.9E-05f);
-            }
+            // Correct how the accessory is drawn according to AccessoryModel.DrawBehindHair
+            var layerFix = (accessoryModel.DrawBeforeHair ? 3.9E-05f : 1.0E-05f);
 
             if (accessoryModel.DrawAfterSleeves)
             {
