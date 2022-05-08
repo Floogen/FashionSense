@@ -233,6 +233,9 @@ namespace FashionSense.Framework.Patches.Renderer
                 return false;
             }
 
+            // Get the farmer's FarmerSprite.currentSingleAnimation via reflection
+            int currentSingleAnimation = _helper.Reflection.GetField<int>(who.FarmerSprite, "currentSingleAnimation").GetValue();
+
             bool isValid = true;
             foreach (var condition in animationModel.Conditions)
             {
@@ -301,11 +304,11 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
                 else if (condition.Name is Condition.Type.IsEating)
                 {
-                    passedCheck = condition.IsValid(who.isEating && who.FarmerSprite.CurrentSingleAnimation == FarmerSprite.eat);
+                    passedCheck = condition.IsValid(who.isEating && currentSingleAnimation == FarmerSprite.eat);
                 }
                 else if (condition.Name is Condition.Type.IsDrinking)
                 {
-                    passedCheck = condition.IsValid(who.isEating && who.FarmerSprite.CurrentSingleAnimation == FarmerSprite.drink);
+                    passedCheck = condition.IsValid(who.isEating && currentSingleAnimation == FarmerSprite.drink);
                 }
                 else if (condition.Name is Condition.Type.IsCasting)
                 {
@@ -353,7 +356,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
                 else if (condition.Name is Condition.Type.IsHarvesting)
                 {
-                    passedCheck = condition.IsValid(279 + who.FacingDirection == who.FarmerSprite.CurrentSingleAnimation);
+                    passedCheck = condition.IsValid(279 + who.FacingDirection == currentSingleAnimation);
                 }
                 else if (condition.Name is Condition.Type.IsInMines)
                 {
