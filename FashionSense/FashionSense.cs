@@ -438,7 +438,7 @@ namespace FashionSense
                     }
 
                     // Load in the texture
-                    appearanceModel.Texture = contentPack.LoadAsset<Texture2D>(contentPack.GetActualAssetKey(Path.Combine(parentFolderName, textureFolder.Name, "hair.png")));
+                    appearanceModel.Texture = contentPack.ModContent.Load<Texture2D>(contentPack.ModContent.GetInternalAssetName(Path.Combine(parentFolderName, textureFolder.Name, "hair.png")).Name);
 
                     // Track the model
                     textureManager.AddAppearanceModel(appearanceModel);
@@ -550,7 +550,7 @@ namespace FashionSense
                     }
 
                     // Load in the texture
-                    appearanceModel.Texture = contentPack.LoadAsset<Texture2D>(contentPack.GetActualAssetKey(Path.Combine(parentFolderName, textureFolder.Name, "accessory.png")));
+                    appearanceModel.Texture = contentPack.ModContent.Load<Texture2D>(contentPack.ModContent.GetInternalAssetName(Path.Combine(parentFolderName, textureFolder.Name, "accessory.png")).Name);
 
                     // Track the model
                     textureManager.AddAppearanceModel(appearanceModel);
@@ -662,7 +662,7 @@ namespace FashionSense
                     }
 
                     // Load in the texture
-                    appearanceModel.Texture = contentPack.LoadAsset<Texture2D>(contentPack.GetActualAssetKey(Path.Combine(parentFolderName, textureFolder.Name, "hat.png")));
+                    appearanceModel.Texture = contentPack.ModContent.Load<Texture2D>(contentPack.ModContent.GetInternalAssetName(Path.Combine(parentFolderName, textureFolder.Name, "hat.png")).Name);
 
                     // Track the model
                     textureManager.AddAppearanceModel(appearanceModel);
@@ -774,7 +774,7 @@ namespace FashionSense
                     }
 
                     // Load in the texture
-                    appearanceModel.Texture = contentPack.LoadAsset<Texture2D>(contentPack.GetActualAssetKey(Path.Combine(parentFolderName, textureFolder.Name, "shirt.png")));
+                    appearanceModel.Texture = contentPack.ModContent.Load<Texture2D>(contentPack.ModContent.GetInternalAssetName(Path.Combine(parentFolderName, textureFolder.Name, "shirt.png")).Name);
 
                     // Track the model
                     textureManager.AddAppearanceModel(appearanceModel);
@@ -887,7 +887,7 @@ namespace FashionSense
                     }
 
                     // Load in the texture
-                    appearanceModel.Texture = contentPack.LoadAsset<Texture2D>(contentPack.GetActualAssetKey(Path.Combine(parentFolderName, textureFolder.Name, "pants.png")));
+                    appearanceModel.Texture = contentPack.ModContent.Load<Texture2D>(contentPack.ModContent.GetInternalAssetName(Path.Combine(parentFolderName, textureFolder.Name, "pants.png")).Name);
 
                     // Track the model
                     textureManager.AddAppearanceModel(appearanceModel);
@@ -1000,7 +1000,7 @@ namespace FashionSense
                     }
 
                     // Load in the texture
-                    appearanceModel.Texture = contentPack.LoadAsset<Texture2D>(contentPack.GetActualAssetKey(Path.Combine(parentFolderName, textureFolder.Name, "sleeves.png")));
+                    appearanceModel.Texture = contentPack.ModContent.Load<Texture2D>(contentPack.ModContent.GetInternalAssetName(Path.Combine(parentFolderName, textureFolder.Name, "sleeves.png")).Name);
 
                     // Track the model
                     textureManager.AddAppearanceModel(appearanceModel);
@@ -1113,7 +1113,7 @@ namespace FashionSense
                     }
 
                     // Load in the texture
-                    appearanceModel.Texture = contentPack.LoadAsset<Texture2D>(contentPack.GetActualAssetKey(Path.Combine(parentFolderName, textureFolder.Name, "shoes.png")));
+                    appearanceModel.Texture = contentPack.ModContent.Load<Texture2D>(contentPack.ModContent.GetInternalAssetName(Path.Combine(parentFolderName, textureFolder.Name, "shoes.png")).Name);
 
                     // Track the model
                     textureManager.AddAppearanceModel(appearanceModel);

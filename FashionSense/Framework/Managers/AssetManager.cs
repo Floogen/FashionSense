@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FashionSense.Framework.Managers
 {
-    internal class AssetManager : IAssetLoader
+    internal class AssetManager
     {
         internal string assetFolderPath;
         internal Dictionary<string, Texture2D> toolNames = new Dictionary<string, Texture2D>();
@@ -34,34 +34,24 @@ namespace FashionSense.Framework.Managers
         public AssetManager(IModHelper helper)
         {
             // Get the asset folder path
-            assetFolderPath = helper.Content.GetActualAssetKey(Path.Combine("Framework", "Assets"), ContentSource.ModFolder);
+            assetFolderPath = helper.ModContent.GetInternalAssetName(Path.Combine("Framework", "Assets")).Name;
 
             // Load in the assets
-            _handMirrorTexture = helper.Content.Load<Texture2D>(Path.Combine(assetFolderPath, "HandMirror.png"));
-            scissorsButtonTexture = helper.Content.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "HairButton.png"));
-            accessoryButtonTexture = helper.Content.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "AccessoryButton.png"));
-            hatButtonTexture = helper.Content.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "HatButton.png"));
-            shirtButtonTexture = helper.Content.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "ShirtButton.png"));
-            pantsButtonTexture = helper.Content.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "PantsButton.png"));
-            sleevesButtonTexture = helper.Content.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "SleevesButton.png"));
-            sleevesAndShoesButtonTexture = helper.Content.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "SleevesShoesButton.png"));
-            shoesButtonTexture = helper.Content.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "ShoesButton.png"));
-            optionOneButton = helper.Content.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "OptionOneButton.png"));
-            optionTwoButton = helper.Content.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "OptionTwoButton.png"));
-            optionThreeButton = helper.Content.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "OptionThreeButton.png"));
+            _handMirrorTexture = helper.ModContent.Load<Texture2D>(Path.Combine(assetFolderPath, "HandMirror.png"));
+            scissorsButtonTexture = helper.ModContent.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "HairButton.png"));
+            accessoryButtonTexture = helper.ModContent.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "AccessoryButton.png"));
+            hatButtonTexture = helper.ModContent.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "HatButton.png"));
+            shirtButtonTexture = helper.ModContent.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "ShirtButton.png"));
+            pantsButtonTexture = helper.ModContent.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "PantsButton.png"));
+            sleevesButtonTexture = helper.ModContent.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "SleevesButton.png"));
+            sleevesAndShoesButtonTexture = helper.ModContent.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "SleevesShoesButton.png"));
+            shoesButtonTexture = helper.ModContent.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "ShoesButton.png"));
+            optionOneButton = helper.ModContent.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "OptionOneButton.png"));
+            optionTwoButton = helper.ModContent.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "OptionTwoButton.png"));
+            optionThreeButton = helper.ModContent.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "OptionThreeButton.png"));
 
             // Setup toolNames
             toolNames.Add("HandMirror", _handMirrorTexture);
-        }
-
-        public bool CanLoad<T>(IAssetInfo asset)
-        {
-            return false;
-        }
-
-        public T Load<T>(IAssetInfo asset)
-        {
-            return (T)(object)asset;
         }
 
         internal Texture2D GetHandMirrorTexture()
