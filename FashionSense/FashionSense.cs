@@ -94,7 +94,7 @@ namespace FashionSense
 
             // Add in our debug commands
             helper.ConsoleCommands.Add("fs_display_movement", "Displays debug info related to player movement. Use again to disable. \n\nUsage: fs_display_movement", delegate { _displayMovementData = !_displayMovementData; });
-            helper.ConsoleCommands.Add("fs_reload", "Reloads all Fashion Sense content packs.\n\nUsage: fs_reload", delegate { this.LoadContentPacks(); });
+            helper.ConsoleCommands.Add("fs_reload", "Reloads all Fashion Sense content packs. Can specify a manifest unique ID to only reload that pack.\n\nUsage: fs_reload [manifest_unique_id]", ReloadFashionSense);
             helper.ConsoleCommands.Add("fs_reload_continuous", "Debug usage only: reloads all Fashion Sense content packs every 2 seconds. Use the command again to stop the continuous reloading.\n\nUsage: fs_reload_continuous", delegate { _continuousReloading = !_continuousReloading; });
             helper.ConsoleCommands.Add("fs_add_mirror", "Gives you a Hand Mirror tool.\n\nUsage: fs_add_mirror", delegate { Game1.player.addItemToInventory(SeedShopPatch.GetHandMirrorTool()); });
 
@@ -246,6 +246,12 @@ namespace FashionSense
             return new Api(Monitor, textureManager);
         }
 
+        private void ReloadFashionSense(string command, string[] args)
+        {
+            var packFilter = args.Length > 0 ? args[0] : null;
+            this.LoadContentPacks(packId: packFilter);
+        }
+
         private void UpdateElapsedDuration(Farmer who)
         {
             UpdateElapsedDuration(who, ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION);
@@ -287,13 +293,13 @@ namespace FashionSense
             }
         }
 
-        private void LoadContentPacks(bool silent = false)
+        private void LoadContentPacks(bool silent = false, string packId = null)
         {
             // Clear the existing cache of AppearanceModels
-            textureManager.Reset();
+            textureManager.Reset(packId);
 
             // Load owned content packs
-            foreach (IContentPack contentPack in Helper.ContentPacks.GetOwned())
+            foreach (IContentPack contentPack in Helper.ContentPacks.GetOwned().Where(c => String.IsNullOrEmpty(packId) is true || c.Manifest.UniqueID.Equals(packId, StringComparison.OrdinalIgnoreCase)))
             {
                 Monitor.Log($"Loading data from pack: {contentPack.Manifest.Name} {contentPack.Manifest.Version} by {contentPack.Manifest.Author}", silent ? LogLevel.Trace : LogLevel.Debug);
 

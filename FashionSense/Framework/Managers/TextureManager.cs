@@ -22,9 +22,16 @@ namespace FashionSense.Framework.Managers
             _appearanceTextures = new List<AppearanceContentPack>();
         }
 
-        public void Reset()
+        public void Reset(string packId = null)
         {
-            _appearanceTextures.Clear();
+            if (String.IsNullOrEmpty(packId) is true)
+            {
+                _appearanceTextures.Clear();
+            }
+            else
+            {
+                _appearanceTextures = _appearanceTextures.Where(a => a.Owner.Equals(packId, StringComparison.OrdinalIgnoreCase) is false).ToList();
+            }
         }
 
         public void AddAppearanceModel(AppearanceContentPack model)
