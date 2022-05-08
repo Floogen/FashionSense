@@ -26,7 +26,248 @@
     "IdleAnimation": [
       {
         "Frame": 0,
-        "Duration": 125
+        "Conditions": [
+          {
+            "Name": "IsEating",
+            "Value": false
+          },
+          {
+            "Name": "IsDrinking",
+            "Value": false
+          },
+          {
+            "Name": "IsCarrying",
+            "Value": false
+          }
+        ]
+      },
+      {
+        "Frame": 3,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsEating",
+            "Value": false
+          },
+          {
+            "Name": "IsDrinking",
+            "Value": false
+          },
+          {
+            "Name": "IsCarrying",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 4,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsEating",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 5,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsEating",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 5,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsEating",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 6,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsEating",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 6,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsEating",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 7,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsEating",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 8,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsEating",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 7,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsEating",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 8,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsEating",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 7,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsEating",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 8,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsEating",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 9,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsDrinking",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 10,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsDrinking",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 11,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsDrinking",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 12,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsDrinking",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 11,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsDrinking",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 12,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsDrinking",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 11,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsDrinking",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 12,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsDrinking",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 10,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsDrinking",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 9,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsDrinking",
+            "Value": true
+          }
+        ]
       }
     ],
     "MovementAnimation": [
@@ -82,16 +323,6 @@
       },
       {
         "Frame": 0,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "IsRunning",
-            "Value": true
-          }
-        ]
-      },
-      {
-        "Frame": 2,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
