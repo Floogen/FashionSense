@@ -25,6 +25,7 @@ using FashionSense.Framework.Patches.Entities;
 using FashionSense.Framework.Models.Sleeves;
 using FashionSense.Framework.UI;
 using FashionSense.Framework.Models.Shoes;
+using FashionSense.Framework.Interfaces.API;
 
 namespace FashionSense
 {
@@ -238,6 +239,11 @@ namespace FashionSense
 
             // Set sprite to dirty in order to refresh sleeves and other tied-in appearances
             SetSpriteDirty();
+        }
+
+        public override object GetApi()
+        {
+            return new Api(Monitor, textureManager);
         }
 
         private void UpdateElapsedDuration(Farmer who)
