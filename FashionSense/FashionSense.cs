@@ -26,6 +26,7 @@ using FashionSense.Framework.Models.Sleeves;
 using FashionSense.Framework.UI;
 using FashionSense.Framework.Models.Shoes;
 using FashionSense.Framework.Interfaces.API;
+using StardewModdingAPI.Utilities;
 
 namespace FashionSense
 {
@@ -99,20 +100,11 @@ namespace FashionSense
             helper.ConsoleCommands.Add("fs_add_mirror", "Gives you a Hand Mirror tool.\n\nUsage: fs_add_mirror", delegate { Game1.player.addItemToInventory(SeedShopPatch.GetHandMirrorTool()); });
 
             modHelper.Events.GameLoop.GameLaunched += OnGameLaunched;
-            modHelper.Events.GameLoop.SaveCreated += OnSaveCreated;
             modHelper.Events.GameLoop.SaveLoaded += OnSaveLoaded;
             modHelper.Events.GameLoop.DayStarted += OnDayStarted;
             modHelper.Events.Player.Warped += OnWarped;
             modHelper.Events.GameLoop.UpdateTicked += OnUpdateTicked;
             modHelper.Events.Display.Rendered += OnRendered;
-        }
-
-        private void OnSaveCreated(object sender, SaveCreatedEventArgs e)
-        {
-            if (Game1.player.modData.ContainsKey(ModDataKeys.STARTS_WITH_HAND_MIRROR) && bool.Parse(Game1.player.modData[ModDataKeys.STARTS_WITH_HAND_MIRROR]))
-            {
-                Game1.player.addItemByMenuIfNecessary(SeedShopPatch.GetHandMirrorTool());
-            }
         }
 
         private void OnRendered(object sender, StardewModdingAPI.Events.RenderedEventArgs e)
@@ -239,6 +231,13 @@ namespace FashionSense
 
             // Set sprite to dirty in order to refresh sleeves and other tied-in appearances
             SetSpriteDirty();
+
+            // Check if we need to give a Hand Mirror at the start of the game
+            if (SDate.Now().DaysSinceStart == 1 && Game1.player.modData.ContainsKey(ModDataKeys.STARTS_WITH_HAND_MIRROR) && bool.Parse(Game1.player.modData[ModDataKeys.STARTS_WITH_HAND_MIRROR]))
+            {
+                Monitor.Log($"Giving the Hand Mirror to player {Game1.player.Name} as they enabled STARTS_WITH_HAND_MIRROR");
+                Game1.player.addItemByMenuIfNecessary(SeedShopPatch.GetHandMirrorTool());
+            }
         }
 
         public override object GetApi()
