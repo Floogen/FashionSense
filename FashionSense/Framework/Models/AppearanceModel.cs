@@ -29,6 +29,7 @@ namespace FashionSense.Framework.Models
         public bool DisableSkinGrayscale { get; set; }
         public bool IsPrismatic { get; set; }
         public float PrismaticAnimationSpeedMultiplier { get; set; } = 1f;
+        public float Scale { get; set; } = 4f;
         public List<int[]> ColorMasks { get; set; } = new List<int[]>();
         public SkinToneModel SkinToneMasks { get; set; }
         public List<AppearanceSync> AppearanceSyncing { get; set; } = new List<AppearanceSync>();
