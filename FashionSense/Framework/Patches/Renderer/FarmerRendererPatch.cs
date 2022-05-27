@@ -1297,7 +1297,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
             else if (accessoryModel.DrawAfterPlayer)
             {
-                layerFix += 0.5E-05f;
+                layerFix += 1.5E-05f;
             }
 
             b.Draw(accessoryPack.Texture, position + origin + positionOffset + rotationAdjustment + GetFeatureOffset(facingDirection, currentFrame, scale, renderer, accessoryPack.PackType), customAccessorySourceRect, accessoryModel.HasColorMask() ? Color.White : accessoryColor, rotation, origin + new Vector2(accessoryModel.HeadPosition.X, accessoryModel.HeadPosition.Y), accessoryModel.Scale * scale + ((rotation != 0f) ? 0f : 0f), accessoryModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + layerFix);
