@@ -28,14 +28,16 @@
   "ui.fashion_sense.warning.name": "ยังไม่ได้ตั้งชื่อเครื่องแต่งกายหรือตั้งชื่อที่มีอยู่แล้ว",
 
   // UI - Etc
+  "ui.fashion_sense.start_with_hand_mirror": "เริ่มต้นด้วยกระจก",
+  "ui.fashion_sense.start_with_hand_mirror.description": "คุณจะเริ่มเกมใหม่ด้วยกระจกในคลังของคุณ",
   "ui.fashion_sense.color_override.shoes": "แทนที่สีรองเท้า",
   "ui.fashion_sense.search_button": "ค้นหาชุด Fashion Sense ที่เฉพาะเจาะจง",
   "ui.fashion_sense.outfit_button": "เข้าถึงเครื่องแต่งกาย Fashion Sense ของคุณ",
   "ui.fashion_sense.color_copy_button": "คัดลอกสีปัจจุบัน",
   "ui.fashion_sense.color_paste_button": "วางสีที่บันทึกไว้",
   "ui.fashion_sense.color_paste_button_empty": "วางสีที่บันทึกไว้ (ว่าง)",
-  "ui.fashion_sense.clear_button": "ล้างไอเท็ม Fashion Sense ที่เลือกอยู่ในปัจจุบัน",
-  "ui.fashion_sense.random_button": "สุ่มเลือกไอเท็ม Fashion Sense",
+  "ui.fashion_sense.clear_button": "ล้างไอเทม Fashion Sense ที่เลือกอยู่ในปัจจุบัน",
+  "ui.fashion_sense.random_button": "สุ่มเลือกไอเทม Fashion Sense",
   "ui.fashion_sense.color_active.hair": "สีผม",
   "ui.fashion_sense.color_active.hat": "หมวกสี",
   "ui.fashion_sense.color_active.shirt": "สีเสื้อ",
