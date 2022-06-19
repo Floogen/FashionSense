@@ -55,6 +55,16 @@ namespace FashionSense.Framework.Models
                 {
                     return true;
                 }
+
+                if (maskedColor.A is not (byte.MinValue or byte.MaxValue))
+                {
+                    // Premultiply the color for the mask, as SMAPI premultiplies the alpha
+                    Color adjustedColor = new Color(maskedColor.R * maskedColor.A / 255, maskedColor.G * maskedColor.A / 255, maskedColor.B * maskedColor.A / 255, maskedColor.A);
+                    if (adjustedColor == color)
+                    {
+                        return true;
+                    }
+                }
             }
 
             return false;
