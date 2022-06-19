@@ -49,7 +49,7 @@ namespace FashionSense.Framework.Models
                 return false;
             }
 
-            foreach (Color maskedColor in ColorMasks.Select(c => new Color(c[0], c[1], c[2])))
+            foreach (Color maskedColor in ColorMasks.Select(c => new Color(c[0], c[1], c[2], c.Length > 3 ? c[3] : 255)))
             {
                 if (maskedColor == color)
                 {
