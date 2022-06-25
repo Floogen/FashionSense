@@ -1,0 +1,56 @@
+{
+  // Tools
+  "tools.name.hand_mirror": "Ручне люстерко",
+  "tools.description.hand_mirror": "Дозволяє \"оживити\" свою зовнішність.",
+
+  // Messages
+  "messages.warning.no_content_packs": "У вас не встановлено жодного набору на новий вміст для моду \"Fashion Sense\"!",
+
+  // UI - Titles
+  "ui.fashion_sense.title.search": "Виберіть набір для моду \"Fashion Sense\"",
+  "ui.fashion_sense.title.hair": "Зачіски",
+  "ui.fashion_sense.title.accessory": "Аксесуари",
+  "ui.fashion_sense.title.hat": "Капелюхи",
+  "ui.fashion_sense.title.shirt": "Сорочки",
+  "ui.fashion_sense.title.pants": "Штани",
+  "ui.fashion_sense.title.sleeves": "Рукава",
+  "ui.fashion_sense.title.sleevesAndShoes": "Рукава та взуття",
+  "ui.fashion_sense.title.shoes": "Взуття",
+
+  // UI - Outfits
+  "ui.fashion_sense.title.outfits": "Убрання",
+  "ui.fashion_sense.title.outfit_naming": "Назва вбрання",
+  "ui.fashion_sense.create_outfit_button": "Створити вбрання",
+  "ui.fashion_sense.create_outfit_hover": "Створіть нове вбрання на основі вашого поточного одягу.",
+  "ui.fashion_sense.outfit_info.save": "Зберігає ваш поточний одяг у цьому вбранні.",
+  "ui.fashion_sense.outfit_info.rename": "Переназвіть це вбрання.",
+  "ui.fashion_sense.outfit_info.delete": "Видаліть це вбрання.",
+  "ui.fashion_sense.warning.name": "Назва вбрання порожня або вже існує.",
+
+  // UI - Etc
+  "ui.fashion_sense.start_with_hand_mirror": "Почати з люстерком",
+  "ui.fashion_sense.start_with_hand_mirror.description": "Ви почнете свою нову гру з ручним люстерком у вашому інвентарі.",
+  "ui.fashion_sense.color_override.shoes": "Змінити колір взуття",
+  "ui.fashion_sense.search_button": "Знайти певний набір для \"Fashion Sense\".",
+  "ui.fashion_sense.outfit_button": "Отримати доступ до свого вбрання з \"Fashion Sense\".",
+  "ui.fashion_sense.color_copy_button": "Скопіювати поточний колір.",
+  "ui.fashion_sense.color_paste_button": "Вставити збережений колір.",
+  "ui.fashion_sense.color_paste_button_empty": "Вставити збережений колір (порожньо).",
+  "ui.fashion_sense.clear_button": "Очищає поточний вибраний предмет \"Fashion Sense\".",
+  "ui.fashion_sense.random_button": "Випадково вибирає предмет з \"Fashion Sense\".",
+  "ui.fashion_sense.color_active.hair": "Колір волосся",
+  "ui.fashion_sense.color_active.hat": "Колір капелюха",
+  "ui.fashion_sense.color_active.shirt": "Колір сорочки",
+  "ui.fashion_sense.color_active.pants": "Колір штанів",
+  "ui.fashion_sense.color_active.accessory": "Колір акс.",
+  "ui.fashion_sense.color_active.sleeves": "Колір рукава",
+  "ui.fashion_sense.color_active.shoes": "Колір взуття",
+  "ui.fashion_sense.color_disabled.generic": "(Нехтується)",
+  "ui.fashion_sense.color_info.hair": "Кольорові накладення не вплинуть на цю зачіску.",
+  "ui.fashion_sense.color_info.hat": "Кольорові накладення не вплинуть на цей капелюх.",
+  "ui.fashion_sense.color_info.shirt": "Кольорові накладення не вплинуть на цю сорочку.",
+  "ui.fashion_sense.color_info.pants": "Кольорові накладення не вплинуть на ці штани.",
+  "ui.fashion_sense.color_info.accessory": "Кольорові накладення не вплинуть на цей аксесуар.",
+  "ui.fashion_sense.color_info.sleeves": "Кольорові накладення не вплинуть на ці рукава.",
+  "ui.fashion_sense.color_info.shoes": "Кольорові накладення не вплинуть на це взуття."
+}
