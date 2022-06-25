@@ -1858,6 +1858,9 @@ namespace FashionSense.Framework.Patches.Renderer
                 return true;
             }
 
+            // This is in the vanilla code, which for some reason is always 2 instead of relying on facingDirection's initial value
+            facingDirection = 2;
+
             HairModel hairModel = hairPack.GetHairFromFacingDirection(facingDirection);
             if (hairModel is null)
             {
@@ -1881,9 +1884,6 @@ namespace FashionSense.Framework.Patches.Renderer
 
             // Get hair metadata
             HairStyleMetadata hair_metadata = Farmer.GetHairStyleMetadata(who.hair.Value);
-
-            // This is in the vanilla code, which for some reason is always 2 instead of relying on facingDirection's initial value
-            facingDirection = 2;
 
             // Vanilla logic to determine player's head position (though largely useless as it always executes facingDirection == 2)
             bool flip = false;
