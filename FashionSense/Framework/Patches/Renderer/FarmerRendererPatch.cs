@@ -1233,35 +1233,43 @@ namespace FashionSense.Framework.Patches.Renderer
 
         private static void DrawSleeveColorMask(SpriteBatch b, SleevesContentPack sleevesPack, SleevesModel sleevesModel, ShirtModel shirtModel, Vector2 position, Rectangle sourceRect, Color color, float rotation, Vector2 origin, float scale, float layerDepth)
         {
-            Color[] data = new Color[sleevesPack.Texture.Width * sleevesPack.Texture.Height];
-            sleevesPack.Texture.GetData(data);
-            Texture2D maskedTexture = new Texture2D(Game1.graphics.GraphicsDevice, sleevesPack.Texture.Width, sleevesPack.Texture.Height);
-
-            for (int i = 0; i < data.Length; i++)
+            if (sleevesPack.ColorMaskTexture is null || AreColorMasksPendingRefresh)
             {
-                if (!sleevesModel.IsMaskedColor(data[i]))
+                Color[] data = new Color[sleevesPack.Texture.Width * sleevesPack.Texture.Height];
+                sleevesPack.Texture.GetData(data);
+                Texture2D maskedTexture = new Texture2D(Game1.graphics.GraphicsDevice, sleevesPack.Texture.Width, sleevesPack.Texture.Height);
+
+                var firstSleeveColor = shirtModel.GetSleeveColor(0);
+                var secondSleeveColor = shirtModel.GetSleeveColor(1);
+                var thirdSleeveColor = shirtModel.GetSleeveColor(2);
+
+                for (int i = 0; i < data.Length; i++)
                 {
-                    data[i] = Color.Transparent;
+                    if (!sleevesModel.IsMaskedColor(data[i]))
+                    {
+                        data[i] = Color.Transparent;
+                    }
+                    else if (sleevesModel.ColorMasks is not null)
+                    {
+                        if (sleevesModel.ColorMasks.Count > 0 && data[i] == AppearanceModel.GetColor(sleevesModel.ColorMasks[0]) && shirtModel.HasSleeveColorAtLayer(0))
+                        {
+                            data[i] = firstSleeveColor;
+                        }
+                        else if (sleevesModel.ColorMasks.Count > 1 && data[i] == AppearanceModel.GetColor(sleevesModel.ColorMasks[1]) && shirtModel.HasSleeveColorAtLayer(1))
+                        {
+                            data[i] = secondSleeveColor;
+                        }
+                        else if (sleevesModel.ColorMasks.Count > 2 && data[i] == AppearanceModel.GetColor(sleevesModel.ColorMasks[2]) && shirtModel.HasSleeveColorAtLayer(2))
+                        {
+                            data[i] = thirdSleeveColor;
+                        }
+                    }
                 }
-                else if (sleevesModel.ColorMasks is not null)
-                {
-                    if (sleevesModel.ColorMasks.Count > 0 && data[i] == AppearanceModel.GetColor(sleevesModel.ColorMasks[0]) && shirtModel.HasSleeveColorAtLayer(0))
-                    {
-                        data[i] = shirtModel.GetSleeveColor(0);
-                    }
-                    else if (sleevesModel.ColorMasks.Count > 1 && data[i] == AppearanceModel.GetColor(sleevesModel.ColorMasks[1]) && shirtModel.HasSleeveColorAtLayer(1))
-                    {
-                        data[i] = shirtModel.GetSleeveColor(1);
-                    }
-                    else if (sleevesModel.ColorMasks.Count > 2 && data[i] == AppearanceModel.GetColor(sleevesModel.ColorMasks[2]) && shirtModel.HasSleeveColorAtLayer(2))
-                    {
-                        data[i] = shirtModel.GetSleeveColor(2);
-                    }
-                }
+
+                maskedTexture.SetData(data);
             }
 
-            maskedTexture.SetData(data);
-            b.Draw(maskedTexture, position, sourceRect, Color.White, rotation, origin, scale, sleevesModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
+            b.Draw(sleevesPack.ColorMaskTexture, position, sourceRect, Color.White, rotation, origin, scale, sleevesModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
         }
 
         private static void DrawSkinToneMask(SpriteBatch b, AppearanceContentPack appearancePack, AppearanceModel appearanceModel, SkinToneModel skinTone, Vector2 position, Rectangle sourceRect, Color color, float rotation, Vector2 origin, float scale, float layerDepth)
