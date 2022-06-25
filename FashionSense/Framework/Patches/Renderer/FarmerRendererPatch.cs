@@ -326,9 +326,17 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     passedCheck = condition.IsValid(who.CurrentTool is FishingRod fishingRod && fishingRod.isReeling);
                 }
+                else if (condition.Name is Condition.Type.IsPullingFishOutOfWater)
+                {
+                    passedCheck = condition.IsValid(who.CurrentTool is FishingRod fishingRod && fishingRod.pullingOutOfWater);
+                }
                 else if (condition.Name is Condition.Type.IsUsingHeavyTool)
                 {
                     passedCheck = condition.IsValid(who.UsingTool && (who.CurrentTool is Hoe || who.CurrentTool is Pickaxe || who.CurrentTool is Axe));
+                }
+                else if (condition.Name is Condition.Type.ToolChargeLevel)
+                {
+                    passedCheck = condition.IsValid(who.toolPower) && condition.IsValid(who.UsingTool && (who.CurrentTool is Hoe || who.CurrentTool is Axe || who.CurrentTool is WateringCan));
                 }
                 else if (condition.Name is Condition.Type.IsUsingMilkPail)
                 {
@@ -341,6 +349,10 @@ namespace FashionSense.Framework.Patches.Renderer
                 else if (condition.Name is Condition.Type.IsUsingPan)
                 {
                     passedCheck = condition.IsValid(who.UsingTool && who.CurrentTool is Pan);
+                }
+                else if (condition.Name is Condition.Type.IsWatering)
+                {
+                    passedCheck = condition.IsValid(who.UsingTool && who.CurrentTool is WateringCan);
                 }
                 else if (condition.Name is Condition.Type.IsUsingScythe)
                 {
@@ -389,6 +401,14 @@ namespace FashionSense.Framework.Patches.Renderer
                 else if (condition.Name is Condition.Type.IsInBathingSuit)
                 {
                     passedCheck = condition.IsValid(who.bathingClothes.Value);
+                }
+                else if (condition.Name is Condition.Type.IsSick)
+                {
+                    passedCheck = condition.IsValid(currentSingleAnimation == 104 || currentSingleAnimation == 105);
+                }
+                else if (condition.Name is Condition.Type.IsPassingOut)
+                {
+                    passedCheck = condition.IsValid(who.FarmerSprite.isPassingOut());
                 }
 
                 // If the condition is independent and is true, then skip rest of evaluations
