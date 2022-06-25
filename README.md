@@ -19,3 +19,4 @@ Translations have been generously provided by the following users:
 
 * **Thai** - ellipszist
 * **Turkish** - KediDili
+* **Ukrainian** - ChulkyBow
