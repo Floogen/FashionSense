@@ -82,6 +82,7 @@ namespace FashionSense
 
                 // Apply UI related patches
                 new CharacterCustomizationPatch(monitor, modHelper).Apply(harmony);
+                new LetterViewerMenuPatch(monitor, modHelper).Apply(harmony);
 
                 // Apply entity related patches
                 new FarmerPatch(monitor, modHelper).Apply(harmony);
@@ -99,12 +100,13 @@ namespace FashionSense
             helper.ConsoleCommands.Add("fs_reload_continuous", "Debug usage only: reloads all Fashion Sense content packs every 2 seconds. Use the command again to stop the continuous reloading.\n\nUsage: fs_reload_continuous", delegate { _continuousReloading = !_continuousReloading; });
             helper.ConsoleCommands.Add("fs_add_mirror", "Gives you a Hand Mirror tool.\n\nUsage: fs_add_mirror", delegate { Game1.player.addItemToInventory(SeedShopPatch.GetHandMirrorTool()); });
 
-            modHelper.Events.GameLoop.GameLaunched += OnGameLaunched;
-            modHelper.Events.GameLoop.SaveLoaded += OnSaveLoaded;
-            modHelper.Events.GameLoop.DayStarted += OnDayStarted;
-            modHelper.Events.Player.Warped += OnWarped;
-            modHelper.Events.GameLoop.UpdateTicked += OnUpdateTicked;
-            modHelper.Events.Display.Rendered += OnRendered;
+            helper.Events.Content.AssetRequested += OnAssetRequested;
+            helper.Events.GameLoop.GameLaunched += OnGameLaunched;
+            helper.Events.GameLoop.SaveLoaded += OnSaveLoaded;
+            helper.Events.GameLoop.DayStarted += OnDayStarted;
+            helper.Events.Player.Warped += OnWarped;
+            helper.Events.GameLoop.UpdateTicked += OnUpdateTicked;
+            helper.Events.Display.Rendered += OnRendered;
         }
 
         private void OnRendered(object sender, StardewModdingAPI.Events.RenderedEventArgs e)
@@ -194,6 +196,18 @@ namespace FashionSense
             this.LoadContentPacks();
         }
 
+        private void OnAssetRequested(object sender, AssetRequestedEventArgs e)
+        {
+            if (e.NameWithoutLocale.IsEquivalentTo("Data/Mail"))
+            {
+                e.Edit(asset =>
+                {
+                    var data = asset.AsDictionary<string, string>().Data;
+                    data[ModDataKeys.LETTER_HAND_MIRROR] = modHelper.Translation.Get("letters.hand_mirror");
+                });
+            }
+        }
+
         private void OnSaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
         {
             // Reset Hand Mirror UI
@@ -233,10 +247,10 @@ namespace FashionSense
             SetSpriteDirty();
 
             // Check if we need to give a Hand Mirror at the start of the game
-            if (SDate.Now().DaysSinceStart == 1 && Game1.player.modData.ContainsKey(ModDataKeys.STARTS_WITH_HAND_MIRROR) && bool.Parse(Game1.player.modData[ModDataKeys.STARTS_WITH_HAND_MIRROR]))
+            if (SDate.Now().DaysSinceStart == 1 && Game1.player.modData.ContainsKey(ModDataKeys.STARTS_WITH_HAND_MIRROR))
             {
-                Monitor.Log($"Giving the Hand Mirror to player {Game1.player.Name} as they enabled STARTS_WITH_HAND_MIRROR");
-                Game1.player.addItemByMenuIfNecessary(SeedShopPatch.GetHandMirrorTool());
+                Monitor.Log($"Giving the Hand Mirror to player {Game1.player.Name} via letter as they enabled STARTS_WITH_HAND_MIRROR");
+                Game1.player.mailbox.Add(ModDataKeys.LETTER_HAND_MIRROR);
             }
         }
 

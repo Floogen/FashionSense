@@ -6,6 +6,9 @@
   // Messages
   "messages.warning.no_content_packs": "You don't have any Fashion Sense content packs installed!",
 
+  // Letters
+  "letters.hand_mirror": "I heard someone new was moving into the valley and thought to offer a housewarming gift.^ ^I've included my old Hand Mirror with this letter, which should help with your fashion sense.^ ^If you ever lose it, you can buy another from Pierre's shop.  ^   -Haley %item tool HandMirror %%",
+
   // UI - Titles
   "ui.fashion_sense.title.search": "Select a Fashion Sense Pack",
   "ui.fashion_sense.title.hair": "Hairstyles",
