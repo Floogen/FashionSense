@@ -59,5 +59,10 @@ namespace FashionSense.Framework.Models
 
             return true;
         }
+
+        internal Texture2D GetCachedTexture()
+        {
+            return _cachedTexture;
+        }
     }
 }

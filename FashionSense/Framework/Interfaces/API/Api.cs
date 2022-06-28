@@ -52,8 +52,8 @@ namespace FashionSense.Framework.Interfaces.API
         KeyValuePair<bool, string> ClearShoesAppearance(IManifest callerManifest);
 
         KeyValuePair<bool, string> GetCurrentAppearanceId(Type appearanceType);
-        KeyValuePair<bool, IRawTextureData> GetAppearanceTexture(Type appearanceType, string targetPackId, string targetAppearanceName);
-        KeyValuePair<bool, IRawTextureData> GetAppearanceTexture(string appearanceId);
+        KeyValuePair<bool, IRawTextureData> GetAppearanceTexture(Type appearanceType, string targetPackId, string targetAppearanceName, bool getOriginalTexture = false);
+        KeyValuePair<bool, IRawTextureData> GetAppearanceTexture(string appearanceId, bool getOriginalTexture = false);
         KeyValuePair<bool, string> SetAppearanceTexture(Type appearanceType, string targetPackId, string targetAppearanceName, IRawTextureData textureData, IManifest callerManifest);
         KeyValuePair<bool, string> SetAppearanceTexture(string appearanceId, IRawTextureData textureData, IManifest callerManifest);
         KeyValuePair<bool, string> ResetAppearanceTexture(Type appearanceType, string targetPackId, string targetAppearanceName, IManifest callerManifest);
@@ -365,12 +365,12 @@ namespace FashionSense.Framework.Interfaces.API
             return GenerateResponsePair(true, appearancePack.Id);
         }
 
-        public KeyValuePair<bool, IRawTextureData> GetAppearanceTexture(IApi.Type appearanceType, string targetPackId, string targetAppearanceName)
+        public KeyValuePair<bool, IRawTextureData> GetAppearanceTexture(IApi.Type appearanceType, string targetPackId, string targetAppearanceName, bool getOriginalTexture = false)
         {
-            return GetAppearanceTexture(GetAppearanceId(targetPackId, appearanceType, targetAppearanceName));
+            return GetAppearanceTexture(GetAppearanceId(targetPackId, appearanceType, targetAppearanceName), getOriginalTexture);
         }
 
-        public KeyValuePair<bool, IRawTextureData> GetAppearanceTexture(string appearanceId)
+        public KeyValuePair<bool, IRawTextureData> GetAppearanceTexture(string appearanceId, bool getOriginalTexture = false)
         {
             var appearancePack = FashionSense.textureManager.GetSpecificAppearanceModel<AppearanceContentPack>(appearanceId);
             if (appearancePack is null)
@@ -378,7 +378,7 @@ namespace FashionSense.Framework.Interfaces.API
                 return new KeyValuePair<bool, IRawTextureData>(false, null);
             }
 
-            var texture = appearancePack.Texture;
+            var texture = getOriginalTexture is false ? appearancePack.Texture : appearancePack.GetCachedTexture();
             Color[] data = new Color[appearancePack.Texture.Width * appearancePack.Texture.Height];
             appearancePack.Texture.GetData(data);
 
