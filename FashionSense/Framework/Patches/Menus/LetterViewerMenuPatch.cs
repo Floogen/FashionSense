@@ -42,6 +42,8 @@ namespace FashionSense.Framework.Patches.Menus
                     leftNeighborID = 101,
                     rightNeighborID = 102
                 });
+
+                _monitor.Log("Added the Hand Mirror to the LetterViewerMenu", LogLevel.Trace);
             }
         }
     }
