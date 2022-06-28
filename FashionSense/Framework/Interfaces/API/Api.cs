@@ -31,6 +31,7 @@ namespace FashionSense.Framework.Interfaces.API
 
         public record RawTextureData(int Width, int Height, Color[] Data) : IRawTextureData;
 
+        KeyValuePair<bool, string> SetAppearance(Type appearanceType, string targetPackId, string targetAppearanceName, IManifest callerManifest);
         KeyValuePair<bool, string> SetHatAppearance(string targetPackId, string targetAppearanceName, IManifest callerManifest);
         KeyValuePair<bool, string> SetHairAppearance(string targetPackId, string targetAppearanceName, IManifest callerManifest);
         KeyValuePair<bool, string> SetAccessoryPrimaryAppearance(string targetPackId, string targetAppearanceName, IManifest callerManifest);
@@ -41,6 +42,7 @@ namespace FashionSense.Framework.Interfaces.API
         KeyValuePair<bool, string> SetPantsAppearance(string targetPackId, string targetAppearanceName, IManifest callerManifest);
         KeyValuePair<bool, string> SetShoesAppearance(string targetPackId, string targetAppearanceName, IManifest callerManifest);
 
+        KeyValuePair<bool, string> ClearAppearance(Type appearanceType, IManifest callerManifest);
         KeyValuePair<bool, string> ClearHatAppearance(IManifest callerManifest);
         KeyValuePair<bool, string> ClearHairAppearance(IManifest callerManifest);
         KeyValuePair<bool, string> ClearAccessoryPrimaryAppearance(IManifest callerManifest);
@@ -250,6 +252,12 @@ namespace FashionSense.Framework.Interfaces.API
             return GenerateResponsePair(true, $"Successfully cleared the {packType} appearance");
         }
 
+
+        public KeyValuePair<bool, string> SetAppearance(IApi.Type appearanceType, string targetPackId, string targetAppearanceName, IManifest callerManifest)
+        {
+            return SetFashionSenseAppearance(appearanceType, targetPackId, targetAppearanceName, callerManifest);
+        }
+
         public KeyValuePair<bool, string> SetHatAppearance(string targetPackId, string targetAppearanceName, IManifest callerManifest)
         {
             return SetFashionSenseAppearance(IApi.Type.Hat, targetPackId, targetAppearanceName, callerManifest);
@@ -295,6 +303,11 @@ namespace FashionSense.Framework.Interfaces.API
             return SetFashionSenseAppearance(IApi.Type.Shoes, targetPackId, targetAppearanceName, callerManifest);
         }
 
+
+        public KeyValuePair<bool, string> ClearAppearance(IApi.Type appearanceType, IManifest callerManifest)
+        {
+            return ClearFashionSenseAppearance(appearanceType, callerManifest);
+        }
 
         public KeyValuePair<bool, string> ClearHatAppearance(IManifest callerManifest)
         {
