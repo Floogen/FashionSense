@@ -51,7 +51,7 @@ namespace FashionSense.Framework.Interfaces.API
         KeyValuePair<bool, string> ClearPantsAppearance(IManifest callerManifest);
         KeyValuePair<bool, string> ClearShoesAppearance(IManifest callerManifest);
 
-        KeyValuePair<bool, string> GetCurrentAppearanceId(Type appearanceType);
+        KeyValuePair<bool, string> GetCurrentAppearanceId(Type appearanceType, Farmer target = null);
         KeyValuePair<bool, IRawTextureData> GetAppearanceTexture(Type appearanceType, string targetPackId, string targetAppearanceName, bool getOriginalTexture = false);
         KeyValuePair<bool, IRawTextureData> GetAppearanceTexture(string appearanceId, bool getOriginalTexture = false);
         KeyValuePair<bool, string> SetAppearanceTexture(Type appearanceType, string targetPackId, string targetAppearanceName, IRawTextureData textureData, IManifest callerManifest);
@@ -342,8 +342,13 @@ namespace FashionSense.Framework.Interfaces.API
         }
 
 
-        public KeyValuePair<bool, string> GetCurrentAppearanceId(IApi.Type appearanceType)
+        public KeyValuePair<bool, string> GetCurrentAppearanceId(IApi.Type appearanceType, Farmer target = null)
         {
+            if (target is null)
+            {
+                target = Game1.player;
+            }
+
             string modDataKey = GetAppearanceModDataKey(appearanceType);
 
             if (String.IsNullOrEmpty(modDataKey))
@@ -351,7 +356,7 @@ namespace FashionSense.Framework.Interfaces.API
                 return GenerateResponsePair(false, $"No match for the IApi.Type value of: {appearanceType}");
             }
 
-            if (Game1.player.modData.ContainsKey(modDataKey) is false)
+            if (target.modData.ContainsKey(modDataKey) is false)
             {
                 return GenerateResponsePair(false, $"The player has not worn a Fashion Sense appearance of the type {appearanceType} | {modDataKey}");
             }
