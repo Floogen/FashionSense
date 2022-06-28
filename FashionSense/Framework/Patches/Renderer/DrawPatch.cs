@@ -116,7 +116,6 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 var skinTone = GetSkinTone(___farmerTextureManager, ___baseTexture, pixels, ___skin, ____sickFrame);
 
-                who.hidden.Value = true;
                 SwapColorReversePatch(__instance, texture_name, pixels, 256, skinTone.Darkest);
                 SwapColorReversePatch(__instance, texture_name, pixels, 257, skinTone.Medium);
                 SwapColorReversePatch(__instance, texture_name, pixels, 258, skinTone.Lightest);
