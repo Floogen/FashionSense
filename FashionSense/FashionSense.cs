@@ -1165,6 +1165,22 @@ namespace FashionSense
             FarmerRendererPatch.AreColorMasksPendingRefresh = true;
         }
 
+        internal static bool ResetTextureIfNecessary(string appearanceId)
+        {
+            // See if we need to reset the texture (i.e. it has been overriden by the API and not using the shouldOverridePersist parameter)
+            var appearancePack = textureManager.GetSpecificAppearanceModel<AppearanceContentPack>(appearanceId);
+            if (appearancePack is null)
+            {
+                return false;
+            }
+            else if (appearancePack.IsTextureDirty)
+            {
+                appearancePack.ResetTexture();
+            }
+
+            return true;
+        }
+
         internal static void ResetAnimationModDataFields(Farmer who, int duration, AnimationModel.Type animationType, int facingDirection, bool ignoreAnimationType = false, AppearanceModel model = null)
         {
             if (model is null || model is HairModel)

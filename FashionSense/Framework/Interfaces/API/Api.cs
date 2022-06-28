@@ -56,8 +56,8 @@ namespace FashionSense.Framework.Interfaces.API
         KeyValuePair<bool, string> GetCurrentAppearanceId(Type appearanceType, Farmer target = null);
         KeyValuePair<bool, IRawTextureData> GetAppearanceTexture(Type appearanceType, string targetPackId, string targetAppearanceName, bool getOriginalTexture = false);
         KeyValuePair<bool, IRawTextureData> GetAppearanceTexture(string appearanceId, bool getOriginalTexture = false);
-        KeyValuePair<bool, string> SetAppearanceTexture(Type appearanceType, string targetPackId, string targetAppearanceName, IRawTextureData textureData, IManifest callerManifest);
-        KeyValuePair<bool, string> SetAppearanceTexture(string appearanceId, IRawTextureData textureData, IManifest callerManifest);
+        KeyValuePair<bool, string> SetAppearanceTexture(Type appearanceType, string targetPackId, string targetAppearanceName, IRawTextureData textureData, IManifest callerManifest, bool shouldOverridePersist = false);
+        KeyValuePair<bool, string> SetAppearanceTexture(string appearanceId, IRawTextureData textureData, IManifest callerManifest, bool shouldOverridePersist = false);
         KeyValuePair<bool, string> ResetAppearanceTexture(Type appearanceType, string targetPackId, string targetAppearanceName, IManifest callerManifest);
         KeyValuePair<bool, string> ResetAppearanceTexture(string appearanceId, IManifest callerManifest);
 
@@ -217,6 +217,12 @@ namespace FashionSense.Framework.Interfaces.API
 
             var appearanceId = GetAppearanceId(targetPackId, packType, targetAppearanceName);
             if (IsAppearanceIdValid(appearanceId) is false)
+            {
+                return GenerateResponsePair(false, $"No Fashion Sense {packType} found with the id of {appearanceId}");
+            }
+
+            // See if we need to reset the texture, if it is dirty
+            if (FashionSense.ResetTextureIfNecessary(appearanceId) is false)
             {
                 return GenerateResponsePair(false, $"No Fashion Sense {packType} found with the id of {appearanceId}");
             }
@@ -403,12 +409,12 @@ namespace FashionSense.Framework.Interfaces.API
             return new KeyValuePair<bool, IRawTextureData>(true, new RawTextureData(texture.Width, texture.Height, data));
         }
 
-        public KeyValuePair<bool, string> SetAppearanceTexture(IApi.Type appearanceType, string targetPackId, string targetAppearanceName, IRawTextureData textureData, IManifest callerManifest)
+        public KeyValuePair<bool, string> SetAppearanceTexture(IApi.Type appearanceType, string targetPackId, string targetAppearanceName, IRawTextureData textureData, IManifest callerManifest, bool shouldOverridePersist = false)
         {
-            return SetAppearanceTexture(GetAppearanceId(targetPackId, appearanceType, targetAppearanceName), textureData, callerManifest);
+            return SetAppearanceTexture(GetAppearanceId(targetPackId, appearanceType, targetAppearanceName), textureData, callerManifest, shouldOverridePersist);
         }
 
-        public KeyValuePair<bool, string> SetAppearanceTexture(string appearanceId, IRawTextureData textureData, IManifest callerManifest)
+        public KeyValuePair<bool, string> SetAppearanceTexture(string appearanceId, IRawTextureData textureData, IManifest callerManifest, bool shouldOverridePersist = false)
         {
             if (callerManifest is null || String.IsNullOrEmpty(callerManifest.Name))
             {
@@ -432,6 +438,7 @@ namespace FashionSense.Framework.Interfaces.API
             try
             {
                 appearancePack.Texture.SetData(textureData.Data);
+                appearancePack.IsTextureDirty = shouldOverridePersist is false;
             }
             catch (Exception ex)
             {

@@ -37,6 +37,7 @@ namespace FashionSense.Framework.Models
         private Texture2D _cachedTexture;
         internal Texture2D ColorMaskTexture { get; set; }
         internal Texture2D SkinMaskTexture { get; set; }
+        internal bool IsTextureDirty { get; set; }
 
         internal bool ResetTexture()
         {
@@ -50,6 +51,8 @@ namespace FashionSense.Framework.Models
                 Color[] colors = new Color[_cachedTexture.Width * _cachedTexture.Height];
                 _cachedTexture.GetData(colors);
                 _texture.SetData(colors);
+
+                IsTextureDirty = false;
             }
             catch (Exception ex)
             {

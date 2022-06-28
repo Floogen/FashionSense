@@ -111,6 +111,17 @@ namespace FashionSense.Framework.Managers
             who.modData[ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR] = outfit.ShoesColor;
 
             FashionSense.SetSpriteDirty();
+
+            // Attempt to reset any overridden textures
+            FashionSense.ResetTextureIfNecessary(who.modData[ModDataKeys.CUSTOM_HAIR_ID]);
+            FashionSense.ResetTextureIfNecessary(who.modData[ModDataKeys.CUSTOM_ACCESSORY_ID]);
+            FashionSense.ResetTextureIfNecessary(who.modData[ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID]);
+            FashionSense.ResetTextureIfNecessary(who.modData[ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID]);
+            FashionSense.ResetTextureIfNecessary(who.modData[ModDataKeys.CUSTOM_HAT_ID]);
+            FashionSense.ResetTextureIfNecessary(who.modData[ModDataKeys.CUSTOM_SHIRT_ID]);
+            FashionSense.ResetTextureIfNecessary(who.modData[ModDataKeys.CUSTOM_SLEEVES_ID]);
+            FashionSense.ResetTextureIfNecessary(who.modData[ModDataKeys.CUSTOM_PANTS_ID]);
+            FashionSense.ResetTextureIfNecessary(who.modData[ModDataKeys.CUSTOM_SHOES_ID]);
         }
 
         public void OverrideOutfit(Farmer who, string name)
