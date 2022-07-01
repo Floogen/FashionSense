@@ -6,8 +6,11 @@
   // Messages
   "messages.warning.no_content_packs": "คุณไม่ได้ติดตั้งชุดเนื้อหาของ Fashion Sense!",
 
+  // Letters
+  "letters.hand_mirror": "ฉันได้ยินมาว่ามีคนใหม่เพิ่งจะย้ายเข้ามาในหุบเขานี้ เลยคิดว่าอยากจะให้ของขวัญขึ้นบ้านใหม่สักหน่อย^ ^ฉันก็เลยเอากระจกพกพาอันเก่าของฉันใส่มาในจดหมายนี้ด้วย หวังว่าจะช่วยเรื่องรสนิยมการแต่งตัวของเธอได้นะ^ ^ถ้าเกิดว่าเธอทำหาย เธอไปหาซื้ออันใหม่ที่ร้านปิแอร์ได้  ^   -เฮลีย์ %item tool HandMirror %%",
+
   // UI - Titles
-  "ui.fashion_sense.title.search": "เลือก Fashion Sense Pack",
+  "ui.fashion_sense.title.search": "เลือกรสนิยมการแต่งตัว",
   "ui.fashion_sense.title.hair": "ทรงผม",
   "ui.fashion_sense.title.accessory": "เครื่องประดับ",
   "ui.fashion_sense.title.hat": "หมวก",
@@ -31,8 +34,8 @@
   "ui.fashion_sense.start_with_hand_mirror": "เริ่มต้นด้วยกระจก",
   "ui.fashion_sense.start_with_hand_mirror.description": "คุณจะเริ่มเกมใหม่ด้วยกระจกในคลังของคุณ",
   "ui.fashion_sense.color_override.shoes": "แทนที่สีรองเท้า",
-  "ui.fashion_sense.search_button": "ค้นหาชุด Fashion Sense ที่เฉพาะเจาะจง",
-  "ui.fashion_sense.outfit_button": "เข้าถึงเครื่องแต่งกาย Fashion Sense ของคุณ",
+  "ui.fashion_sense.search_button": "ค้นหารสนิยมที่เฉพาะเจาะจง",
+  "ui.fashion_sense.outfit_button": "เข้าถึงรสนิยมเครื่องแต่งกายของคุณ",
   "ui.fashion_sense.color_copy_button": "คัดลอกสีปัจจุบัน",
   "ui.fashion_sense.color_paste_button": "วางสีที่บันทึกไว้",
   "ui.fashion_sense.color_paste_button_empty": "วางสีที่บันทึกไว้ (ว่าง)",
