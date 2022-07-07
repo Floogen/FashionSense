@@ -27,6 +27,7 @@ using FashionSense.Framework.UI;
 using FashionSense.Framework.Models.Shoes;
 using FashionSense.Framework.Interfaces.API;
 using StardewModdingAPI.Utilities;
+using FashionSense.Framework.Patches.GameLocations;
 
 namespace FashionSense
 {
@@ -79,6 +80,7 @@ namespace FashionSense
                 // Apply tool related patches
                 new ToolPatch(monitor, modHelper).Apply(harmony);
                 new SeedShopPatch(monitor, modHelper).Apply(harmony);
+                new GameLocationPatch(monitor, modHelper).Apply(harmony);
 
                 // Apply UI related patches
                 new CharacterCustomizationPatch(monitor, modHelper).Apply(harmony);
