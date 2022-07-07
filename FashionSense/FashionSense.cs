@@ -85,7 +85,6 @@ namespace FashionSense
                 new LetterViewerMenuPatch(monitor, modHelper).Apply(harmony);
 
                 // Apply entity related patches
-                new FarmerPatch(monitor, modHelper).Apply(harmony);
                 new CharacterPatch(monitor, modHelper).Apply(harmony);
             }
             catch (Exception e)
