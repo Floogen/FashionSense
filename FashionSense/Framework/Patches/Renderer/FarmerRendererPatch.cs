@@ -366,6 +366,10 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     passedCheck = condition.IsValid(who.UsingTool && who.CurrentTool is Slingshot);
                 }
+                else if (condition.Name is Condition.Type.IsUsingDagger)
+                {
+                    passedCheck = condition.IsValid(who.UsingTool && who.CurrentTool is MeleeWeapon weapon && weapon.type.Value == MeleeWeapon.dagger);
+                }
                 else if (condition.Name is Condition.Type.IsHarvesting)
                 {
                     passedCheck = condition.IsValid(279 + who.FacingDirection == currentSingleAnimation);
@@ -409,6 +413,10 @@ namespace FashionSense.Framework.Patches.Renderer
                 else if (condition.Name is Condition.Type.IsPassingOut)
                 {
                     passedCheck = condition.IsValid(who.FarmerSprite.isPassingOut());
+                }
+                else if (condition.Name is Condition.Type.CurrentFarmerFrame)
+                {
+                    passedCheck = condition.IsValid(who.FarmerSprite.CurrentFrame);
                 }
 
                 // If the condition is independent and is true, then skip rest of evaluations

@@ -51,6 +51,7 @@ namespace FashionSense.Framework.Models.Generic
             IsWatering,
             IsUsingMeleeWeapon,
             IsUsingSlingshot,
+            IsUsingDagger,
             IsHarvesting,
             IsInMines,
             IsOutdoors,
@@ -61,7 +62,8 @@ namespace FashionSense.Framework.Models.Generic
             IsSwimming,
             IsInBathingSuit,
             IsSick,
-            IsPassingOut
+            IsPassingOut,
+            CurrentFarmerFrame
         }
 
         public Type Name { get; set; }
