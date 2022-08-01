@@ -35,5 +35,25 @@ namespace FashionSense.Framework.Models.Shoes
 
             return ShoesModel;
         }
+
+        internal override void LinkId()
+        {
+            if (BackShoes is AppearanceModel backModel && backModel is not null)
+            {
+                backModel.Pack = this;
+            }
+            if (RightShoes is AppearanceModel rightModel && rightModel is not null)
+            {
+                rightModel.Pack = this;
+            }
+            if (FrontShoes is AppearanceModel frontModel && frontModel is not null)
+            {
+                frontModel.Pack = this;
+            }
+            if (LeftShoes is AppearanceModel leftModel && leftModel is not null)
+            {
+                leftModel.Pack = this;
+            }
+        }
     }
 }

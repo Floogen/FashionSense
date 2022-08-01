@@ -17,6 +17,7 @@ namespace FashionSense.Framework.Models
 {
     public class AppearanceModel
     {
+        internal AppearanceContentPack Pack { get; set; }
         public Position StartingPosition { get; set; }
         public bool Flipped { get; set; }
         public bool RequireAnimationToFinish { get; set; }

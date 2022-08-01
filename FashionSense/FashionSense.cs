@@ -28,6 +28,7 @@ using FashionSense.Framework.Models.Shoes;
 using FashionSense.Framework.Interfaces.API;
 using StardewModdingAPI.Utilities;
 using FashionSense.Framework.Patches.GameLocations;
+using FashionSense.Framework.Models.Generic;
 
 namespace FashionSense
 {
@@ -45,6 +46,7 @@ namespace FashionSense
 
         // Utilities
         internal static ConditionData conditionData;
+        internal static Dictionary<string, ConditionGroup> conditionGroups;
 
         // Constants
         internal const int MAX_TRACKED_MILLISECONDS = 3600000;
@@ -311,6 +313,7 @@ namespace FashionSense
         {
             // Clear the existing cache of AppearanceModels
             textureManager.Reset(packId);
+            conditionGroups = new Dictionary<string, ConditionGroup>();
 
             // Load owned content packs
             foreach (IContentPack contentPack in Helper.ContentPacks.GetOwned().Where(c => String.IsNullOrEmpty(packId) is true || c.Manifest.UniqueID.Equals(packId, StringComparison.OrdinalIgnoreCase)))
@@ -359,6 +362,16 @@ namespace FashionSense
                 // Load Shoes
                 Monitor.Log($"Loading shoes from pack: {contentPack.Manifest.Name} {contentPack.Manifest.Version} by {contentPack.Manifest.Author}", LogLevel.Trace);
                 AddShoesContentPacks(contentPack);
+
+                // Load in Condition Groups
+                if (File.Exists(Path.Combine(contentPack.DirectoryPath, "conditions.json")))
+                {
+                    var conditions = contentPack.ReadJsonFile<Dictionary<string, List<Condition>>>("conditions.json");
+                    foreach (var condition in conditions)
+                    {
+                        conditionGroups[$"{contentPack.Manifest.UniqueID}.{condition.Key}".ToLower()] = new ConditionGroup() { Conditions = condition.Value };
+                    }
+                }
             }
 
             if (Context.IsWorldReady)
@@ -418,7 +431,8 @@ namespace FashionSense
 
                     // Set the PackName and Id
                     appearanceModel.PackName = contentPack.Manifest.Name;
-                    appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.PackType, "/", appearanceModel.Name);
+                    appearanceModel.PackId = contentPack.Manifest.UniqueID;
+                    appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.PackType, "/", appearanceModel.Name); ;
 
                     // Verify that a hairstyle with the name doesn't exist in this pack
                     if (textureManager.GetSpecificAppearanceModel<HairContentPack>(appearanceModel.Id) != null)
@@ -465,6 +479,9 @@ namespace FashionSense
 
                     // Load in the texture
                     appearanceModel.Texture = contentPack.ModContent.Load<Texture2D>(contentPack.ModContent.GetInternalAssetName(Path.Combine(parentFolderName, textureFolder.Name, "hair.png")).Name);
+
+                    // Link the content pack's ID to the model
+                    appearanceModel.LinkId();
 
                     // Track the model
                     textureManager.AddAppearanceModel(appearanceModel);
@@ -530,6 +547,7 @@ namespace FashionSense
 
                     // Set the PackName and Id
                     appearanceModel.PackName = contentPack.Manifest.Name;
+                    appearanceModel.PackId = contentPack.Manifest.UniqueID;
                     appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.PackType, "/", appearanceModel.Name);
 
                     // Verify that a accessory with the name doesn't exist in this pack
@@ -577,6 +595,9 @@ namespace FashionSense
 
                     // Load in the texture
                     appearanceModel.Texture = contentPack.ModContent.Load<Texture2D>(contentPack.ModContent.GetInternalAssetName(Path.Combine(parentFolderName, textureFolder.Name, "accessory.png")).Name);
+
+                    // Link the content pack's ID to the model
+                    appearanceModel.LinkId();
 
                     // Track the model
                     textureManager.AddAppearanceModel(appearanceModel);
@@ -642,6 +663,7 @@ namespace FashionSense
 
                     // Set the PackName and Id
                     appearanceModel.PackName = contentPack.Manifest.Name;
+                    appearanceModel.PackId = contentPack.Manifest.UniqueID;
                     appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.PackType, "/", appearanceModel.Name);
 
                     // Verify that a hat with the name doesn't exist in this pack
@@ -689,6 +711,9 @@ namespace FashionSense
 
                     // Load in the texture
                     appearanceModel.Texture = contentPack.ModContent.Load<Texture2D>(contentPack.ModContent.GetInternalAssetName(Path.Combine(parentFolderName, textureFolder.Name, "hat.png")).Name);
+
+                    // Link the content pack's ID to the model
+                    appearanceModel.LinkId();
 
                     // Track the model
                     textureManager.AddAppearanceModel(appearanceModel);
@@ -754,6 +779,7 @@ namespace FashionSense
 
                     // Set the PackName and Id
                     appearanceModel.PackName = contentPack.Manifest.Name;
+                    appearanceModel.PackId = contentPack.Manifest.UniqueID;
                     appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.PackType, "/", appearanceModel.Name);
 
                     // Verify that a shirt with the name doesn't exist in this pack
@@ -801,6 +827,9 @@ namespace FashionSense
 
                     // Load in the texture
                     appearanceModel.Texture = contentPack.ModContent.Load<Texture2D>(contentPack.ModContent.GetInternalAssetName(Path.Combine(parentFolderName, textureFolder.Name, "shirt.png")).Name);
+
+                    // Link the content pack's ID to the model
+                    appearanceModel.LinkId();
 
                     // Track the model
                     textureManager.AddAppearanceModel(appearanceModel);
@@ -867,6 +896,7 @@ namespace FashionSense
 
                     // Set the PackName and Id
                     appearanceModel.PackName = contentPack.Manifest.Name;
+                    appearanceModel.PackId = contentPack.Manifest.UniqueID;
                     appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.PackType, "/", appearanceModel.Name);
 
                     // Verify that a pants with the name doesn't exist in this pack
@@ -914,6 +944,9 @@ namespace FashionSense
 
                     // Load in the texture
                     appearanceModel.Texture = contentPack.ModContent.Load<Texture2D>(contentPack.ModContent.GetInternalAssetName(Path.Combine(parentFolderName, textureFolder.Name, "pants.png")).Name);
+
+                    // Link the content pack's ID to the model
+                    appearanceModel.LinkId();
 
                     // Track the model
                     textureManager.AddAppearanceModel(appearanceModel);
@@ -980,6 +1013,7 @@ namespace FashionSense
 
                     // Set the PackName and Id
                     appearanceModel.PackName = contentPack.Manifest.Name;
+                    appearanceModel.PackId = contentPack.Manifest.UniqueID;
                     appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.PackType, "/", appearanceModel.Name);
 
                     // Verify that a sleeves with the name doesn't exist in this pack
@@ -1027,6 +1061,9 @@ namespace FashionSense
 
                     // Load in the texture
                     appearanceModel.Texture = contentPack.ModContent.Load<Texture2D>(contentPack.ModContent.GetInternalAssetName(Path.Combine(parentFolderName, textureFolder.Name, "sleeves.png")).Name);
+
+                    // Link the content pack's ID to the model
+                    appearanceModel.LinkId();
 
                     // Track the model
                     textureManager.AddAppearanceModel(appearanceModel);
@@ -1093,6 +1130,7 @@ namespace FashionSense
 
                     // Set the PackName and Id
                     appearanceModel.PackName = contentPack.Manifest.Name;
+                    appearanceModel.PackId = contentPack.Manifest.UniqueID;
                     appearanceModel.Id = String.Concat(appearanceModel.Owner, "/", appearanceModel.PackType, "/", appearanceModel.Name);
 
                     // Verify that a shoes with the name doesn't exist in this pack
@@ -1140,6 +1178,9 @@ namespace FashionSense
 
                     // Load in the texture
                     appearanceModel.Texture = contentPack.ModContent.Load<Texture2D>(contentPack.ModContent.GetInternalAssetName(Path.Combine(parentFolderName, textureFolder.Name, "shoes.png")).Name);
+
+                    // Link the content pack's ID to the model
+                    appearanceModel.LinkId();
 
                     // Track the model
                     textureManager.AddAppearanceModel(appearanceModel);

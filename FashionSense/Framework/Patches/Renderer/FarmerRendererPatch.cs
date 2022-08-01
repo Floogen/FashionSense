@@ -225,7 +225,7 @@ namespace FashionSense.Framework.Patches.Renderer
             return who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_ITERATOR) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_FRAME_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_TYPE) && who.modData.ContainsKey(ModDataKeys.ANIMATION_FACING_DIRECTION) && who.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_FARMER_FRAME);
         }
 
-        private static bool IsFrameValid(Farmer who, List<AnimationModel> animations, int iterator, bool probe = false)
+        private static bool IsFrameValid(Farmer who, AppearanceModel model, List<AnimationModel> animations, int iterator, bool probe = false)
         {
             AnimationModel animationModel = animations.ElementAtOrDefault(iterator);
             if (animationModel is null)
@@ -236,11 +236,28 @@ namespace FashionSense.Framework.Patches.Renderer
             // Get the farmer's FarmerSprite.currentSingleAnimation via reflection
             int currentSingleAnimation = _helper.Reflection.GetField<int>(who.FarmerSprite, "currentSingleAnimation").GetValue();
 
+            bool isValid = AreConditionsValid(animationModel.Conditions, currentSingleAnimation, who, model, animations, iterator, probe);
+
+            if (!probe)
+            {
+                animationModel.WasDisplayed = isValid;
+            }
+
+            return isValid;
+        }
+
+        private static bool AreConditionsValid(List<Condition> conditions, int currentSingleAnimation, Farmer who, AppearanceModel model, List<AnimationModel> animations, int iterator, bool probe)
+        {
             bool isValid = true;
-            foreach (var condition in animationModel.Conditions)
+            foreach (var condition in conditions)
             {
                 var passedCheck = false;
-                if (condition.Name is Condition.Type.MovementDuration)
+                string groupKey = $"{model.Pack.PackId}.{condition.GroupName}".ToLower();
+                if (FashionSense.conditionGroups.ContainsKey(groupKey))
+                {
+                    passedCheck = condition.IsValid(AreConditionsValid(FashionSense.conditionGroups[groupKey].Conditions, currentSingleAnimation, who, model, animations, iterator, probe));
+                }
+                else if (condition.Name is Condition.Type.MovementDuration)
                 {
                     passedCheck = condition.IsValid(true, FashionSense.conditionData.IsMovingLongEnough(condition.GetParsedValue<long>(!probe)));
                 }
@@ -431,13 +448,9 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
             }
 
-            if (!probe)
-            {
-                animationModel.WasDisplayed = isValid;
-            }
-
             return isValid;
         }
+
         private static void UpdatePlayerAnimationData(AppearanceModel model, Farmer who, AnimationModel.Type type, List<AnimationModel> animations, int facingDirection, int iterator, int startingIndex)
         {
             switch (model)
@@ -683,6 +696,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 SetAnimationType(appearanceModel, who, animationType);
                 FashionSense.ResetAnimationModDataFields(who, animations.ElementAt(0).Duration, animationType, facingDirection, true, appearanceModel);
             }
+            var modelPack = appearanceModel.Pack;
 
             // Determine the modData keys to use based on AppearanceModel
             int iterator, startingIndex, frameDuration, elapsedDuration, lastFarmerFrame;
@@ -769,7 +783,16 @@ namespace FashionSense.Framework.Patches.Renderer
                 if (HasModelOfType(activeModels, appearanceSync.TargetAppearanceType) && forceUpdate is false)
                 {
                     var rectangle = appearanceTypeToSourceRectangles[appearancePackType];
-                    rectangle.X += appearanceTypeToSourceRectangles[appearancePackType].Width * animationModel.Frame;
+                    var frameOffset = (animationModel.Frame * rectangle.Width) - rectangle.Width;
+                    if (modelPack is not null && frameOffset > modelPack.Texture.Width)
+                    {
+                        rectangle.X += (frameOffset % modelPack.Texture.Width) - rectangle.Width;
+                        rectangle.Y += (frameOffset / modelPack.Texture.Width) * rectangle.Height;
+                    }
+                    else
+                    {
+                        rectangle.X += rectangle.Width * animationModel.Frame;
+                    }
                     appearanceTypeToSourceRectangles[appearancePackType] = rectangle;
 
                     return;
@@ -781,7 +804,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             // Check if frame is valid
-            if (IsFrameValid(who, animations, iterator, probe: true))
+            if (IsFrameValid(who, appearanceModel, animations, iterator, probe: true))
             {
                 if (animationModel.OverrideStartingIndex && startingIndex != iterator)
                 {
@@ -797,7 +820,7 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 // Frame isn't valid, get the next available frame starting from iterator
                 var hasFoundNextFrame = false;
-                foreach (var animation in animations.Skip(iterator + 1).Where(a => IsFrameValid(who, animations, animations.IndexOf(a), probe: true)))
+                foreach (var animation in animations.Skip(iterator + 1).Where(a => IsFrameValid(who, appearanceModel, animations, animations.IndexOf(a), probe: true)))
                 {
                     iterator = animations.IndexOf(animation);
 
@@ -814,7 +837,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 // If no frames are available from iterator onwards, then check backwards for the next available frame with OverrideStartingIndex
                 if (!hasFoundNextFrame)
                 {
-                    foreach (var animation in animations.Take(iterator + 1).Reverse().Where(a => a.OverrideStartingIndex && IsFrameValid(who, animations, animations.IndexOf(a), probe: true)))
+                    foreach (var animation in animations.Take(iterator + 1).Reverse().Where(a => a.OverrideStartingIndex && IsFrameValid(who, appearanceModel, animations, animations.IndexOf(a), probe: true)))
                     {
                         iterator = animations.IndexOf(animation);
                         startingIndex = iterator;
@@ -846,7 +869,7 @@ namespace FashionSense.Framework.Patches.Renderer
             if ((elapsedDuration >= frameDuration && !animationModel.EndWhenFarmerFrameUpdates) || ((animationModel.EndWhenFarmerFrameUpdates || defaultToEndWhenFarmerFrameUpdates) && who.FarmerSprite.CurrentFrame != lastFarmerFrame) || forceUpdate)
             {
                 // Force the frame's condition to evalute and update any caches
-                IsFrameValid(who, animations, iterator);
+                IsFrameValid(who, appearanceModel, animations, iterator);
                 UpdateLight(appearanceModel, animationModel, who, true);
 
                 iterator = iterator + 1 >= animations.Count() ? startingIndex : iterator + 1;
@@ -873,7 +896,16 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             var sourceRect = appearanceTypeToSourceRectangles[appearancePackType];
-            sourceRect.X += appearanceTypeToSourceRectangles[appearancePackType].Width * animationModel.Frame;
+            var sourceOffset = (animationModel.Frame * sourceRect.Width) - sourceRect.Width;
+            if (modelPack is not null && sourceOffset > modelPack.Texture.Width)
+            {
+                sourceRect.X += sourceOffset % modelPack.Texture.Width;
+                sourceRect.Y += (sourceOffset / modelPack.Texture.Width) * sourceRect.Height;
+            }
+            else
+            {
+                sourceRect.X += sourceRect.Width * animationModel.Frame;
+            }
             appearanceTypeToSourceRectangles[appearancePackType] = sourceRect;
         }
 
@@ -1168,7 +1200,7 @@ namespace FashionSense.Framework.Patches.Renderer
                         return new Vector2(16 - FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, 56 + FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + (int)renderer.heightOffset);
                 }
             }
-            else
+            else if (type is not AppearanceContentPack.Type.Sleeves)
             {
                 switch (facingDirection)
                 {

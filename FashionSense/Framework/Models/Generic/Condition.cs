@@ -67,6 +67,7 @@ namespace FashionSense.Framework.Models.Generic
         }
 
         public Type Name { get; set; }
+        public string GroupName { get; set; }
         public object Value { get; set; }
         public Comparison Operator { get; set; } = Comparison.EqualTo;
         public bool Inverse { get; set; }
