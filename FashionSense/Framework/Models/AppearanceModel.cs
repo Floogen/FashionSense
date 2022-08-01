@@ -28,6 +28,7 @@ namespace FashionSense.Framework.Models
         public bool HideSleeves { get; set; }
         public bool DisableGrayscale { get; set; }
         public bool DisableSkinGrayscale { get; set; }
+        public bool DisableNativeOffset { get; set; }
         public bool IsPrismatic { get; set; }
         public float PrismaticAnimationSpeedMultiplier { get; set; } = 1f;
         public float Scale { get; set; } = 4f;
