@@ -425,7 +425,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
                 else if (condition.Name is Condition.Type.IsSick)
                 {
-                    passedCheck = condition.IsValid(currentSingleAnimation == 104 || currentSingleAnimation == 105);
+                    passedCheck = condition.IsValid(who.FarmerSprite.CurrentFrame == 104 || who.FarmerSprite.CurrentFrame == 105);
                 }
                 else if (condition.Name is Condition.Type.IsPassingOut)
                 {
