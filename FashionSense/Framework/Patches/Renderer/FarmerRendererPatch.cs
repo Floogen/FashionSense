@@ -1592,7 +1592,7 @@ namespace FashionSense.Framework.Patches.Renderer
             Rectangle customShoesSourceRect = appearanceTypeToSourceRectangles[AppearanceContentPack.Type.Shoes];
 
             // Check if the cached facing direction needs to be updated
-            if (who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] != facingDirection.ToString())
+            if (who.modData.ContainsKey(ModDataKeys.ANIMATION_FACING_DIRECTION) is false || who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] != facingDirection.ToString())
             {
                 who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] = facingDirection.ToString();
             }
