@@ -897,7 +897,7 @@ namespace FashionSense.Framework.Patches.Renderer
 
             var sourceRect = appearanceTypeToSourceRectangles[appearancePackType];
             var sourceOffset = (animationModel.Frame * sourceRect.Width) - sourceRect.Width;
-            if (modelPack is not null && sourceOffset > modelPack.Texture.Width)
+            if (modelPack is not null && sourceOffset >= modelPack.Texture.Width)
             {
                 sourceRect.X += sourceOffset % modelPack.Texture.Width;
                 sourceRect.Y += (sourceOffset / modelPack.Texture.Width) * sourceRect.Height;
