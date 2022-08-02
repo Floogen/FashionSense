@@ -1893,7 +1893,7 @@ namespace FashionSense.Framework.Patches.Renderer
 
         private static bool DrawMiniPortratPrefix(FarmerRenderer __instance, LocalizedContentManager ___farmerTextureManager, Texture2D ___baseTexture, NetInt ___skin, bool ____sickFrame, SpriteBatch b, Vector2 position, float layerDepth, float scale, int facingDirection, Farmer who)
         {
-            if (!who.modData.ContainsKey(ModDataKeys.CUSTOM_HAIR_ID))
+            if (!who.modData.ContainsKey(ModDataKeys.CUSTOM_HAIR_ID) || ___baseTexture is null || ___baseTexture.IsDisposed)
             {
                 return true;
             }
