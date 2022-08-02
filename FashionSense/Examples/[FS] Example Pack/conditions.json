@@ -1,0 +1,41 @@
+﻿{
+  "IsDarkOutAndWalking": [
+    {
+      "Name": "IsDarkOut",
+      "Value": true
+    },
+    {
+      "Name": "IsWalking",
+      "Value": true
+    }
+  ],
+  "IsEatingOrDrinking": [
+    {
+      "Name": "IsDrinking",
+      "Value": true,
+      "Independent": true
+    },
+    {
+      "Name": "IsEating",
+      "Value": true,
+      "Independent": true
+    }
+  ],
+  "IsIdle": [
+    {
+      "Name": "CurrentFarmerFrame",
+      "Value": 0,
+      "Independent": true
+    },
+    {
+      "Name": "CurrentFarmerFrame",
+      "Value": 6,
+      "Independent": true
+    },
+    {
+      "Name": "CurrentFarmerFrame",
+      "Value": 12,
+      "Independent": true
+    }
+  ]
+}

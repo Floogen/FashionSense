@@ -51,6 +51,7 @@ namespace FashionSense.Framework.Models.Generic
             IsWatering,
             IsUsingMeleeWeapon,
             IsUsingSlingshot,
+            IsUsingDagger,
             IsHarvesting,
             IsInMines,
             IsOutdoors,
@@ -61,10 +62,12 @@ namespace FashionSense.Framework.Models.Generic
             IsSwimming,
             IsInBathingSuit,
             IsSick,
-            IsPassingOut
+            IsPassingOut,
+            CurrentFarmerFrame
         }
 
         public Type Name { get; set; }
+        public string GroupName { get; set; }
         public object Value { get; set; }
         public Comparison Operator { get; set; } = Comparison.EqualTo;
         public bool Inverse { get; set; }

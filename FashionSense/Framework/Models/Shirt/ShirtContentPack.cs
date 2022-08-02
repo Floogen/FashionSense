@@ -35,5 +35,25 @@ namespace FashionSense.Framework.Models.Shirt
 
             return ShirtModel;
         }
+
+        internal override void LinkId()
+        {
+            if (BackShirt is AppearanceModel backModel && backModel is not null)
+            {
+                backModel.Pack = this;
+            }
+            if (RightShirt is AppearanceModel rightModel && rightModel is not null)
+            {
+                rightModel.Pack = this;
+            }
+            if (FrontShirt is AppearanceModel frontModel && frontModel is not null)
+            {
+                frontModel.Pack = this;
+            }
+            if (LeftShirt is AppearanceModel leftModel && leftModel is not null)
+            {
+                leftModel.Pack = this;
+            }
+        }
     }
 }

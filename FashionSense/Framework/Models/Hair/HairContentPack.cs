@@ -35,5 +35,25 @@ namespace FashionSense.Framework.Models.Hair
 
             return hairModel;
         }
+
+        internal override void LinkId()
+        {
+            if (BackHair is AppearanceModel backModel && backModel is not null)
+            {
+                backModel.Pack = this;
+            }
+            if (RightHair is AppearanceModel rightModel && rightModel is not null)
+            {
+                rightModel.Pack = this;
+            }
+            if (FrontHair is AppearanceModel frontModel && frontModel is not null)
+            {
+                frontModel.Pack = this;
+            }
+            if (LeftHair is AppearanceModel leftModel && leftModel is not null)
+            {
+                leftModel.Pack = this;
+            }
+        }
     }
 }

@@ -35,5 +35,25 @@ namespace FashionSense.Framework.Models.Sleeves
 
             return SleevesModel;
         }
+
+        internal override void LinkId()
+        {
+            if (BackSleeves is AppearanceModel backModel && backModel is not null)
+            {
+                backModel.Pack = this;
+            }
+            if (RightSleeves is AppearanceModel rightModel && rightModel is not null)
+            {
+                rightModel.Pack = this;
+            }
+            if (FrontSleeves is AppearanceModel frontModel && frontModel is not null)
+            {
+                frontModel.Pack = this;
+            }
+            if (LeftSleeves is AppearanceModel leftModel && leftModel is not null)
+            {
+                leftModel.Pack = this;
+            }
+        }
     }
 }

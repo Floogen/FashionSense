@@ -35,5 +35,25 @@ namespace FashionSense.Framework.Models.Accessory
 
             return AccessoryModel;
         }
+
+        internal override void LinkId()
+        {
+            if (BackAccessory is AppearanceModel backModel && backModel is not null)
+            {
+                backModel.Pack = this;
+            }
+            if (RightAccessory is AppearanceModel rightModel && rightModel is not null)
+            {
+                rightModel.Pack = this;
+            }
+            if (FrontAccessory is AppearanceModel frontModel && frontModel is not null)
+            {
+                frontModel.Pack = this;
+            }
+            if (LeftAccessory is AppearanceModel leftModel && leftModel is not null)
+            {
+                leftModel.Pack = this;
+            }
+        }
     }
 }

@@ -77,7 +77,7 @@ namespace FashionSense.Framework.Utilities
             _movementSpeed = who.getMovementSpeed();
 
             _movementDurationMilliseconds += (float)time.ElapsedGameTime.TotalMilliseconds;
-            if (!who.isMoving())
+            if (!who.isMoving() || who.UsingTool)
             {
                 _movementSpeed = 0;
                 _movementDurationMilliseconds = 0;
