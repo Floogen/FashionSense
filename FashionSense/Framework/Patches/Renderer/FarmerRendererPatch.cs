@@ -1279,7 +1279,7 @@ namespace FashionSense.Framework.Patches.Renderer
 
         private static void DrawSleeveColorMask(SpriteBatch b, SleevesContentPack sleevesPack, SleevesModel sleevesModel, ShirtModel shirtModel, Vector2 position, Rectangle sourceRect, Color color, float rotation, Vector2 origin, float scale, float layerDepth)
         {
-            if (sleevesPack.ColorMaskTexture is null || AreColorMasksPendingRefresh)
+            if (sleevesPack.ShirtToneTexture is null || AreColorMasksPendingRefresh)
             {
                 Color[] data = new Color[sleevesPack.Texture.Width * sleevesPack.Texture.Height];
                 sleevesPack.Texture.GetData(data);
@@ -1291,12 +1291,35 @@ namespace FashionSense.Framework.Patches.Renderer
 
                 for (int i = 0; i < data.Length; i++)
                 {
-                    if (!sleevesModel.IsMaskedColor(data[i]))
+                    if (sleevesModel.ShirtToneMask is not null)
                     {
-                        data[i] = Color.Transparent;
+                        if (sleevesModel.IsShirtToneMaskColor(data[i]) is false)
+                        {
+                            data[i] = Color.Transparent;
+                            continue;
+                        }
+
+                        if (sleevesModel.ShirtToneMask.DarkTone is not null && data[i] == sleevesModel.ShirtToneMask.Darkest && shirtModel.HasSleeveColorAtLayer(0))
+                        {
+                            data[i] = firstSleeveColor;
+                        }
+                        else if (sleevesModel.ShirtToneMask.MediumTone is not null && data[i] == sleevesModel.ShirtToneMask.Medium && shirtModel.HasSleeveColorAtLayer(1))
+                        {
+                            data[i] = secondSleeveColor;
+                        }
+                        else if (sleevesModel.ShirtToneMask.LightTone is not null && data[i] == sleevesModel.ShirtToneMask.Lightest && shirtModel.HasSleeveColorAtLayer(2))
+                        {
+                            data[i] = thirdSleeveColor;
+                        }
                     }
                     else if (sleevesModel.ColorMasks is not null)
                     {
+                        if (sleevesModel.IsMaskedColor(data[i]) is false)
+                        {
+                            data[i] = Color.Transparent;
+                            continue;
+                        }
+
                         if (sleevesModel.ColorMasks.Count > 0 && data[i] == AppearanceModel.GetColor(sleevesModel.ColorMasks[0]) && shirtModel.HasSleeveColorAtLayer(0))
                         {
                             data[i] = firstSleeveColor;
@@ -1313,9 +1336,118 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
 
                 maskedTexture.SetData(data);
+                sleevesPack.ShirtToneTexture = maskedTexture;
             }
 
-            b.Draw(sleevesPack.ColorMaskTexture, position, sourceRect, Color.White, rotation, origin, scale, sleevesModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
+            b.Draw(sleevesPack.ShirtToneTexture, position, sourceRect, Color.White, rotation, origin, scale, sleevesModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
+        }
+
+        private static Color[] GetVanillaShirtSleeveColors(Farmer who, FarmerRenderer renderer)
+        {
+            // Perform initial vanilla logic
+            Color[] shirtData = new Color[FarmerRenderer.shirtsTexture.Bounds.Width * FarmerRenderer.shirtsTexture.Bounds.Height];
+            FarmerRenderer.shirtsTexture.GetData(shirtData);
+            int index = renderer.ClampShirt(who.GetShirtIndex()) * 8 / 128 * 32 * FarmerRenderer.shirtsTexture.Bounds.Width + renderer.ClampShirt(who.GetShirtIndex()) * 8 % 128 + FarmerRenderer.shirtsTexture.Width * 4;
+            int dye_index = index + 128;
+            Color shirtSleeveColor = Color.White;
+
+            Color actualShirtColor = Utility.MakeCompletelyOpaque(who.GetShirtColor());
+            shirtSleeveColor = shirtData[dye_index];
+            Color clothes_color = actualShirtColor;
+            if (shirtSleeveColor.A < byte.MaxValue)
+            {
+                shirtSleeveColor = shirtData[index];
+                clothes_color = Color.White;
+            }
+            shirtSleeveColor = Utility.MultiplyColor(shirtSleeveColor, clothes_color);
+
+            var firstSleeveColor = shirtSleeveColor;
+            shirtSleeveColor = shirtData[dye_index - FarmerRenderer.shirtsTexture.Width];
+            if (shirtSleeveColor.A < byte.MaxValue)
+            {
+                shirtSleeveColor = shirtData[index - FarmerRenderer.shirtsTexture.Width];
+                clothes_color = Color.White;
+            }
+            shirtSleeveColor = Utility.MultiplyColor(shirtSleeveColor, clothes_color);
+
+            var secondSleeveColor = shirtSleeveColor;
+            shirtSleeveColor = shirtData[dye_index - FarmerRenderer.shirtsTexture.Width * 2];
+            if (shirtSleeveColor.A < byte.MaxValue)
+            {
+                shirtSleeveColor = shirtData[index - FarmerRenderer.shirtsTexture.Width * 2];
+                clothes_color = Color.White;
+            }
+            shirtSleeveColor = Utility.MultiplyColor(shirtSleeveColor, clothes_color);
+
+            var thirdSleeveColor = shirtSleeveColor;
+
+            return new Color[] { firstSleeveColor, secondSleeveColor, thirdSleeveColor };
+        }
+
+        private static void DrawSleeveColorMaskVanilla(SpriteBatch b, SleevesContentPack sleevesPack, SleevesModel sleevesModel, Farmer who, FarmerRenderer renderer, Vector2 position, Rectangle sourceRect, Color color, float rotation, Vector2 origin, float scale, float layerDepth)
+        {
+            if (sleevesPack.ShirtToneTexture is null || AreColorMasksPendingRefresh)
+            {
+                Color[] data = new Color[sleevesPack.Texture.Width * sleevesPack.Texture.Height];
+                sleevesPack.Texture.GetData(data);
+                Texture2D maskedTexture = new Texture2D(Game1.graphics.GraphicsDevice, sleevesPack.Texture.Width, sleevesPack.Texture.Height);
+
+                var shirtSleeveColors = GetVanillaShirtSleeveColors(who, renderer);
+                var firstSleeveColor = shirtSleeveColors[0];
+                var secondSleeveColor = shirtSleeveColors[1];
+                var thirdSleeveColor = shirtSleeveColors[2];
+
+                for (int i = 0; i < data.Length; i++)
+                {
+                    if (sleevesModel.ShirtToneMask is not null)
+                    {
+                        if (sleevesModel.IsShirtToneMaskColor(data[i]) is false)
+                        {
+                            data[i] = Color.Transparent;
+                            continue;
+                        }
+
+                        if (sleevesModel.ShirtToneMask.DarkTone is not null && data[i] == sleevesModel.ShirtToneMask.Darkest)
+                        {
+                            data[i] = firstSleeveColor;
+                        }
+                        else if (sleevesModel.ShirtToneMask.MediumTone is not null && data[i] == sleevesModel.ShirtToneMask.Medium)
+                        {
+                            data[i] = secondSleeveColor;
+                        }
+                        else if (sleevesModel.ShirtToneMask.LightTone is not null && data[i] == sleevesModel.ShirtToneMask.Lightest)
+                        {
+                            data[i] = thirdSleeveColor;
+                        }
+                    }
+                    else if (sleevesModel.ColorMasks is not null)
+                    {
+                        if (sleevesModel.IsMaskedColor(data[i]) is false)
+                        {
+                            data[i] = Color.Transparent;
+                            continue;
+                        }
+
+                        if (sleevesModel.ColorMasks.Count > 0 && data[i] == AppearanceModel.GetColor(sleevesModel.ColorMasks[0]))
+                        {
+                            data[i] = firstSleeveColor;
+                        }
+                        else if (sleevesModel.ColorMasks.Count > 1 && data[i] == AppearanceModel.GetColor(sleevesModel.ColorMasks[1]))
+                        {
+                            data[i] = secondSleeveColor;
+                        }
+                        else if (sleevesModel.ColorMasks.Count > 2 && data[i] == AppearanceModel.GetColor(sleevesModel.ColorMasks[2]))
+                        {
+                            data[i] = thirdSleeveColor;
+                        }
+                    }
+                }
+
+                maskedTexture.SetData(data);
+                sleevesPack.ShirtToneTexture = maskedTexture;
+            }
+
+            b.Draw(sleevesPack.ShirtToneTexture, position, sourceRect, Color.White, rotation, origin, scale, sleevesModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
         }
 
         private static void DrawSkinToneMask(SpriteBatch b, AppearanceContentPack appearancePack, AppearanceModel appearanceModel, SkinToneModel skinTone, Vector2 position, Rectangle sourceRect, Color color, float rotation, Vector2 origin, float scale, float layerDepth)
@@ -1837,15 +1969,19 @@ namespace FashionSense.Framework.Patches.Renderer
 
                 if (sleevesModel.HasColorMask())
                 {
-                    if (sleevesModel.UseShirtColors && shirtModel is not null && shirtModel.SleeveColors is not null)
+                    sleevesLayer += 0.01E-05f;
+                    DrawColorMask(b, sleevesPack, sleevesModel, GetScaledPosition(position, sleevesModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, customSleevesSourceRect, sleevesColor, rotation, origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), sleevesModel.Scale * scale, sleevesLayer);
+                }
+                if ((sleevesModel.HasColorMask() || sleevesModel.HasShirtToneMask()) && sleevesModel.UseShirtColors)
+                {
+                    sleevesLayer += 0.01E-05f;
+                    if (shirtModel is not null && shirtModel.SleeveColors is not null)
                     {
-                        sleevesLayer += 0.01E-05f;
                         DrawSleeveColorMask(b, sleevesPack, sleevesModel, shirtModel, GetScaledPosition(position, sleevesModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, customSleevesSourceRect, sleevesColor, rotation, origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), sleevesModel.Scale * scale, sleevesLayer);
                     }
                     else
                     {
-                        sleevesLayer += 0.01E-05f;
-                        DrawColorMask(b, sleevesPack, sleevesModel, GetScaledPosition(position, sleevesModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, customSleevesSourceRect, sleevesColor, rotation, origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), sleevesModel.Scale * scale, sleevesLayer);
+                        DrawSleeveColorMaskVanilla(b, sleevesPack, sleevesModel, who, __instance, GetScaledPosition(position, sleevesModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, customSleevesSourceRect, sleevesColor, rotation, origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), sleevesModel.Scale * scale, sleevesLayer);
                     }
                 }
                 if (sleevesModel.HasSkinToneMask())

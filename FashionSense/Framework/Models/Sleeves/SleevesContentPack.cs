@@ -13,6 +13,7 @@ namespace FashionSense.Framework.Models.Sleeves
         public SleevesModel RightSleeves { get; set; }
         public SleevesModel FrontSleeves { get; set; }
         public SleevesModel LeftSleeves { get; set; }
+        internal Texture2D ShirtToneTexture { get; set; }
 
         internal SleevesModel GetSleevesFromFacingDirection(int facingDirection)
         {
