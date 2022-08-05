@@ -465,7 +465,7 @@ namespace FashionSense.Framework.Patches.Renderer
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_TYPE] = type.ToString();
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ITERATOR] = iterator.ToString();
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_STARTING_INDEX] = startingIndex.ToString();
-                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
+                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_FRAME_DURATION] = animations.ElementAt(iterator).GetDuration(true).ToString();
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ELAPSED_DURATION] = "0";
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
                     }
@@ -474,7 +474,7 @@ namespace FashionSense.Framework.Patches.Renderer
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_TYPE] = type.ToString();
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ITERATOR] = iterator.ToString();
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_STARTING_INDEX] = startingIndex.ToString();
-                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
+                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_FRAME_DURATION] = animations.ElementAt(iterator).GetDuration(true).ToString();
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION] = "0";
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
                     }
@@ -483,7 +483,7 @@ namespace FashionSense.Framework.Patches.Renderer
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_TYPE] = type.ToString();
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_ITERATOR] = iterator.ToString();
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_STARTING_INDEX] = startingIndex.ToString();
-                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
+                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_FRAME_DURATION] = animations.ElementAt(iterator).GetDuration(true).ToString();
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION] = "0";
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
                     }
@@ -492,7 +492,7 @@ namespace FashionSense.Framework.Patches.Renderer
                     who.modData[ModDataKeys.ANIMATION_HAT_TYPE] = type.ToString();
                     who.modData[ModDataKeys.ANIMATION_HAT_ITERATOR] = iterator.ToString();
                     who.modData[ModDataKeys.ANIMATION_HAT_STARTING_INDEX] = startingIndex.ToString();
-                    who.modData[ModDataKeys.ANIMATION_HAT_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
+                    who.modData[ModDataKeys.ANIMATION_HAT_FRAME_DURATION] = animations.ElementAt(iterator).GetDuration(true).ToString();
                     who.modData[ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION] = "0";
                     who.modData[ModDataKeys.ANIMATION_HAT_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
                     break;
@@ -500,7 +500,7 @@ namespace FashionSense.Framework.Patches.Renderer
                     who.modData[ModDataKeys.ANIMATION_SHIRT_TYPE] = type.ToString();
                     who.modData[ModDataKeys.ANIMATION_SHIRT_ITERATOR] = iterator.ToString();
                     who.modData[ModDataKeys.ANIMATION_SHIRT_STARTING_INDEX] = startingIndex.ToString();
-                    who.modData[ModDataKeys.ANIMATION_SHIRT_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
+                    who.modData[ModDataKeys.ANIMATION_SHIRT_FRAME_DURATION] = animations.ElementAt(iterator).GetDuration(true).ToString();
                     who.modData[ModDataKeys.ANIMATION_SHIRT_ELAPSED_DURATION] = "0";
                     who.modData[ModDataKeys.ANIMATION_SHIRT_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
                     break;
@@ -508,7 +508,7 @@ namespace FashionSense.Framework.Patches.Renderer
                     who.modData[ModDataKeys.ANIMATION_PANTS_TYPE] = type.ToString();
                     who.modData[ModDataKeys.ANIMATION_PANTS_ITERATOR] = iterator.ToString();
                     who.modData[ModDataKeys.ANIMATION_PANTS_STARTING_INDEX] = startingIndex.ToString();
-                    who.modData[ModDataKeys.ANIMATION_PANTS_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
+                    who.modData[ModDataKeys.ANIMATION_PANTS_FRAME_DURATION] = animations.ElementAt(iterator).GetDuration(true).ToString();
                     who.modData[ModDataKeys.ANIMATION_PANTS_ELAPSED_DURATION] = "0";
                     who.modData[ModDataKeys.ANIMATION_PANTS_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
                     break;
@@ -516,7 +516,7 @@ namespace FashionSense.Framework.Patches.Renderer
                     who.modData[ModDataKeys.ANIMATION_SLEEVES_TYPE] = type.ToString();
                     who.modData[ModDataKeys.ANIMATION_SLEEVES_ITERATOR] = iterator.ToString();
                     who.modData[ModDataKeys.ANIMATION_SLEEVES_STARTING_INDEX] = startingIndex.ToString();
-                    who.modData[ModDataKeys.ANIMATION_SLEEVES_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
+                    who.modData[ModDataKeys.ANIMATION_SLEEVES_FRAME_DURATION] = animations.ElementAt(iterator).GetDuration(true).ToString();
                     who.modData[ModDataKeys.ANIMATION_SLEEVES_ELAPSED_DURATION] = "0";
                     who.modData[ModDataKeys.ANIMATION_SLEEVES_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
                     break;
@@ -524,7 +524,7 @@ namespace FashionSense.Framework.Patches.Renderer
                     who.modData[ModDataKeys.ANIMATION_SHOES_TYPE] = type.ToString();
                     who.modData[ModDataKeys.ANIMATION_SHOES_ITERATOR] = iterator.ToString();
                     who.modData[ModDataKeys.ANIMATION_SHOES_STARTING_INDEX] = startingIndex.ToString();
-                    who.modData[ModDataKeys.ANIMATION_SHOES_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
+                    who.modData[ModDataKeys.ANIMATION_SHOES_FRAME_DURATION] = animations.ElementAt(iterator).GetDuration(true).ToString();
                     who.modData[ModDataKeys.ANIMATION_SHOES_ELAPSED_DURATION] = "0";
                     who.modData[ModDataKeys.ANIMATION_SHOES_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
                     break;
@@ -532,7 +532,7 @@ namespace FashionSense.Framework.Patches.Renderer
                     who.modData[ModDataKeys.ANIMATION_HAIR_TYPE] = type.ToString();
                     who.modData[ModDataKeys.ANIMATION_HAIR_ITERATOR] = iterator.ToString();
                     who.modData[ModDataKeys.ANIMATION_HAIR_STARTING_INDEX] = startingIndex.ToString();
-                    who.modData[ModDataKeys.ANIMATION_HAIR_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
+                    who.modData[ModDataKeys.ANIMATION_HAIR_FRAME_DURATION] = animations.ElementAt(iterator).GetDuration(true).ToString();
                     who.modData[ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION] = "0";
                     who.modData[ModDataKeys.ANIMATION_HAIR_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
                     break;
@@ -581,7 +581,7 @@ namespace FashionSense.Framework.Patches.Renderer
             if (model.HasMovementAnimation() && FashionSense.conditionData.IsPlayerMoving() && !HasCorrectAnimationTypeCached(model, who, AnimationModel.Type.Moving))
             {
                 SetAnimationType(model, who, AnimationModel.Type.Moving);
-                FashionSense.ResetAnimationModDataFields(who, model.MovementAnimation.ElementAt(0).Duration, AnimationModel.Type.Moving, facingDirection, true, model);
+                FashionSense.ResetAnimationModDataFields(who, model.MovementAnimation.ElementAt(0).GetDuration(true), AnimationModel.Type.Moving, facingDirection, true, model);
 
                 foreach (var animation in model.MovementAnimation)
                 {
@@ -591,7 +591,7 @@ namespace FashionSense.Framework.Patches.Renderer
             else if (model.HasIdleAnimation() && !FashionSense.conditionData.IsPlayerMoving() && !HasCorrectAnimationTypeCached(model, who, AnimationModel.Type.Idle))
             {
                 SetAnimationType(model, who, AnimationModel.Type.Idle);
-                FashionSense.ResetAnimationModDataFields(who, model.IdleAnimation.ElementAt(0).Duration, AnimationModel.Type.Idle, facingDirection, true, model);
+                FashionSense.ResetAnimationModDataFields(who, model.IdleAnimation.ElementAt(0).GetDuration(true), AnimationModel.Type.Idle, facingDirection, true, model);
 
                 foreach (var animation in model.IdleAnimation)
                 {
@@ -601,7 +601,7 @@ namespace FashionSense.Framework.Patches.Renderer
             else if (model.HasUniformAnimation() && !model.HasMovementAnimation() && !model.HasIdleAnimation() && !HasCorrectAnimationTypeCached(model, who, AnimationModel.Type.Uniform))
             {
                 SetAnimationType(model, who, AnimationModel.Type.Uniform);
-                FashionSense.ResetAnimationModDataFields(who, model.UniformAnimation.ElementAt(0).Duration, AnimationModel.Type.Uniform, facingDirection, true, model);
+                FashionSense.ResetAnimationModDataFields(who, model.UniformAnimation.ElementAt(0).GetDuration(true), AnimationModel.Type.Uniform, facingDirection, true, model);
 
                 foreach (var animation in model.UniformAnimation)
                 {
@@ -698,7 +698,7 @@ namespace FashionSense.Framework.Patches.Renderer
             if (!HasRequiredModDataKeys(appearanceModel, who) || !HasCorrectAnimationTypeCached(appearanceModel, who, animationType) || who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] != facingDirection.ToString())
             {
                 SetAnimationType(appearanceModel, who, animationType);
-                FashionSense.ResetAnimationModDataFields(who, animations.ElementAt(0).Duration, animationType, facingDirection, true, appearanceModel);
+                FashionSense.ResetAnimationModDataFields(who, animations.ElementAt(0).GetDuration(true), animationType, facingDirection, true, appearanceModel);
             }
             var modelPack = appearanceModel.Pack;
 
