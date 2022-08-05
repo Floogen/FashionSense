@@ -435,6 +435,10 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     passedCheck = condition.IsValid(who.FarmerSprite.CurrentFrame);
                 }
+                else if (condition.Name is Condition.Type.RandomChance)
+                {
+                    passedCheck = true;
+                }
 
                 // If the condition is independent and is true, then skip rest of evaluations
                 if (condition.Independent && passedCheck)
