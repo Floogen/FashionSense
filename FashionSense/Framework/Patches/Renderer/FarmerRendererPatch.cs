@@ -353,7 +353,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
                 else if (condition.Name is Condition.Type.ToolChargeLevel)
                 {
-                    passedCheck = condition.IsValid(who.toolPower) && condition.IsValid(who.UsingTool && (who.CurrentTool is Hoe || who.CurrentTool is Axe || who.CurrentTool is WateringCan));
+                    passedCheck = condition.IsValid(who.toolPower) && who.UsingTool && (who.CurrentTool is Hoe || who.CurrentTool is Axe || who.CurrentTool is WateringCan);
                 }
                 else if (condition.Name is Condition.Type.IsUsingMilkPail)
                 {
