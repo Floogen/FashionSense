@@ -437,7 +437,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
                 else if (condition.Name is Condition.Type.RandomChance)
                 {
-                    passedCheck = true;
+                    passedCheck = condition.IsValid(Game1.random.NextDouble());
                 }
 
                 // If the condition is independent and is true, then skip rest of evaluations
