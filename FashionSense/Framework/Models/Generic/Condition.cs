@@ -63,7 +63,8 @@ namespace FashionSense.Framework.Models.Generic
             IsInBathingSuit,
             IsSick,
             IsPassingOut,
-            CurrentFarmerFrame
+            CurrentFarmerFrame,
+            RandomChance
         }
 
         public Type Name { get; set; }
@@ -96,6 +97,30 @@ namespace FashionSense.Framework.Models.Generic
         {
             var passed = false;
             var comparisonValue = GetParsedValue<long>(recalculateValue: false);
+            switch (Operator)
+            {
+                case Comparison.EqualTo:
+                    passed = (numericalValue == comparisonValue);
+                    break;
+                case Comparison.GreaterThan:
+                    passed = (numericalValue > comparisonValue);
+                    break;
+                case Comparison.LessThan:
+                    passed = (numericalValue < comparisonValue);
+                    break;
+            }
+            if (Inverse)
+            {
+                passed = !passed;
+            }
+
+            return passed;
+        }
+
+        internal bool IsValid(double numericalValue)
+        {
+            var passed = false;
+            var comparisonValue = GetParsedValue<double>(recalculateValue: false);
             switch (Operator)
             {
                 case Comparison.EqualTo:

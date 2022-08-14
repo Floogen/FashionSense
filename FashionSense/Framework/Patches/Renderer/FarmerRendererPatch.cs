@@ -353,7 +353,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
                 else if (condition.Name is Condition.Type.ToolChargeLevel)
                 {
-                    passedCheck = condition.IsValid(who.toolPower) && condition.IsValid(who.UsingTool && (who.CurrentTool is Hoe || who.CurrentTool is Axe || who.CurrentTool is WateringCan));
+                    passedCheck = condition.IsValid(who.toolPower) && who.UsingTool && (who.CurrentTool is Hoe || who.CurrentTool is Axe || who.CurrentTool is WateringCan);
                 }
                 else if (condition.Name is Condition.Type.IsUsingMilkPail)
                 {
@@ -435,6 +435,10 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     passedCheck = condition.IsValid(who.FarmerSprite.CurrentFrame);
                 }
+                else if (condition.Name is Condition.Type.RandomChance)
+                {
+                    passedCheck = condition.IsValid(Game1.random.NextDouble());
+                }
 
                 // If the condition is independent and is true, then skip rest of evaluations
                 if (condition.Independent && passedCheck)
@@ -461,7 +465,7 @@ namespace FashionSense.Framework.Patches.Renderer
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_TYPE] = type.ToString();
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ITERATOR] = iterator.ToString();
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_STARTING_INDEX] = startingIndex.ToString();
-                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
+                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_FRAME_DURATION] = animations.ElementAt(iterator).GetDuration(true).ToString();
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ELAPSED_DURATION] = "0";
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
                     }
@@ -470,7 +474,7 @@ namespace FashionSense.Framework.Patches.Renderer
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_TYPE] = type.ToString();
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ITERATOR] = iterator.ToString();
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_STARTING_INDEX] = startingIndex.ToString();
-                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
+                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_FRAME_DURATION] = animations.ElementAt(iterator).GetDuration(true).ToString();
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION] = "0";
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
                     }
@@ -479,7 +483,7 @@ namespace FashionSense.Framework.Patches.Renderer
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_TYPE] = type.ToString();
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_ITERATOR] = iterator.ToString();
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_STARTING_INDEX] = startingIndex.ToString();
-                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
+                        who.modData[ModDataKeys.ANIMATION_ACCESSORY_FRAME_DURATION] = animations.ElementAt(iterator).GetDuration(true).ToString();
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION] = "0";
                         who.modData[ModDataKeys.ANIMATION_ACCESSORY_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
                     }
@@ -488,7 +492,7 @@ namespace FashionSense.Framework.Patches.Renderer
                     who.modData[ModDataKeys.ANIMATION_HAT_TYPE] = type.ToString();
                     who.modData[ModDataKeys.ANIMATION_HAT_ITERATOR] = iterator.ToString();
                     who.modData[ModDataKeys.ANIMATION_HAT_STARTING_INDEX] = startingIndex.ToString();
-                    who.modData[ModDataKeys.ANIMATION_HAT_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
+                    who.modData[ModDataKeys.ANIMATION_HAT_FRAME_DURATION] = animations.ElementAt(iterator).GetDuration(true).ToString();
                     who.modData[ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION] = "0";
                     who.modData[ModDataKeys.ANIMATION_HAT_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
                     break;
@@ -496,7 +500,7 @@ namespace FashionSense.Framework.Patches.Renderer
                     who.modData[ModDataKeys.ANIMATION_SHIRT_TYPE] = type.ToString();
                     who.modData[ModDataKeys.ANIMATION_SHIRT_ITERATOR] = iterator.ToString();
                     who.modData[ModDataKeys.ANIMATION_SHIRT_STARTING_INDEX] = startingIndex.ToString();
-                    who.modData[ModDataKeys.ANIMATION_SHIRT_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
+                    who.modData[ModDataKeys.ANIMATION_SHIRT_FRAME_DURATION] = animations.ElementAt(iterator).GetDuration(true).ToString();
                     who.modData[ModDataKeys.ANIMATION_SHIRT_ELAPSED_DURATION] = "0";
                     who.modData[ModDataKeys.ANIMATION_SHIRT_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
                     break;
@@ -504,7 +508,7 @@ namespace FashionSense.Framework.Patches.Renderer
                     who.modData[ModDataKeys.ANIMATION_PANTS_TYPE] = type.ToString();
                     who.modData[ModDataKeys.ANIMATION_PANTS_ITERATOR] = iterator.ToString();
                     who.modData[ModDataKeys.ANIMATION_PANTS_STARTING_INDEX] = startingIndex.ToString();
-                    who.modData[ModDataKeys.ANIMATION_PANTS_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
+                    who.modData[ModDataKeys.ANIMATION_PANTS_FRAME_DURATION] = animations.ElementAt(iterator).GetDuration(true).ToString();
                     who.modData[ModDataKeys.ANIMATION_PANTS_ELAPSED_DURATION] = "0";
                     who.modData[ModDataKeys.ANIMATION_PANTS_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
                     break;
@@ -512,7 +516,7 @@ namespace FashionSense.Framework.Patches.Renderer
                     who.modData[ModDataKeys.ANIMATION_SLEEVES_TYPE] = type.ToString();
                     who.modData[ModDataKeys.ANIMATION_SLEEVES_ITERATOR] = iterator.ToString();
                     who.modData[ModDataKeys.ANIMATION_SLEEVES_STARTING_INDEX] = startingIndex.ToString();
-                    who.modData[ModDataKeys.ANIMATION_SLEEVES_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
+                    who.modData[ModDataKeys.ANIMATION_SLEEVES_FRAME_DURATION] = animations.ElementAt(iterator).GetDuration(true).ToString();
                     who.modData[ModDataKeys.ANIMATION_SLEEVES_ELAPSED_DURATION] = "0";
                     who.modData[ModDataKeys.ANIMATION_SLEEVES_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
                     break;
@@ -520,7 +524,7 @@ namespace FashionSense.Framework.Patches.Renderer
                     who.modData[ModDataKeys.ANIMATION_SHOES_TYPE] = type.ToString();
                     who.modData[ModDataKeys.ANIMATION_SHOES_ITERATOR] = iterator.ToString();
                     who.modData[ModDataKeys.ANIMATION_SHOES_STARTING_INDEX] = startingIndex.ToString();
-                    who.modData[ModDataKeys.ANIMATION_SHOES_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
+                    who.modData[ModDataKeys.ANIMATION_SHOES_FRAME_DURATION] = animations.ElementAt(iterator).GetDuration(true).ToString();
                     who.modData[ModDataKeys.ANIMATION_SHOES_ELAPSED_DURATION] = "0";
                     who.modData[ModDataKeys.ANIMATION_SHOES_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
                     break;
@@ -528,7 +532,7 @@ namespace FashionSense.Framework.Patches.Renderer
                     who.modData[ModDataKeys.ANIMATION_HAIR_TYPE] = type.ToString();
                     who.modData[ModDataKeys.ANIMATION_HAIR_ITERATOR] = iterator.ToString();
                     who.modData[ModDataKeys.ANIMATION_HAIR_STARTING_INDEX] = startingIndex.ToString();
-                    who.modData[ModDataKeys.ANIMATION_HAIR_FRAME_DURATION] = animations.ElementAt(iterator).Duration.ToString();
+                    who.modData[ModDataKeys.ANIMATION_HAIR_FRAME_DURATION] = animations.ElementAt(iterator).GetDuration(true).ToString();
                     who.modData[ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION] = "0";
                     who.modData[ModDataKeys.ANIMATION_HAIR_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
                     break;
@@ -577,7 +581,7 @@ namespace FashionSense.Framework.Patches.Renderer
             if (model.HasMovementAnimation() && FashionSense.conditionData.IsPlayerMoving() && !HasCorrectAnimationTypeCached(model, who, AnimationModel.Type.Moving))
             {
                 SetAnimationType(model, who, AnimationModel.Type.Moving);
-                FashionSense.ResetAnimationModDataFields(who, model.MovementAnimation.ElementAt(0).Duration, AnimationModel.Type.Moving, facingDirection, true, model);
+                FashionSense.ResetAnimationModDataFields(who, model.MovementAnimation.ElementAt(0).GetDuration(true), AnimationModel.Type.Moving, facingDirection, true, model);
 
                 foreach (var animation in model.MovementAnimation)
                 {
@@ -587,7 +591,7 @@ namespace FashionSense.Framework.Patches.Renderer
             else if (model.HasIdleAnimation() && !FashionSense.conditionData.IsPlayerMoving() && !HasCorrectAnimationTypeCached(model, who, AnimationModel.Type.Idle))
             {
                 SetAnimationType(model, who, AnimationModel.Type.Idle);
-                FashionSense.ResetAnimationModDataFields(who, model.IdleAnimation.ElementAt(0).Duration, AnimationModel.Type.Idle, facingDirection, true, model);
+                FashionSense.ResetAnimationModDataFields(who, model.IdleAnimation.ElementAt(0).GetDuration(true), AnimationModel.Type.Idle, facingDirection, true, model);
 
                 foreach (var animation in model.IdleAnimation)
                 {
@@ -597,7 +601,7 @@ namespace FashionSense.Framework.Patches.Renderer
             else if (model.HasUniformAnimation() && !model.HasMovementAnimation() && !model.HasIdleAnimation() && !HasCorrectAnimationTypeCached(model, who, AnimationModel.Type.Uniform))
             {
                 SetAnimationType(model, who, AnimationModel.Type.Uniform);
-                FashionSense.ResetAnimationModDataFields(who, model.UniformAnimation.ElementAt(0).Duration, AnimationModel.Type.Uniform, facingDirection, true, model);
+                FashionSense.ResetAnimationModDataFields(who, model.UniformAnimation.ElementAt(0).GetDuration(true), AnimationModel.Type.Uniform, facingDirection, true, model);
 
                 foreach (var animation in model.UniformAnimation)
                 {
@@ -694,7 +698,7 @@ namespace FashionSense.Framework.Patches.Renderer
             if (!HasRequiredModDataKeys(appearanceModel, who) || !HasCorrectAnimationTypeCached(appearanceModel, who, animationType) || who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] != facingDirection.ToString())
             {
                 SetAnimationType(appearanceModel, who, animationType);
-                FashionSense.ResetAnimationModDataFields(who, animations.ElementAt(0).Duration, animationType, facingDirection, true, appearanceModel);
+                FashionSense.ResetAnimationModDataFields(who, animations.ElementAt(0).GetDuration(true), animationType, facingDirection, true, appearanceModel);
             }
             var modelPack = appearanceModel.Pack;
 
@@ -1279,7 +1283,7 @@ namespace FashionSense.Framework.Patches.Renderer
 
         private static void DrawSleeveColorMask(SpriteBatch b, SleevesContentPack sleevesPack, SleevesModel sleevesModel, ShirtModel shirtModel, Vector2 position, Rectangle sourceRect, Color color, float rotation, Vector2 origin, float scale, float layerDepth)
         {
-            if (sleevesPack.ColorMaskTexture is null || AreColorMasksPendingRefresh)
+            if (sleevesPack.ShirtToneTexture is null || AreColorMasksPendingRefresh)
             {
                 Color[] data = new Color[sleevesPack.Texture.Width * sleevesPack.Texture.Height];
                 sleevesPack.Texture.GetData(data);
@@ -1291,12 +1295,35 @@ namespace FashionSense.Framework.Patches.Renderer
 
                 for (int i = 0; i < data.Length; i++)
                 {
-                    if (!sleevesModel.IsMaskedColor(data[i]))
+                    if (sleevesModel.ShirtToneMask is not null)
                     {
-                        data[i] = Color.Transparent;
+                        if (sleevesModel.IsShirtToneMaskColor(data[i]) is false)
+                        {
+                            data[i] = Color.Transparent;
+                            continue;
+                        }
+
+                        if (sleevesModel.ShirtToneMask.DarkTone is not null && data[i] == sleevesModel.ShirtToneMask.Darkest && shirtModel.HasSleeveColorAtLayer(0))
+                        {
+                            data[i] = firstSleeveColor;
+                        }
+                        else if (sleevesModel.ShirtToneMask.MediumTone is not null && data[i] == sleevesModel.ShirtToneMask.Medium && shirtModel.HasSleeveColorAtLayer(1))
+                        {
+                            data[i] = secondSleeveColor;
+                        }
+                        else if (sleevesModel.ShirtToneMask.LightTone is not null && data[i] == sleevesModel.ShirtToneMask.Lightest && shirtModel.HasSleeveColorAtLayer(2))
+                        {
+                            data[i] = thirdSleeveColor;
+                        }
                     }
                     else if (sleevesModel.ColorMasks is not null)
                     {
+                        if (sleevesModel.IsMaskedColor(data[i]) is false)
+                        {
+                            data[i] = Color.Transparent;
+                            continue;
+                        }
+
                         if (sleevesModel.ColorMasks.Count > 0 && data[i] == AppearanceModel.GetColor(sleevesModel.ColorMasks[0]) && shirtModel.HasSleeveColorAtLayer(0))
                         {
                             data[i] = firstSleeveColor;
@@ -1313,9 +1340,118 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
 
                 maskedTexture.SetData(data);
+                sleevesPack.ShirtToneTexture = maskedTexture;
             }
 
-            b.Draw(sleevesPack.ColorMaskTexture, position, sourceRect, Color.White, rotation, origin, scale, sleevesModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
+            b.Draw(sleevesPack.ShirtToneTexture, position, sourceRect, Color.White, rotation, origin, scale, sleevesModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
+        }
+
+        private static Color[] GetVanillaShirtSleeveColors(Farmer who, FarmerRenderer renderer)
+        {
+            // Perform initial vanilla logic
+            Color[] shirtData = new Color[FarmerRenderer.shirtsTexture.Bounds.Width * FarmerRenderer.shirtsTexture.Bounds.Height];
+            FarmerRenderer.shirtsTexture.GetData(shirtData);
+            int index = renderer.ClampShirt(who.GetShirtIndex()) * 8 / 128 * 32 * FarmerRenderer.shirtsTexture.Bounds.Width + renderer.ClampShirt(who.GetShirtIndex()) * 8 % 128 + FarmerRenderer.shirtsTexture.Width * 4;
+            int dye_index = index + 128;
+            Color shirtSleeveColor = Color.White;
+
+            Color actualShirtColor = Utility.MakeCompletelyOpaque(who.GetShirtColor());
+            shirtSleeveColor = shirtData[dye_index];
+            Color clothes_color = actualShirtColor;
+            if (shirtSleeveColor.A < byte.MaxValue)
+            {
+                shirtSleeveColor = shirtData[index];
+                clothes_color = Color.White;
+            }
+            shirtSleeveColor = Utility.MultiplyColor(shirtSleeveColor, clothes_color);
+
+            var firstSleeveColor = shirtSleeveColor;
+            shirtSleeveColor = shirtData[dye_index - FarmerRenderer.shirtsTexture.Width];
+            if (shirtSleeveColor.A < byte.MaxValue)
+            {
+                shirtSleeveColor = shirtData[index - FarmerRenderer.shirtsTexture.Width];
+                clothes_color = Color.White;
+            }
+            shirtSleeveColor = Utility.MultiplyColor(shirtSleeveColor, clothes_color);
+
+            var secondSleeveColor = shirtSleeveColor;
+            shirtSleeveColor = shirtData[dye_index - FarmerRenderer.shirtsTexture.Width * 2];
+            if (shirtSleeveColor.A < byte.MaxValue)
+            {
+                shirtSleeveColor = shirtData[index - FarmerRenderer.shirtsTexture.Width * 2];
+                clothes_color = Color.White;
+            }
+            shirtSleeveColor = Utility.MultiplyColor(shirtSleeveColor, clothes_color);
+
+            var thirdSleeveColor = shirtSleeveColor;
+
+            return new Color[] { firstSleeveColor, secondSleeveColor, thirdSleeveColor };
+        }
+
+        private static void DrawSleeveColorMaskVanilla(SpriteBatch b, SleevesContentPack sleevesPack, SleevesModel sleevesModel, Farmer who, FarmerRenderer renderer, Vector2 position, Rectangle sourceRect, Color color, float rotation, Vector2 origin, float scale, float layerDepth)
+        {
+            if (sleevesPack.ShirtToneTexture is null || AreColorMasksPendingRefresh)
+            {
+                Color[] data = new Color[sleevesPack.Texture.Width * sleevesPack.Texture.Height];
+                sleevesPack.Texture.GetData(data);
+                Texture2D maskedTexture = new Texture2D(Game1.graphics.GraphicsDevice, sleevesPack.Texture.Width, sleevesPack.Texture.Height);
+
+                var shirtSleeveColors = GetVanillaShirtSleeveColors(who, renderer);
+                var firstSleeveColor = shirtSleeveColors[0];
+                var secondSleeveColor = shirtSleeveColors[1];
+                var thirdSleeveColor = shirtSleeveColors[2];
+
+                for (int i = 0; i < data.Length; i++)
+                {
+                    if (sleevesModel.ShirtToneMask is not null)
+                    {
+                        if (sleevesModel.IsShirtToneMaskColor(data[i]) is false)
+                        {
+                            data[i] = Color.Transparent;
+                            continue;
+                        }
+
+                        if (sleevesModel.ShirtToneMask.DarkTone is not null && data[i] == sleevesModel.ShirtToneMask.Darkest)
+                        {
+                            data[i] = firstSleeveColor;
+                        }
+                        else if (sleevesModel.ShirtToneMask.MediumTone is not null && data[i] == sleevesModel.ShirtToneMask.Medium)
+                        {
+                            data[i] = secondSleeveColor;
+                        }
+                        else if (sleevesModel.ShirtToneMask.LightTone is not null && data[i] == sleevesModel.ShirtToneMask.Lightest)
+                        {
+                            data[i] = thirdSleeveColor;
+                        }
+                    }
+                    else if (sleevesModel.ColorMasks is not null)
+                    {
+                        if (sleevesModel.IsMaskedColor(data[i]) is false)
+                        {
+                            data[i] = Color.Transparent;
+                            continue;
+                        }
+
+                        if (sleevesModel.ColorMasks.Count > 0 && data[i] == AppearanceModel.GetColor(sleevesModel.ColorMasks[0]))
+                        {
+                            data[i] = firstSleeveColor;
+                        }
+                        else if (sleevesModel.ColorMasks.Count > 1 && data[i] == AppearanceModel.GetColor(sleevesModel.ColorMasks[1]))
+                        {
+                            data[i] = secondSleeveColor;
+                        }
+                        else if (sleevesModel.ColorMasks.Count > 2 && data[i] == AppearanceModel.GetColor(sleevesModel.ColorMasks[2]))
+                        {
+                            data[i] = thirdSleeveColor;
+                        }
+                    }
+                }
+
+                maskedTexture.SetData(data);
+                sleevesPack.ShirtToneTexture = maskedTexture;
+            }
+
+            b.Draw(sleevesPack.ShirtToneTexture, position, sourceRect, Color.White, rotation, origin, scale, sleevesModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
         }
 
         private static void DrawSkinToneMask(SpriteBatch b, AppearanceContentPack appearancePack, AppearanceModel appearanceModel, SkinToneModel skinTone, Vector2 position, Rectangle sourceRect, Color color, float rotation, Vector2 origin, float scale, float layerDepth)
@@ -1837,15 +1973,19 @@ namespace FashionSense.Framework.Patches.Renderer
 
                 if (sleevesModel.HasColorMask())
                 {
-                    if (sleevesModel.UseShirtColors && shirtModel is not null && shirtModel.SleeveColors is not null)
+                    sleevesLayer += 0.01E-05f;
+                    DrawColorMask(b, sleevesPack, sleevesModel, GetScaledPosition(position, sleevesModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, customSleevesSourceRect, sleevesColor, rotation, origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), sleevesModel.Scale * scale, sleevesLayer);
+                }
+                if ((sleevesModel.HasColorMask() || sleevesModel.HasShirtToneMask()) && sleevesModel.UseShirtColors)
+                {
+                    sleevesLayer += 0.01E-05f;
+                    if (shirtModel is not null && shirtModel.SleeveColors is not null)
                     {
-                        sleevesLayer += 0.01E-05f;
                         DrawSleeveColorMask(b, sleevesPack, sleevesModel, shirtModel, GetScaledPosition(position, sleevesModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, customSleevesSourceRect, sleevesColor, rotation, origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), sleevesModel.Scale * scale, sleevesLayer);
                     }
                     else
                     {
-                        sleevesLayer += 0.01E-05f;
-                        DrawColorMask(b, sleevesPack, sleevesModel, GetScaledPosition(position, sleevesModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, customSleevesSourceRect, sleevesColor, rotation, origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), sleevesModel.Scale * scale, sleevesLayer);
+                        DrawSleeveColorMaskVanilla(b, sleevesPack, sleevesModel, who, __instance, GetScaledPosition(position, sleevesModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, customSleevesSourceRect, sleevesColor, rotation, origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), sleevesModel.Scale * scale, sleevesLayer);
                     }
                 }
                 if (sleevesModel.HasSkinToneMask())

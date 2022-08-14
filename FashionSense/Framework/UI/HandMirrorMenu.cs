@@ -1475,7 +1475,7 @@ namespace FashionSense.Framework.UI
                         ShirtContentPack sPack = FashionSense.textureManager.GetSpecificAppearanceModel<ShirtContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_SHIRT_ID]);
                         if (contentPack is SleevesContentPack sleevesPack && sleevesPack.GetSleevesFromFacingDirection(Game1.player.facingDirection) is SleevesModel slModel && slModel != null)
                         {
-                            if (slModel.IsPlayerColorChoiceIgnored() || (sPack is not null && sPack.GetShirtFromFacingDirection(Game1.player.facingDirection) is ShirtModel shModel && shModel is not null && shModel.SleeveColors is not null && slModel.UseShirtColors))
+                            if (slModel.IsPlayerColorChoiceIgnored() || (sPack is not null && sPack.GetShirtFromFacingDirection(Game1.player.facingDirection) is ShirtModel shModel && shModel is not null && shModel.SleeveColors is not null && slModel.UseShirtColors && slModel.SkinToneMasks is null))
                             {
                                 name = GetColorPickerLabel(true, enabledFilterName: GetNameOfEnabledFilter());
                             }
