@@ -876,19 +876,27 @@ namespace FashionSense.Framework.Patches.Renderer
                 IsFrameValid(who, appearanceModel, animations, iterator);
                 UpdateLight(appearanceModel, animationModel, who, true);
 
-                iterator = iterator + 1 >= animations.Count() ? startingIndex : iterator + 1;
-
-                UpdatePlayerAnimationData(appearanceModel, who, animationType, animations, facingDirection, iterator, startingIndex);
-
+                // Set this frame as having been displayed
                 animationModel.WasDisplayed = true;
-                if (iterator == startingIndex)
+
+                int nextValidIndex = GetNextValidFrame(animations, who, appearanceModel, iterator, startingIndex);
+                if (nextValidIndex <= iterator)
                 {
+                    if (IsFrameValid(who, appearanceModel, animations, startingIndex, probe: true))
+                    {
+                        nextValidIndex = startingIndex;
+                    }
+
                     // Reset any cached values with the AnimationModel
                     foreach (var animation in animations)
                     {
                         animation.Reset();
                     }
                 }
+                animationModel = animations.ElementAtOrDefault(nextValidIndex) is null ? animations.ElementAtOrDefault(0) : animations.ElementAtOrDefault(nextValidIndex);
+                iterator = nextValidIndex;
+
+                UpdatePlayerAnimationData(appearanceModel, who, animationType, animations, facingDirection, iterator, startingIndex);
 
                 foreach (var model in activeModels.Where(m => m is not null))
                 {
@@ -911,6 +919,35 @@ namespace FashionSense.Framework.Patches.Renderer
                 sourceRect.X += sourceRect.Width * animationModel.Frame;
             }
             appearanceTypeToSourceRectangles[appearancePackType] = sourceRect;
+        }
+
+        private static int GetNextValidFrame(List<AnimationModel> animations, Farmer who, AppearanceModel appearanceModel, int iterator, int startingIndex)
+        {
+            var hasFoundNextFrame = false;
+            foreach (var animation in animations.Skip(iterator + 1).Where(a => IsFrameValid(who, appearanceModel, animations, animations.IndexOf(a), probe: true)))
+            {
+                iterator = animations.IndexOf(animation);
+                hasFoundNextFrame = true;
+                break;
+            }
+
+            // If no frames are available from iterator onwards, then check for the next available frame from the start
+            if (hasFoundNextFrame is false)
+            {
+                foreach (var animation in animations.Take(iterator + 1).Where(a => IsFrameValid(who, appearanceModel, animations, animations.IndexOf(a), probe: true)))
+                {
+                    iterator = animations.IndexOf(animation);
+                    hasFoundNextFrame = true;
+                    break;
+                }
+
+                if (hasFoundNextFrame is false)
+                {
+                    iterator = startingIndex;
+                }
+            }
+
+            return iterator;
         }
 
         private static bool HasModelOfType(List<AppearanceModel> models, AppearanceContentPack.Type appearanceType)
