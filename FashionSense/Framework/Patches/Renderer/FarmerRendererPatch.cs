@@ -1456,7 +1456,7 @@ namespace FashionSense.Framework.Patches.Renderer
 
         private static void DrawSkinToneMask(SpriteBatch b, AppearanceContentPack appearancePack, AppearanceModel appearanceModel, SkinToneModel skinTone, Vector2 position, Rectangle sourceRect, Color color, float rotation, Vector2 origin, float scale, float layerDepth)
         {
-            if (appearancePack.SkinMaskTexture is null)
+            if (appearancePack.SkinMaskTexture is null || AreColorMasksPendingRefresh)
             {
                 Color[] data = new Color[appearancePack.Texture.Width * appearancePack.Texture.Height];
                 appearancePack.Texture.GetData(data);
