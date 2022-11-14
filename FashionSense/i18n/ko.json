@@ -7,7 +7,7 @@
   "messages.warning.no_content_packs": "Fashion Sense 컨텐츠 팩이 설치되어 있지 않습니다!",
 
   // Letters
-  "letters.hand_mirror": "계곡에 새로 이사 온다는 소식을 듣고 집들이 선물을 준비했어.^ ^내 오래된 손거울을 이 편지와 함께 동봉할께, 이건 네 패션 감각에 도움이 될거야.^ ^잃어버리면, 피에르 가게에서 하나 더 살 수 있어.  ^   -헤일리 %item tool HandMirror %%",
+  "letters.hand_mirror": "^계곡에 새로 이사 온다는 소식을 듣고 집들이 선물을 준비했어.^내 오래된 손거울을 이 편지와 함께 동봉할께, 이건 네 패션 감각에 도움이 될거야.^잃어버리면, 피에르 가게에서 하나 더 살 수 있어.^^   -헤일리 %item tool HandMirror %%",
 
   // UI - Titles
   "ui.fashion_sense.title.search": "패션 센스 팩 선택",
@@ -21,18 +21,18 @@
   "ui.fashion_sense.title.shoes": "신발",
 
   // UI - Outfits
-  "ui.fashion_sense.title.outfits": "의상",
-  "ui.fashion_sense.title.outfit_naming": "의상 이름",
-  "ui.fashion_sense.create_outfit_button": "의상 만들기",
-  "ui.fashion_sense.create_outfit_hover": "현재 의상을 기반으로 새 의상을 만듭니다.",
-  "ui.fashion_sense.outfit_info.save": "현재 의상을 이 의상에 저장합니다.",
-  "ui.fashion_sense.outfit_info.rename": "이 의상의 이름을 바꿉니다.",
-  "ui.fashion_sense.outfit_info.delete": "이 의상을 삭제 합니다.",
-  "ui.fashion_sense.warning.name": "의상 이름이 비어 있거나 이미 존재합니다.",
+  "ui.fashion_sense.title.outfits": "의상 세트",
+  "ui.fashion_sense.title.outfit_naming": "의상 세트 이름",
+  "ui.fashion_sense.create_outfit_button": "의상 세트 만들기",
+  "ui.fashion_sense.create_outfit_hover": "현재 의상을 기반으로 새 의상 세트를 만듭니다.",
+  "ui.fashion_sense.outfit_info.save": "현재 의상을 이 의상 세트에 저장합니다.",
+  "ui.fashion_sense.outfit_info.rename": "이 의상 세트의 이름을 바꿉니다.",
+  "ui.fashion_sense.outfit_info.delete": "이 의상 세트를 삭제 합니다.",
+  "ui.fashion_sense.warning.name": "이름이 비어 있거나 이미 존재합니다.",
 
   // UI - Etc
-  "ui.fashion_sense.start_with_hand_mirror": "거울로 시작",
-  "ui.fashion_sense.start_with_hand_mirror.description": "인벤토리에 있는 손 거울로 새 게임을 시작합니다.",
+  "ui.fashion_sense.start_with_hand_mirror": "거울 추가",
+  "ui.fashion_sense.start_with_hand_mirror.description": "인벤토리에 손 거울을 추가하여 새 게임을 시작합니다.",
   "ui.fashion_sense.color_override.shoes": "신발 색상 재설정",
   "ui.fashion_sense.search_button": "특정 패션 센스 팩을 검색합니다.",
   "ui.fashion_sense.outfit_button": "Fashion Sense 의상에 액세스합니다.",
