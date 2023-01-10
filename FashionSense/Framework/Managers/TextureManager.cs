@@ -1,4 +1,5 @@
 ﻿using FashionSense.Framework.Models;
+using FashionSense.Framework.Models.Accessory;
 using FashionSense.Framework.Models.Hair;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;

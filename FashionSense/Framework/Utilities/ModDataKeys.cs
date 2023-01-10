@@ -13,6 +13,7 @@ namespace FashionSense.Framework.Utilities
         internal const string CUSTOM_ACCESSORY_ID = "FashionSense.CustomAccessory.Id";
         internal const string CUSTOM_ACCESSORY_SECONDARY_ID = "FashionSense.CustomAccessory.Secondary.Id";
         internal const string CUSTOM_ACCESSORY_TERTIARY_ID = "FashionSense.CustomAccessory.Tertiary.Id";
+        internal const string CUSTOM_ACCESSORY_COLLECTIVE_ID = "FashionSense.CustomAccessory.Collective.Id";
         internal const string CUSTOM_HAT_ID = "FashionSense.CustomHat.Id";
         internal const string CUSTOM_SHIRT_ID = "FashionSense.CustomShirt.Id";
         internal const string CUSTOM_PANTS_ID = "FashionSense.CustomPants.Id";
@@ -54,6 +55,7 @@ namespace FashionSense.Framework.Utilities
         internal const string ANIMATION_HAIR_LIGHT_ID = "FashionSense.Animation.Hair.Light.Id";
         internal const string ANIMATION_HAIR_FARMER_FRAME = "FashionSense.Animation.Hair.FarmerFrame";
 
+        #region Start of obsolete accessory animation keys
         // Accessory animation related keys
         internal const string ANIMATION_ACCESSORY_TYPE = "FashionSense.Animation.Accessory.Type";
         internal const string ANIMATION_ACCESSORY_ITERATOR = "FashionSense.Animation.Accessory.Iterator";
@@ -80,6 +82,7 @@ namespace FashionSense.Framework.Utilities
         internal const string ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION = "FashionSense.Animation.Accessory.Tertiary.ElapsedDuration";
         internal const string ANIMATION_ACCESSORY_TERTIARY_LIGHT_ID = "FashionSense.Animation.Accessory.Tertiary.Light.Id";
         internal const string ANIMATION_ACCESSORY_TERTIARY_FARMER_FRAME = "FashionSense.Animation.Accessory.Tertiary.FarmerFrame";
+        #endregion
 
         // Hat animation related keys
         internal const string ANIMATION_HAT_TYPE = "FashionSense.Animation.Hat.Type";

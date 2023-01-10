@@ -29,6 +29,7 @@ using FashionSense.Framework.Interfaces.API;
 using StardewModdingAPI.Utilities;
 using FashionSense.Framework.Patches.GameLocations;
 using FashionSense.Framework.Models.Generic;
+using Newtonsoft.Json;
 
 namespace FashionSense
 {
@@ -39,10 +40,11 @@ namespace FashionSense
         internal static IModHelper modHelper;
 
         // Managers
+        internal static AccessoryManager accessoryManager;
         internal static ApiManager apiManager;
         internal static AssetManager assetManager;
-        internal static TextureManager textureManager;
         internal static OutfitManager outfitManager;
+        internal static TextureManager textureManager;
 
         // Utilities
         internal static ConditionData conditionData;
@@ -62,10 +64,11 @@ namespace FashionSense
             modHelper = helper;
 
             // Load managers
+            accessoryManager = new AccessoryManager(monitor);
             apiManager = new ApiManager(monitor);
             assetManager = new AssetManager(modHelper);
-            textureManager = new TextureManager(monitor, modHelper);
             outfitManager = new OutfitManager(monitor, modHelper);
+            textureManager = new TextureManager(monitor, modHelper);
 
             // Setup our utilities
             conditionData = new ConditionData();
@@ -240,11 +243,16 @@ namespace FashionSense
             EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID);
+            EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_HAT_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_SHIRT_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_PANTS_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_SLEEVES_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_SHOES_ID);
+
+            // Handle the old CUSTOM_ACCESSORY_ID format
+            accessoryManager.HandleOldAccessoryFormat(Game1.player);
+            accessoryManager.SetAccessories(Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID]);
 
             // Set sprite to dirty in order to refresh sleeves and other tied-in appearances
             SetSpriteDirty();
@@ -1210,7 +1218,11 @@ namespace FashionSense
         internal static bool ResetTextureIfNecessary(string appearanceId)
         {
             // See if we need to reset the texture (i.e. it has been overriden by the API and not using the shouldOverridePersist parameter)
-            var appearancePack = textureManager.GetSpecificAppearanceModel<AppearanceContentPack>(appearanceId);
+            return ResetTextureIfNecessary(textureManager.GetSpecificAppearanceModel<AppearanceContentPack>(appearanceId));
+        }
+
+        internal static bool ResetTextureIfNecessary(AppearanceContentPack appearancePack)
+        {
             if (appearancePack is null)
             {
                 return false;

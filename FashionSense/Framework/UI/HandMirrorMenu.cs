@@ -10,6 +10,7 @@ using FashionSense.Framework.UI.Components;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Menus;
@@ -534,6 +535,26 @@ namespace FashionSense.Framework.UI
             }
         }
 
+        // TODO: Rewrite this to utilize new accessory selection slot menu
+        internal int GetAccessoryIndex()
+        {
+            int accessoryIndex = -1;
+            switch (GetCurrentAccessorySlotKey())
+            {
+                case ModDataKeys.CUSTOM_ACCESSORY_ID:
+                    accessoryIndex = 0;
+                    break;
+                case ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID:
+                    accessoryIndex = 1;
+                    break;
+                case ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID:
+                    accessoryIndex = 2;
+                    break;
+            }
+
+            return accessoryIndex;
+        }
+
         internal string GetCurrentFeatureSlotKey()
         {
             var enabledButton = featureButtons.FirstOrDefault(f => (f as ClickableTextureComponent).hoverText == "enabled");
@@ -570,17 +591,11 @@ namespace FashionSense.Framework.UI
                     Game1.player.changeHairColor(color);
                     break;
                 case ACCESSORY_FILTER_BUTTON:
-                    var accessoryColorKey = ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR;
-                    switch (GetCurrentAccessorySlotKey())
+                    var accessoryData = FashionSense.accessoryManager.GetAccessoryDataByIndex(GetAccessoryIndex());
+                    if (accessoryData is not null)
                     {
-                        case ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID:
-                            accessoryColorKey = ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR;
-                            break;
-                        case ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID:
-                            accessoryColorKey = ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR;
-                            break;
+                        accessoryData.Color = color;
                     }
-                    Game1.player.modData[accessoryColorKey] = color.PackedValue.ToString();
                     break;
                 case HAT_FILTER_BUTTON:
                     Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_HAT_COLOR] = color.PackedValue.ToString();
@@ -608,6 +623,7 @@ namespace FashionSense.Framework.UI
 
         private void UpdateAppearance(int change, bool overrideIndex = false)
         {
+            int accessoryIndex = -1;
             string modDataKey = null;
             AppearanceContentPack currentAppearance = null;
             List<AppearanceContentPack> appearanceModels = new List<AppearanceContentPack>();
@@ -619,8 +635,10 @@ namespace FashionSense.Framework.UI
                     appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is HairContentPack).ToList();
                     break;
                 case ACCESSORY_FILTER_BUTTON:
-                    modDataKey = GetCurrentAccessorySlotKey();
-                    currentAppearance = FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(Game1.player.modData[modDataKey]);
+                    modDataKey = ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID;
+                    accessoryIndex = GetAccessoryIndex();
+
+                    currentAppearance = FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(FashionSense.accessoryManager.GetAccessoryIdByIndex(accessoryIndex));
                     appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is AccessoryContentPack).ToList();
                     break;
                 case HAT_FILTER_BUTTON:
@@ -668,12 +686,21 @@ namespace FashionSense.Framework.UI
                 current_index = appearanceModels.Count() - 1;
             }
 
-            Game1.player.modData[modDataKey] = current_index == -1 ? "None" : appearanceModels[current_index].Id;
+            string appearanceId = current_index == -1 ? "None" : appearanceModels[current_index].Id;
+            if (modDataKey == ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID)
+            {
+                FashionSense.accessoryManager.AddAccessory(appearanceId, accessoryIndex);
+            }
+            else
+            {
+                Game1.player.modData[modDataKey] = appearanceId;
+            }
+
             FashionSense.ResetAnimationModDataFields(Game1.player, 0, AnimationModel.Type.Idle, Game1.player.facingDirection);
             Game1.playSound("grassyStep");
 
             FashionSense.SetSpriteDirty();
-            FashionSense.ResetTextureIfNecessary(Game1.player.modData[modDataKey]);
+            FashionSense.ResetTextureIfNecessary(currentAppearance);
         }
 
         private void selectionClick(string name, int change)
@@ -1282,7 +1309,7 @@ namespace FashionSense.Framework.UI
                     contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID]);
                     break;
                 case ACCESSORY_FILTER_BUTTON:
-                    contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(Game1.player.modData[GetCurrentAccessorySlotKey()]);
+                    contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(FashionSense.accessoryManager.GetAccessoryIdByIndex(GetAccessoryIndex()));
                     break;
                 case HAT_FILTER_BUTTON:
                     contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<HatContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAT_ID]);

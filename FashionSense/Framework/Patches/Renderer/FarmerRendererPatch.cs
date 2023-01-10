@@ -25,6 +25,7 @@ using FashionSense.Framework.Models.Shirt;
 using FashionSense.Framework.Models.Pants;
 using FashionSense.Framework.Models.Sleeves;
 using FashionSense.Framework.Models.Shoes;
+using Newtonsoft.Json;
 
 namespace FashionSense.Framework.Patches.Renderer
 {
@@ -539,7 +540,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
         }
 
-        private static void HandleAppearanceAnimation(List<AppearanceModel> models, AppearanceModel model, Farmer who, int facingDirection, ref Dictionary<AppearanceContentPack.Type, Rectangle> appearanceTypeToSourceRectangles, bool forceUpdate = false)
+        private static void HandleAppearanceAnimation(List<AppearanceModel> models, AppearanceModel model, Farmer who, int facingDirection, ref Dictionary<AppearanceModel, Rectangle> appearanceTypeToSourceRectangles, bool forceUpdate = false)
         {
             var size = new Size();
             if (model is HairModel hairModel)
@@ -610,7 +611,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             // Update the animations
-            appearanceTypeToSourceRectangles[model.GetPackType()] = new Rectangle(model.StartingPosition.X, model.StartingPosition.Y, size.Width, size.Length);
+            appearanceTypeToSourceRectangles[model] = new Rectangle(model.StartingPosition.X, model.StartingPosition.Y, size.Width, size.Length);
             if (model.HasMovementAnimation() && (FashionSense.conditionData.IsPlayerMoving() || IsWaitingOnRequiredAnimation(who, model)))
             {
                 HandleAppearanceAnimation(models, model, who, AnimationModel.Type.Moving, model.MovementAnimation, facingDirection, ref appearanceTypeToSourceRectangles, !FashionSense.conditionData.IsPlayerMoving() && IsWaitingOnRequiredAnimation(who, model), forceUpdate);
@@ -693,7 +694,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
         }
 
-        private static void HandleAppearanceAnimation(List<AppearanceModel> activeModels, AppearanceModel appearanceModel, Farmer who, AnimationModel.Type animationType, List<AnimationModel> animations, int facingDirection, ref Dictionary<AppearanceContentPack.Type, Rectangle> appearanceTypeToSourceRectangles, bool isAnimationFinishing = false, bool forceUpdate = false)
+        private static void HandleAppearanceAnimation(List<AppearanceModel> activeModels, AppearanceModel appearanceModel, Farmer who, AnimationModel.Type animationType, List<AnimationModel> animations, int facingDirection, ref Dictionary<AppearanceModel, Rectangle> appearanceTypeToSourceRectangles, bool isAnimationFinishing = false, bool forceUpdate = false)
         {
             if (!HasRequiredModDataKeys(appearanceModel, who) || !HasCorrectAnimationTypeCached(appearanceModel, who, animationType) || who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] != facingDirection.ToString())
             {
@@ -781,12 +782,11 @@ namespace FashionSense.Framework.Patches.Renderer
 
             // Handle animations that are syncing with other appearances 
             bool defaultToEndWhenFarmerFrameUpdates = false;
-            var appearancePackType = appearanceModel.GetPackType();
             if (appearanceModel.AppearanceSyncing.FirstOrDefault(a => a.AnimationType == animationType) is AppearanceSync appearanceSync && appearanceSync is not null)
             {
                 if (HasModelOfType(activeModels, appearanceSync.TargetAppearanceType) && forceUpdate is false)
                 {
-                    var rectangle = appearanceTypeToSourceRectangles[appearancePackType];
+                    var rectangle = appearanceTypeToSourceRectangles[appearanceModel];
                     var frameOffset = (animationModel.Frame * rectangle.Width) - rectangle.Width;
                     if (modelPack is not null && frameOffset > modelPack.Texture.Width)
                     {
@@ -797,7 +797,7 @@ namespace FashionSense.Framework.Patches.Renderer
                     {
                         rectangle.X += rectangle.Width * animationModel.Frame;
                     }
-                    appearanceTypeToSourceRectangles[appearancePackType] = rectangle;
+                    appearanceTypeToSourceRectangles[appearanceModel] = rectangle;
 
                     return;
                 }
@@ -900,14 +900,14 @@ namespace FashionSense.Framework.Patches.Renderer
 
                 foreach (var model in activeModels.Where(m => m is not null))
                 {
-                    if (model.AppearanceSyncing.FirstOrDefault(a => a.AnimationType == animationType && a.TargetAppearanceType == appearancePackType) is not null)
+                    if (model.AppearanceSyncing.FirstOrDefault(a => a.AnimationType == animationType && a.TargetAppearanceType == appearanceModel.GetPackType()) is not null)
                     {
                         HandleAppearanceAnimation(activeModels, model, who, facingDirection, ref appearanceTypeToSourceRectangles, forceUpdate: true);
                     }
                 }
             }
 
-            var sourceRect = appearanceTypeToSourceRectangles[appearancePackType];
+            var sourceRect = appearanceTypeToSourceRectangles[appearanceModel];
             var sourceOffset = (animationModel.Frame * sourceRect.Width) - sourceRect.Width;
             if (modelPack is not null && sourceOffset >= modelPack.Texture.Width)
             {
@@ -918,7 +918,7 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 sourceRect.X += sourceRect.Width * animationModel.Frame;
             }
-            appearanceTypeToSourceRectangles[appearancePackType] = sourceRect;
+            appearanceTypeToSourceRectangles[appearanceModel] = sourceRect;
         }
 
         private static int GetNextValidFrame(List<AnimationModel> animations, Farmer who, AppearanceModel appearanceModel, int iterator, int startingIndex)
@@ -1425,6 +1425,11 @@ namespace FashionSense.Framework.Patches.Renderer
             return new Color[] { firstSleeveColor, secondSleeveColor, thirdSleeveColor };
         }
 
+        private static Rectangle GetSourceRectangle(AppearanceModel model, Dictionary<AppearanceModel, Rectangle> appearanceTypeToSourceRectangles)
+        {
+            return appearanceTypeToSourceRectangles[model];
+        }
+
         private static void DrawSleeveColorMaskVanilla(SpriteBatch b, SleevesContentPack sleevesPack, SleevesModel sleevesModel, Farmer who, FarmerRenderer renderer, Vector2 position, Rectangle sourceRect, Color color, float rotation, Vector2 origin, float scale, float layerDepth)
         {
             if (sleevesPack.ShirtToneTexture is null || AreColorMasksPendingRefresh)
@@ -1529,9 +1534,8 @@ namespace FashionSense.Framework.Patches.Renderer
             b.Draw(appearancePack.SkinMaskTexture, position, sourceRect, appearanceModel.DisableSkinGrayscale ? Color.White : color, rotation, origin, scale, appearanceModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
         }
 
-        private static void DrawCustomAccessory(AccessoryContentPack accessoryPack, AccessoryModel accessoryModel, Rectangle customAccessorySourceRect, string colorModDataKey, SkinToneModel skinTone, FarmerRenderer renderer, bool isDrawingForUI, SpriteBatch b, Farmer who, int facingDirection, Vector2 position, Vector2 origin, Vector2 positionOffset, Vector2 rotationAdjustment, float scale, int currentFrame, float rotation, float layerDepth)
+        private static void DrawCustomAccessory(AccessoryContentPack accessoryPack, AccessoryModel accessoryModel, Rectangle customAccessorySourceRect, Color accessoryColor, SkinToneModel skinTone, FarmerRenderer renderer, bool isDrawingForUI, SpriteBatch b, Farmer who, int facingDirection, Vector2 position, Vector2 origin, Vector2 positionOffset, Vector2 rotationAdjustment, float scale, int currentFrame, float rotation, float layerDepth)
         {
-            var accessoryColor = new Color() { PackedValue = who.modData.ContainsKey(colorModDataKey) ? uint.Parse(who.modData[colorModDataKey]) : who.hairstyleColor.Value.PackedValue };
             if (accessoryModel.DisableGrayscale)
             {
                 accessoryColor = Color.White;
@@ -1601,47 +1605,31 @@ namespace FashionSense.Framework.Patches.Renderer
                 models.Add(hairModel);
             }
 
-            // Accessory pack
-            AccessoryContentPack accessoryPack = null;
-            AccessoryModel accessoryModel = null;
-            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(who.modData[ModDataKeys.CUSTOM_ACCESSORY_ID]) is AccessoryContentPack aPack && aPack != null)
+            // Accessory packs
+            Dictionary<AccessoryContentPack, AccessoryModel> accessoriesData = new Dictionary<AccessoryContentPack, AccessoryModel>();
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_ID))
             {
-                accessoryPack = aPack;
-                accessoryModel = aPack.GetAccessoryFromFacingDirection(facingDirection);
-
-                if (accessoryModel != null)
+                try
                 {
-                    accessoryModel.Priority = AccessoryModel.Type.Primary;
+                    foreach (var accessoryData in FashionSense.accessoryManager.GetAccessoryData())
+                    {
+                        if (FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(accessoryData.Id) is AccessoryContentPack aPack && aPack != null)
+                        {
+                            AccessoryModel accessoryModel = aPack.GetAccessoryFromFacingDirection(facingDirection);
+                            if (accessoryModel is null)
+                            {
+                                continue;
+                            }
+
+                            models.Add(accessoryModel);
+                            accessoriesData[aPack] = accessoryModel;
+                        }
+                    }
                 }
-                models.Add(accessoryModel);
-            }
-
-            AccessoryContentPack secondaryAccessoryPack = null;
-            AccessoryModel secondaryAccessoryModel = null;
-            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(who.modData[ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID]) is AccessoryContentPack secAPack && secAPack != null)
-            {
-                secondaryAccessoryPack = secAPack;
-                secondaryAccessoryModel = secAPack.GetAccessoryFromFacingDirection(facingDirection);
-
-                if (secondaryAccessoryModel != null)
+                catch (Exception)
                 {
-                    secondaryAccessoryModel.Priority = AccessoryModel.Type.Secondary;
+                    // Do nothing
                 }
-                models.Add(secondaryAccessoryModel);
-            }
-
-            AccessoryContentPack tertiaryAccessoryPack = null;
-            AccessoryModel tertiaryAccessoryModel = null;
-            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(who.modData[ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID]) is AccessoryContentPack triAPack && triAPack != null)
-            {
-                tertiaryAccessoryPack = triAPack;
-                tertiaryAccessoryModel = triAPack.GetAccessoryFromFacingDirection(facingDirection);
-
-                if (tertiaryAccessoryModel != null)
-                {
-                    tertiaryAccessoryModel.Priority = AccessoryModel.Type.Tertiary;
-                }
-                models.Add(tertiaryAccessoryModel);
             }
 
             // Hat pack
@@ -1693,7 +1681,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             // Check if all the models are null, if so revert back to vanilla logic
-            if (pantsModel is null && hairModel is null && accessoryModel is null && secondaryAccessoryModel is null && tertiaryAccessoryModel is null && hatModel is null && shirtModel is null && sleevesModel is null && shoesModel is null)
+            if (pantsModel is null && hairModel is null && accessoriesData.Count == 0 && hatModel is null && shirtModel is null && sleevesModel is null && shoesModel is null)
             {
                 return true;
             }
@@ -1702,18 +1690,11 @@ namespace FashionSense.Framework.Patches.Renderer
             var skinTone = DrawPatch.GetSkinTone(___farmerTextureManager, ___baseTexture, null, ___skin, ____sickFrame);
 
             // Set up source rectangles
-            Dictionary<AppearanceContentPack.Type, Rectangle> appearanceTypeToSourceRectangles = new Dictionary<AppearanceContentPack.Type, Rectangle>()
+            Dictionary<AppearanceModel, Rectangle> appearanceTypeToSourceRectangles = new Dictionary<AppearanceModel, Rectangle>();
+            foreach (var model in models)
             {
-                { AppearanceContentPack.Type.Pants, new Rectangle() },
-                { AppearanceContentPack.Type.Hair, new Rectangle() },
-                { AppearanceContentPack.Type.Accessory, new Rectangle() },
-                { AppearanceContentPack.Type.AccessorySecondary, new Rectangle() },
-                { AppearanceContentPack.Type.AccessoryTertiary, new Rectangle() },
-                { AppearanceContentPack.Type.Hat, new Rectangle() },
-                { AppearanceContentPack.Type.Shirt, new Rectangle() },
-                { AppearanceContentPack.Type.Sleeves, new Rectangle() },
-                { AppearanceContentPack.Type.Shoes, new Rectangle() }
-            };
+                appearanceTypeToSourceRectangles[model] = new Rectangle();
+            }
 
             // Handle any animations
             if (pantsModel != null)
@@ -1724,17 +1705,9 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 HandleAppearanceAnimation(models, hairModel, who, facingDirection, ref appearanceTypeToSourceRectangles);
             }
-            if (accessoryModel != null)
+            foreach (var accessoryModel in accessoriesData.Values)
             {
                 HandleAppearanceAnimation(models, accessoryModel, who, facingDirection, ref appearanceTypeToSourceRectangles);
-            }
-            if (secondaryAccessoryModel != null)
-            {
-                HandleAppearanceAnimation(models, secondaryAccessoryModel, who, facingDirection, ref appearanceTypeToSourceRectangles);
-            }
-            if (tertiaryAccessoryModel != null)
-            {
-                HandleAppearanceAnimation(models, tertiaryAccessoryModel, who, facingDirection, ref appearanceTypeToSourceRectangles);
             }
             if (hatModel != null)
             {
@@ -1752,17 +1725,6 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 HandleAppearanceAnimation(models, shoesModel, who, facingDirection, ref appearanceTypeToSourceRectangles);
             }
-
-            // Set the source rectangles
-            Rectangle customPantsSourceRect = appearanceTypeToSourceRectangles[AppearanceContentPack.Type.Pants];
-            Rectangle customHairSourceRect = appearanceTypeToSourceRectangles[AppearanceContentPack.Type.Hair];
-            Rectangle customAccessorySourceRect = appearanceTypeToSourceRectangles[AppearanceContentPack.Type.Accessory];
-            Rectangle customSecondaryAccessorySourceRect = appearanceTypeToSourceRectangles[AppearanceContentPack.Type.AccessorySecondary];
-            Rectangle customTertiaryAccessorySourceRect = appearanceTypeToSourceRectangles[AppearanceContentPack.Type.AccessoryTertiary];
-            Rectangle customHatSourceRect = appearanceTypeToSourceRectangles[AppearanceContentPack.Type.Hat];
-            Rectangle customShirtSourceRect = appearanceTypeToSourceRectangles[AppearanceContentPack.Type.Shirt];
-            Rectangle customSleevesSourceRect = appearanceTypeToSourceRectangles[AppearanceContentPack.Type.Sleeves];
-            Rectangle customShoesSourceRect = appearanceTypeToSourceRectangles[AppearanceContentPack.Type.Shoes];
 
             // Check if the cached facing direction needs to be updated
             if (who.modData.ContainsKey(ModDataKeys.ANIMATION_FACING_DIRECTION) is false || who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] != facingDirection.ToString())
@@ -1817,15 +1779,15 @@ namespace FashionSense.Framework.Patches.Renderer
                 var featureOffset = GetFeatureOffset(facingDirection, currentFrame, scale, __instance, pantsModel, false);
                 featureOffset.Y -= who.isMale ? 4 : 0;
 
-                b.Draw(pantsPack.Texture, GetScaledPosition(position, pantsModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, customPantsSourceRect, pantsModel.HasColorMask() ? Color.White : pantsColor, rotation, origin + new Vector2(pantsModel.BodyPosition.X, pantsModel.BodyPosition.Y), pantsModel.Scale * scale, pantsModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + 0.01E-05f);
+                b.Draw(pantsPack.Texture, GetScaledPosition(position, pantsModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, GetSourceRectangle(pantsModel, appearanceTypeToSourceRectangles), pantsModel.HasColorMask() ? Color.White : pantsColor, rotation, origin + new Vector2(pantsModel.BodyPosition.X, pantsModel.BodyPosition.Y), pantsModel.Scale * scale, pantsModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + 0.01E-05f);
 
                 if (pantsModel.HasColorMask())
                 {
-                    DrawColorMask(b, pantsPack, pantsModel, GetScaledPosition(position, pantsModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, customPantsSourceRect, pantsColor, rotation, origin + new Vector2(pantsModel.BodyPosition.X, pantsModel.BodyPosition.Y), pantsModel.Scale * scale, layerDepth + 0.02E-05f);
+                    DrawColorMask(b, pantsPack, pantsModel, GetScaledPosition(position, pantsModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, GetSourceRectangle(pantsModel, appearanceTypeToSourceRectangles), pantsColor, rotation, origin + new Vector2(pantsModel.BodyPosition.X, pantsModel.BodyPosition.Y), pantsModel.Scale * scale, layerDepth + 0.02E-05f);
                 }
                 if (pantsModel.HasSkinToneMask())
                 {
-                    DrawSkinToneMask(b, pantsPack, pantsModel, skinTone, GetScaledPosition(position, pantsModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, customPantsSourceRect, pantsColor, rotation, origin + new Vector2(pantsModel.BodyPosition.X, pantsModel.BodyPosition.Y), pantsModel.Scale * scale, layerDepth + 0.02E-05f);
+                    DrawSkinToneMask(b, pantsPack, pantsModel, skinTone, GetScaledPosition(position, pantsModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, GetSourceRectangle(pantsModel, appearanceTypeToSourceRectangles), pantsColor, rotation, origin + new Vector2(pantsModel.BodyPosition.X, pantsModel.BodyPosition.Y), pantsModel.Scale * scale, layerDepth + 0.02E-05f);
                 }
             }
             layerDepth += 0.03E-05f;
@@ -1857,15 +1819,15 @@ namespace FashionSense.Framework.Patches.Renderer
                 var featureOffset = GetFeatureOffset(facingDirection, currentFrame, scale, __instance, shoesModel, false);
                 featureOffset.Y -= who.isMale ? 4 : 0;
 
-                b.Draw(shoesPack.Texture, GetScaledPosition(position, shoesModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, customShoesSourceRect, shoesModel.HasColorMask() ? Color.White : shoesColor, rotation, origin + new Vector2(shoesModel.BodyPosition.X, shoesModel.BodyPosition.Y), shoesModel.Scale * scale, shoesModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, shoesLayer + 0.01E-05f);
+                b.Draw(shoesPack.Texture, GetScaledPosition(position, shoesModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, GetSourceRectangle(shoesModel, appearanceTypeToSourceRectangles), shoesModel.HasColorMask() ? Color.White : shoesColor, rotation, origin + new Vector2(shoesModel.BodyPosition.X, shoesModel.BodyPosition.Y), shoesModel.Scale * scale, shoesModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, shoesLayer + 0.01E-05f);
 
                 if (shoesModel.HasColorMask())
                 {
-                    DrawColorMask(b, shoesPack, shoesModel, GetScaledPosition(position, shoesModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, customShoesSourceRect, shoesColor, rotation, origin + new Vector2(shoesModel.BodyPosition.X, shoesModel.BodyPosition.Y), shoesModel.Scale * scale, shoesLayer + 0.02E-05f);
+                    DrawColorMask(b, shoesPack, shoesModel, GetScaledPosition(position, shoesModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, GetSourceRectangle(shoesModel, appearanceTypeToSourceRectangles), shoesColor, rotation, origin + new Vector2(shoesModel.BodyPosition.X, shoesModel.BodyPosition.Y), shoesModel.Scale * scale, shoesLayer + 0.02E-05f);
                 }
                 if (shoesModel.HasSkinToneMask())
                 {
-                    DrawSkinToneMask(b, shoesPack, shoesModel, skinTone, GetScaledPosition(position, shoesModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, customShoesSourceRect, shoesColor, rotation, origin + new Vector2(shoesModel.BodyPosition.X, shoesModel.BodyPosition.Y), shoesModel.Scale * scale, shoesLayer + 0.02E-05f);
+                    DrawSkinToneMask(b, shoesPack, shoesModel, skinTone, GetScaledPosition(position, shoesModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, GetSourceRectangle(shoesModel, appearanceTypeToSourceRectangles), shoesColor, rotation, origin + new Vector2(shoesModel.BodyPosition.X, shoesModel.BodyPosition.Y), shoesModel.Scale * scale, shoesLayer + 0.02E-05f);
                 }
             }
             layerDepth += 0.03E-05f;
@@ -1889,17 +1851,17 @@ namespace FashionSense.Framework.Patches.Renderer
                 shirtLayer = layerDepth + 0.01E-05f;
 
                 var featureOffset = GetFeatureOffset(facingDirection, currentFrame, scale, __instance, shirtModel, false);
-                b.Draw(shirtPack.Texture, GetScaledPosition(position, shirtModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, customShirtSourceRect, shirtModel.HasColorMask() ? Color.White : shirtColor, rotation, origin + new Vector2(shirtModel.BodyPosition.X, shirtModel.BodyPosition.Y), shirtModel.Scale * scale, shirtModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, shirtLayer);
+                b.Draw(shirtPack.Texture, GetScaledPosition(position, shirtModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, GetSourceRectangle(shirtModel, appearanceTypeToSourceRectangles), shirtModel.HasColorMask() ? Color.White : shirtColor, rotation, origin + new Vector2(shirtModel.BodyPosition.X, shirtModel.BodyPosition.Y), shirtModel.Scale * scale, shirtModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, shirtLayer);
 
                 if (shirtModel.HasColorMask())
                 {
                     shirtLayer += 0.01E-05f;
-                    DrawColorMask(b, shirtPack, shirtModel, GetScaledPosition(position, shirtModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, customShirtSourceRect, shirtColor, rotation, origin + new Vector2(shirtModel.BodyPosition.X, shirtModel.BodyPosition.Y), shirtModel.Scale * scale, shirtLayer);
+                    DrawColorMask(b, shirtPack, shirtModel, GetScaledPosition(position, shirtModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, GetSourceRectangle(shirtModel, appearanceTypeToSourceRectangles), shirtColor, rotation, origin + new Vector2(shirtModel.BodyPosition.X, shirtModel.BodyPosition.Y), shirtModel.Scale * scale, shirtLayer);
                 }
                 if (shirtModel.HasSkinToneMask())
                 {
                     shirtLayer += 0.01E-05f;
-                    DrawSkinToneMask(b, shirtPack, shirtModel, skinTone, GetScaledPosition(position, shirtModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, customShirtSourceRect, shirtColor, rotation, origin + new Vector2(shirtModel.BodyPosition.X, shirtModel.BodyPosition.Y), shirtModel.Scale * scale, shirtLayer);
+                    DrawSkinToneMask(b, shirtPack, shirtModel, skinTone, GetScaledPosition(position, shirtModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, GetSourceRectangle(shirtModel, appearanceTypeToSourceRectangles), shirtColor, rotation, origin + new Vector2(shirtModel.BodyPosition.X, shirtModel.BodyPosition.Y), shirtModel.Scale * scale, shirtLayer);
                 }
 
                 layerDepth = shirtLayer;
@@ -1907,24 +1869,26 @@ namespace FashionSense.Framework.Patches.Renderer
             layerDepth += 0.02E-05f;
 
             // Draw accessory
-            if (accessoryModel is null && secondaryAccessoryModel is null && tertiaryAccessoryModel is null)
+            if (accessoriesData.Count == 0)
             {
                 DrawAccessoryVanilla(b, ___accessorySourceRect, __instance, who, currentFrame, rotation, scale, layerDepth, position, origin, ___positionOffset, ___rotationAdjustment, overrideColor);
             }
             else
             {
                 var accessoryLayer = who.FacingDirection == 2 ? layerDepth - 1E-5f : layerDepth;
-                if (accessoryModel != null && !(accessoryModel.HideWhileSwimming && who.swimming.Value) && !(accessoryModel.HideWhileWearingBathingSuit && who.bathingClothes.Value))
+
+                int index = 0;
+                foreach (var pair in accessoriesData)
                 {
-                    DrawCustomAccessory(accessoryPack, accessoryModel, customAccessorySourceRect, ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR, skinTone, __instance, ___isDrawingForUI, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, accessoryLayer);
-                }
-                if (secondaryAccessoryModel != null && !(secondaryAccessoryModel.HideWhileSwimming && who.swimming.Value) && !(secondaryAccessoryModel.HideWhileWearingBathingSuit && who.bathingClothes.Value))
-                {
-                    DrawCustomAccessory(secondaryAccessoryPack, secondaryAccessoryModel, customSecondaryAccessorySourceRect, ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR, skinTone, __instance, ___isDrawingForUI, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, accessoryLayer + 0.01E-05f);
-                }
-                if (tertiaryAccessoryModel != null && !(tertiaryAccessoryModel.HideWhileSwimming && who.swimming.Value) && !(tertiaryAccessoryModel.HideWhileWearingBathingSuit && who.bathingClothes.Value))
-                {
-                    DrawCustomAccessory(tertiaryAccessoryPack, tertiaryAccessoryModel, customTertiaryAccessorySourceRect, ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR, skinTone, __instance, ___isDrawingForUI, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, accessoryLayer + 0.03E-05f);
+                    var accessoryPack = pair.Key;
+                    var accessoryModel = pair.Value;
+
+                    if (!(accessoryModel.HideWhileSwimming && who.swimming.Value) && !(accessoryModel.HideWhileWearingBathingSuit && who.bathingClothes.Value))
+                    {
+                        DrawCustomAccessory(accessoryPack, accessoryModel, GetSourceRectangle(accessoryModel, appearanceTypeToSourceRectangles), FashionSense.accessoryManager.GetAccessoryDataByIndex(index).Color, skinTone, __instance, ___isDrawingForUI, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, accessoryLayer);
+                    }
+
+                    index++;
                 }
             }
             layerDepth += 0.02E-05f;
@@ -1957,17 +1921,17 @@ namespace FashionSense.Framework.Patches.Renderer
                     featureOffset.Y -= who.isMale ? 4 : 0;
 
                     // Draw the hair
-                    b.Draw(hairPack.Texture, GetScaledPosition(position, hairModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, customHairSourceRect, hairModel.HasColorMask() ? Color.White : hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), hairModel.Scale * scale, hairModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, hairLayer);
+                    b.Draw(hairPack.Texture, GetScaledPosition(position, hairModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, GetSourceRectangle(hairModel, appearanceTypeToSourceRectangles), hairModel.HasColorMask() ? Color.White : hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), hairModel.Scale * scale, hairModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, hairLayer);
 
                     if (hairModel.HasColorMask())
                     {
                         hairLayer += 2.2E-05f + 0.01E-05f;
-                        DrawColorMask(b, hairPack, hairModel, GetScaledPosition(position, hairModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, customHairSourceRect, hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), hairModel.Scale * scale, hairLayer);
+                        DrawColorMask(b, hairPack, hairModel, GetScaledPosition(position, hairModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, GetSourceRectangle(hairModel, appearanceTypeToSourceRectangles), hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), hairModel.Scale * scale, hairLayer);
                     }
                     if (hairModel.HasSkinToneMask())
                     {
                         hairLayer += 2.2E-05f + 0.01E-05f;
-                        DrawSkinToneMask(b, hairPack, hairModel, skinTone, GetScaledPosition(position, hairModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, customHairSourceRect, hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), hairModel.Scale * scale, hairLayer);
+                        DrawSkinToneMask(b, hairPack, hairModel, skinTone, GetScaledPosition(position, hairModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, GetSourceRectangle(hairModel, appearanceTypeToSourceRectangles), hairColor, rotation, origin + new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), hairModel.Scale * scale, hairLayer);
                     }
 
                     layerDepth = hairLayer;
@@ -1976,7 +1940,7 @@ namespace FashionSense.Framework.Patches.Renderer
             layerDepth += 0.01E-05f;
 
             // Draw the sleeves
-            if (sleevesModel is null || (sleevesModel.HideWhileWearingBathingSuit && who.bathingClothes.Value) || (sleevesModel.HideWhileSwimming && who.swimming.Value) || AreSleevesForcedHidden(pantsModel, hairModel, accessoryModel, secondaryAccessoryModel, tertiaryAccessoryModel, hatModel, shirtModel))
+            if (sleevesModel is null || (sleevesModel.HideWhileWearingBathingSuit && who.bathingClothes.Value) || (sleevesModel.HideWhileSwimming && who.swimming.Value) || AreSleevesForcedHidden(pantsModel, hairModel, hatModel, shirtModel) || AreSleevesForcedHidden(accessoriesData.Values.ToArray()))
             {
                 // Handled in DrawPatch.HandleCustomDraw
             }
@@ -2006,29 +1970,29 @@ namespace FashionSense.Framework.Patches.Renderer
                 var featureOffset = GetFeatureOffset(facingDirection, currentFrame, scale, __instance, sleevesModel, false);
                 featureOffset.Y -= who.isMale ? 4 : 0;
 
-                b.Draw(sleevesPack.Texture, GetScaledPosition(position, sleevesModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, customSleevesSourceRect, sleevesModel.HasColorMask() ? Color.White : sleevesColor, rotation, origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), sleevesModel.Scale * scale, sleevesModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, sleevesLayer);
+                b.Draw(sleevesPack.Texture, GetScaledPosition(position, sleevesModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, GetSourceRectangle(sleevesModel, appearanceTypeToSourceRectangles), sleevesModel.HasColorMask() ? Color.White : sleevesColor, rotation, origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), sleevesModel.Scale * scale, sleevesModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, sleevesLayer);
 
                 if (sleevesModel.HasColorMask())
                 {
                     sleevesLayer += 0.01E-05f;
-                    DrawColorMask(b, sleevesPack, sleevesModel, GetScaledPosition(position, sleevesModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, customSleevesSourceRect, sleevesColor, rotation, origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), sleevesModel.Scale * scale, sleevesLayer);
+                    DrawColorMask(b, sleevesPack, sleevesModel, GetScaledPosition(position, sleevesModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, GetSourceRectangle(sleevesModel, appearanceTypeToSourceRectangles), sleevesColor, rotation, origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), sleevesModel.Scale * scale, sleevesLayer);
                 }
                 if ((sleevesModel.HasColorMask() || sleevesModel.HasShirtToneMask()) && sleevesModel.UseShirtColors)
                 {
                     sleevesLayer += 0.01E-05f;
                     if (shirtModel is not null && shirtModel.SleeveColors is not null)
                     {
-                        DrawSleeveColorMask(b, sleevesPack, sleevesModel, shirtModel, GetScaledPosition(position, sleevesModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, customSleevesSourceRect, sleevesColor, rotation, origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), sleevesModel.Scale * scale, sleevesLayer);
+                        DrawSleeveColorMask(b, sleevesPack, sleevesModel, shirtModel, GetScaledPosition(position, sleevesModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, GetSourceRectangle(sleevesModel, appearanceTypeToSourceRectangles), sleevesColor, rotation, origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), sleevesModel.Scale * scale, sleevesLayer);
                     }
                     else
                     {
-                        DrawSleeveColorMaskVanilla(b, sleevesPack, sleevesModel, who, __instance, GetScaledPosition(position, sleevesModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, customSleevesSourceRect, sleevesColor, rotation, origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), sleevesModel.Scale * scale, sleevesLayer);
+                        DrawSleeveColorMaskVanilla(b, sleevesPack, sleevesModel, who, __instance, GetScaledPosition(position, sleevesModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, GetSourceRectangle(sleevesModel, appearanceTypeToSourceRectangles), sleevesColor, rotation, origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), sleevesModel.Scale * scale, sleevesLayer);
                     }
                 }
                 if (sleevesModel.HasSkinToneMask())
                 {
                     sleevesLayer += 0.01E-05f;
-                    DrawSkinToneMask(b, sleevesPack, sleevesModel, skinTone, GetScaledPosition(position, sleevesModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, customSleevesSourceRect, sleevesColor, rotation, origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), sleevesModel.Scale * scale, sleevesLayer);
+                    DrawSkinToneMask(b, sleevesPack, sleevesModel, skinTone, GetScaledPosition(position, sleevesModel, ___isDrawingForUI) + origin + ___positionOffset + featureOffset, GetSourceRectangle(sleevesModel, appearanceTypeToSourceRectangles), sleevesColor, rotation, origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), sleevesModel.Scale * scale, sleevesLayer);
                 }
             }
             layerDepth += 0.01E-05f;
@@ -2052,15 +2016,15 @@ namespace FashionSense.Framework.Patches.Renderer
 
                 bool flip = who.FarmerSprite.CurrentAnimationFrame.flip;
                 float layerOffset = 3.88E-05f;
-                b.Draw(hatPack.Texture, GetScaledPosition(position, hatModel, ___isDrawingForUI) + origin + ___positionOffset + GetFeatureOffset(facingDirection, currentFrame, scale, __instance, hatModel, flip), customHatSourceRect, hatModel.HasColorMask() ? Color.White : hatColor, rotation, origin + new Vector2(hatModel.HeadPosition.X, hatModel.HeadPosition.Y), hatModel.Scale * scale, hatModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + layerOffset);
+                b.Draw(hatPack.Texture, GetScaledPosition(position, hatModel, ___isDrawingForUI) + origin + ___positionOffset + GetFeatureOffset(facingDirection, currentFrame, scale, __instance, hatModel, flip), GetSourceRectangle(hatModel, appearanceTypeToSourceRectangles), hatModel.HasColorMask() ? Color.White : hatColor, rotation, origin + new Vector2(hatModel.HeadPosition.X, hatModel.HeadPosition.Y), hatModel.Scale * scale, hatModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + layerOffset);
 
                 if (hatModel.HasColorMask())
                 {
-                    DrawColorMask(b, hatPack, hatModel, GetScaledPosition(position, hatModel, ___isDrawingForUI) + origin + ___positionOffset + GetFeatureOffset(facingDirection, currentFrame, scale, __instance, hatModel, flip), customHatSourceRect, hatColor, rotation, origin + new Vector2(hatModel.HeadPosition.X, hatModel.HeadPosition.Y), hatModel.Scale * scale, layerDepth + layerOffset + 0.01E-05f);
+                    DrawColorMask(b, hatPack, hatModel, GetScaledPosition(position, hatModel, ___isDrawingForUI) + origin + ___positionOffset + GetFeatureOffset(facingDirection, currentFrame, scale, __instance, hatModel, flip), GetSourceRectangle(hatModel, appearanceTypeToSourceRectangles), hatColor, rotation, origin + new Vector2(hatModel.HeadPosition.X, hatModel.HeadPosition.Y), hatModel.Scale * scale, layerDepth + layerOffset + 0.01E-05f);
                 }
                 if (hatModel.HasSkinToneMask())
                 {
-                    DrawSkinToneMask(b, hatPack, hatModel, skinTone, GetScaledPosition(position, hatModel, ___isDrawingForUI) + origin + ___positionOffset + GetFeatureOffset(facingDirection, currentFrame, scale, __instance, hatModel, flip), customHatSourceRect, hatColor, rotation, origin + new Vector2(hatModel.HeadPosition.X, hatModel.HeadPosition.Y), hatModel.Scale * scale, layerDepth + layerOffset + 0.01E-05f);
+                    DrawSkinToneMask(b, hatPack, hatModel, skinTone, GetScaledPosition(position, hatModel, ___isDrawingForUI) + origin + ___positionOffset + GetFeatureOffset(facingDirection, currentFrame, scale, __instance, hatModel, flip), GetSourceRectangle(hatModel, appearanceTypeToSourceRectangles), hatColor, rotation, origin + new Vector2(hatModel.HeadPosition.X, hatModel.HeadPosition.Y), hatModel.Scale * scale, layerDepth + layerOffset + 0.01E-05f);
                 }
             }
 
