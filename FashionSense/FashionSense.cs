@@ -156,17 +156,14 @@ namespace FashionSense
             {
                 e.OldLocation.sharedLights.Remove(hair_id);
             }
-            if (e.Player.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_LIGHT_ID) && Int32.TryParse(e.Player.modData[ModDataKeys.ANIMATION_ACCESSORY_LIGHT_ID], out int acc_id))
+            int accessoryIndex = 0;
+            foreach (var accessory in accessoryManager.GetAccessoryData())
             {
-                e.OldLocation.sharedLights.Remove(acc_id);
-            }
-            if (e.Player.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_LIGHT_ID) && Int32.TryParse(e.Player.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_LIGHT_ID], out int acc_sec_id))
-            {
-                e.OldLocation.sharedLights.Remove(acc_sec_id);
-            }
-            if (e.Player.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_LIGHT_ID) && Int32.TryParse(e.Player.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_LIGHT_ID], out int acc_ter_id))
-            {
-                e.OldLocation.sharedLights.Remove(acc_ter_id);
+                if (Int32.TryParse(accessoryManager.GetModData(accessoryIndex, AccessoryManager.AnimationKey.LightId), out int accessoryLightId))
+                {
+                    e.OldLocation.sharedLights.Remove(accessoryLightId);
+                }
+                accessoryIndex++;
             }
             if (e.Player.modData.ContainsKey(ModDataKeys.ANIMATION_HAT_LIGHT_ID) && Int32.TryParse(e.Player.modData[ModDataKeys.ANIMATION_HAT_LIGHT_ID], out int hat_id))
             {
@@ -244,6 +241,7 @@ namespace FashionSense
             EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID);
+            EnsureKeyExists(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR);
             EnsureKeyExists(ModDataKeys.CUSTOM_HAT_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_SHIRT_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_PANTS_ID);
@@ -252,7 +250,7 @@ namespace FashionSense
 
             // Handle the old CUSTOM_ACCESSORY_ID format
             accessoryManager.HandleOldAccessoryFormat(Game1.player);
-            accessoryManager.SetAccessories(Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID]);
+            accessoryManager.SetAccessories(Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID], Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR]);
 
             // Set sprite to dirty in order to refresh sleeves and other tied-in appearances
             SetSpriteDirty();
@@ -279,9 +277,14 @@ namespace FashionSense
         private void UpdateElapsedDuration(Farmer who)
         {
             UpdateElapsedDuration(who, ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION);
-            UpdateElapsedDuration(who, ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION);
-            UpdateElapsedDuration(who, ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ELAPSED_DURATION);
-            UpdateElapsedDuration(who, ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION);
+
+            int accessoryIndex = 0;
+            foreach (var accessory in accessoryManager.GetAccessoryData())
+            {
+                UpdateElapsedDuration(who, accessoryManager.GetModDataKey(AccessoryManager.AnimationKey.ElapsedDuration, accessoryIndex));
+                accessoryIndex++;
+            }
+
             UpdateElapsedDuration(who, ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION);
             UpdateElapsedDuration(who, ModDataKeys.ANIMATION_SHIRT_ELAPSED_DURATION);
             UpdateElapsedDuration(who, ModDataKeys.ANIMATION_PANTS_ELAPSED_DURATION);
@@ -1246,29 +1249,17 @@ namespace FashionSense
                 who.modData[ModDataKeys.ANIMATION_HAIR_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
             }
 
-            if (model is null || (model is AccessoryModel accessoryModel && accessoryModel.Priority == AccessoryModel.Type.Primary))
+            if (model is AccessoryModel accessoryModel && accessoryModel is not null)
             {
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_ITERATOR] = "0";
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_STARTING_INDEX] = "0";
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_FRAME_DURATION] = duration.ToString();
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION] = "0";
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
+                var accessoryIndex = accessoryManager.GetAccessoryIndexById(accessoryModel.Pack.Id);
+                if (accessoryIndex != -1)
+                {
+                    accessoryManager.ResetAccessory(accessoryIndex, who, duration, animationType, ignoreAnimationType);
+                }
             }
-            if (model is null || (model is AccessoryModel secondaryAccessoryModel && secondaryAccessoryModel.Priority == AccessoryModel.Type.Secondary))
+            else if (model is null)
             {
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ITERATOR] = "0";
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_STARTING_INDEX] = "0";
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_FRAME_DURATION] = duration.ToString();
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ELAPSED_DURATION] = "0";
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
-            }
-            if (model is null || (model is AccessoryModel tertiaryAccessoryModel && tertiaryAccessoryModel.Priority == AccessoryModel.Type.Tertiary))
-            {
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ITERATOR] = "0";
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_STARTING_INDEX] = "0";
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_FRAME_DURATION] = duration.ToString();
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION] = "0";
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
+                accessoryManager.ResetAllAccessories();
             }
 
             if (model is null || model is HatModel)
@@ -1324,9 +1315,6 @@ namespace FashionSense
             if (!ignoreAnimationType)
             {
                 who.modData[ModDataKeys.ANIMATION_HAIR_TYPE] = animationType.ToString();
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_TYPE] = animationType.ToString();
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_TYPE] = animationType.ToString();
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_TYPE] = animationType.ToString();
                 who.modData[ModDataKeys.ANIMATION_HAT_TYPE] = animationType.ToString();
                 who.modData[ModDataKeys.ANIMATION_SHIRT_TYPE] = animationType.ToString();
                 who.modData[ModDataKeys.ANIMATION_PANTS_TYPE] = animationType.ToString();

@@ -3,13 +3,13 @@ using FashionSense.Framework.Models.Hair;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 using StardewModdingAPI;
 using StardewValley;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace FashionSense.Framework.Managers
@@ -35,7 +35,7 @@ namespace FashionSense.Framework.Managers
             outfits.Add(outfit);
 
             // Serialize the changes
-            who.modData[ModDataKeys.OUTFITS] = JsonSerializer.Serialize(outfits);
+            who.modData[ModDataKeys.OUTFITS] = JsonConvert.SerializeObject(outfits);
 
             return outfit;
         }
@@ -52,7 +52,7 @@ namespace FashionSense.Framework.Managers
             outfits.RemoveAt(outfits.FindIndex(o => o.Name.Equals(name, StringComparison.Ordinal)));
 
             // Serialize the changes
-            who.modData[ModDataKeys.OUTFITS] = JsonSerializer.Serialize(outfits);
+            who.modData[ModDataKeys.OUTFITS] = JsonConvert.SerializeObject(outfits);
         }
 
         public bool DoesOutfitExist(Farmer who, string name)
@@ -70,7 +70,7 @@ namespace FashionSense.Framework.Managers
                 return new List<Outfit>();
             }
 
-            return JsonSerializer.Deserialize<List<Outfit>>(who.modData[ModDataKeys.OUTFITS]);
+            return JsonConvert.DeserializeObject<List<Outfit>>(who.modData[ModDataKeys.OUTFITS]);
         }
 
         public void RenameOutfit(Farmer who, string originalName, string currentName)
@@ -85,7 +85,7 @@ namespace FashionSense.Framework.Managers
             outfits.First(o => o.Name.Equals(originalName, StringComparison.Ordinal)).Name = currentName;
 
             // Serialize the changes
-            who.modData[ModDataKeys.OUTFITS] = JsonSerializer.Serialize(outfits);
+            who.modData[ModDataKeys.OUTFITS] = JsonConvert.SerializeObject(outfits);
         }
 
         public void SetOutfit(Farmer who, Outfit outfit)
@@ -94,6 +94,7 @@ namespace FashionSense.Framework.Managers
             who.modData[ModDataKeys.CUSTOM_ACCESSORY_ID] = String.IsNullOrEmpty(outfit.AccessoryOneId) ? "None" : outfit.AccessoryOneId;
             who.modData[ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID] = String.IsNullOrEmpty(outfit.AccessoryTwoId) ? "None" : outfit.AccessoryTwoId;
             who.modData[ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID] = String.IsNullOrEmpty(outfit.AccessoryThreeId) ? "None" : outfit.AccessoryThreeId;
+            who.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID] = outfit.AccessoryIds is null || outfit.AccessoryIds.Any() is false ? "None" : JsonConvert.SerializeObject(outfit.AccessoryIds);
             who.modData[ModDataKeys.CUSTOM_HAT_ID] = String.IsNullOrEmpty(outfit.HatId) ? "None" : outfit.HatId;
             who.modData[ModDataKeys.CUSTOM_SHIRT_ID] = String.IsNullOrEmpty(outfit.ShirtId) ? "None" : outfit.ShirtId;
             who.modData[ModDataKeys.CUSTOM_SLEEVES_ID] = String.IsNullOrEmpty(outfit.SleevesId) ? "None" : outfit.SleevesId;
@@ -104,11 +105,14 @@ namespace FashionSense.Framework.Managers
             who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR] = outfit.AccessoryOneColor;
             who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR] = outfit.AccessoryTwoColor;
             who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR] = outfit.AccessoryThreeColor;
+            who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR] = outfit.AccessoryColors is null || outfit.AccessoryColors.Any() is false ? null : JsonConvert.SerializeObject(outfit.AccessoryColors);
             who.modData[ModDataKeys.UI_HAND_MIRROR_HAT_COLOR] = outfit.HatColor;
             who.modData[ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR] = outfit.ShirtColor;
             who.modData[ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR] = outfit.SleevesColor;
             who.modData[ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR] = outfit.PantsColor;
             who.modData[ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR] = outfit.ShoesColor;
+
+            FashionSense.accessoryManager.SetAccessories(who.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID], who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR]);
 
             FashionSense.SetSpriteDirty();
 
@@ -137,7 +141,7 @@ namespace FashionSense.Framework.Managers
             outfits[outfits.FindIndex(o => o.Name.Equals(name, StringComparison.Ordinal))] = new Outfit(who, name);
 
             // Serialize the changes
-            who.modData[ModDataKeys.OUTFITS] = JsonSerializer.Serialize(outfits);
+            who.modData[ModDataKeys.OUTFITS] = JsonConvert.SerializeObject(outfits);
         }
     }
 }
