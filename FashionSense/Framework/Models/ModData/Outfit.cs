@@ -21,7 +21,7 @@ namespace FashionSense.Framework.Models
         public string AccessoryOneId { get; set; }
         public string AccessoryTwoId { get; set; }
         public string AccessoryThreeId { get; set; }
-        public List<string> AccessoryIds { get; set; } = new List<string>();
+        public string AccessoryIds { get; set; }
         public string HairId { get; set; }
         public string HatId { get; set; }
         public string ShirtId { get; set; }
@@ -33,7 +33,7 @@ namespace FashionSense.Framework.Models
         public string AccessoryOneColor { get; set; }
         public string AccessoryTwoColor { get; set; }
         public string AccessoryThreeColor { get; set; }
-        public List<string> AccessoryColors { get; set; } = new List<string>();
+        public string AccessoryColors { get; set; }
         public string HairColor { get; set; }
         public string HatColor { get; set; }
         public string ShirtColor { get; set; }
@@ -54,7 +54,7 @@ namespace FashionSense.Framework.Models
             AccessoryOneId = who.modData[ModDataKeys.CUSTOM_ACCESSORY_ID];
             AccessoryTwoId = who.modData[ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID];
             AccessoryThreeId = who.modData[ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID];
-            AccessoryIds = FashionSense.accessoryManager.GetAccessoryData().Select(d => d.Id).ToList();
+            AccessoryIds = who.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID];
             HatId = who.modData[ModDataKeys.CUSTOM_HAT_ID];
             ShirtId = who.modData[ModDataKeys.CUSTOM_SHIRT_ID];
             SleevesId = who.modData[ModDataKeys.CUSTOM_SLEEVES_ID];
@@ -65,7 +65,7 @@ namespace FashionSense.Framework.Models
             AccessoryOneColor = who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR];
             AccessoryTwoColor = who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR];
             AccessoryThreeColor = who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR];
-            AccessoryColors = FashionSense.accessoryManager.GetAccessoryData().Select(d => d.Color.PackedValue.ToString()).ToList();
+            AccessoryColors = who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR];
             HatColor = who.modData[ModDataKeys.UI_HAND_MIRROR_HAT_COLOR];
             ShirtColor = who.modData[ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR];
             SleevesColor = who.modData[ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR];

@@ -191,39 +191,30 @@ namespace FashionSense.Framework.UI
                     var targetPack = filteredTextureOptions[textureIndex];
 
                     string modDataKey = null;
-                    AppearanceModel appearanceModel = null;
                     switch (_appearanceFilter)
                     {
                         case HandMirrorMenu.HAIR_FILTER_BUTTON:
                             modDataKey = ModDataKeys.CUSTOM_HAIR_ID;
-                            appearanceModel = (targetPack as HairContentPack).GetHairFromFacingDirection(fakeFarmers[i].facingDirection);
                             break;
                         case HandMirrorMenu.ACCESSORY_FILTER_BUTTON:
-                            modDataKey = _callbackMenu.GetCurrentAccessorySlotKey();
-                            appearanceModel = (targetPack as AccessoryContentPack).GetAccessoryFromFacingDirection(fakeFarmers[i].facingDirection);
-                            break;
+                            FashionSense.accessoryManager.AddAccessory(fakeFarmers[i], targetPack.Id, FashionSense.accessoryManager.GetActiveAccessoryCount(Game1.player) - 1);
+                            FashionSense.ResetAnimationModDataFields(fakeFarmers[i], 0, AnimationModel.Type.Idle, fakeFarmers[i].facingDirection);
+                            FashionSense.SetSpriteDirty();
+                            continue;
                         case HandMirrorMenu.HAT_FILTER_BUTTON:
                             modDataKey = ModDataKeys.CUSTOM_HAT_ID;
-                            appearanceModel = (targetPack as HatContentPack).GetHatFromFacingDirection(fakeFarmers[i].facingDirection);
                             break;
                         case HandMirrorMenu.SHIRT_FILTER_BUTTON:
                             modDataKey = ModDataKeys.CUSTOM_SHIRT_ID;
-                            appearanceModel = (targetPack as ShirtContentPack).GetShirtFromFacingDirection(fakeFarmers[i].facingDirection);
                             break;
                         case HandMirrorMenu.PANTS_FILTER_BUTTON:
                             modDataKey = ModDataKeys.CUSTOM_PANTS_ID;
-                            appearanceModel = (targetPack as PantsContentPack).GetPantsFromFacingDirection(fakeFarmers[i].facingDirection);
                             break;
                         case HandMirrorMenu.SLEEVES_FILTER_BUTTON:
+                            modDataKey = ModDataKeys.CUSTOM_SLEEVES_ID;
                             if (_callbackMenu.GetCurrentFeatureSlotKey() == ModDataKeys.CUSTOM_SHOES_ID)
                             {
                                 modDataKey = ModDataKeys.CUSTOM_SHOES_ID;
-                                appearanceModel = (targetPack as ShoesContentPack).GetShoesFromFacingDirection(fakeFarmers[i].facingDirection);
-                            }
-                            else
-                            {
-                                modDataKey = ModDataKeys.CUSTOM_SLEEVES_ID;
-                                appearanceModel = (targetPack as SleevesContentPack).GetSleevesFromFacingDirection(fakeFarmers[i].facingDirection);
                             }
                             break;
                     }

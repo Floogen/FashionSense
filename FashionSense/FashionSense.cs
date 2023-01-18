@@ -156,15 +156,15 @@ namespace FashionSense
             {
                 e.OldLocation.sharedLights.Remove(hair_id);
             }
-            int accessoryIndex = 0;
-            foreach (var accessory in accessoryManager.GetAccessoryData())
+
+            foreach (int index in accessoryManager.GetActiveAccessoryIndices(e.Player))
             {
-                if (Int32.TryParse(accessoryManager.GetModData(accessoryIndex, AccessoryManager.AnimationKey.LightId), out int accessoryLightId))
+                if (Int32.TryParse(accessoryManager.GetModData(e.Player, index, AccessoryManager.AnimationKey.LightId), out int accessoryLightId))
                 {
                     e.OldLocation.sharedLights.Remove(accessoryLightId);
                 }
-                accessoryIndex++;
             }
+
             if (e.Player.modData.ContainsKey(ModDataKeys.ANIMATION_HAT_LIGHT_ID) && Int32.TryParse(e.Player.modData[ModDataKeys.ANIMATION_HAT_LIGHT_ID], out int hat_id))
             {
                 e.OldLocation.sharedLights.Remove(hat_id);
@@ -250,7 +250,7 @@ namespace FashionSense
 
             // Handle the old CUSTOM_ACCESSORY_ID format
             accessoryManager.HandleOldAccessoryFormat(Game1.player);
-            accessoryManager.SetAccessories(Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID], Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR]);
+            accessoryManager.SetAccessories(Game1.player, Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID], Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR]);
 
             // Set sprite to dirty in order to refresh sleeves and other tied-in appearances
             SetSpriteDirty();
@@ -278,11 +278,9 @@ namespace FashionSense
         {
             UpdateElapsedDuration(who, ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION);
 
-            int accessoryIndex = 0;
-            foreach (var accessory in accessoryManager.GetAccessoryData())
+            foreach (int index in accessoryManager.GetActiveAccessoryIndices(who))
             {
-                UpdateElapsedDuration(who, accessoryManager.GetModDataKey(AccessoryManager.AnimationKey.ElapsedDuration, accessoryIndex));
-                accessoryIndex++;
+                UpdateElapsedDuration(who, accessoryManager.GetModDataKey(who, AccessoryManager.AnimationKey.ElapsedDuration, index));
             }
 
             UpdateElapsedDuration(who, ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION);
@@ -1251,7 +1249,7 @@ namespace FashionSense
 
             if (model is AccessoryModel accessoryModel && accessoryModel is not null)
             {
-                var accessoryIndex = accessoryManager.GetAccessoryIndexById(accessoryModel.Pack.Id);
+                var accessoryIndex = accessoryManager.GetAccessoryIndexById(who, accessoryModel.Pack.Id);
                 if (accessoryIndex != -1)
                 {
                     accessoryManager.ResetAccessory(accessoryIndex, who, duration, animationType, ignoreAnimationType);
@@ -1259,7 +1257,7 @@ namespace FashionSense
             }
             else if (model is null)
             {
-                accessoryManager.ResetAllAccessories();
+                accessoryManager.ResetAllAccessories(who);
             }
 
             if (model is null || model is HatModel)

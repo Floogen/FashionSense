@@ -333,11 +333,7 @@ namespace FashionSense.Framework.UI
                     colorPicker.SetColor(Game1.player.hairstyleColor);
                     break;
                 case ACCESSORY_FILTER_BUTTON:
-                    var accessoryData = FashionSense.accessoryManager.GetAccessoryDataByIndex(GetAccessoryIndex());
-                    if (accessoryData is not null)
-                    {
-                        colorPicker.SetColor(accessoryData.Color);
-                    }
+                    colorPicker.SetColor(FashionSense.accessoryManager.GetColorFromIndex(Game1.player, GetAccessoryIndex()));
                     break;
                 case HAT_FILTER_BUTTON:
                     var hatColor = new Color() { PackedValue = uint.Parse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_HAT_COLOR]) };
@@ -445,11 +441,7 @@ namespace FashionSense.Framework.UI
                 case ACCESSORY_FILTER_BUTTON:
                     Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON] = ACCESSORY_FILTER_BUTTON;
 
-                    var accessoryData = FashionSense.accessoryManager.GetAccessoryDataByIndex(GetAccessoryIndex());
-                    if (accessoryData is not null)
-                    {
-                        colorPicker.SetColor(accessoryData.Color);
-                    }
+                    colorPicker.SetColor(FashionSense.accessoryManager.GetColorFromIndex(Game1.player, GetAccessoryIndex()));
 
                     filterButton = filterButtons.First(b => b.name == ACCESSORY_FILTER_BUTTON) as ClickableTextureComponent;
                     break;
@@ -592,11 +584,7 @@ namespace FashionSense.Framework.UI
                     Game1.player.changeHairColor(color);
                     break;
                 case ACCESSORY_FILTER_BUTTON:
-                    var accessoryData = FashionSense.accessoryManager.GetAccessoryDataByIndex(GetAccessoryIndex());
-                    if (accessoryData is not null)
-                    {
-                        accessoryData.Color = color;
-                    }
+                    Game1.player.modData[FashionSense.accessoryManager.GetKeyForAccessoryColor(GetAccessoryIndex())] = color.PackedValue.ToString();
                     break;
                 case HAT_FILTER_BUTTON:
                     Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_HAT_COLOR] = color.PackedValue.ToString();
@@ -639,7 +627,7 @@ namespace FashionSense.Framework.UI
                     modDataKey = ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID;
                     accessoryIndex = GetAccessoryIndex();
 
-                    currentAppearance = FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(FashionSense.accessoryManager.GetAccessoryIdByIndex(accessoryIndex));
+                    currentAppearance = FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(FashionSense.accessoryManager.GetAccessoryIdByIndex(Game1.player, accessoryIndex));
                     appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is AccessoryContentPack).ToList();
                     break;
                 case HAT_FILTER_BUTTON:
@@ -690,7 +678,7 @@ namespace FashionSense.Framework.UI
             string appearanceId = current_index == -1 ? "None" : appearanceModels[current_index].Id;
             if (modDataKey == ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID)
             {
-                FashionSense.accessoryManager.AddAccessory(appearanceId, accessoryIndex);
+                FashionSense.accessoryManager.AddAccessory(Game1.player, appearanceId, accessoryIndex);
             }
             else
             {
@@ -723,11 +711,7 @@ namespace FashionSense.Framework.UI
                     currentAccessorySlot = currentAccessorySlot + change < 0 ? 0 : currentAccessorySlot + change;
                     accessorySlotLabel.name = currentAccessorySlot.ToString();
 
-                    var accessoryData = FashionSense.accessoryManager.GetAccessoryDataByIndex(currentAccessorySlot);
-                    if (accessoryData is not null)
-                    {
-                        colorPicker.SetColor(accessoryData.Color);
-                    }
+                    colorPicker.SetColor(FashionSense.accessoryManager.GetColorFromIndex(Game1.player, GetAccessoryIndex()));
 
                     break;
             }
@@ -788,11 +772,7 @@ namespace FashionSense.Framework.UI
                         case ACCESSORY_FILTER_BUTTON:
                             Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON] = ACCESSORY_FILTER_BUTTON;
 
-                            var accessoryData = FashionSense.accessoryManager.GetAccessoryDataByIndex(GetAccessoryIndex());
-                            if (accessoryData is not null)
-                            {
-                                colorPicker.SetColor(accessoryData.Color);
-                            }
+                            colorPicker.SetColor(FashionSense.accessoryManager.GetColorFromIndex(Game1.player, GetAccessoryIndex()));
                             break;
                         case HAT_FILTER_BUTTON:
                             Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON] = HAT_FILTER_BUTTON;
@@ -853,11 +833,7 @@ namespace FashionSense.Framework.UI
 
                     Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON] = ACCESSORY_FILTER_BUTTON;
 
-                    var accessoryData = FashionSense.accessoryManager.GetAccessoryDataByIndex(GetAccessoryIndex());
-                    if (accessoryData is not null)
-                    {
-                        colorPicker.SetColor(accessoryData.Color);
-                    }
+                    colorPicker.SetColor(FashionSense.accessoryManager.GetColorFromIndex(Game1.player, GetAccessoryIndex()));
                 }
             }
 
@@ -926,7 +902,7 @@ namespace FashionSense.Framework.UI
                         modDataKey = ModDataKeys.CUSTOM_HAIR_ID;
                         break;
                     case ACCESSORY_FILTER_BUTTON:
-                        FashionSense.accessoryManager.RemoveAccessory(currentAccessorySlot);
+                        FashionSense.accessoryManager.RemoveAccessory(Game1.player, currentAccessorySlot);
                         FashionSense.SetSpriteDirty();
                         return;
                     case HAT_FILTER_BUTTON:
@@ -1162,7 +1138,7 @@ namespace FashionSense.Framework.UI
                         contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID]);
                         break;
                     case ACCESSORY_FILTER_BUTTON:
-                        contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(FashionSense.accessoryManager.GetAccessoryIdByIndex(GetAccessoryIndex()));
+                        contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(FashionSense.accessoryManager.GetAccessoryIdByIndex(Game1.player, GetAccessoryIndex()));
                         break;
                     case HAT_FILTER_BUTTON:
                         contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<HatContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAT_ID]);
@@ -1193,7 +1169,7 @@ namespace FashionSense.Framework.UI
                         contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID]);
                         break;
                     case ACCESSORY_FILTER_BUTTON:
-                        contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(FashionSense.accessoryManager.GetAccessoryIdByIndex(GetAccessoryIndex()));
+                        contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(FashionSense.accessoryManager.GetAccessoryIdByIndex(Game1.player, GetAccessoryIndex()));
                         break;
                     case HAT_FILTER_BUTTON:
                         contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<HatContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAT_ID]);
@@ -1310,7 +1286,7 @@ namespace FashionSense.Framework.UI
                     contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAIR_ID]);
                     break;
                 case ACCESSORY_FILTER_BUTTON:
-                    contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(FashionSense.accessoryManager.GetAccessoryIdByIndex(GetAccessoryIndex()));
+                    contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(FashionSense.accessoryManager.GetAccessoryIdByIndex(Game1.player, GetAccessoryIndex()));
                     break;
                 case HAT_FILTER_BUTTON:
                     contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<HatContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_HAT_ID]);

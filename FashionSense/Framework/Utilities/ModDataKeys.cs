@@ -43,6 +43,7 @@ namespace FashionSense.Framework.Utilities
         internal const string STARTS_WITH_HAND_MIRROR = "FashionSense.StartsWithHandMirror";
         internal const string INTERNAL_COLOR_OVERRIDE_SHOE_ID = "Override Shoe Color";
         internal const string LETTER_HAND_MIRROR = $"FashionSense.Mail.HandMirror";
+        internal const string ACTIVE_ACCESSORIES_COUNT = $"FashionSense.Counters.ActiveAccessories";
 
         // General animation related keys
         internal const string ANIMATION_FACING_DIRECTION = "FashionSense.Animation.FacingDirection";

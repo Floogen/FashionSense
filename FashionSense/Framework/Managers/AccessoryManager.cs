@@ -22,7 +22,6 @@ namespace FashionSense.Framework.Managers
     class AccessoryManager
     {
         private IMonitor _monitor;
-        private List<AccessoryData> _accessoryData;
 
         internal enum AnimationKey
         {
@@ -38,24 +37,20 @@ namespace FashionSense.Framework.Managers
         public AccessoryManager(IMonitor monitor)
         {
             _monitor = monitor;
-            _accessoryData = new List<AccessoryData>();
         }
 
-        internal void SetAccessories(string accessories, string colors)
+        internal void SetAccessories(Farmer who, string accessories, string colors)
         {
-            _accessoryData = new List<AccessoryData>();
-
             try
             {
+                ClearAccessories(who);
+
                 List<string> colorsParsed = JsonConvert.DeserializeObject<List<string>>(colors);
 
-                int index = 0;
                 foreach (string accessoryId in JsonConvert.DeserializeObject<List<string>>(accessories))
                 {
-                    AddAccessory(accessoryId, index);
-                    _accessoryData[index].Color = new Color(uint.Parse(colorsParsed[index]));
-
-                    index++;
+                    var index = AddAccessory(who, accessoryId);
+                    who.modData[GetKeyForAccessoryColor(index)] = uint.Parse(colorsParsed[index]).ToString();
                 }
             }
             catch (Exception)
@@ -64,60 +59,151 @@ namespace FashionSense.Framework.Managers
             }
         }
 
-        internal void AddAccessory(string accessoryId, int index = -1)
+        internal void ClearAccessories(Farmer who)
         {
-            if (_accessoryData.ElementAtOrDefault(index) is not null)
+            for (int i = 0; i < GetActiveAccessoryCount(who); i++)
             {
-                _accessoryData[index].Id = accessoryId;
-                ResetAccessory(index);
-            }
-            else
-            {
-                _accessoryData.Add(new AccessoryData(accessoryId));
-            }
-        }
-
-        internal void RemoveAccessory(int index)
-        {
-            if (_accessoryData.ElementAtOrDefault(index) is not null)
-            {
-                _accessoryData.RemoveAt(index);
-            }
-        }
-
-        internal int GetAccessoryIndexById(string accessoryId)
-        {
-            return _accessoryData.FindIndex(d => d.Id == accessoryId);
-        }
-
-        internal string GetAccessoryIdByIndex(int index)
-        {
-            if (_accessoryData.ElementAtOrDefault(index) is null)
-            {
-                return null;
+                RemoveAccessory(who, i);
             }
 
-            return _accessoryData[index].Id;
+            who.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID] = "None";
+            who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR] = String.Empty;
         }
 
-        internal AccessoryData GetAccessoryDataById(string accessoryId)
+        internal int AddAccessory(Farmer who, string accessoryId, int index = -1)
         {
-            return _accessoryData.FirstOrDefault(d => d.Id == accessoryId);
-        }
-
-        internal AccessoryData GetAccessoryDataByIndex(int index)
-        {
-            if (_accessoryData.ElementAtOrDefault(index) is null)
+            if (index == -1)
             {
-                return null;
+                index = GetActiveAccessoryCount(who);
             }
 
-            return _accessoryData[index];
+            if (index > -1)
+            {
+                who.modData[GetKeyForAccessoryId(index)] = accessoryId;
+                ResetAccessory(who, index);
+                SetActiveAccessoryCount(who, index + 1);
+
+                // TODO: Update the CUSTOM_ACCESSORY_COLLECTIVE_ID ModData to include the new accessory 
+                List<string> accessoryIds = new List<string>();
+                List<string> colorValues = new List<string>();
+                foreach (int accessoryIndex in GetActiveAccessoryIndices(who))
+                {
+                    accessoryIds.Add(GetKeyForAccessoryId(accessoryIndex));
+                    colorValues.Add(GetKeyForAccessoryColor(accessoryIndex));
+                }
+                who.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID] = JsonConvert.SerializeObject(accessoryIds);
+                who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR] = JsonConvert.SerializeObject(colorValues);
+
+                return index;
+            }
+
+            return 0;
         }
 
-        internal List<AccessoryData> GetAccessoryData()
+        internal void RemoveAccessory(Farmer who, int index)
         {
-            return _accessoryData;
+            var idKey = GetKeyForAccessoryId(index);
+            if (who.modData.ContainsKey(idKey))
+            {
+                who.modData.Remove(idKey);
+                SetActiveAccessoryCount(who, GetActiveAccessoryCount(who) - 1);
+            }
+
+            var colorKey = GetKeyForAccessoryColor(index);
+            if (who.modData.ContainsKey(colorKey))
+            {
+                who.modData.Remove(colorKey);
+            }
+        }
+
+        internal int GetActiveAccessoryCount(Farmer who)
+        {
+            if (IsKeyValid(who, ModDataKeys.ACTIVE_ACCESSORIES_COUNT) && Int32.TryParse(who.modData[ModDataKeys.ACTIVE_ACCESSORIES_COUNT], out int count))
+            {
+                return count;
+            }
+
+            return 0;
+        }
+
+        internal void SetActiveAccessoryCount(Farmer who, int count)
+        {
+            who.modData[ModDataKeys.ACTIVE_ACCESSORIES_COUNT] = count.ToString();
+        }
+
+        internal string GetKeyForAccessoryId(int index)
+        {
+            return $"FashionSense.CustomAccessory.{index}.Id";
+        }
+
+        internal string GetKeyForAccessoryColor(int index)
+        {
+            return $"FashionSense.CustomAccessory.{index}.Color";
+        }
+
+        internal int GetAccessoryIndexById(Farmer who, string accessoryId)
+        {
+            for (int i = 0; i < GetActiveAccessoryCount(who); i++)
+            {
+                var idKey = GetKeyForAccessoryId(i);
+                if (IsKeyValid(who, idKey) && who.modData[idKey] == accessoryId)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        internal bool IsKeyValid(Farmer who, string key, bool checkForValue = false)
+        {
+            if (who is null || who.modData.ContainsKey(key) is false)
+            {
+                return false;
+            }
+
+            if (checkForValue is true && String.IsNullOrEmpty(who.modData[key]))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        internal Color GetColorFromIndex(Farmer who, int index)
+        {
+            var colorKey = GetKeyForAccessoryColor(index);
+            if (IsKeyValid(who, colorKey, checkForValue: true) && uint.TryParse(who.modData[colorKey], out var parsedColor))
+            {
+                return new Color(parsedColor);
+            }
+
+            return Color.White;
+        }
+
+        internal string GetAccessoryIdByIndex(Farmer who, int index)
+        {
+            var idKey = GetKeyForAccessoryId(index);
+            if (who.modData.ContainsKey(idKey))
+            {
+                return who.modData[idKey];
+            }
+
+            return null;
+        }
+
+        internal List<int> GetActiveAccessoryIndices(Farmer who)
+        {
+            List<int> indices = new List<int>();
+            for (int i = 0; i < GetActiveAccessoryCount(who); i++)
+            {
+                if (IsKeyValid(who, GetKeyForAccessoryId(i), checkForValue: true))
+                {
+                    indices.Add(i);
+                }
+            }
+
+            return indices;
         }
 
         internal static string GetAnimationKeyString(AnimationKey animationKey)
@@ -143,9 +229,10 @@ namespace FashionSense.Framework.Managers
             return null;
         }
 
-        internal string GetModDataKey(AnimationKey animationKey, int index)
+        internal string GetModDataKey(Farmer who, AnimationKey animationKey, int index)
         {
-            if (_accessoryData.ElementAtOrDefault(index) is null)
+            var idKey = GetKeyForAccessoryId(index);
+            if (IsKeyValid(who, idKey, checkForValue: true) is false)
             {
                 return null;
             }
@@ -159,59 +246,62 @@ namespace FashionSense.Framework.Managers
             return $"FashionSense.Animation.Accessory.{index}.{animationString}";
         }
 
-        internal void SetModData(int index, AnimationKey animationType, string value)
+        internal void SetModData(Farmer who, int index, AnimationKey animationType, string value)
         {
-            var modDataKey = GetModDataKey(animationType, index);
+            var modDataKey = GetModDataKey(who, animationType, index);
             if (String.IsNullOrEmpty(modDataKey))
             {
                 return;
             }
 
-            Game1.player.modData[modDataKey] = value;
+            who.modData[modDataKey] = value;
         }
 
-        internal string GetModData(int index, AnimationKey animationType)
+        internal string GetModData(Farmer who, int index, AnimationKey animationType)
         {
-            var modDataKey = GetModDataKey(animationType, index);
-            if (String.IsNullOrEmpty(modDataKey) || Game1.player.modData.ContainsKey(modDataKey) is false)
+            var modDataKey = GetModDataKey(who, animationType, index);
+            if (String.IsNullOrEmpty(modDataKey) || who.modData.ContainsKey(modDataKey) is false)
             {
                 return null;
             }
 
-            return Game1.player.modData[modDataKey];
+            return who.modData[modDataKey];
         }
 
-        internal void ResetAccessory(int index, int startingIndex = 0)
+        internal void ResetAccessory(Farmer who, int index, int startingIndex = 0)
         {
-            Game1.player.modData[GetModDataKey(AnimationKey.AnimationType, index)] = AnimationModel.Type.Unknown.ToString();
-            Game1.player.modData[GetModDataKey(AnimationKey.Iterator, index)] = "0";
-            Game1.player.modData[GetModDataKey(AnimationKey.StartingIndex, index)] = startingIndex.ToString();
-            Game1.player.modData[GetModDataKey(AnimationKey.FrameDuration, index)] = "0";
-            Game1.player.modData[GetModDataKey(AnimationKey.ElapsedDuration, index)] = "0";
-            Game1.player.modData[GetModDataKey(AnimationKey.FarmerFrame, index)] = "0";
-            Game1.player.modData[GetModDataKey(AnimationKey.LightId, index)] = "0";
+            if (GetModDataKey(who, AnimationKey.AnimationType, index) is null)
+            {
+                return;
+            }
+
+            who.modData[GetModDataKey(who, AnimationKey.AnimationType, index)] = AnimationModel.Type.Unknown.ToString();
+            who.modData[GetModDataKey(who, AnimationKey.Iterator, index)] = "0";
+            who.modData[GetModDataKey(who, AnimationKey.StartingIndex, index)] = startingIndex.ToString();
+            who.modData[GetModDataKey(who, AnimationKey.FrameDuration, index)] = "0";
+            who.modData[GetModDataKey(who, AnimationKey.ElapsedDuration, index)] = "0";
+            who.modData[GetModDataKey(who, AnimationKey.FarmerFrame, index)] = "0";
+            who.modData[GetModDataKey(who, AnimationKey.LightId, index)] = "0";
         }
 
         internal void ResetAccessory(int index, Farmer who, int duration, AnimationModel.Type animationType, bool ignoreAnimationType = false, int startingIndex = 0)
         {
-            ResetAccessory(index, startingIndex: startingIndex);
+            ResetAccessory(who, index, startingIndex: startingIndex);
 
             if (ignoreAnimationType is false)
             {
-                Game1.player.modData[GetModDataKey(AnimationKey.AnimationType, index)] = animationType.ToString();
+                who.modData[GetModDataKey(who, AnimationKey.AnimationType, index)] = animationType.ToString();
             }
 
-            Game1.player.modData[GetModDataKey(AnimationKey.FrameDuration, index)] = duration.ToString();
-            Game1.player.modData[GetModDataKey(AnimationKey.FarmerFrame, index)] = who.FarmerSprite.CurrentFrame.ToString();
+            who.modData[GetModDataKey(who, AnimationKey.FrameDuration, index)] = duration.ToString();
+            who.modData[GetModDataKey(who, AnimationKey.FarmerFrame, index)] = who.FarmerSprite.CurrentFrame.ToString();
         }
 
-        internal void ResetAllAccessories()
+        internal void ResetAllAccessories(Farmer who)
         {
-            int index = 0;
-            foreach (var accessory in _accessoryData)
+            for (int i = 0; i < GetActiveAccessoryCount(who); i++)
             {
-                ResetAccessory(index);
-                index++;
+                ResetAccessory(who, i);
             }
         }
 

@@ -455,7 +455,7 @@ namespace FashionSense.Framework.Patches.Renderer
             switch (model)
             {
                 case AccessoryModel accessoryModel:
-                    var accessoryIndex = FashionSense.accessoryManager.GetAccessoryIndexById(accessoryModel.Pack.Id);
+                    var accessoryIndex = FashionSense.accessoryManager.GetAccessoryIndexById(who, accessoryModel.Pack.Id);
                     if (accessoryIndex != -1)
                     {
                         FashionSense.accessoryManager.ResetAccessory(accessoryIndex, who, animations.ElementAt(iterator).GetDuration(true), type, ignoreAnimationType: false, startingIndex: startingIndex);
@@ -603,10 +603,10 @@ namespace FashionSense.Framework.Patches.Renderer
             switch (model)
             {
                 case AccessoryModel accessoryModel:
-                    var accessoryIndex = FashionSense.accessoryManager.GetAccessoryIndexById(accessoryModel.Pack.Id);
+                    var accessoryIndex = FashionSense.accessoryManager.GetAccessoryIndexById(who, accessoryModel.Pack.Id);
                     if (accessoryIndex != -1)
                     {
-                        return FashionSense.accessoryManager.GetModData(accessoryIndex, AccessoryManager.AnimationKey.AnimationType) == type.ToString();
+                        return FashionSense.accessoryManager.GetModData(who, accessoryIndex, AccessoryManager.AnimationKey.AnimationType) == type.ToString();
                     }
                     return false;
                 case HatModel hatModel:
@@ -629,10 +629,10 @@ namespace FashionSense.Framework.Patches.Renderer
             switch (model)
             {
                 case AccessoryModel accessoryModel:
-                    var accessoryIndex = FashionSense.accessoryManager.GetAccessoryIndexById(accessoryModel.Pack.Id);
+                    var accessoryIndex = FashionSense.accessoryManager.GetAccessoryIndexById(who, accessoryModel.Pack.Id);
                     if (accessoryIndex != -1)
                     {
-                        FashionSense.accessoryManager.SetModData(accessoryIndex, AccessoryManager.AnimationKey.AnimationType, type.ToString());
+                        FashionSense.accessoryManager.SetModData(who, accessoryIndex, AccessoryManager.AnimationKey.AnimationType, type.ToString());
                     }
                     break;
                 case HatModel hatModel:
@@ -670,14 +670,14 @@ namespace FashionSense.Framework.Patches.Renderer
             switch (appearanceModel)
             {
                 case AccessoryModel accessoryModel:
-                    var accessoryIndex = FashionSense.accessoryManager.GetAccessoryIndexById(accessoryModel.Pack.Id);
+                    var accessoryIndex = FashionSense.accessoryManager.GetAccessoryIndexById(who, accessoryModel.Pack.Id);
                     if (accessoryIndex != -1)
                     {
-                        iterator = Int32.Parse(FashionSense.accessoryManager.GetModData(accessoryIndex, AccessoryManager.AnimationKey.Iterator));
-                        startingIndex = Int32.Parse(FashionSense.accessoryManager.GetModData(accessoryIndex, AccessoryManager.AnimationKey.StartingIndex));
-                        frameDuration = Int32.Parse(FashionSense.accessoryManager.GetModData(accessoryIndex, AccessoryManager.AnimationKey.FrameDuration));
-                        elapsedDuration = Int32.Parse(FashionSense.accessoryManager.GetModData(accessoryIndex, AccessoryManager.AnimationKey.ElapsedDuration));
-                        lastFarmerFrame = Int32.Parse(FashionSense.accessoryManager.GetModData(accessoryIndex, AccessoryManager.AnimationKey.FarmerFrame));
+                        iterator = Int32.Parse(FashionSense.accessoryManager.GetModData(who, accessoryIndex, AccessoryManager.AnimationKey.Iterator));
+                        startingIndex = Int32.Parse(FashionSense.accessoryManager.GetModData(who, accessoryIndex, AccessoryManager.AnimationKey.StartingIndex));
+                        frameDuration = Int32.Parse(FashionSense.accessoryManager.GetModData(who, accessoryIndex, AccessoryManager.AnimationKey.FrameDuration));
+                        elapsedDuration = Int32.Parse(FashionSense.accessoryManager.GetModData(who, accessoryIndex, AccessoryManager.AnimationKey.ElapsedDuration));
+                        lastFarmerFrame = Int32.Parse(FashionSense.accessoryManager.GetModData(who, accessoryIndex, AccessoryManager.AnimationKey.FarmerFrame));
                     }
                     else
                     {
@@ -930,11 +930,11 @@ namespace FashionSense.Framework.Patches.Renderer
             switch (model)
             {
                 case AccessoryModel accessoryModel:
-                    var accessoryIndex = FashionSense.accessoryManager.GetAccessoryIndexById(accessoryModel.Pack.Id);
+                    var accessoryIndex = FashionSense.accessoryManager.GetAccessoryIndexById(who, accessoryModel.Pack.Id);
                     if (accessoryIndex != -1)
                     {
                         indexOffset = 10 + accessoryIndex;
-                        lightIdKey = FashionSense.accessoryManager.GetModDataKey(AccessoryManager.AnimationKey.LightId, accessoryIndex);
+                        lightIdKey = FashionSense.accessoryManager.GetModDataKey(who, AccessoryManager.AnimationKey.LightId, accessoryIndex);
                     }
                     break;
                 case HatModel hatModel:
@@ -1037,10 +1037,10 @@ namespace FashionSense.Framework.Patches.Renderer
             switch (model)
             {
                 case AccessoryModel accessoryModel:
-                    var accessoryIndex = FashionSense.accessoryManager.GetAccessoryIndexById(accessoryModel.Pack.Id);
+                    var accessoryIndex = FashionSense.accessoryManager.GetAccessoryIndexById(who, accessoryModel.Pack.Id);
                     if (accessoryIndex != -1)
                     {
-                        iteratorKey = FashionSense.accessoryManager.GetModDataKey(AccessoryManager.AnimationKey.Iterator, accessoryIndex);
+                        iteratorKey = FashionSense.accessoryManager.GetModDataKey(who, AccessoryManager.AnimationKey.Iterator, accessoryIndex);
                     }
                     break;
                 case HatModel hatModel:
@@ -1550,9 +1550,10 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 try
                 {
-                    foreach (var accessoryData in FashionSense.accessoryManager.GetAccessoryData())
+                    foreach (int index in FashionSense.accessoryManager.GetActiveAccessoryIndices(who))
                     {
-                        if (FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(accessoryData.Id) is AccessoryContentPack aPack && aPack != null)
+                        var accessoryKey = FashionSense.accessoryManager.GetAccessoryIdByIndex(who, index);
+                        if (FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(accessoryKey) is AccessoryContentPack aPack && aPack != null)
                         {
                             AccessoryModel accessoryModel = aPack.GetAccessoryFromFacingDirection(facingDirection);
                             if (accessoryModel is null)
@@ -1824,7 +1825,10 @@ namespace FashionSense.Framework.Patches.Renderer
 
                     if (!(accessoryModel.HideWhileSwimming && who.swimming.Value) && !(accessoryModel.HideWhileWearingBathingSuit && who.bathingClothes.Value))
                     {
-                        DrawCustomAccessory(accessoryPack, accessoryModel, GetSourceRectangle(accessoryModel, appearanceTypeToSourceRectangles), FashionSense.accessoryManager.GetAccessoryDataByIndex(index).Color, skinTone, __instance, ___isDrawingForUI, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, accessoryLayer);
+                        var colorKey = FashionSense.accessoryManager.GetKeyForAccessoryColor(index);
+                        var accessoryColor = new Color() { PackedValue = who.modData.ContainsKey(colorKey) ? uint.Parse(who.modData[colorKey]) : who.hairstyleColor.Value.PackedValue };
+
+                        DrawCustomAccessory(accessoryPack, accessoryModel, GetSourceRectangle(accessoryModel, appearanceTypeToSourceRectangles), accessoryColor, skinTone, __instance, ___isDrawingForUI, b, who, facingDirection, position, origin, ___positionOffset, ___rotationAdjustment, scale, currentFrame, rotation, accessoryLayer);
                     }
 
                     index++;
