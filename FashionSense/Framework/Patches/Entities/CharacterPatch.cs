@@ -2,11 +2,7 @@
 using FashionSense.Framework.Utilities;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Locations;
-using StardewValley.Tools;
 using System;
-using System.Collections.Generic;
-using FashionSense.Framework.Models.Shirt;
 using Microsoft.Xna.Framework;
 using FashionSense.Framework.Models.Pants;
 

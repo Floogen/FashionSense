@@ -1,21 +1,11 @@
 ﻿using FashionSense.Framework.Models;
-using FashionSense.Framework.Models.Accessory;
-using FashionSense.Framework.Models.Hair;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using StardewModdingAPI;
 using StardewValley;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using static StardewValley.HouseRenovation;
 
 namespace FashionSense.Framework.Managers
 {
@@ -46,7 +36,6 @@ namespace FashionSense.Framework.Managers
                 ClearAccessories(who);
 
                 List<string> colorsParsed = JsonConvert.DeserializeObject<List<string>>(colors);
-
                 foreach (string accessoryId in JsonConvert.DeserializeObject<List<string>>(accessories))
                 {
                     var index = AddAccessory(who, accessoryId);

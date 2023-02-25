@@ -6,7 +6,6 @@ using FashionSense.Framework.Patches.Renderer;
 using FashionSense.Framework.Patches.ShopLocations;
 using FashionSense.Framework.Patches.Tools;
 using FashionSense.Framework.Utilities;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
@@ -29,7 +28,6 @@ using FashionSense.Framework.Interfaces.API;
 using StardewModdingAPI.Utilities;
 using FashionSense.Framework.Patches.GameLocations;
 using FashionSense.Framework.Models.Generic;
-using Newtonsoft.Json;
 
 namespace FashionSense
 {

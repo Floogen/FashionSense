@@ -1,11 +1,4 @@
 ﻿using FashionSense.Framework.Models;
-using FashionSense.Framework.Models.Accessory;
-using FashionSense.Framework.Models.Hair;
-using FashionSense.Framework.Models.Hat;
-using FashionSense.Framework.Models.Pants;
-using FashionSense.Framework.Models.Shirt;
-using FashionSense.Framework.Models.Sleeves;
-using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -15,8 +8,6 @@ using StardewValley.Menus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FashionSense.Framework.UI
 {

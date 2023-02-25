@@ -7,11 +7,8 @@ using FashionSense.Framework.Models.Shirt;
 using FashionSense.Framework.Models.Shoes;
 using FashionSense.Framework.Models.Sleeves;
 using Microsoft.Xna.Framework;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FashionSense.Framework.Models
 {

@@ -1,16 +1,12 @@
 ﻿using FashionSense.Framework.Models;
-using FashionSense.Framework.Models.Hair;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using StardewModdingAPI;
 using StardewValley;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FashionSense.Framework.Managers
 {

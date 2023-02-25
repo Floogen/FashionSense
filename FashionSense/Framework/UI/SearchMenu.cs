@@ -1,6 +1,5 @@
 ﻿using FashionSense.Framework.Models;
 using FashionSense.Framework.Models.Accessory;
-using FashionSense.Framework.Models.Generic;
 using FashionSense.Framework.Models.Hair;
 using FashionSense.Framework.Models.Hat;
 using FashionSense.Framework.Models.Pants;
@@ -13,18 +12,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
-using StardewValley.Buildings;
-using StardewValley.Locations;
 using StardewValley.Menus;
-using StardewValley.Objects;
-using StardewValley.TerrainFeatures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Object = StardewValley.Object;
 
 namespace FashionSense.Framework.UI
 {

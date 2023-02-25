@@ -1,19 +1,14 @@
 ﻿using HarmonyLib;
-using FashionSense.Framework.Models;
-using FashionSense.Framework.UI;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Locations;
 using StardewValley.Menus;
-using StardewValley.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using static StardewValley.Menus.CharacterCustomization;
-using FashionSense.Framework.Models.Hair;
 
 namespace FashionSense.Framework.Patches.Menus
 {
