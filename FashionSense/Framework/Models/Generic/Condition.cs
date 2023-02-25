@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using FashionSense.Framework.Models.Generic.Random;
+﻿using FashionSense.Framework.Models.Generic.Random;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using StardewValley;
+using System;
+using System.Collections.Generic;
 
 namespace FashionSense.Framework.Models.Generic
 {

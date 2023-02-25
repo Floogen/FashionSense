@@ -1,5 +1,5 @@
-﻿using HarmonyLib;
-using FashionSense.Framework.Utilities;
+﻿using FashionSense.Framework.Utilities;
+using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;

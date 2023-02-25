@@ -1,10 +1,10 @@
-﻿using HarmonyLib;
+﻿using FashionSense.Framework.Patches.ShopLocations;
 using FashionSense.Framework.Utilities;
+using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley.Menus;
 using System;
-using FashionSense.Framework.Patches.ShopLocations;
 
 namespace FashionSense.Framework.Patches.Menus
 {

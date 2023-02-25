@@ -1,9 +1,9 @@
-﻿using HarmonyLib;
+﻿using FashionSense.Framework.UI;
+using HarmonyLib;
 using StardewModdingAPI;
 using StardewValley;
 using System;
 using xTile.Dimensions;
-using FashionSense.Framework.UI;
 
 namespace FashionSense.Framework.Patches.GameLocations
 {

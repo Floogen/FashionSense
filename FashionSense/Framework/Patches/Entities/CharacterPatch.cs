@@ -1,10 +1,10 @@
-﻿using HarmonyLib;
+﻿using FashionSense.Framework.Models.Pants;
 using FashionSense.Framework.Utilities;
+using HarmonyLib;
+using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using System;
-using Microsoft.Xna.Framework;
-using FashionSense.Framework.Models.Pants;
 
 namespace FashionSense.Framework.Patches.Entities
 {

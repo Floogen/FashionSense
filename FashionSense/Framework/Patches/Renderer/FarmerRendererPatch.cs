@@ -1,24 +1,24 @@
-﻿using HarmonyLib;
+﻿using FashionSense.Framework.Managers;
 using FashionSense.Framework.Models;
+using FashionSense.Framework.Models.Accessory;
 using FashionSense.Framework.Models.Generic;
+using FashionSense.Framework.Models.Hair;
+using FashionSense.Framework.Models.Hat;
+using FashionSense.Framework.Models.Pants;
+using FashionSense.Framework.Models.Shirt;
+using FashionSense.Framework.Models.Shoes;
+using FashionSense.Framework.Models.Sleeves;
 using FashionSense.Framework.Utilities;
+using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using FashionSense.Framework.Models.Hair;
-using FashionSense.Framework.Models.Accessory;
-using StardewValley.Tools;
-using FashionSense.Framework.Models.Hat;
-using FashionSense.Framework.Models.Shirt;
-using FashionSense.Framework.Models.Pants;
-using FashionSense.Framework.Models.Sleeves;
-using FashionSense.Framework.Models.Shoes;
-using FashionSense.Framework.Managers;
 
 namespace FashionSense.Framework.Patches.Renderer
 {

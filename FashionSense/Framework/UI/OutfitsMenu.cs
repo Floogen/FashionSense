@@ -301,7 +301,7 @@ namespace FashionSense.Framework.UI
 
                     if (_pages[_currentPage][i].Name.Length > 18)
                     {
-                        _hoverText = $"{ _pages[_currentPage][i].Name}";
+                        _hoverText = $"{_pages[_currentPage][i].Name}";
                         return;
                     }
                 }
