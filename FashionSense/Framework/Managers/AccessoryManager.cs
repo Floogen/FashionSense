@@ -13,6 +13,7 @@ namespace FashionSense.Framework.Managers
     class AccessoryManager
     {
         private IMonitor _monitor;
+        private const int MAX_ACCESSORY_LIMIT = 100;
 
         internal enum AnimationKey
         {
@@ -50,7 +51,7 @@ namespace FashionSense.Framework.Managers
 
         internal void ClearAccessories(Farmer who)
         {
-            for (int i = 0; i < GetActiveAccessoryCount(who); i++)
+            for (int i = 0; i < MAX_ACCESSORY_LIMIT; i++)
             {
                 RemoveAccessory(who, i);
             }
@@ -67,19 +68,14 @@ namespace FashionSense.Framework.Managers
 
             if (index > -1)
             {
+                if (who.modData.ContainsKey(GetKeyForAccessoryId(index)) is false)
+                {
+                    SetActiveAccessoryCount(who, GetActiveAccessoryCount(who) + 1);
+                }
+                ResetAccessory(who, index);
+
                 who.modData[GetKeyForAccessoryId(index)] = accessoryId;
                 who.modData[GetKeyForAccessoryColor(index)] = Color.White.PackedValue.ToString();
-
-                ResetAccessory(who, index);
-                SetActiveAccessoryCount(who, index + 1);
-
-                List<string> accessoryIds = new List<string>();
-                List<string> colorValues = new List<string>();
-                foreach (int accessoryIndex in GetActiveAccessoryIndices(who))
-                {
-                    accessoryIds.Add(GetKeyForAccessoryId(accessoryIndex));
-                    colorValues.Add(GetKeyForAccessoryColor(accessoryIndex));
-                }
 
                 return index;
             }
@@ -105,7 +101,7 @@ namespace FashionSense.Framework.Managers
 
         internal int GetActiveAccessoryCount(Farmer who)
         {
-            if (IsKeyValid(who, ModDataKeys.ACTIVE_ACCESSORIES_COUNT) && Int32.TryParse(who.modData[ModDataKeys.ACTIVE_ACCESSORIES_COUNT], out int count))
+            if (IsKeyValid(who, ModDataKeys.ACTIVE_ACCESSORIES_COUNT) && Int32.TryParse(who.modData[ModDataKeys.ACTIVE_ACCESSORIES_COUNT], out int count) && count > 0)
             {
                 return count;
             }
