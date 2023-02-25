@@ -7,16 +7,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Characters;
-using StardewValley.Locations;
-using StardewValley.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using Object = StardewValley.Object;
 using FashionSense.Framework.Models.Hair;
 using FashionSense.Framework.Models.Accessory;
 using StardewValley.Tools;
@@ -25,9 +18,7 @@ using FashionSense.Framework.Models.Shirt;
 using FashionSense.Framework.Models.Pants;
 using FashionSense.Framework.Models.Sleeves;
 using FashionSense.Framework.Models.Shoes;
-using Newtonsoft.Json;
 using FashionSense.Framework.Managers;
-using static StardewValley.HouseRenovation;
 
 namespace FashionSense.Framework.Patches.Renderer
 {
@@ -1626,7 +1617,8 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             // Check if all the models are null, if so revert back to vanilla logic
-            if (pantsModel is null && hairModel is null && accessoriesData.Count == 0 && hatModel is null && shirtModel is null && sleevesModel is null && shoesModel is null)
+            models = models.Where(m => m is not null).ToList();
+            if (models.Count == 0)
             {
                 return true;
             }
