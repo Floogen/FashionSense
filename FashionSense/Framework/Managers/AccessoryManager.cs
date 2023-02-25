@@ -1,4 +1,5 @@
 ﻿using FashionSense.Framework.Models;
+using FashionSense.Framework.Models.Accessory;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
@@ -29,17 +30,16 @@ namespace FashionSense.Framework.Managers
             _monitor = monitor;
         }
 
-        internal void SetAccessories(Farmer who, string accessories, string colors)
+        internal void SetAccessories(Farmer who, List<string> accessoryIds, List<string> colors)
         {
             try
             {
                 ClearAccessories(who);
 
-                List<string> colorsParsed = JsonConvert.DeserializeObject<List<string>>(colors);
-                foreach (string accessoryId in JsonConvert.DeserializeObject<List<string>>(accessories))
+                foreach (string accessoryId in accessoryIds)
                 {
                     var index = AddAccessory(who, accessoryId);
-                    who.modData[GetKeyForAccessoryColor(index)] = uint.Parse(colorsParsed[index]).ToString();
+                    who.modData[GetKeyForAccessoryColor(index)] = uint.Parse(colors[index]).ToString();
                 }
             }
             catch (Exception)
@@ -54,10 +54,8 @@ namespace FashionSense.Framework.Managers
             {
                 RemoveAccessory(who, i);
             }
-            SetActiveAccessoryCount(who, 0);
 
-            who.modData[ModDataKeys.OUTFIT_ACCESSORY_IDS] = "None";
-            who.modData[ModDataKeys.OUTFIT_ACCESSORY_COLORS] = String.Empty;
+            SetActiveAccessoryCount(who, 0);
         }
 
         internal int AddAccessory(Farmer who, string accessoryId, int index = -1)
@@ -82,8 +80,6 @@ namespace FashionSense.Framework.Managers
                     accessoryIds.Add(GetKeyForAccessoryId(accessoryIndex));
                     colorValues.Add(GetKeyForAccessoryColor(accessoryIndex));
                 }
-                who.modData[ModDataKeys.OUTFIT_ACCESSORY_IDS] = JsonConvert.SerializeObject(accessoryIds);
-                who.modData[ModDataKeys.OUTFIT_ACCESSORY_COLORS] = JsonConvert.SerializeObject(colorValues);
 
                 return index;
             }
@@ -195,6 +191,28 @@ namespace FashionSense.Framework.Managers
             }
 
             return indices;
+        }
+
+        internal List<string> GetActiveAccessoryIds(Farmer who)
+        {
+            List<string> accessoryIds = new List<string>();
+            foreach (int index in GetActiveAccessoryIndices(who))
+            {
+                accessoryIds.Add(FashionSense.accessoryManager.GetAccessoryIdByIndex(who, index));
+            }
+
+            return accessoryIds;
+        }
+
+        internal List<string> GetActiveAccessoryColorValues(Farmer who)
+        {
+            List<string> accessoryColorValues = new List<string>();
+            foreach (int index in GetActiveAccessoryIndices(who))
+            {
+                accessoryColorValues.Add(FashionSense.accessoryManager.GetColorFromIndex(who, index).PackedValue.ToString());
+            }
+
+            return accessoryColorValues;
         }
 
         internal static string GetAnimationKeyString(AnimationKey animationKey)
@@ -327,8 +345,7 @@ namespace FashionSense.Framework.Managers
             // If any old accessories were detected, import them
             if (accessoryIds.Count > 0)
             {
-                player.modData[ModDataKeys.OUTFIT_ACCESSORY_IDS] = JsonConvert.SerializeObject(accessoryIds);
-                player.modData[ModDataKeys.OUTFIT_ACCESSORY_COLORS] = JsonConvert.SerializeObject(accessoryColors);
+                SetAccessories(player, accessoryIds, accessoryColors);
             }
         }
     }

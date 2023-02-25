@@ -90,7 +90,6 @@ namespace FashionSense.Framework.Managers
             who.modData[ModDataKeys.CUSTOM_ACCESSORY_ID] = String.IsNullOrEmpty(outfit.AccessoryOneId) ? "None" : outfit.AccessoryOneId;
             who.modData[ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID] = String.IsNullOrEmpty(outfit.AccessoryTwoId) ? "None" : outfit.AccessoryTwoId;
             who.modData[ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID] = String.IsNullOrEmpty(outfit.AccessoryThreeId) ? "None" : outfit.AccessoryThreeId;
-            who.modData[ModDataKeys.OUTFIT_ACCESSORY_IDS] = String.IsNullOrEmpty(outfit.AccessoryIds) ? "None" : outfit.AccessoryIds;
             who.modData[ModDataKeys.CUSTOM_HAT_ID] = String.IsNullOrEmpty(outfit.HatId) ? "None" : outfit.HatId;
             who.modData[ModDataKeys.CUSTOM_SHIRT_ID] = String.IsNullOrEmpty(outfit.ShirtId) ? "None" : outfit.ShirtId;
             who.modData[ModDataKeys.CUSTOM_SLEEVES_ID] = String.IsNullOrEmpty(outfit.SleevesId) ? "None" : outfit.SleevesId;
@@ -101,15 +100,21 @@ namespace FashionSense.Framework.Managers
             who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR] = outfit.AccessoryOneColor;
             who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR] = outfit.AccessoryTwoColor;
             who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR] = outfit.AccessoryThreeColor;
-            who.modData[ModDataKeys.OUTFIT_ACCESSORY_COLORS] = outfit.AccessoryColors;
             who.modData[ModDataKeys.UI_HAND_MIRROR_HAT_COLOR] = outfit.HatColor;
             who.modData[ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR] = outfit.ShirtColor;
             who.modData[ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR] = outfit.SleevesColor;
             who.modData[ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR] = outfit.PantsColor;
             who.modData[ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR] = outfit.ShoesColor;
 
-            FashionSense.accessoryManager.HandleOldAccessoryFormat(who);
-            FashionSense.accessoryManager.SetAccessories(who, who.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID], who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR]);
+            // Handle any old outfit versions
+            if (outfit.Version == 1)
+            {
+                FashionSense.accessoryManager.HandleOldAccessoryFormat(Game1.player);
+            }
+            else if (outfit.AccessoryIds.Count > 0)
+            {
+                FashionSense.accessoryManager.SetAccessories(who, outfit.AccessoryIds, outfit.AccessoryColors);
+            }
 
             FashionSense.SetSpriteDirty();
 

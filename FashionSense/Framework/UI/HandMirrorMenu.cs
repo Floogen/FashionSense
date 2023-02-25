@@ -621,7 +621,7 @@ namespace FashionSense.Framework.UI
                     appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is HairContentPack).ToList();
                     break;
                 case ACCESSORY_FILTER_BUTTON:
-                    modDataKey = ModDataKeys.OUTFIT_ACCESSORY_IDS;
+                    modDataKey = ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID;
                     accessoryIndex = GetAccessoryIndex();
 
                     currentAppearance = FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(FashionSense.accessoryManager.GetAccessoryIdByIndex(Game1.player, accessoryIndex));
@@ -673,7 +673,7 @@ namespace FashionSense.Framework.UI
             }
 
             string appearanceId = current_index == -1 ? "None" : appearanceModels[current_index].Id;
-            if (modDataKey == ModDataKeys.OUTFIT_ACCESSORY_IDS)
+            if (modDataKey == ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID)
             {
                 FashionSense.accessoryManager.AddAccessory(Game1.player, appearanceId, accessoryIndex);
             }

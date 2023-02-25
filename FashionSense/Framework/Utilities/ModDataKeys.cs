@@ -7,6 +7,7 @@
         internal const string CUSTOM_ACCESSORY_ID = "FashionSense.CustomAccessory.Id";
         internal const string CUSTOM_ACCESSORY_SECONDARY_ID = "FashionSense.CustomAccessory.Secondary.Id";
         internal const string CUSTOM_ACCESSORY_TERTIARY_ID = "FashionSense.CustomAccessory.Tertiary.Id";
+        internal const string CUSTOM_ACCESSORY_COLLECTIVE_ID = "FashionSense.CustomAccessory.Collective.Id";
         internal const string CUSTOM_HAT_ID = "FashionSense.CustomHat.Id";
         internal const string CUSTOM_SHIRT_ID = "FashionSense.CustomShirt.Id";
         internal const string CUSTOM_PANTS_ID = "FashionSense.CustomPants.Id";
@@ -30,8 +31,6 @@
         // Outfit related keys
         internal const string OUTFITS = "FashionSense.Outfit.Collection";
         internal const string CURRENT_OUTFIT_ID = "FashionSense.Outfit.CurrentId";
-        internal const string OUTFIT_ACCESSORY_IDS = "FashionSense.Outfit.Accessories.Ids";
-        internal const string OUTFIT_ACCESSORY_COLORS = "FashionSense.Outfit.Accessories.Colors";
 
         // Etc
         internal const string STARTS_WITH_HAND_MIRROR = "FashionSense.StartsWithHandMirror";

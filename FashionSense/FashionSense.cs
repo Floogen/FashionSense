@@ -238,8 +238,6 @@ namespace FashionSense
             EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID);
-            EnsureKeyExists(ModDataKeys.OUTFIT_ACCESSORY_IDS);
-            EnsureKeyExists(ModDataKeys.OUTFIT_ACCESSORY_COLORS);
             EnsureKeyExists(ModDataKeys.CUSTOM_HAT_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_SHIRT_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_PANTS_ID);
@@ -248,7 +246,6 @@ namespace FashionSense
 
             // Handle the old CUSTOM_ACCESSORY_ID format
             accessoryManager.HandleOldAccessoryFormat(Game1.player);
-            accessoryManager.SetAccessories(Game1.player, Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID], Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR]);
 
             // Set sprite to dirty in order to refresh sleeves and other tied-in appearances
             SetSpriteDirty();
