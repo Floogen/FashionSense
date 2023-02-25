@@ -275,7 +275,6 @@ namespace FashionSense.Framework.Managers
                 return;
             }
 
-            who.modData[GetModDataKey(who, AnimationKey.AnimationType, index)] = AnimationModel.Type.Unknown.ToString();
             who.modData[GetModDataKey(who, AnimationKey.Iterator, index)] = "0";
             who.modData[GetModDataKey(who, AnimationKey.StartingIndex, index)] = startingIndex.ToString();
             who.modData[GetModDataKey(who, AnimationKey.FrameDuration, index)] = "0";

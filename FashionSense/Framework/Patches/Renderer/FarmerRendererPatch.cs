@@ -458,7 +458,12 @@ namespace FashionSense.Framework.Patches.Renderer
                     var accessoryIndex = FashionSense.accessoryManager.GetAccessoryIndexById(who, accessoryModel.Pack.Id);
                     if (accessoryIndex != -1)
                     {
-                        FashionSense.accessoryManager.ResetAccessory(accessoryIndex, who, animations.ElementAt(iterator).GetDuration(true), type, ignoreAnimationType: false, startingIndex: startingIndex);
+                        who.modData[FashionSense.accessoryManager.GetModDataKey(who, AccessoryManager.AnimationKey.AnimationType, accessoryIndex)] = type.ToString();
+                        who.modData[FashionSense.accessoryManager.GetModDataKey(who, AccessoryManager.AnimationKey.Iterator, accessoryIndex)] = iterator.ToString();
+                        who.modData[FashionSense.accessoryManager.GetModDataKey(who, AccessoryManager.AnimationKey.StartingIndex, accessoryIndex)] = startingIndex.ToString();
+                        who.modData[FashionSense.accessoryManager.GetModDataKey(who, AccessoryManager.AnimationKey.FrameDuration, accessoryIndex)] = animations.ElementAt(iterator).GetDuration(true).ToString();
+                        who.modData[FashionSense.accessoryManager.GetModDataKey(who, AccessoryManager.AnimationKey.ElapsedDuration, accessoryIndex)] = "0";
+                        who.modData[FashionSense.accessoryManager.GetModDataKey(who, AccessoryManager.AnimationKey.FarmerFrame, accessoryIndex)] = who.FarmerSprite.CurrentFrame.ToString();
                     }
                     break;
                 case HatModel hatModel:
