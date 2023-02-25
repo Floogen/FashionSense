@@ -3,7 +3,7 @@ using StardewModdingAPI;
 
 namespace FashionSense.Framework.Managers
 {
-    class ApiManager
+    internal class ApiManager
     {
         private IMonitor _monitor;
         private IContentPatcherApi _contentPatcherApi;

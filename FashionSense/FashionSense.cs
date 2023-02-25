@@ -65,8 +65,8 @@ namespace FashionSense
             accessoryManager = new AccessoryManager(monitor);
             apiManager = new ApiManager(monitor);
             assetManager = new AssetManager(modHelper);
-            outfitManager = new OutfitManager(monitor, modHelper);
-            textureManager = new TextureManager(monitor, modHelper);
+            outfitManager = new OutfitManager(monitor);
+            textureManager = new TextureManager(monitor);
 
             // Setup our utilities
             conditionData = new ConditionData();

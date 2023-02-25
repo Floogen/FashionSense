@@ -7,12 +7,12 @@ using System.Linq;
 
 namespace FashionSense.Framework.Managers
 {
-    class TextureManager
+    internal class TextureManager
     {
         private IMonitor _monitor;
         private List<AppearanceContentPack> _appearanceTextures;
 
-        public TextureManager(IMonitor monitor, IModHelper helper)
+        public TextureManager(IMonitor monitor)
         {
             _monitor = monitor;
             _appearanceTextures = new List<AppearanceContentPack>();

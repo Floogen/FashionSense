@@ -10,11 +10,11 @@ using System.Linq;
 
 namespace FashionSense.Framework.Managers
 {
-    class OutfitManager
+    internal class OutfitManager
     {
         private IMonitor _monitor;
 
-        public OutfitManager(IMonitor monitor, IModHelper helper)
+        public OutfitManager(IMonitor monitor)
         {
             _monitor = monitor;
         }

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace FashionSense.Framework.Managers
 {
-    class AccessoryManager
+    internal class AccessoryManager
     {
         private IMonitor _monitor;
         private const int MAX_ACCESSORY_LIMIT = 100;
