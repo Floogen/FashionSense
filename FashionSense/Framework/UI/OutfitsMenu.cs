@@ -237,6 +237,7 @@ namespace FashionSense.Framework.UI
                         }
 
                         FashionSense.outfitManager.SetOutfit(Game1.player, _pages[_currentPage][i]);
+                        _callbackMenu.colorPicker.SetColor(FashionSense.accessoryManager.GetColorFromIndex(Game1.player, _callbackMenu.GetAccessoryIndex()));
 
                         Game1.activeClickableMenu = _callbackMenu;
                         base.exitThisMenu();
