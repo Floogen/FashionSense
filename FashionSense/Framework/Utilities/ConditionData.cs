@@ -1,4 +1,4 @@
-﻿using FashionSense.Framework.Models.Generic;
+﻿using FashionSense.Framework.Models.Appearances.Generic;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
 using StardewValley;

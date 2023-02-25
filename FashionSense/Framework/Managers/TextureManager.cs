@@ -1,4 +1,4 @@
-﻿using FashionSense.Framework.Models;
+﻿using FashionSense.Framework.Models.Appearances;
 using StardewModdingAPI;
 using StardewValley;
 using System;

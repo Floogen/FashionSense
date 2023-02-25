@@ -1,4 +1,4 @@
-﻿using FashionSense.Framework.Models.Pants;
+﻿using FashionSense.Framework.Models.Appearances.Pants;
 using FashionSense.Framework.Utilities;
 using HarmonyLib;
 using Microsoft.Xna.Framework;

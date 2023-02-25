@@ -1,8 +1,6 @@
-﻿using FashionSense.Framework.Models;
-using FashionSense.Framework.Models.Accessory;
+﻿using FashionSense.Framework.Models.Appearances;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
-using Newtonsoft.Json;
 using StardewModdingAPI;
 using StardewValley;
 using System;
