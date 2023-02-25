@@ -44,7 +44,7 @@ namespace FashionSense.Framework.Models
             AccessoryOneId = who.modData[ModDataKeys.CUSTOM_ACCESSORY_ID];
             AccessoryTwoId = who.modData[ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID];
             AccessoryThreeId = who.modData[ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID];
-            AccessoryIds = who.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID];
+            AccessoryIds = who.modData[ModDataKeys.OUTFIT_ACCESSORY_IDS];
             HatId = who.modData[ModDataKeys.CUSTOM_HAT_ID];
             ShirtId = who.modData[ModDataKeys.CUSTOM_SHIRT_ID];
             SleevesId = who.modData[ModDataKeys.CUSTOM_SLEEVES_ID];
@@ -55,7 +55,7 @@ namespace FashionSense.Framework.Models
             AccessoryOneColor = who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR];
             AccessoryTwoColor = who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR];
             AccessoryThreeColor = who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR];
-            AccessoryColors = who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR];
+            AccessoryColors = who.modData[ModDataKeys.OUTFIT_ACCESSORY_COLORS];
             HatColor = who.modData[ModDataKeys.UI_HAND_MIRROR_HAT_COLOR];
             ShirtColor = who.modData[ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR];
             SleevesColor = who.modData[ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR];

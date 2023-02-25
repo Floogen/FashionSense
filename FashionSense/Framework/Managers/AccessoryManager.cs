@@ -56,8 +56,8 @@ namespace FashionSense.Framework.Managers
             }
             SetActiveAccessoryCount(who, 0);
 
-            who.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID] = "None";
-            who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR] = String.Empty;
+            who.modData[ModDataKeys.OUTFIT_ACCESSORY_IDS] = "None";
+            who.modData[ModDataKeys.OUTFIT_ACCESSORY_COLORS] = String.Empty;
         }
 
         internal int AddAccessory(Farmer who, string accessoryId, int index = -1)
@@ -70,6 +70,8 @@ namespace FashionSense.Framework.Managers
             if (index > -1)
             {
                 who.modData[GetKeyForAccessoryId(index)] = accessoryId;
+                who.modData[GetKeyForAccessoryColor(index)] = Color.White.PackedValue.ToString();
+
                 ResetAccessory(who, index);
                 SetActiveAccessoryCount(who, index + 1);
 
@@ -80,8 +82,8 @@ namespace FashionSense.Framework.Managers
                     accessoryIds.Add(GetKeyForAccessoryId(accessoryIndex));
                     colorValues.Add(GetKeyForAccessoryColor(accessoryIndex));
                 }
-                who.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID] = JsonConvert.SerializeObject(accessoryIds);
-                who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR] = JsonConvert.SerializeObject(colorValues);
+                who.modData[ModDataKeys.OUTFIT_ACCESSORY_IDS] = JsonConvert.SerializeObject(accessoryIds);
+                who.modData[ModDataKeys.OUTFIT_ACCESSORY_COLORS] = JsonConvert.SerializeObject(colorValues);
 
                 return index;
             }
@@ -325,8 +327,8 @@ namespace FashionSense.Framework.Managers
             // If any old accessories were detected, import them
             if (accessoryIds.Count > 0)
             {
-                player.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID] = JsonConvert.SerializeObject(accessoryIds);
-                player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR] = JsonConvert.SerializeObject(accessoryColors);
+                player.modData[ModDataKeys.OUTFIT_ACCESSORY_IDS] = JsonConvert.SerializeObject(accessoryIds);
+                player.modData[ModDataKeys.OUTFIT_ACCESSORY_COLORS] = JsonConvert.SerializeObject(accessoryColors);
             }
         }
     }

@@ -238,8 +238,8 @@ namespace FashionSense
             EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID);
-            EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID);
-            EnsureKeyExists(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR);
+            EnsureKeyExists(ModDataKeys.OUTFIT_ACCESSORY_IDS);
+            EnsureKeyExists(ModDataKeys.OUTFIT_ACCESSORY_COLORS);
             EnsureKeyExists(ModDataKeys.CUSTOM_HAT_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_SHIRT_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_PANTS_ID);
