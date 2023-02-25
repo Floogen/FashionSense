@@ -65,6 +65,7 @@ namespace FashionSense.Framework.Managers
             {
                 RemoveAccessory(who, i);
             }
+            SetActiveAccessoryCount(who, 0);
 
             who.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID] = "None";
             who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR] = String.Empty;
