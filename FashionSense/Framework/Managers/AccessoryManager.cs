@@ -73,7 +73,6 @@ namespace FashionSense.Framework.Managers
                 ResetAccessory(who, index);
                 SetActiveAccessoryCount(who, index + 1);
 
-                // TODO: Update the CUSTOM_ACCESSORY_COLLECTIVE_ID ModData to include the new accessory 
                 List<string> accessoryIds = new List<string>();
                 List<string> colorValues = new List<string>();
                 foreach (int accessoryIndex in GetActiveAccessoryIndices(who))
