@@ -1,4 +1,5 @@
-﻿using FashionSense.Framework.Models.Appearances;
+﻿using FashionSense.Framework.Managers;
+using FashionSense.Framework.Models.Appearances;
 using FashionSense.Framework.Models.Appearances.Accessory;
 using FashionSense.Framework.Models.Appearances.Hair;
 using FashionSense.Framework.Models.Appearances.Hat;
@@ -6,6 +7,7 @@ using FashionSense.Framework.Models.Appearances.Pants;
 using FashionSense.Framework.Models.Appearances.Shirt;
 using FashionSense.Framework.Models.Appearances.Shoes;
 using FashionSense.Framework.Models.Appearances.Sleeves;
+using FashionSense.Framework.Models.General;
 using FashionSense.Framework.UI;
 using FashionSense.Framework.Utilities;
 using HarmonyLib;
@@ -16,7 +18,9 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Tools;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace FashionSense.Framework.Patches.Renderer
 {
@@ -77,7 +81,7 @@ namespace FashionSense.Framework.Patches.Renderer
             var lightestColor = new Color(158, 158, 158);
 
             var isDoingVanillaOverride = false;
-            if (who.modData[ModDataKeys.CUSTOM_SHOES_ID] == ModDataKeys.INTERNAL_COLOR_OVERRIDE_SHOE_ID && ShouldHideLegs(who, who.FacingDirection) is false)
+            if (who.modData[ModDataKeys.CUSTOM_SHOES_ID] == ModDataKeys.INTERNAL_COLOR_OVERRIDE_SHOE_ID && AppearanceHelpers.ShouldHideLegs(who, who.FacingDirection) is false)
             {
                 isDoingVanillaOverride = true;
             }
@@ -132,14 +136,17 @@ namespace FashionSense.Framework.Patches.Renderer
         }
 
         [HarmonyAfter(new string[] { "aedenthorn.Swim" })]
-        private static bool DrawPrefix(FarmerRenderer __instance, ref Vector2 ___positionOffset, ref Vector2 ___rotationAdjustment, ref bool ____sickFrame, ref bool ____shirtDirty, ref bool ____spriteDirty, SpriteBatch b, FarmerSprite.AnimationFrame animationFrame, int currentFrame, Rectangle sourceRect, Vector2 position, Vector2 origin, float layerDepth, int facingDirection, Color overrideColor, float rotation, float scale, Farmer who)
+        private static bool DrawPrefix(FarmerRenderer __instance, LocalizedContentManager ___farmerTextureManager, Texture2D ___baseTexture, NetInt ___skin, ref Rectangle ___hairstyleSourceRect, ref Rectangle ___shirtSourceRect, ref Rectangle ___accessorySourceRect, ref Rectangle ___hatSourceRect, ref Vector2 ___positionOffset, ref Vector2 ___rotationAdjustment, ref bool ____sickFrame, ref bool ____shirtDirty, ref bool ____spriteDirty, SpriteBatch b, FarmerSprite.AnimationFrame animationFrame, int currentFrame, Rectangle sourceRect, Vector2 position, Vector2 origin, float layerDepth, int facingDirection, Color overrideColor, float rotation, float scale, Farmer who)
         {
             if (who.isFakeEventActor && Game1.eventUp)
             {
                 who = Game1.player;
             }
 
-            if (GetCurrentlyEquippedModels(who, facingDirection).Any(m => m is not null))
+            // Get the currently equipped models
+            List<AppearanceModel> equippedModels = GetCurrentlyEquippedModels(who, facingDirection);
+
+            if (equippedModels.Count > 0)
             {
                 // Draw with modified SpriteSortMode method for UI to handle clipping issue
                 //_monitor.Log(_helper.Reflection.GetField<SpriteSortMode>(b, "_sortMode").GetValue().ToString(), LogLevel.Debug);
@@ -148,7 +155,7 @@ namespace FashionSense.Framework.Patches.Renderer
                     b.End();
                     b.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
 
-                    HandleConditionalDraw(__instance, ref ___positionOffset, ref ___rotationAdjustment, ref ____sickFrame, ref ____shirtDirty, ref ____spriteDirty, b, animationFrame, currentFrame, sourceRect, position, origin, layerDepth, facingDirection, overrideColor, rotation, scale, who);
+                    HandleConditionalDraw(equippedModels, __instance, ___farmerTextureManager, ___baseTexture, ___skin, ref ___hairstyleSourceRect, ref ___shirtSourceRect, ref ___accessorySourceRect, ref ___hatSourceRect, ref ___positionOffset, ref ___rotationAdjustment, ref ____sickFrame, ref ____shirtDirty, ref ____spriteDirty, b, animationFrame, currentFrame, sourceRect, position, origin, layerDepth, facingDirection, overrideColor, rotation, scale, who);
 
                     b.End();
                     b.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
@@ -156,7 +163,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 else
                 {
                     // Utilize standard SpriteSortMode if not using the UI
-                    HandleConditionalDraw(__instance, ref ___positionOffset, ref ___rotationAdjustment, ref ____sickFrame, ref ____shirtDirty, ref ____spriteDirty, b, animationFrame, currentFrame, sourceRect, position, origin, layerDepth, facingDirection, overrideColor, rotation, scale, who);
+                    HandleConditionalDraw(equippedModels, __instance, ___farmerTextureManager, ___baseTexture, ___skin, ref ___hairstyleSourceRect, ref ___shirtSourceRect, ref ___accessorySourceRect, ref ___hatSourceRect, ref ___positionOffset, ref ___rotationAdjustment, ref ____sickFrame, ref ____shirtDirty, ref ____spriteDirty, b, animationFrame, currentFrame, sourceRect, position, origin, layerDepth, facingDirection, overrideColor, rotation, scale, who);
                 }
 
                 return false;
@@ -165,12 +172,12 @@ namespace FashionSense.Framework.Patches.Renderer
             return true;
         }
 
-        private static void HandleConditionalDraw(FarmerRenderer __instance, ref Vector2 ___positionOffset, ref Vector2 ___rotationAdjustment, ref bool ____sickFrame, ref bool ____shirtDirty, ref bool ____spriteDirty, SpriteBatch b, FarmerSprite.AnimationFrame animationFrame, int currentFrame, Rectangle sourceRect, Vector2 position, Vector2 origin, float layerDepth, int facingDirection, Color overrideColor, float rotation, float scale, Farmer who)
+        private static void HandleConditionalDraw(List<AppearanceModel> equippedModels, FarmerRenderer __instance, LocalizedContentManager ___farmerTextureManager, Texture2D ___baseTexture, NetInt ___skin, ref Rectangle ___hairstyleSourceRect, ref Rectangle ___shirtSourceRect, ref Rectangle ___accessorySourceRect, ref Rectangle ___hatSourceRect, ref Vector2 ___positionOffset, ref Vector2 ___rotationAdjustment, ref bool ____sickFrame, ref bool ____shirtDirty, ref bool ____spriteDirty, SpriteBatch b, FarmerSprite.AnimationFrame animationFrame, int currentFrame, Rectangle sourceRect, Vector2 position, Vector2 origin, float layerDepth, int facingDirection, Color overrideColor, float rotation, float scale, Farmer who)
         {
             // Check if we need to utilize custom draw logic
-            if (GetCurrentlyEquippedModels(who, facingDirection).Count() > 0 || ShouldSleevesBeHidden(who, facingDirection))
+            if (equippedModels.Count() > 0 || AppearanceHelpers.AreSleevesForcedHidden(equippedModels))
             {
-                HandleCustomDraw(__instance, ref ___positionOffset, ref ___rotationAdjustment, ref ____sickFrame, ref ____shirtDirty, ref ____spriteDirty, b, animationFrame, currentFrame, sourceRect, position, origin, layerDepth, facingDirection, overrideColor, rotation, scale, who);
+                HandleCustomDraw(equippedModels, __instance, ___farmerTextureManager, ___baseTexture, ___skin, ref ___hairstyleSourceRect, ref ___shirtSourceRect, ref ___accessorySourceRect, ref ___hatSourceRect, ref ___positionOffset, ref ___rotationAdjustment, ref ____sickFrame, ref ____shirtDirty, ref ____spriteDirty, b, animationFrame, currentFrame, sourceRect, position, origin, layerDepth, facingDirection, overrideColor, rotation, scale, who);
             }
             else
             {
@@ -178,8 +185,9 @@ namespace FashionSense.Framework.Patches.Renderer
             }
         }
 
-        private static void HandleCustomDraw(FarmerRenderer __instance, ref Vector2 ___positionOffset, ref Vector2 ___rotationAdjustment, ref bool ____sickFrame, ref bool ____shirtDirty, ref bool ____spriteDirty, SpriteBatch b, FarmerSprite.AnimationFrame animationFrame, int currentFrame, Rectangle sourceRect, Vector2 position, Vector2 origin, float layerDepth, int facingDirection, Color overrideColor, float rotation, float scale, Farmer who)
+        private static void HandleCustomDraw(List<AppearanceModel> equippedModels, FarmerRenderer __instance, LocalizedContentManager ___farmerTextureManager, Texture2D ___baseTexture, NetInt ___skin, ref Rectangle ___hairstyleSourceRect, ref Rectangle ___shirtSourceRect, ref Rectangle ___accessorySourceRect, ref Rectangle ___hatSourceRect, ref Vector2 ___positionOffset, ref Vector2 ___rotationAdjustment, ref bool ____sickFrame, ref bool ____shirtDirty, ref bool ____spriteDirty, SpriteBatch b, FarmerSprite.AnimationFrame animationFrame, int currentFrame, Rectangle sourceRect, Vector2 position, Vector2 origin, float layerDepth, int facingDirection, Color overrideColor, float rotation, float scale, Farmer who)
         {
+            // Determine if player is currently sick
             bool sick_frame = currentFrame == 104 || currentFrame == 105;
             if (____sickFrame != sick_frame)
             {
@@ -188,8 +196,8 @@ namespace FashionSense.Framework.Patches.Renderer
                 ____spriteDirty = true;
             }
 
-            // Check if one of the styles
-            if (ShouldUseBaldBase(who, facingDirection))
+            // Check what player base to use
+            if (AppearanceHelpers.ShouldUseBaldBase(who, facingDirection))
             {
                 if (!__instance.textureName.Contains("_bald"))
                 {
@@ -201,6 +209,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 __instance.textureName.Set("Characters\\Farmer\\farmer_" + (who.IsMale ? "" : "girl_") + "base");
             }
 
+            // Recolor the player's base
             ExecuteRecolorActionsReversePatch(__instance, who);
             var baseTexture = _helper.Reflection.GetField<Texture2D>(__instance, "baseTexture").GetValue();
 
@@ -219,15 +228,9 @@ namespace FashionSense.Framework.Patches.Renderer
                 facingDirection = ((!animationFrame.flip) ? 1 : 3);
             }
 
-            // Get the pants model, if applicable
-            PantsModel pantsModel = null;
-            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_PANTS_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<PantsContentPack>(who.modData[ModDataKeys.CUSTOM_PANTS_ID]) is PantsContentPack pPack && pPack != null)
-            {
-                pantsModel = pPack.GetPantsFromFacingDirection(facingDirection);
-            }
-
+            // Check if the player's legs need to be hidden
             var adjustedBaseRectangle = sourceRect;
-            if (pantsModel != null && pantsModel.HideLegs && !(bool)who.swimming)
+            if (AppearanceHelpers.ShouldHideLegs(who, facingDirection) && !(bool)who.swimming)
             {
                 switch (who.FarmerSprite.CurrentFrame)
                 {
@@ -314,8 +317,31 @@ namespace FashionSense.Framework.Patches.Renderer
                     adjustedBaseRectangle.Height -= 1;
                 }
             }
+
+            // Draw the player's base texture
             b.Draw(baseTexture, position + origin + ___positionOffset, adjustedBaseRectangle, overrideColor, rotation, origin, 4f * scale, animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
 
+            // Get skin tone
+            var skinTone = DrawPatch.GetSkinTone(___farmerTextureManager, ___baseTexture, null, ___skin, ____sickFrame);
+
+            // Establish the source rectangles for models
+            Dictionary<AppearanceModel, Rectangle> appearanceTypeToSourceRectangles = new Dictionary<AppearanceModel, Rectangle>();
+
+            // Generate the list of layers to draw
+            List<LayerData> layers = GenerateDrawLayers(equippedModels, __instance, ref appearanceTypeToSourceRectangles, FarmerRenderer.isDrawingForUI, ___positionOffset, ___rotationAdjustment, ___farmerTextureManager, ___baseTexture, ___skin, ____sickFrame, ref ___hairstyleSourceRect, ref ___shirtSourceRect, ref ___accessorySourceRect, ref ___hatSourceRect, b, facingDirection, who, position, origin, scale, currentFrame, rotation, overrideColor, layerDepth);
+
+            // Get the dyed_shirt_source_rect
+            Rectangle dyedShirtSourceRect = ___shirtSourceRect;
+            dyedShirtSourceRect = ___shirtSourceRect;
+            dyedShirtSourceRect.Offset(128, 0);
+
+            // Offset the source rectangles for shirts, accessories and hats according to facingDirection
+            AppearanceHelpers.OffsetSourceRectangles(who, facingDirection, rotation, ref ___shirtSourceRect, ref dyedShirtSourceRect, ref ___accessorySourceRect, ref ___hatSourceRect, ref ___rotationAdjustment);
+
+            // Prepare the DrawManager
+            DrawManager drawManager = new DrawManager(b, __instance, skinTone, ___baseTexture, sourceRect, ___shirtSourceRect, dyedShirtSourceRect, ___accessorySourceRect, ___hatSourceRect, appearanceTypeToSourceRectangles, animationFrame, overrideColor, position, origin, ___positionOffset, ___rotationAdjustment, facingDirection, currentFrame, scale, rotation, FarmerRendererPatch.AreColorMasksPendingRefresh, FarmerRenderer.isDrawingForUI, AppearanceHelpers.AreSleevesForcedHidden(equippedModels));
+
+            // Draw the player's eyes
             if (!FarmerRenderer.isDrawingForUI && (bool)who.swimming)
             {
                 if (who.currentEyes != 0 && who.FacingDirection != 0 && (Game1.timeOfDay < 2600 || (who.isInBed.Value && who.timeWentToBed.Value != 0)) && ((!who.FarmerSprite.PauseForSingleAnimation && !who.UsingTool) || (who.UsingTool && who.CurrentTool is FishingRod)))
@@ -324,21 +350,15 @@ namespace FashionSense.Framework.Patches.Renderer
                     b.Draw(baseTexture, position + origin + ___positionOffset + new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4 + 20 + ((who.FacingDirection == 1) ? 12 : ((who.FacingDirection == 3) ? 4 : 0)), FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + 40), new Rectangle(264 + ((who.FacingDirection == 3) ? 4 : 0), 2 + (who.currentEyes - 1) * 2, (who.FacingDirection == 2) ? 6 : 2, 2), overrideColor, 0f, origin, 4f * scale, SpriteEffects.None, layerDepth + 1.2E-07f);
                 }
 
-                __instance.drawHairAndAccesories(b, facingDirection, who, position, origin, scale, currentFrame, rotation, overrideColor, layerDepth);
-                if (!ShouldHideWaterLine(who, facingDirection))
+                // Draw all clothing related assets
+                drawManager.DrawLayers(who, layers);
+                if (!AppearanceHelpers.ShouldHideWaterLine(equippedModels))
                 {
                     b.Draw(Game1.staminaRect, new Rectangle((int)position.X + (int)who.yOffset + 8, (int)position.Y - 128 + sourceRect.Height * 4 + (int)origin.Y - (int)who.yOffset, sourceRect.Width * 4 - (int)who.yOffset * 2 - 16, 4), Game1.staminaRect.Bounds, Color.White * 0.75f, 0f, Vector2.Zero, SpriteEffects.None, layerDepth + 0.001f);
                 }
                 return;
             }
 
-            // Utilize vanilla logic if no valid PantsModel is given
-            if (pantsModel is null)
-            {
-                DrawPantsVanilla(b, sourceRect, __instance, who, animationFrame, currentFrame, facingDirection, rotation, scale, layerDepth, position, origin, ___positionOffset, ___rotationAdjustment, overrideColor);
-            }
-
-            sourceRect.Offset(288, 0);
             FishingRod fishing_rod;
             if (who.currentEyes != 0 && facingDirection != 0 && (Game1.timeOfDay < 2600 || (who.isInBed.Value && who.timeWentToBed.Value != 0)) && ((!who.FarmerSprite.PauseForSingleAnimation && !who.UsingTool) || (who.UsingTool && who.CurrentTool is FishingRod)) && (!who.UsingTool || (fishing_rod = who.CurrentTool as FishingRod) == null || fishing_rod.isFishing))
             {
@@ -357,182 +377,126 @@ namespace FashionSense.Framework.Patches.Renderer
                 b.Draw(baseTexture, position + origin + ___positionOffset + new Vector2(x_adjustment, FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + ((who.IsMale && who.FacingDirection != 2) ? 36 : 40)), new Rectangle(5, 16, (facingDirection == 2) ? 6 : 2, 2), overrideColor, 0f, origin, 4f * scale, SpriteEffects.None, layerDepth + 5E-08f);
                 b.Draw(baseTexture, position + origin + ___positionOffset + new Vector2(x_adjustment, FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + ((who.FacingDirection == 1 || who.FacingDirection == 3) ? 40 : 44)), new Rectangle(264 + ((facingDirection == 3) ? 4 : 0), 2 + (who.currentEyes - 1) * 2, (facingDirection == 2) ? 6 : 2, 2), overrideColor, 0f, origin, 4f * scale, SpriteEffects.None, layerDepth + 1.2E-07f);
             }
-            __instance.drawHairAndAccesories(b, facingDirection, who, position, origin, scale, currentFrame, rotation, overrideColor, layerDepth);
 
-            // Get the sleeves model, if applicable
-            SleevesModel sleevesModel = null;
-            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_SLEEVES_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<SleevesContentPack>(who.modData[ModDataKeys.CUSTOM_SLEEVES_ID]) is SleevesContentPack sleevesPack && sleevesPack != null)
-            {
-                sleevesModel = sleevesPack.GetSleevesFromFacingDirection(facingDirection);
-            }
+            // Draw all clothing related assets
+            drawManager.DrawLayers(who, layers);
 
-            // Handle the vanilla sleeve / arm drawing, if a custom sleeve model isn't given
-            if (sleevesModel is null && !ShouldSleevesBeHidden(who, facingDirection))
-            {
-                float arm_layer_offset = 4.9E-05f;
-                if (facingDirection == 0)
-                {
-                    arm_layer_offset = -1E-07f;
-                }
-                sourceRect.Offset(-288 + (animationFrame.secondaryArm ? 192 : 96), 0);
-
-                b.Draw(baseTexture, position + origin + ___positionOffset + who.armOffset, sourceRect, overrideColor, rotation, origin, 4f * scale, animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + arm_layer_offset);
-            }
+            FarmerRendererPatch.AreColorMasksPendingRefresh = false;
         }
 
-        private static bool ShouldUseBaldBase(Farmer who, int facingDirection)
+        private static List<LayerData> GenerateDrawLayers(List<AppearanceModel> models, FarmerRenderer __instance, ref Dictionary<AppearanceModel, Rectangle> appearanceTypeToSourceRectangles, bool ___isDrawingForUI, Vector2 ___positionOffset, Vector2 ___rotationAdjustment, LocalizedContentManager ___farmerTextureManager, Texture2D ___baseTexture, NetInt ___skin, bool ____sickFrame, ref Rectangle ___hairstyleSourceRect, ref Rectangle ___shirtSourceRect, ref Rectangle ___accessorySourceRect, ref Rectangle ___hatSourceRect, SpriteBatch b, int facingDirection, Farmer who, Vector2 position, Vector2 origin, float scale, int currentFrame, float rotation, Color overrideColor, float layerDepth)
         {
-            // Hair pack
-            HairModel hairModel = null;
-            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_HAIR_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(who.modData[ModDataKeys.CUSTOM_HAIR_ID]) is HairContentPack hPack && hPack != null)
+            // Check if all the models are null, if so revert back to vanilla logic
+            models = models.Where(m => m is not null).ToList();
+            if (models.Count == 0)
             {
-                hairModel = hPack.GetHairFromFacingDirection(facingDirection);
+                return new List<LayerData>();
             }
 
-            // Hat pack
-            HatModel hatModel = null;
-            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_HAT_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<HatContentPack>(who.modData[ModDataKeys.CUSTOM_HAT_ID]) is HatContentPack tPack && tPack != null)
+            // Set up the initial source rectangles
+            foreach (var model in models)
             {
-                hatModel = tPack.GetHatFromFacingDirection(facingDirection);
+                appearanceTypeToSourceRectangles[model] = new Rectangle();
             }
 
-            if ((hairModel is not null && hairModel.UseBaldHead) || (hatModel is not null && hatModel.UseBaldHead))
+            // Handle any animations
+            foreach (var model in models)
             {
-                return true;
-            }
-            else if (hairModel is null && who.IsBaldHairStyle(who.getHair()) && (hatModel is null || hatModel.HideHair is false))
-            {
-                return true;
+                AppearanceHelpers.HandleAppearanceAnimation(models, model, who, facingDirection, ref appearanceTypeToSourceRectangles);
             }
 
-            return false;
+            // Check if the cached facing direction needs to be updated
+            if (who.modData.ContainsKey(ModDataKeys.ANIMATION_FACING_DIRECTION) is false || who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] != facingDirection.ToString())
+            {
+                who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] = facingDirection.ToString();
+            }
+
+            // Execute recolor
+            DrawPatch.ExecuteRecolorActionsReversePatch(__instance, who);
+
+            // Set the source rectangles for vanilla shirts, accessories and hats
+            ___shirtSourceRect = new Rectangle(__instance.ClampShirt(who.GetShirtIndex()) * 8 % 128, __instance.ClampShirt(who.GetShirtIndex()) * 8 / 128 * 32, 8, 8);
+            if ((int)who.accessory >= 0)
+            {
+                ___accessorySourceRect = new Rectangle((int)who.accessory * 16 % FarmerRenderer.accessoriesTexture.Width, (int)who.accessory * 16 / FarmerRenderer.accessoriesTexture.Width * 32, 16, 16);
+            }
+            if (who.hat.Value != null)
+            {
+                ___hatSourceRect = new Rectangle(20 * (int)who.hat.Value.which % FarmerRenderer.hatsTexture.Width, 20 * (int)who.hat.Value.which / FarmerRenderer.hatsTexture.Width * 20 * 4, 20, 20);
+            }
+
+            // Go through the models and determine draw order
+            return FashionSense.layerManager.SortModelsForDrawing(who, facingDirection, models);
         }
 
-        private static bool ShouldSleevesBeHidden(Farmer who, int facingDirection)
+        private static List<AppearanceModel> GetCurrentlyEquippedModels(Farmer who, int facingDirection)
         {
-            AppearanceModel[] appearances = GetCurrentlyEquippedModels(who, facingDirection);
+            // Set up each AppearanceModel
+            List<AppearanceModel> models = new List<AppearanceModel>();
 
-            return FarmerRendererPatch.AreSleevesForcedHidden(appearances);
-        }
-
-        private static bool ShouldHideWaterLine(Farmer who, int facingDirection)
-        {
-            foreach (var model in GetCurrentlyEquippedModels(who, facingDirection).Where(m => m is not null))
-            {
-                if (model.HideWaterLine)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        internal static bool ShouldHideLegs(Farmer who, int facingDirection)
-        {
-            // Get the pants model, if applicable
-            PantsModel pantsModel = null;
-            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_PANTS_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<PantsContentPack>(who.modData[ModDataKeys.CUSTOM_PANTS_ID]) is PantsContentPack pPack && pPack != null)
-            {
-                pantsModel = pPack.GetPantsFromFacingDirection(facingDirection);
-            }
-
-            return pantsModel is not null && pantsModel.HideLegs;
-        }
-
-        private static AppearanceModel[] GetCurrentlyEquippedModels(Farmer who, int facingDirection)
-        {
             // Pants pack
-            PantsModel pantsModel = null;
             if (who.modData.ContainsKey(ModDataKeys.CUSTOM_PANTS_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<PantsContentPack>(who.modData[ModDataKeys.CUSTOM_PANTS_ID]) is PantsContentPack pPack && pPack != null)
             {
-                pantsModel = pPack.GetPantsFromFacingDirection(facingDirection);
+                models.Add(pPack.GetPantsFromFacingDirection(facingDirection));
             }
 
             // Hair pack
-            HairModel hairModel = null;
             if (who.modData.ContainsKey(ModDataKeys.CUSTOM_HAIR_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(who.modData[ModDataKeys.CUSTOM_HAIR_ID]) is HairContentPack hPack && hPack != null)
             {
-                hairModel = hPack.GetHairFromFacingDirection(facingDirection);
+                models.Add(hPack.GetHairFromFacingDirection(facingDirection));
             }
 
-            // Accessory pack
-            AccessoryModel accessoryModel = null;
-            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(who.modData[ModDataKeys.CUSTOM_ACCESSORY_ID]) is AccessoryContentPack aPack && aPack != null)
+            // Accessory packs
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_ID))
             {
-                accessoryModel = aPack.GetAccessoryFromFacingDirection(facingDirection);
-
-                if (accessoryModel != null)
+                try
                 {
-                    accessoryModel.Priority = AccessoryModel.Type.Primary;
+                    foreach (int index in FashionSense.accessoryManager.GetActiveAccessoryIndices(who))
+                    {
+                        var accessoryKey = FashionSense.accessoryManager.GetAccessoryIdByIndex(who, index);
+                        if (FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(accessoryKey) is AccessoryContentPack aPack && aPack != null)
+                        {
+                            AccessoryModel accessoryModel = aPack.GetAccessoryFromFacingDirection(facingDirection);
+                            if (accessoryModel is null)
+                            {
+                                continue;
+                            }
+
+                            models.Add(accessoryModel);
+                        }
+                    }
                 }
-            }
-
-            AccessoryModel secondaryAccessoryModel = null;
-            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(who.modData[ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID]) is AccessoryContentPack secAPack && secAPack != null)
-            {
-                secondaryAccessoryModel = secAPack.GetAccessoryFromFacingDirection(facingDirection);
-
-                if (secondaryAccessoryModel != null)
+                catch (Exception)
                 {
-                    secondaryAccessoryModel.Priority = AccessoryModel.Type.Secondary;
-                }
-            }
-
-            AccessoryModel tertiaryAccessoryModel = null;
-            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(who.modData[ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID]) is AccessoryContentPack triAPack && triAPack != null)
-            {
-                tertiaryAccessoryModel = triAPack.GetAccessoryFromFacingDirection(facingDirection);
-
-                if (tertiaryAccessoryModel != null)
-                {
-                    tertiaryAccessoryModel.Priority = AccessoryModel.Type.Tertiary;
+                    // TODO: Flag error here
                 }
             }
 
             // Hat pack
-            HatModel hatModel = null;
             if (who.modData.ContainsKey(ModDataKeys.CUSTOM_HAT_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<HatContentPack>(who.modData[ModDataKeys.CUSTOM_HAT_ID]) is HatContentPack tPack && tPack != null)
             {
-                hatModel = tPack.GetHatFromFacingDirection(facingDirection);
+                models.Add(tPack.GetHatFromFacingDirection(facingDirection));
             }
 
             // Shirt pack
-            ShirtModel shirtModel = null;
             if (who.modData.ContainsKey(ModDataKeys.CUSTOM_SHIRT_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<ShirtContentPack>(who.modData[ModDataKeys.CUSTOM_SHIRT_ID]) is ShirtContentPack sPack && sPack != null)
             {
-                shirtModel = sPack.GetShirtFromFacingDirection(facingDirection);
+                models.Add(sPack.GetShirtFromFacingDirection(facingDirection));
             }
 
             // Sleeves pack
-            SleevesModel sleeveModel = null;
             if (who.modData.ContainsKey(ModDataKeys.CUSTOM_SLEEVES_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<SleevesContentPack>(who.modData[ModDataKeys.CUSTOM_SLEEVES_ID]) is SleevesContentPack slModel && slModel != null)
             {
-                sleeveModel = slModel.GetSleevesFromFacingDirection(facingDirection);
+                models.Add(slModel.GetSleevesFromFacingDirection(facingDirection));
             }
 
             // Shoes pack
-            ShoesModel shoesModel = null;
             if (who.modData.ContainsKey(ModDataKeys.CUSTOM_SHOES_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<ShoesContentPack>(who.modData[ModDataKeys.CUSTOM_SHOES_ID]) is ShoesContentPack shModel && shModel != null)
             {
-                shoesModel = shModel.GetShoesFromFacingDirection(facingDirection);
+                models.Add(shModel.GetShoesFromFacingDirection(facingDirection));
             }
 
-            return new AppearanceModel[] { pantsModel, hairModel, accessoryModel, secondaryAccessoryModel, tertiaryAccessoryModel, hatModel, shirtModel, sleeveModel, shoesModel };
-        }
-
-        private static void DrawPantsVanilla(SpriteBatch b, Rectangle sourceRect, FarmerRenderer renderer, Farmer who, FarmerSprite.AnimationFrame animationFrame, int currentFrame, int facingDirection, float rotation, float scale, float layerDepth, Vector2 position, Vector2 origin, Vector2 positionOffset, Vector2 rotationAdjustment, Color overrideColor)
-        {
-            Rectangle pants_rect = new Rectangle(sourceRect.X, sourceRect.Y, sourceRect.Width, sourceRect.Height);
-            pants_rect.X += renderer.ClampPants(who.GetPantsIndex()) % 10 * 192;
-            pants_rect.Y += renderer.ClampPants(who.GetPantsIndex()) / 10 * 688;
-
-            if (!who.IsMale)
-            {
-                pants_rect.X += 96;
-            }
-
-            b.Draw(FarmerRenderer.pantsTexture, position + origin + positionOffset, pants_rect, overrideColor.Equals(Color.White) ? Utility.MakeCompletelyOpaque(who.GetPantsColor()) : overrideColor, rotation, origin, 4f * scale, animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth + ((who.FarmerSprite.CurrentAnimationFrame.frame == 5) ? 0.00092f : 9.2E-08f));
+            return models.Where(m => m is not null).ToList();
         }
 
         internal static SkinToneModel GetSkinTone(LocalizedContentManager farmerTextureManager, Texture2D baseTexture, Color[] pixels, NetInt skin, bool sickFrame)

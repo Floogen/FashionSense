@@ -9,6 +9,7 @@ using FashionSense.Framework.Models.Appearances.Shoes;
 using FashionSense.Framework.Models.Appearances.Sleeves;
 using FashionSense.Framework.Models.General;
 using FashionSense.Framework.Patches.Renderer;
+using FashionSense.Framework.Utilities;
 using StardewModdingAPI;
 using StardewValley;
 using System;
@@ -77,39 +78,39 @@ namespace FashionSense.Framework.Managers
                 rawLayerData.First(d => d.AppearanceType is AppearanceContentPack.Type.Sleeves),
                 rawLayerData.First(d => d.AppearanceType is AppearanceContentPack.Type.Hat),
             };
-            sortedLayerData.InsertRange(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Shirt), rawLayerData.Where(d => d.AppearanceType is AppearanceContentPack.Type.Accessory));
+            sortedLayerData.InsertRange(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Shirt) + 1, rawLayerData.Where(d => d.AppearanceType is AppearanceContentPack.Type.Accessory));
 
             // Sort the models in the actual correct order
-            foreach (var LayerData in sortedLayerData.ToList())
+            foreach (var layerData in sortedLayerData.ToList())
             {
                 // If the LayerData is using vanilla logic, skip any conditional checks
-                if (LayerData.IsVanilla)
+                if (layerData.IsVanilla)
                 {
                     continue;
                 }
 
-                switch (LayerData.AppearanceType)
+                switch (layerData.AppearanceType)
                 {
                     case AppearanceContentPack.Type.Pants:
-                        SortPants(LayerData, ref sortedLayerData);
+                        SortPants(layerData, ref sortedLayerData);
                         break;
                     case AppearanceContentPack.Type.Shoes:
-                        SortShoes(LayerData, ref sortedLayerData);
+                        SortShoes(layerData, ref sortedLayerData);
                         break;
                     case AppearanceContentPack.Type.Shirt:
-                        SortShirt(LayerData, ref sortedLayerData);
+                        SortShirt(layerData, ref sortedLayerData);
                         break;
                     case AppearanceContentPack.Type.Accessory:
-                        SortAccessory(LayerData, ref sortedLayerData);
+                        SortAccessory(layerData, ref sortedLayerData);
                         break;
                     case AppearanceContentPack.Type.Hair:
-                        SortHair(LayerData, ref sortedLayerData);
+                        SortHair(layerData, ref sortedLayerData);
                         break;
                     case AppearanceContentPack.Type.Sleeves:
-                        SortSleeves(LayerData, ref sortedLayerData);
+                        SortSleeves(layerData, ref sortedLayerData);
                         break;
                     case AppearanceContentPack.Type.Hat:
-                        SortHat(LayerData, ref sortedLayerData);
+                        SortHat(layerData, ref sortedLayerData);
                         break;
                 }
             }
@@ -118,11 +119,6 @@ namespace FashionSense.Framework.Managers
         }
 
         #region Conditional check methods
-        private bool ShouldHideWhileSwimmingOrWearingBathingSuit(Farmer who, AppearanceModel model)
-        {
-            return (model.HideWhileWearingBathingSuit && who.bathingClothes.Value) || (model.HideWhileSwimming && who.swimming.Value);
-        }
-
         private bool IsHatHidingHair(List<LayerData> rawLayerData)
         {
             return rawLayerData.Any(d => d.AppearanceModel is HatModel hatModel && hatModel.HideHair is true);
@@ -165,153 +161,153 @@ namespace FashionSense.Framework.Managers
                 rawLayerData.Add(new LayerData(AppearanceContentPack.Type.Hat, null, isVanilla: true));
             }
         }
-        private void MoveLayerDataItem(int index, LayerData LayerData, ref List<LayerData> sourceList)
+        private void MoveLayerDataItem(int index, LayerData layerData, ref List<LayerData> sourceList)
         {
-            sourceList.Remove(LayerData);
-            sourceList.Insert(index, LayerData);
+            sourceList.Remove(layerData);
+            sourceList.Insert(index, layerData);
         }
 
         #region Add methods for rawLayerData
         private void AddPants(Farmer who, PantsModel pantsModel, ref List<LayerData> rawLayerData)
         {
-            var LayerData = new LayerData(AppearanceContentPack.Type.Pants, pantsModel);
-            if (ShouldHideWhileSwimmingOrWearingBathingSuit(who, pantsModel))
+            var layerData = new LayerData(AppearanceContentPack.Type.Pants, pantsModel);
+            if (AppearanceHelpers.ShouldHideWhileSwimmingOrWearingBathingSuit(who, pantsModel))
             {
-                LayerData.IsVanilla = true;
+                layerData.IsVanilla = true;
             }
 
-            rawLayerData.Add(LayerData);
+            rawLayerData.Add(layerData);
         }
 
         private void AddShoes(Farmer who, ShoesModel shoesModel, ref List<LayerData> rawLayerData)
         {
-            var LayerData = new LayerData(AppearanceContentPack.Type.Shoes, shoesModel);
-            if (ShouldHideWhileSwimmingOrWearingBathingSuit(who, shoesModel) || DrawPatch.ShouldHideLegs(who, _facingDirection))
+            var layerData = new LayerData(AppearanceContentPack.Type.Shoes, shoesModel);
+            if (AppearanceHelpers.ShouldHideWhileSwimmingOrWearingBathingSuit(who, shoesModel) || AppearanceHelpers.ShouldHideLegs(who, _facingDirection))
             {
-                LayerData.IsVanilla = true;
+                layerData.IsVanilla = true;
             }
 
-            rawLayerData.Add(LayerData);
+            rawLayerData.Add(layerData);
         }
 
         private void AddShirt(Farmer who, ShirtModel shirtModel, ref List<LayerData> rawLayerData)
         {
-            var LayerData = new LayerData(AppearanceContentPack.Type.Shirt, shirtModel);
-            if (ShouldHideWhileSwimmingOrWearingBathingSuit(who, shirtModel))
+            var layerData = new LayerData(AppearanceContentPack.Type.Shirt, shirtModel);
+            if (AppearanceHelpers.ShouldHideWhileSwimmingOrWearingBathingSuit(who, shirtModel))
             {
-                LayerData.IsVanilla = true;
+                layerData.IsVanilla = true;
             }
 
-            rawLayerData.Add(LayerData);
+            rawLayerData.Add(layerData);
         }
 
         private void AddAccessory(Farmer who, AccessoryModel accessoryModel, ref List<LayerData> rawLayerData)
         {
-            var LayerData = new LayerData(AppearanceContentPack.Type.Accessory, accessoryModel);
-            if (ShouldHideWhileSwimmingOrWearingBathingSuit(who, accessoryModel))
+            var layerData = new LayerData(AppearanceContentPack.Type.Accessory, accessoryModel);
+            if (AppearanceHelpers.ShouldHideWhileSwimmingOrWearingBathingSuit(who, accessoryModel))
             {
-                LayerData.IsVanilla = true;
+                layerData.IsVanilla = true;
             }
 
-            rawLayerData.Add(LayerData);
+            rawLayerData.Add(layerData);
         }
 
         private void AddHair(Farmer who, HairModel hairModel, ref List<LayerData> rawLayerData)
         {
-            var LayerData = new LayerData(AppearanceContentPack.Type.Hair, hairModel);
-            if (ShouldHideWhileSwimmingOrWearingBathingSuit(who, hairModel))
+            var layerData = new LayerData(AppearanceContentPack.Type.Hair, hairModel);
+            if (AppearanceHelpers.ShouldHideWhileSwimmingOrWearingBathingSuit(who, hairModel))
             {
                 if (IsHatHidingHair(rawLayerData))
                 {
-                    LayerData.IsVanilla = true;
+                    layerData.IsVanilla = true;
                 }
             }
 
-            rawLayerData.Add(LayerData);
+            rawLayerData.Add(layerData);
         }
 
         private void AddSleeves(Farmer who, SleevesModel sleevesModel, ref List<LayerData> rawLayerData)
         {
-            var LayerData = new LayerData(AppearanceContentPack.Type.Sleeves, sleevesModel);
-            if (ShouldHideWhileSwimmingOrWearingBathingSuit(who, sleevesModel) || AreSleevesForcedHidden(rawLayerData))
+            var layerData = new LayerData(AppearanceContentPack.Type.Sleeves, sleevesModel);
+            if (AppearanceHelpers.ShouldHideWhileSwimmingOrWearingBathingSuit(who, sleevesModel) || AreSleevesForcedHidden(rawLayerData))
             {
-                LayerData.IsVanilla = true;
+                layerData.IsVanilla = true;
             }
 
-            rawLayerData.Add(LayerData);
+            rawLayerData.Add(layerData);
         }
 
         private void AddHat(Farmer who, HatModel hatModel, ref List<LayerData> rawLayerData)
         {
-            var LayerData = new LayerData(AppearanceContentPack.Type.Hat, hatModel);
-            if (ShouldHideWhileSwimmingOrWearingBathingSuit(who, hatModel))
+            var layerData = new LayerData(AppearanceContentPack.Type.Hat, hatModel);
+            if (AppearanceHelpers.ShouldHideWhileSwimmingOrWearingBathingSuit(who, hatModel))
             {
-                LayerData.IsVanilla = true;
+                layerData.IsVanilla = true;
             }
 
-            rawLayerData.Add(LayerData);
+            rawLayerData.Add(layerData);
         }
         #endregion
 
         #region Sort methods for sortedLayerData
-        private void SortPants(LayerData LayerData, ref List<LayerData> sortedLayerData)
+        private void SortPants(LayerData layerData, ref List<LayerData> sortedLayerData)
         {
             // Pants have no conditional checks
         }
 
-        private void SortShoes(LayerData LayerData, ref List<LayerData> sortedLayerData)
+        private void SortShoes(LayerData layerData, ref List<LayerData> sortedLayerData)
         {
-            var shoesModel = LayerData.AppearanceModel as ShoesModel;
+            var shoesModel = layerData.AppearanceModel as ShoesModel;
             if (shoesModel.DrawBeforePants)
             {
-                MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Pants), LayerData, ref sortedLayerData);
+                MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Pants), layerData, ref sortedLayerData);
             }
         }
 
-        private void SortShirt(LayerData LayerData, ref List<LayerData> sortedLayerData)
+        private void SortShirt(LayerData layerData, ref List<LayerData> sortedLayerData)
         {
             // Shirts have no conditional checks
         }
 
-        private void SortAccessory(LayerData LayerData, ref List<LayerData> sortedLayerData)
+        private void SortAccessory(LayerData layerData, ref List<LayerData> sortedLayerData)
         {
-            var accessoryModel = LayerData.AppearanceModel as AccessoryModel;
+            var accessoryModel = layerData.AppearanceModel as AccessoryModel;
             if (accessoryModel.DrawBeforeHair)
             {
-                MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Hair), LayerData, ref sortedLayerData);
+                MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Hair), layerData, ref sortedLayerData);
             }
             else if (accessoryModel.DrawAfterSleeves)
             {
-                MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Sleeves), LayerData, ref sortedLayerData);
+                MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Sleeves), layerData, ref sortedLayerData);
             }
             else if (accessoryModel.DrawAfterPlayer)
             {
                 // TODO: Verify that DrawAfterPlayer is implemented correctly
                 // Move to bottom of list
-                sortedLayerData.Remove(LayerData);
-                sortedLayerData.Add(LayerData);
+                sortedLayerData.Remove(layerData);
+                sortedLayerData.Add(layerData);
             }
         }
 
-        private void SortHair(LayerData LayerData, ref List<LayerData> sortedLayerData)
+        private void SortHair(LayerData layerData, ref List<LayerData> sortedLayerData)
         {
             // Hair has no conditional checks
         }
 
-        private void SortSleeves(LayerData LayerData, ref List<LayerData> sortedLayerData)
+        private void SortSleeves(LayerData layerData, ref List<LayerData> sortedLayerData)
         {
-            var sleevesModel = LayerData.AppearanceModel as SleevesModel;
+            var sleevesModel = layerData.AppearanceModel as SleevesModel;
             if (sleevesModel.DrawBeforeShirt)
             {
-                MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Shirt), LayerData, ref sortedLayerData);
+                MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Shirt), layerData, ref sortedLayerData);
             }
             else if (sleevesModel.DrawBeforeHair)
             {
-                MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Hair), LayerData, ref sortedLayerData);
+                MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Hair), layerData, ref sortedLayerData);
             }
         }
 
-        private void SortHat(LayerData LayerData, ref List<LayerData> sortedLayerData)
+        private void SortHat(LayerData layerData, ref List<LayerData> sortedLayerData)
         {
             // Hat has no conditional checks
         }
