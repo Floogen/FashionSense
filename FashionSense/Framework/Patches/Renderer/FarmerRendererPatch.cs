@@ -1690,6 +1690,11 @@ namespace FashionSense.Framework.Patches.Renderer
             // Offset the source rectangles for shirts, accessories and hats according to facingDirection
             OffsetSourceRectangles(who, facingDirection, rotation, ref ___shirtSourceRect, ref dyed_shirt_source_rect, ref ___accessorySourceRect, ref ___hatSourceRect, ref ___rotationAdjustment);
 
+            // Go through the models and determine draw order
+            FashionSense.drawManager.SortModelsForDrawing(who, facingDirection, models);
+
+            // TODO: Cache the current SpriteBatch and utilize Deferred, before resuming cached SpriteBatch
+
             // Prepare the layer offsets
             float sleevesLayer = 0f;
             float shirtLayer = 0f;

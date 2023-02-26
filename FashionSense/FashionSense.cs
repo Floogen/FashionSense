@@ -41,6 +41,7 @@ namespace FashionSense
         internal static AccessoryManager accessoryManager;
         internal static ApiManager apiManager;
         internal static AssetManager assetManager;
+        internal static DrawManager drawManager;
         internal static OutfitManager outfitManager;
         internal static TextureManager textureManager;
 
@@ -65,6 +66,7 @@ namespace FashionSense
             accessoryManager = new AccessoryManager(monitor);
             apiManager = new ApiManager(monitor);
             assetManager = new AssetManager(modHelper);
+            drawManager = new DrawManager(monitor);
             outfitManager = new OutfitManager(monitor);
             textureManager = new TextureManager(monitor);
 
