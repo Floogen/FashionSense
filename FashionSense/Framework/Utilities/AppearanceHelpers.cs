@@ -1,21 +1,19 @@
 ﻿using FashionSense.Framework.Managers;
+using FashionSense.Framework.Models.Appearances;
 using FashionSense.Framework.Models.Appearances.Accessory;
+using FashionSense.Framework.Models.Appearances.Generic;
 using FashionSense.Framework.Models.Appearances.Hair;
 using FashionSense.Framework.Models.Appearances.Hat;
 using FashionSense.Framework.Models.Appearances.Pants;
 using FashionSense.Framework.Models.Appearances.Shirt;
 using FashionSense.Framework.Models.Appearances.Shoes;
 using FashionSense.Framework.Models.Appearances.Sleeves;
-using FashionSense.Framework.Models.Appearances;
+using Microsoft.Xna.Framework;
 using StardewValley;
+using StardewValley.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FashionSense.Framework.Models.Appearances.Generic;
-using Microsoft.Xna.Framework;
-using StardewValley.Tools;
 
 namespace FashionSense.Framework.Utilities
 {

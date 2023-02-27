@@ -20,7 +20,6 @@ using StardewValley.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace FashionSense.Framework.Patches.Renderer
 {

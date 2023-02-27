@@ -11,7 +11,6 @@ using FashionSense.Framework.Models.General;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using StardewModdingAPI;
 using StardewValley;
 using System;
 using System.Collections.Generic;
