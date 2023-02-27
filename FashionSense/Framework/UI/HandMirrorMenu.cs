@@ -207,7 +207,7 @@ namespace FashionSense.Framework.UI
                 downNeighborID = -99998
             });
             labels.Add(new ClickableComponent(new Rectangle(_portraitBox.Right - 100, _portraitBox.Y + yOffset - 32, 1, 1), "Acc. #", LIMIT_TO_ACCCESSORIES));
-            labels.Add(accessorySlotLabel = new ClickableComponent(new Rectangle(_portraitBox.Right - 72, _portraitBox.Y + yOffset - 2, 1, 1), "0", LIMIT_TO_ACCCESSORIES));
+            labels.Add(accessorySlotLabel = new ClickableComponent(new Rectangle(_portraitBox.Right - 72, _portraitBox.Y + yOffset - 2, 1, 1), "1", LIMIT_TO_ACCCESSORIES));
 
             #region Start of obsolete option buttons
             /*
@@ -706,7 +706,7 @@ namespace FashionSense.Framework.UI
                     break;
                 case LIMIT_TO_ACCCESSORIES:
                     currentAccessorySlot = currentAccessorySlot + change < 0 ? 0 : currentAccessorySlot + change;
-                    accessorySlotLabel.name = currentAccessorySlot.ToString();
+                    accessorySlotLabel.name = (currentAccessorySlot + 1).ToString();
 
                     colorPicker.SetColor(FashionSense.accessoryManager.GetColorFromIndex(Game1.player, GetAccessoryIndex()));
 
