@@ -110,6 +110,9 @@ namespace FashionSense.Framework.Managers
                 case AppearanceContentPack.Type.Hat:
                     DrawHatVanilla(who);
                     break;
+                case AppearanceContentPack.Type.Shoes:
+                    // Purposely leaving blank, as vanilla shoes are handled in DrawPatch
+                    break;
             }
         }
 
@@ -122,6 +125,7 @@ namespace FashionSense.Framework.Managers
                 case AppearanceContentPack.Type.Accessory:
                 case AppearanceContentPack.Type.Hair:
                 case AppearanceContentPack.Type.Hat:
+                case AppearanceContentPack.Type.Shoes:
                     DrawAppearance(who, layer);
                     break;
                 case AppearanceContentPack.Type.Sleeves:

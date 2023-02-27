@@ -455,6 +455,9 @@ namespace FashionSense.Framework.Patches.Renderer
                 case HatModel:
                     key = ModDataKeys.UI_HAND_MIRROR_HAT_COLOR;
                     break;
+                case ShoesModel:
+                    key = ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR;
+                    break;
             }
 
             return new Color() { PackedValue = who.modData.ContainsKey(key) ? uint.Parse(who.modData[key]) : who.hairstyleColor.Value.PackedValue };
