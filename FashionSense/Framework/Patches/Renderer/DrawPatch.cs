@@ -463,7 +463,7 @@ namespace FashionSense.Framework.Patches.Renderer
             return new Color() { PackedValue = who.modData.ContainsKey(key) ? uint.Parse(who.modData[key]) : who.hairstyleColor.Value.PackedValue };
         }
 
-        private static List<AppearanceMetadata> GetCurrentlyEquippedModels(Farmer who, int facingDirection)
+        internal static List<AppearanceMetadata> GetCurrentlyEquippedModels(Farmer who, int facingDirection)
         {
             // Set up each AppearanceModel
             List<AppearanceMetadata> models = new List<AppearanceMetadata>();
