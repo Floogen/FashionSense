@@ -161,9 +161,7 @@ namespace FashionSense.Framework.Managers
             // Handle the vanilla sleeve / arm drawing, if a custom sleeve model isn't given
             if (sleevesModel is null && _hideSleeves is false)
             {
-                _farmerSourceRectangle.Offset((_animationFrame.secondaryArm ? 192 : 96), 0);
-
-                _spriteBatch.Draw(_baseTexture, _position + _origin + _positionOffset + who.armOffset, _farmerSourceRectangle, _overrideColor, _rotation, _origin, 4f * _scale, _animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
+                _spriteBatch.Draw(_baseTexture, _position + _origin + _positionOffset + who.armOffset, new Rectangle(_farmerSourceRectangle.X + (_animationFrame.secondaryArm ? 192 : 96), _farmerSourceRectangle.Y, _farmerSourceRectangle.Width, _farmerSourceRectangle.Height), _overrideColor, _rotation, _origin, 4f * _scale, _animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
             }
         }
 

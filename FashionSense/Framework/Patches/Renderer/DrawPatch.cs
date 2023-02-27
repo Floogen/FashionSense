@@ -361,6 +361,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 return;
             }
 
+            // Draw blinking / eyes closed animation, if conditions are met
             FishingRod fishing_rod;
             if (who.currentEyes != 0 && facingDirection != 0 && (Game1.timeOfDay < 2600 || (who.isInBed.Value && who.timeWentToBed.Value != 0)) && ((!who.FarmerSprite.PauseForSingleAnimation && !who.UsingTool) || (who.UsingTool && who.CurrentTool is FishingRod)) && (!who.UsingTool || (fishing_rod = who.CurrentTool as FishingRod) == null || fishing_rod.isFishing))
             {
