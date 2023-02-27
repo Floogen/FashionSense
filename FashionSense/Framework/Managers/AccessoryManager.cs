@@ -1,16 +1,20 @@
-﻿using FashionSense.Framework.Models.Appearances;
+﻿using FashionSense.Framework.Models;
+using FashionSense.Framework.Models.Appearances;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
+using Newtonsoft.Json;
 using StardewModdingAPI;
 using StardewValley;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace FashionSense.Framework.Managers
 {
     internal class AccessoryManager
     {
         private IMonitor _monitor;
+        private Dictionary<Farmer, HashSet<int>> _farmerToActiveAccessorySlots;
         private const int MAX_ACCESSORY_LIMIT = 100;
 
         internal enum AnimationKey
@@ -27,6 +31,7 @@ namespace FashionSense.Framework.Managers
         public AccessoryManager(IMonitor monitor)
         {
             _monitor = monitor;
+            _farmerToActiveAccessorySlots = new Dictionary<Farmer, HashSet<int>>();
         }
 
         internal void SetAccessories(Farmer who, List<string> accessoryIds, List<string> colors)
@@ -54,26 +59,37 @@ namespace FashionSense.Framework.Managers
                 RemoveAccessory(who, i);
             }
 
-            SetActiveAccessoryCount(who, 0);
+            _farmerToActiveAccessorySlots[who] = new HashSet<int>();
         }
 
         internal int AddAccessory(Farmer who, string accessoryId, int index = -1)
         {
+            if (_farmerToActiveAccessorySlots.ContainsKey(who) is false)
+            {
+                _farmerToActiveAccessorySlots[who] = new HashSet<int>();
+            }
+
             if (index == -1)
             {
-                index = GetActiveAccessoryCount(who);
+                for (int i = 0; i < MAX_ACCESSORY_LIMIT; i++)
+                {
+                    if (_farmerToActiveAccessorySlots[who].Contains(i) is false)
+                    {
+                        index = i;
+                        break;
+                    }
+                }
             }
 
             if (index > -1)
             {
-                if (who.modData.ContainsKey(GetKeyForAccessoryId(index)) is false)
-                {
-                    SetActiveAccessoryCount(who, GetActiveAccessoryCount(who) + 1);
-                }
+                _farmerToActiveAccessorySlots[who].Add(index);
                 ResetAccessory(who, index);
 
                 who.modData[GetKeyForAccessoryId(index)] = accessoryId;
                 who.modData[GetKeyForAccessoryColor(index)] = Color.White.PackedValue.ToString();
+
+                UpdateAccessoryCache(who);
 
                 return index;
             }
@@ -83,11 +99,16 @@ namespace FashionSense.Framework.Managers
 
         internal void RemoveAccessory(Farmer who, int index)
         {
+            if (_farmerToActiveAccessorySlots.ContainsKey(who) is false)
+            {
+                _farmerToActiveAccessorySlots[who] = new HashSet<int>();
+            }
+
             var idKey = GetKeyForAccessoryId(index);
             if (who.modData.ContainsKey(idKey))
             {
                 who.modData.Remove(idKey);
-                SetActiveAccessoryCount(who, GetActiveAccessoryCount(who) - 1);
+                _farmerToActiveAccessorySlots[who].Remove(index);
             }
 
             var colorKey = GetKeyForAccessoryColor(index);
@@ -95,21 +116,22 @@ namespace FashionSense.Framework.Managers
             {
                 who.modData.Remove(colorKey);
             }
+
+            UpdateAccessoryCache(who);
         }
 
-        internal int GetActiveAccessoryCount(Farmer who)
+        internal void UpdateAccessoryCache(Farmer who)
         {
-            if (IsKeyValid(who, ModDataKeys.ACTIVE_ACCESSORIES_COUNT) && Int32.TryParse(who.modData[ModDataKeys.ACTIVE_ACCESSORIES_COUNT], out int count) && count > 0)
+            List<string> accessoryIds = new List<string>();
+            List<string> accessoryColors = new List<string>();
+            foreach (int index in GetActiveAccessoryIndices(who))
             {
-                return count;
+                accessoryIds.Add(GetAccessoryIdByIndex(who, index));
+                accessoryColors.Add(GetColorFromIndex(who, index).PackedValue.ToString());
             }
 
-            return 0;
-        }
-
-        internal void SetActiveAccessoryCount(Farmer who, int count)
-        {
-            who.modData[ModDataKeys.ACTIVE_ACCESSORIES_COUNT] = count.ToString();
+            who.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID] = JsonConvert.SerializeObject(accessoryIds);
+            who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR] = JsonConvert.SerializeObject(accessoryColors);
         }
 
         internal string GetKeyForAccessoryId(int index)
@@ -124,12 +146,12 @@ namespace FashionSense.Framework.Managers
 
         internal int GetAccessoryIndexById(Farmer who, string accessoryId)
         {
-            for (int i = 0; i < GetActiveAccessoryCount(who); i++)
+            foreach (int index in GetActiveAccessoryIndices(who))
             {
-                var idKey = GetKeyForAccessoryId(i);
+                var idKey = GetKeyForAccessoryId(index);
                 if (IsKeyValid(who, idKey) && who.modData[idKey] == accessoryId)
                 {
-                    return i;
+                    return index;
                 }
             }
 
@@ -173,18 +195,14 @@ namespace FashionSense.Framework.Managers
             return null;
         }
 
-        internal List<int> GetActiveAccessoryIndices(Farmer who)
+        internal HashSet<int> GetActiveAccessoryIndices(Farmer who)
         {
-            List<int> indices = new List<int>();
-            for (int i = 0; i < GetActiveAccessoryCount(who); i++)
+            if (_farmerToActiveAccessorySlots.ContainsKey(who) is false)
             {
-                if (IsKeyValid(who, GetKeyForAccessoryId(i), checkForValue: true))
-                {
-                    indices.Add(i);
-                }
+                _farmerToActiveAccessorySlots[who] = new HashSet<int>();
             }
 
-            return indices;
+            return _farmerToActiveAccessorySlots[who];
         }
 
         internal List<string> GetActiveAccessoryIds(Farmer who)
@@ -301,13 +319,13 @@ namespace FashionSense.Framework.Managers
 
         internal void ResetAllAccessories(Farmer who)
         {
-            for (int i = 0; i < GetActiveAccessoryCount(who); i++)
+            foreach (int index in GetActiveAccessoryIndices(who))
             {
-                ResetAccessory(who, i);
+                ResetAccessory(who, index);
             }
         }
 
-        internal void HandleOldAccessoryFormat(Farmer player)
+        internal bool HandleOldAccessoryFormat(Farmer player)
         {
             var accessoryIds = new List<string>();
             var accessoryColors = new List<string>();
@@ -340,7 +358,10 @@ namespace FashionSense.Framework.Managers
             if (accessoryIds.Count > 0)
             {
                 SetAccessories(player, accessoryIds, accessoryColors);
+                return true;
             }
+
+            return false;
         }
     }
 }

@@ -19,6 +19,7 @@
         internal const string UI_HAND_MIRROR_ACCESSORY_COLOR = "FashionSense.UI.HandMirror.Color.Accessory";
         internal const string UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR = "FashionSense.UI.HandMirror.Color.Accessory.Secondary";
         internal const string UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR = "FashionSense.UI.HandMirror.Color.Accessory.Tertiary";
+        internal const string UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR = "FashionSense.UI.HandMirror.Color.Accessory.Collective";
         internal const string UI_HAND_MIRROR_HAT_COLOR = "FashionSense.UI.HandMirror.Color.Hat";
         internal const string UI_HAND_MIRROR_SHIRT_COLOR = "FashionSense.UI.HandMirror.Color.Shirt";
         internal const string UI_HAND_MIRROR_PANTS_COLOR = "FashionSense.UI.HandMirror.Color.Pants";

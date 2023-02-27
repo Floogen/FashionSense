@@ -1,4 +1,5 @@
-﻿using FashionSense.Framework.Models.Appearances;
+﻿using FashionSense.Framework.Managers;
+using FashionSense.Framework.Models.Appearances;
 using FashionSense.Framework.Models.Appearances.Accessory;
 using FashionSense.Framework.Models.Appearances.Hair;
 using FashionSense.Framework.Models.Appearances.Hat;
@@ -10,6 +11,7 @@ using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Menus;
@@ -121,6 +123,14 @@ namespace FashionSense.Framework.UI
                     {
                         fakeFarmer.modData[key] = _displayFarmer.modData[key];
                     }
+
+                    List<string> accessoryIds = JsonConvert.DeserializeObject<List<string>>(fakeFarmer.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID]);
+                    List<string> accessoryColors = JsonConvert.DeserializeObject<List<string>>(fakeFarmer.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR]);
+                    if (accessoryIds is not null && accessoryColors is not null)
+                    {
+                        FashionSense.accessoryManager.SetAccessories(fakeFarmer, accessoryIds, accessoryColors);
+                    }
+
                     fakeFarmers.Add(fakeFarmer);
                 }
             }
@@ -188,7 +198,7 @@ namespace FashionSense.Framework.UI
                             modDataKey = ModDataKeys.CUSTOM_HAIR_ID;
                             break;
                         case HandMirrorMenu.ACCESSORY_FILTER_BUTTON:
-                            FashionSense.accessoryManager.AddAccessory(fakeFarmers[i], targetPack.Id, FashionSense.accessoryManager.GetActiveAccessoryCount(Game1.player) - 1);
+                            FashionSense.accessoryManager.AddAccessory(fakeFarmers[i], targetPack.Id, _callbackMenu.GetAccessoryIndex());
                             FashionSense.ResetAnimationModDataFields(fakeFarmers[i], 0, AnimationModel.Type.Idle, fakeFarmers[i].facingDirection);
                             FashionSense.SetSpriteDirty();
                             continue;

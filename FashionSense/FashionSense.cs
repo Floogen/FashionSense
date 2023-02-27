@@ -20,6 +20,7 @@ using FashionSense.Framework.UI;
 using FashionSense.Framework.Utilities;
 using HarmonyLib;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -28,6 +29,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace FashionSense
 {
@@ -247,7 +249,15 @@ namespace FashionSense
             EnsureKeyExists(ModDataKeys.CUSTOM_SHOES_ID);
 
             // Handle the old CUSTOM_ACCESSORY_ID format
-            accessoryManager.HandleOldAccessoryFormat(Game1.player);
+            if (accessoryManager.HandleOldAccessoryFormat(Game1.player) is false)
+            {
+                List<string> accessoryIds = JsonConvert.DeserializeObject<List<string>>(Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID]);
+                List<string> accessoryColors = JsonConvert.DeserializeObject<List<string>>(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR]);
+                if (accessoryIds is not null && accessoryColors is not null)
+                {
+                    accessoryManager.SetAccessories(Game1.player, accessoryIds, accessoryColors);
+                }
+            }
 
             // Set sprite to dirty in order to refresh sleeves and other tied-in appearances
             SetSpriteDirty();
