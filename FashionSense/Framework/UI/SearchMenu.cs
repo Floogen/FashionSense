@@ -123,13 +123,7 @@ namespace FashionSense.Framework.UI
                     {
                         fakeFarmer.modData[key] = _displayFarmer.modData[key];
                     }
-
-                    List<string> accessoryIds = JsonConvert.DeserializeObject<List<string>>(fakeFarmer.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID]);
-                    List<string> accessoryColors = JsonConvert.DeserializeObject<List<string>>(fakeFarmer.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR]);
-                    if (accessoryIds is not null && accessoryColors is not null)
-                    {
-                        FashionSense.accessoryManager.SetAccessories(fakeFarmer, accessoryIds, accessoryColors);
-                    }
+                    FashionSense.accessoryManager.CopyAccessories(_displayFarmer, fakeFarmer);
 
                     fakeFarmers.Add(fakeFarmer);
                 }
@@ -198,7 +192,7 @@ namespace FashionSense.Framework.UI
                             modDataKey = ModDataKeys.CUSTOM_HAIR_ID;
                             break;
                         case HandMirrorMenu.ACCESSORY_FILTER_BUTTON:
-                            FashionSense.accessoryManager.AddAccessory(fakeFarmers[i], targetPack.Id, _callbackMenu.GetAccessoryIndex());
+                            FashionSense.accessoryManager.AddAccessory(fakeFarmers[i], targetPack.Id, _callbackMenu.GetAccessoryIndex(), preserveColor: true);
                             FashionSense.ResetAnimationModDataFields(fakeFarmers[i], 0, AnimationModel.Type.Idle, fakeFarmers[i].facingDirection);
                             FashionSense.SetSpriteDirty();
                             continue;

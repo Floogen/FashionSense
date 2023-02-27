@@ -67,7 +67,7 @@ namespace FashionSense.Framework.Managers
                 ResetAccessory(destinationFarmer, index);
 
                 destinationFarmer.modData[GetKeyForAccessoryId(index)] = GetAccessoryIdByIndex(sourceFarmer, index);
-                destinationFarmer.modData[GetKeyForAccessoryColor(index)] = Color.White.PackedValue.ToString();
+                destinationFarmer.modData[GetKeyForAccessoryColor(index)] = sourceFarmer.modData[GetKeyForAccessoryColor(index)];
             }
 
             return true;
@@ -83,7 +83,7 @@ namespace FashionSense.Framework.Managers
             _farmerToActiveAccessorySlots[who] = new HashSet<int>();
         }
 
-        internal int AddAccessory(Farmer who, string accessoryId, int index = -1)
+        internal int AddAccessory(Farmer who, string accessoryId, int index = -1, bool preserveColor = false)
         {
             if (_farmerToActiveAccessorySlots.ContainsKey(who) is false)
             {
@@ -108,7 +108,7 @@ namespace FashionSense.Framework.Managers
                 ResetAccessory(who, index);
 
                 who.modData[GetKeyForAccessoryId(index)] = accessoryId;
-                who.modData[GetKeyForAccessoryColor(index)] = Color.White.PackedValue.ToString();
+                who.modData[GetKeyForAccessoryColor(index)] = preserveColor is true && who.modData.ContainsKey(GetKeyForAccessoryColor(index)) is true && String.IsNullOrEmpty(who.modData[GetKeyForAccessoryColor(index)]) is false ? who.modData[GetKeyForAccessoryColor(index)] : Color.White.PackedValue.ToString();
 
                 UpdateAccessoryCache(who);
 
