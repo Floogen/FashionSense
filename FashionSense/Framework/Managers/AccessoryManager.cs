@@ -52,6 +52,27 @@ namespace FashionSense.Framework.Managers
             }
         }
 
+        internal bool CopyAccessories(Farmer sourceFarmer, Farmer destinationFarmer)
+        {
+            if (_farmerToActiveAccessorySlots.ContainsKey(sourceFarmer) is false)
+            {
+                return false;
+            }
+
+            _farmerToActiveAccessorySlots[destinationFarmer] = new HashSet<int>();
+            foreach (int index in _farmerToActiveAccessorySlots[sourceFarmer])
+            {
+                _farmerToActiveAccessorySlots[destinationFarmer].Add(index);
+
+                ResetAccessory(destinationFarmer, index);
+
+                destinationFarmer.modData[GetKeyForAccessoryId(index)] = GetAccessoryIdByIndex(sourceFarmer, index);
+                destinationFarmer.modData[GetKeyForAccessoryColor(index)] = Color.White.PackedValue.ToString();
+            }
+
+            return true;
+        }
+
         internal void ClearAccessories(Farmer who)
         {
             for (int i = 0; i < MAX_ACCESSORY_LIMIT; i++)

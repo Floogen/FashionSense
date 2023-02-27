@@ -299,6 +299,8 @@ namespace FashionSense.Framework.UI
                     {
                         _displayFarmer.modData[key] = fakeFarmers[i].modData[key];
                     }
+                    FashionSense.accessoryManager.CopyAccessories(fakeFarmers[i], _displayFarmer);
+
                     FashionSense.ResetAnimationModDataFields(_displayFarmer, 0, AnimationModel.Type.Idle, _displayFarmer.facingDirection);
                     FashionSense.SetSpriteDirty();
                     base.exitThisMenu();
