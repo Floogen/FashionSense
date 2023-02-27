@@ -117,13 +117,6 @@ namespace FashionSense.Framework.Managers
                 }
             }
 
-            int index = 0;
-            foreach (var layerData in sortedLayerData)
-            {
-                //_monitor.Log($"[{index}] {layerData.AppearanceType} ({(layerData.AppearanceModel is null ? "Unknown" : layerData.AppearanceModel.Pack.Id)})", LogLevel.Debug);
-                index++;
-            }
-
             return sortedLayerData;
         }
 
@@ -298,7 +291,6 @@ namespace FashionSense.Framework.Managers
             }
             else if (accessoryModel.DrawAfterPlayer)
             {
-                // TODO: Verify that DrawAfterPlayer is implemented correctly
                 // Move to bottom of list
                 sortedLayerData.Remove(layerData);
                 sortedLayerData.Add(layerData);
