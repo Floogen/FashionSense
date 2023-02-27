@@ -368,6 +368,7 @@ namespace FashionSense.Framework.Managers
             featureOffset.Y -= who.IsMale ? 4 : 0;
             _spriteBatch.Draw(sleevesModelPack.Texture, GetScaledPosition(_position, sleevesModel, _isDrawingForUI) + _origin + _positionOffset + featureOffset, GetSourceRectangle(sleevesModel, _appearanceTypeToSourceRectangles), sleevesModel.HasColorMask() ? Color.White : modelColor, _rotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), sleevesModel.Scale * _scale, sleevesModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
 
+            Rectangle customSleevesSourceRect = _appearanceTypeToSourceRectangles[sleevesModel];
             if ((sleevesModel.HasColorMask() || sleevesModel.HasShirtToneMask()) && sleevesModel.UseShirtColors)
             {
                 // Get the shirt model, if applicable
@@ -377,7 +378,6 @@ namespace FashionSense.Framework.Managers
                     shirtModel = sPack.GetShirtFromFacingDirection(_facingDirection);
                 }
 
-                Rectangle customSleevesSourceRect = _appearanceTypeToSourceRectangles[sleevesModel];
                 if (shirtModel is not null && shirtModel.SleeveColors is not null)
                 {
                     DrawSleeveColorMask(_spriteBatch, sleevesModelPack, sleevesModel, shirtModel, _areColorMasksPendingRefresh, GetScaledPosition(_position, sleevesModel, _isDrawingForUI) + _origin + _positionOffset + featureOffset, customSleevesSourceRect, modelColor, _rotation, _origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), sleevesModel.Scale * _scale, IncrementAndGetLayerDepth());
@@ -387,9 +387,14 @@ namespace FashionSense.Framework.Managers
                     DrawSleeveColorMaskVanilla(_spriteBatch, sleevesModelPack, sleevesModel, _areColorMasksPendingRefresh, who, _farmerRenderer, GetScaledPosition(_position, sleevesModel, _isDrawingForUI) + _origin + _positionOffset + featureOffset, customSleevesSourceRect, modelColor, _rotation, _origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), sleevesModel.Scale * _scale, IncrementAndGetLayerDepth());
                 }
             }
+            else
+            {
+                DrawColorMask(_spriteBatch, sleevesModelPack, sleevesModel, _areColorMasksPendingRefresh, GetScaledPosition(_position, sleevesModel, _isDrawingForUI) + _origin + _positionOffset + featureOffset, customSleevesSourceRect, modelColor, _rotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), sleevesModel.Scale * _scale, IncrementAndGetLayerDepth());
+            }
+
             if (sleevesModel.HasSkinToneMask())
             {
-                DrawSkinToneMask(_spriteBatch, sleevesModelPack, sleevesModel, _skinToneModel, _areColorMasksPendingRefresh, GetScaledPosition(_position, sleevesModel, _isDrawingForUI) + _origin + _positionOffset + featureOffset, GetSourceRectangle(sleevesModel, _appearanceTypeToSourceRectangles), modelColor, _rotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), sleevesModel.Scale * _scale, IncrementAndGetLayerDepth());
+                DrawSkinToneMask(_spriteBatch, sleevesModelPack, sleevesModel, _skinToneModel, _areColorMasksPendingRefresh, GetScaledPosition(_position, sleevesModel, _isDrawingForUI) + _origin + _positionOffset + featureOffset, customSleevesSourceRect, modelColor, _rotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), sleevesModel.Scale * _scale, IncrementAndGetLayerDepth());
             }
         }
 
