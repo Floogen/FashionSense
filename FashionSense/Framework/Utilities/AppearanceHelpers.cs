@@ -524,11 +524,11 @@ namespace FashionSense.Framework.Utilities
             return 0;
         }
 
-        internal static bool AreSleevesForcedHidden(List<AppearanceModel> models)
+        internal static bool AreSleevesForcedHidden(List<AppearanceMetadata> metadata)
         {
-            foreach (var model in models.Where(m => m is not null))
+            foreach (var data in metadata.Where(d => d.Model is not null))
             {
-                if (model.HideSleeves)
+                if (data.Model.HideSleeves)
                 {
                     return true;
                 }
@@ -565,11 +565,11 @@ namespace FashionSense.Framework.Utilities
             return false;
         }
 
-        internal static bool ShouldHideWaterLine(List<AppearanceModel> models)
+        internal static bool ShouldHideWaterLine(List<AppearanceMetadata> metadata)
         {
-            foreach (var model in models.Where(m => m is not null))
+            foreach (var data in metadata.Where(d => d.Model is not null))
             {
-                if (model.HideWaterLine)
+                if (data.Model.HideWaterLine)
                 {
                     return true;
                 }

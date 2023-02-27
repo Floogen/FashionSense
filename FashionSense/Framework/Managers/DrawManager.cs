@@ -319,7 +319,7 @@ namespace FashionSense.Framework.Managers
             var modelPack = model.Pack;
 
             // Adjust color if needed
-            var modelColor = GetColorValue(who, layer.AppearanceType);
+            var modelColor = layer.Color;
             if (model.DisableGrayscale)
             {
                 modelColor = Color.White;
@@ -608,34 +608,6 @@ namespace FashionSense.Framework.Managers
                     return hatModel.HeadPosition;
             }
             return new Position();
-        }
-
-        private Color GetColorValue(Farmer who, AppearanceContentPack.Type type)
-        {
-            string key = null;
-            switch (type)
-            {
-                case AppearanceContentPack.Type.Pants:
-                    key = ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR;
-                    break;
-                case AppearanceContentPack.Type.Sleeves:
-                    key = ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR;
-                    break;
-                case AppearanceContentPack.Type.Shirt:
-                    key = ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR;
-                    break;
-                case AppearanceContentPack.Type.Accessory:
-                    key = ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR;
-                    break;
-                case AppearanceContentPack.Type.Hair:
-                    key = null; // Purposely left as null as hair doesn't use a key (uses Game1.player.hairstyleColor)
-                    break;
-                case AppearanceContentPack.Type.Hat:
-                    key = ModDataKeys.UI_HAND_MIRROR_HAT_COLOR;
-                    break;
-            }
-
-            return new Color() { PackedValue = String.IsNullOrEmpty(key) is false && who.modData.ContainsKey(key) ? uint.Parse(key) : who.hairstyleColor.Value.PackedValue };
         }
 
         private Rectangle GetSourceRectangle(AppearanceModel model, Dictionary<AppearanceModel, Rectangle> appearanceTypeToSourceRectangles)
