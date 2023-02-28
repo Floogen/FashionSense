@@ -300,7 +300,7 @@ namespace FashionSense.Framework.Managers
             }
             else if (accessoryModel.DrawAfterSleeves)
             {
-                MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Sleeves), layerData, ref sortedLayerData);
+                MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Sleeves) + 1, layerData, ref sortedLayerData);
             }
         }
 
