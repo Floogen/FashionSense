@@ -9,6 +9,8 @@ namespace FashionSense.Framework.Models
     {
         public string Name { get; set; }
         public int Version { get; set; } = 1;
+        public bool IsBeingShared { get; set; }
+        public bool IsGlobal { get; set; }
 
         // Ids
         [Obsolete("No longer used as of Fashion Sense v5, use AccessoryIds instead.")]

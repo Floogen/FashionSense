@@ -28,6 +28,9 @@
   "ui.fashion_sense.outfit_info.save": "Saves your current apparel to this outfit.",
   "ui.fashion_sense.outfit_info.rename": "Rename this outfit.",
   "ui.fashion_sense.outfit_info.delete": "Delete this outfit.",
+  "ui.fashion_sense.outfit_info.share.active": "Currently sharing this outfit with other save files.",
+  "ui.fashion_sense.outfit_info.share.inactive": "Not sharing this outfit with other save files.",
+  "ui.fashion_sense.outfit_info.shared": "Shared",
   "ui.fashion_sense.warning.name": "The outfit name is blank or already exists.",
 
   // UI - Etc

@@ -1,11 +1,13 @@
 ﻿using FashionSense.Framework.Models;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using StardewModdingAPI;
 using StardewValley;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace FashionSense.Framework.Managers
@@ -13,6 +15,7 @@ namespace FashionSense.Framework.Managers
     internal class OutfitManager
     {
         private IMonitor _monitor;
+        private string _sharedOutfitDataPath = Path.Combine("Data", "Outfits.json");
 
         public OutfitManager(IMonitor monitor)
         {
@@ -31,7 +34,7 @@ namespace FashionSense.Framework.Managers
             outfits.Add(outfit);
 
             // Serialize the changes
-            who.modData[ModDataKeys.OUTFITS] = JsonConvert.SerializeObject(outfits);
+            SerializeOutfits(who, outfits);
 
             return outfit;
         }
@@ -48,7 +51,7 @@ namespace FashionSense.Framework.Managers
             outfits.RemoveAt(outfits.FindIndex(o => o.Name.Equals(name, StringComparison.Ordinal)));
 
             // Serialize the changes
-            who.modData[ModDataKeys.OUTFITS] = JsonConvert.SerializeObject(outfits);
+            SerializeOutfits(who, outfits);
         }
 
         public bool DoesOutfitExist(Farmer who, string name)
@@ -61,12 +64,43 @@ namespace FashionSense.Framework.Managers
 
         public List<Outfit> GetOutfits(Farmer who)
         {
-            if (!who.modData.ContainsKey(ModDataKeys.OUTFITS))
+            List<Outfit> outfits = new List<Outfit>();
+            if (who.modData.ContainsKey(ModDataKeys.OUTFITS))
             {
-                return new List<Outfit>();
+                outfits = JsonConvert.DeserializeObject<List<Outfit>>(who.modData[ModDataKeys.OUTFITS]);
             }
 
-            return JsonConvert.DeserializeObject<List<Outfit>>(who.modData[ModDataKeys.OUTFITS]);
+            // Add in the shared outfits
+            foreach (Outfit outfit in GetSharedOutfits())
+            {
+                if (outfits.Any(o => o.Name.Equals(outfit.Name, StringComparison.Ordinal)) is false)
+                {
+                    outfits.Add(outfit);
+                }
+            }
+
+            return outfits;
+        }
+
+        public List<Outfit> GetSharedOutfits()
+        {
+            var sharedOutfits = FashionSense.modHelper.Data.ReadJsonFile<List<Outfit>>(_sharedOutfitDataPath) ?? new List<Outfit>();
+            foreach (var outfit in sharedOutfits)
+            {
+                outfit.IsGlobal = true;
+            }
+
+            return sharedOutfits;
+        }
+
+        public Outfit GetOutfit(Farmer who, string name)
+        {
+            if (DoesOutfitExist(who, name) is false)
+            {
+                return null;
+            }
+
+            return GetOutfits(who).First(o => o.Name.Equals(name, StringComparison.Ordinal));
         }
 
         public void RenameOutfit(Farmer who, string originalName, string currentName)
@@ -81,7 +115,33 @@ namespace FashionSense.Framework.Managers
             outfits.First(o => o.Name.Equals(originalName, StringComparison.Ordinal)).Name = currentName;
 
             // Serialize the changes
+            SerializeOutfits(who, outfits);
+        }
+
+        public void SetOutfitShareState(Farmer who, string name, bool shouldBeShared)
+        {
+            if (DoesOutfitExist(who, name) is false)
+            {
+                return;
+            }
+
+            var outfits = GetOutfits(who);
+            outfits.First(o => o.Name.Equals(name, StringComparison.Ordinal)).IsBeingShared = shouldBeShared;
+
+            // Serialize the changes
+            SerializeOutfits(who, outfits);
+        }
+
+        public void UpdateSharedOutfits(Farmer who)
+        {
+            FashionSense.modHelper.Data.WriteJsonFile(_sharedOutfitDataPath, GetOutfits(who).Where(o => o.IsBeingShared).ToList());
+        }
+
+        public void SerializeOutfits(Farmer who, List<Outfit> outfits)
+        {
             who.modData[ModDataKeys.OUTFITS] = JsonConvert.SerializeObject(outfits);
+
+            UpdateSharedOutfits(who);
         }
 
         public void SetOutfit(Farmer who, Outfit outfit)
@@ -148,7 +208,7 @@ namespace FashionSense.Framework.Managers
             outfits[outfits.FindIndex(o => o.Name.Equals(name, StringComparison.Ordinal))] = new Outfit(who, name);
 
             // Serialize the changes
-            who.modData[ModDataKeys.OUTFITS] = JsonConvert.SerializeObject(outfits);
+            SerializeOutfits(who, outfits);
         }
     }
 }
