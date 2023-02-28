@@ -295,7 +295,7 @@ namespace FashionSense.Framework.Managers
                 sortedLayerData.Remove(layerData);
                 sortedLayerData.Add(layerData);
             }
-            else if (accessoryModel.DrawBeforeHair)
+            else if (accessoryModel.DrawBeforeBase)
             {
                 MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Player), layerData, ref sortedLayerData);
             }
