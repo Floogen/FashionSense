@@ -1,4 +1,5 @@
 ﻿using FashionSense.Framework.Managers;
+using FashionSense.Framework.Models;
 using FashionSense.Framework.Models.Appearances;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
@@ -6,6 +7,7 @@ using StardewModdingAPI;
 using StardewValley;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using static FashionSense.Framework.Interfaces.API.IApi;
 
 namespace FashionSense.Framework.Interfaces.API
@@ -57,6 +59,10 @@ namespace FashionSense.Framework.Interfaces.API
         KeyValuePair<bool, string> SetAppearanceTexture(string appearanceId, IRawTextureData textureData, IManifest callerManifest, bool shouldOverridePersist = false);
         KeyValuePair<bool, string> ResetAppearanceTexture(Type appearanceType, string targetPackId, string targetAppearanceName, IManifest callerManifest);
         KeyValuePair<bool, string> ResetAppearanceTexture(string appearanceId, IManifest callerManifest);
+
+        KeyValuePair<bool, List<string>> GetOutfitIds();
+        KeyValuePair<bool, string> GetCurrentOutfitId();
+        KeyValuePair<bool, string> SetCurrentOutfitId(string outfitId, IManifest callerManifest);
 
         /*
          * Example usages (using the Fashion Sense example pack)
@@ -472,6 +478,36 @@ namespace FashionSense.Framework.Interfaces.API
             _monitor.LogOnce($"{callerManifest.Name} [{callerManifest.UniqueID}] reset the texture for {appearanceId}!", LogLevel.Trace);
 
             return GenerateResponsePair(true, $"Successfully reset the texture data for {appearanceId}!");
+        }
+
+        public KeyValuePair<bool, List<string>> GetOutfitIds()
+        {
+            List<string> outfitIds = FashionSense.outfitManager.GetOutfits(Game1.player).Select(o => o.Name).ToList();
+
+            return new KeyValuePair<bool, List<string>>(true, outfitIds);
+        }
+
+        public KeyValuePair<bool, string> GetCurrentOutfitId()
+        {
+            if (Game1.player.modData.ContainsKey(ModDataKeys.CURRENT_OUTFIT_ID) is false)
+            {
+                return GenerateResponsePair(false, $"Player has not selected an outfit!");
+            }
+
+            return GenerateResponsePair(true, Game1.player.modData[ModDataKeys.CURRENT_OUTFIT_ID]);
+        }
+
+        public KeyValuePair<bool, string> SetCurrentOutfitId(string outfitId, IManifest callerManifest)
+        {
+            if (FashionSense.outfitManager.DoesOutfitExist(Game1.player, outfitId) is false)
+            {
+                return GenerateResponsePair(false, $"No outfit matched for {outfitId}!");
+            }
+
+            Outfit outfit = FashionSense.outfitManager.GetOutfit(Game1.player, outfitId);
+            FashionSense.outfitManager.SetOutfit(Game1.player, outfit);
+
+            return GenerateResponsePair(true, $"Player's outfit has been set to {outfitId}.");
         }
     }
 }

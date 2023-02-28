@@ -130,6 +130,9 @@ namespace FashionSense.Framework.Managers
             FashionSense.ResetTextureIfNecessary(who.modData[ModDataKeys.CUSTOM_SLEEVES_ID]);
             FashionSense.ResetTextureIfNecessary(who.modData[ModDataKeys.CUSTOM_PANTS_ID]);
             FashionSense.ResetTextureIfNecessary(who.modData[ModDataKeys.CUSTOM_SHOES_ID]);
+
+            // Set the current outfit ID
+            who.modData[ModDataKeys.CURRENT_OUTFIT_ID] = outfit.Name;
         }
 
         public void OverrideOutfit(Farmer who, string name)
