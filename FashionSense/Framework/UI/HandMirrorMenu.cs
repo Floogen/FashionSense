@@ -675,7 +675,7 @@ namespace FashionSense.Framework.UI
             string appearanceId = current_index == -1 ? "None" : appearanceModels[current_index].Id;
             if (modDataKey == ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID)
             {
-                FashionSense.accessoryManager.AddAccessory(Game1.player, appearanceId, accessoryIndex);
+                FashionSense.accessoryManager.AddAccessory(Game1.player, appearanceId, accessoryIndex, preserveColor: true);
             }
             else
             {

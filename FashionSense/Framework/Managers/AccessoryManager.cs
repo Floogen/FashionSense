@@ -5,9 +5,11 @@ using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Monsters;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading;
 
 namespace FashionSense.Framework.Managers
 {
@@ -350,7 +352,8 @@ namespace FashionSense.Framework.Managers
         {
             var accessoryIds = new List<string>();
             var accessoryColors = new List<string>();
-            if (String.IsNullOrEmpty(ModDataKeys.CUSTOM_ACCESSORY_ID) is false)
+
+            if (player.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_ID) && String.IsNullOrEmpty(player.modData[ModDataKeys.CUSTOM_ACCESSORY_ID]) is false)
             {
                 accessoryIds.Add(player.modData[ModDataKeys.CUSTOM_ACCESSORY_ID]);
                 player.modData[ModDataKeys.CUSTOM_ACCESSORY_ID] = null;
@@ -358,7 +361,7 @@ namespace FashionSense.Framework.Managers
                 accessoryColors.Add(player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR]);
                 player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR] = null;
             }
-            if (String.IsNullOrEmpty(ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID) is false)
+            if (player.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID) && String.IsNullOrEmpty(player.modData[ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID]) is false)
             {
                 accessoryIds.Add(player.modData[ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID]);
                 player.modData[ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID] = null;
@@ -366,7 +369,7 @@ namespace FashionSense.Framework.Managers
                 accessoryColors.Add(player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR]);
                 player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR] = null;
             }
-            if (String.IsNullOrEmpty(ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID) is false)
+            if (player.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID) && String.IsNullOrEmpty(player.modData[ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID]) is false)
             {
                 accessoryIds.Add(player.modData[ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID]);
                 player.modData[ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID] = null;
