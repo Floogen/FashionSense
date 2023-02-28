@@ -109,6 +109,7 @@ namespace FashionSense
             helper.ConsoleCommands.Add("fs_add_mirror", "Gives you a Hand Mirror tool.\n\nUsage: fs_add_mirror", delegate { Game1.player.addItemToInventory(SeedShopPatch.GetHandMirrorTool()); });
 
             helper.Events.Content.AssetRequested += OnAssetRequested;
+            helper.Events.Content.AssetsInvalidated += OnAssetInvalidated;
             helper.Events.GameLoop.GameLaunched += OnGameLaunched;
             helper.Events.GameLoop.SaveLoaded += OnSaveLoaded;
             helper.Events.GameLoop.DayStarted += OnDayStarted;
@@ -211,6 +212,22 @@ namespace FashionSense
                     data[ModDataKeys.LETTER_HAND_MIRROR] = modHelper.Translation.Get("letters.hand_mirror");
                 });
             }
+            else if (e.NameWithoutLocale.IsEquivalentTo("Data/PeacefulEnd/FashionSense/AppearanceData"))
+            {
+                e.LoadFrom(() => textureManager.GetIdToAppearanceModels(), AssetLoadPriority.High);
+            }
+        }
+
+        private void OnAssetInvalidated(object sender, AssetsInvalidatedEventArgs e)
+        {
+            var asset = e.NamesWithoutLocale.FirstOrDefault(a => a.IsEquivalentTo("Data/PeacefulEnd/FashionSense/AppearanceData"));
+            if (asset is null)
+            {
+                return;
+            }
+
+            // Force load the changes
+            _ = Helper.GameContent.Load<Dictionary<string, AppearanceContentPack>>(asset);
         }
 
         private void OnSaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
@@ -261,6 +278,9 @@ namespace FashionSense
 
             // Set sprite to dirty in order to refresh sleeves and other tied-in appearances
             SetSpriteDirty();
+
+            // Load our Data/PeacefulEnd/FashionSense/AppearanceData
+            _ = Helper.GameContent.Load<Dictionary<string, AppearanceContentPack>>("Data/PeacefulEnd/FashionSense/AppearanceData");
 
             // Check if we need to give a Hand Mirror at the start of the game
             if (SDate.Now().DaysSinceStart == 1 && Game1.player.modData.ContainsKey(ModDataKeys.STARTS_WITH_HAND_MIRROR))

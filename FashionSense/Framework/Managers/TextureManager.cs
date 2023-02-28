@@ -11,11 +11,13 @@ namespace FashionSense.Framework.Managers
     {
         private IMonitor _monitor;
         private List<AppearanceContentPack> _appearanceTextures;
+        private Dictionary<string, AppearanceContentPack> _idToModels;
 
         public TextureManager(IMonitor monitor)
         {
             _monitor = monitor;
             _appearanceTextures = new List<AppearanceContentPack>();
+            _idToModels = new Dictionary<string, AppearanceContentPack>();
         }
 
         public void Reset(string packId = null)
@@ -23,6 +25,7 @@ namespace FashionSense.Framework.Managers
             if (String.IsNullOrEmpty(packId) is true)
             {
                 _appearanceTextures.Clear();
+                _idToModels.Clear();
             }
             else
             {
@@ -41,6 +44,13 @@ namespace FashionSense.Framework.Managers
             {
                 _appearanceTextures.Add(model);
             }
+
+            _idToModels[model.Id] = model;
+        }
+
+        public Dictionary<string, AppearanceContentPack> GetIdToAppearanceModels()
+        {
+            return _idToModels;
         }
 
         public List<AppearanceContentPack> GetAllAppearanceModels()
