@@ -21,6 +21,7 @@ namespace FashionSense.Framework.Models.Appearances
             Shoes
         }
 
+        public bool IsLocked { get; set; }
         internal Type PackType { get; set; }
         internal string Owner { get; set; }
         internal string Author { get; set; }

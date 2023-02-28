@@ -55,7 +55,7 @@ namespace FashionSense.Framework.Managers
 
         public List<AppearanceContentPack> GetAllAppearanceModels()
         {
-            return _appearanceTextures;
+            return _appearanceTextures.Where(t => t.IsLocked is false).ToList();
         }
 
         public List<T> GetAllAppearanceModels<T>() where T : AppearanceContentPack

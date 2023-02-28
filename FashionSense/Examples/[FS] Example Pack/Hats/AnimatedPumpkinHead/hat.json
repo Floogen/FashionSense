@@ -1,5 +1,6 @@
 {
   "Name": "Animated Pumpkin Head",
+  "IsLocked": false,
   "FrontHat": {
     "HideHair": true,
     "DisableGrayscale": true,
