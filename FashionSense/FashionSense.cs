@@ -256,6 +256,7 @@ namespace FashionSense
         private void OnDayStarted(object sender, StardewModdingAPI.Events.DayStartedEventArgs e)
         {
             EnsureKeyExists(ModDataKeys.CUSTOM_HAIR_ID);
+            EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID);
@@ -266,7 +267,7 @@ namespace FashionSense
             EnsureKeyExists(ModDataKeys.CUSTOM_SHOES_ID);
 
             // Handle the old CUSTOM_ACCESSORY_ID format
-            if (accessoryManager.HandleOldAccessoryFormat(Game1.player) is false)
+            if (accessoryManager.HandleOldAccessoryFormat(Game1.player) is false && String.IsNullOrEmpty(Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID]) is false)
             {
                 List<string> accessoryIds = JsonConvert.DeserializeObject<List<string>>(Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID]);
                 List<string> accessoryColors = JsonConvert.DeserializeObject<List<string>>(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR]);
