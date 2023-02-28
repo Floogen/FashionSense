@@ -12,6 +12,7 @@ using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
+using StardewValley.Tools;
 using System;
 using System.Collections.Generic;
 using static StardewValley.FarmerSprite;
@@ -92,6 +93,9 @@ namespace FashionSense.Framework.Managers
         {
             switch (layer.AppearanceType)
             {
+                case AppearanceContentPack.Type.Player:
+                    DrawPlayerVanilla(who);
+                    break;
                 case AppearanceContentPack.Type.Pants:
                     DrawPantsVanilla(who);
                     break;
@@ -135,6 +139,136 @@ namespace FashionSense.Framework.Managers
         }
 
         #region Vanilla draw methods
+        private void DrawPlayerVanilla(Farmer who)
+        {
+            // Check if the player's legs need to be hidden
+            var adjustedBaseRectangle = _farmerSourceRectangle;
+            if (AppearanceHelpers.ShouldHideLegs(who, _facingDirection) && !(bool)who.swimming)
+            {
+                switch (who.FarmerSprite.CurrentFrame)
+                {
+                    case 2:
+                    case 16:
+                    case 54:
+                    case 57:
+                    case 62:
+                    case 66:
+                    case 84:
+                    case 90:
+                    case 124:
+                    case 125:
+                        adjustedBaseRectangle.Height -= 6;
+                        break;
+                    case 6:
+                    case 7:
+                    case 9:
+                    case 19:
+                    case 21:
+                    case 30:
+                    case 31:
+                    case 32:
+                    case 33:
+                    case 43:
+                    case 45:
+                    case 55:
+                    case 59:
+                    case 61:
+                    case 64:
+                    case 68:
+                    case 72:
+                    case 74:
+                    case 76:
+                    case 94:
+                    case 95:
+                    case 97:
+                    case 99:
+                    case 105:
+                        adjustedBaseRectangle.Height -= 8;
+                        break;
+                    case 11:
+                    case 17:
+                    case 20:
+                    case 22:
+                    case 23:
+                    case 49:
+                    case 50:
+                    case 53:
+                    case 56:
+                    case 60:
+                    case 69:
+                    case 70:
+                    case 71:
+                    case 73:
+                    case 75:
+                    case 112:
+                        adjustedBaseRectangle.Height -= 9;
+                        break;
+                    case 51:
+                    case 106:
+                        adjustedBaseRectangle.Height -= 12;
+                        break;
+                    case 52:
+                        adjustedBaseRectangle.Height -= 11;
+                        break;
+                    case 77:
+                        adjustedBaseRectangle.Height -= 10;
+                        break;
+                    case 107:
+                    case 113:
+                        adjustedBaseRectangle.Height -= 14;
+                        break;
+                    case 117:
+                        adjustedBaseRectangle.Height -= 13;
+                        break;
+                    default:
+                        adjustedBaseRectangle.Height -= 7;
+                        break;
+                }
+
+                if (who.isMale)
+                {
+                    adjustedBaseRectangle.Height -= 1;
+                }
+            }
+
+            // Draw the player's base texture
+            _spriteBatch.Draw(_baseTexture, _position + _origin + _positionOffset, adjustedBaseRectangle, _overrideColor, _rotation, _origin, 4f * _scale, _animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
+
+            // Vanilla swim draw logic
+            if (!FarmerRenderer.isDrawingForUI && (bool)who.swimming)
+            {
+                if (who.currentEyes != 0 && who.FacingDirection != 0 && (Game1.timeOfDay < 2600 || (who.isInBed.Value && who.timeWentToBed.Value != 0)) && ((!who.FarmerSprite.PauseForSingleAnimation && !who.UsingTool) || (who.UsingTool && who.CurrentTool is FishingRod)))
+                {
+                    _spriteBatch.Draw(_baseTexture, _position + _origin + _positionOffset + new Vector2(FarmerRenderer.featureXOffsetPerFrame[_currentFrame] * 4 + 20 + ((who.FacingDirection == 1) ? 12 : ((who.FacingDirection == 3) ? 4 : 0)), FarmerRenderer.featureYOffsetPerFrame[_currentFrame] * 4 + 40), new Rectangle(5, 16, (who.FacingDirection == 2) ? 6 : 2, 2), _overrideColor, 0f, _origin, 4f * _scale, SpriteEffects.None, IncrementAndGetLayerDepth());
+                    _spriteBatch.Draw(_baseTexture, _position + _origin + _positionOffset + new Vector2(FarmerRenderer.featureXOffsetPerFrame[_currentFrame] * 4 + 20 + ((who.FacingDirection == 1) ? 12 : ((who.FacingDirection == 3) ? 4 : 0)), FarmerRenderer.featureYOffsetPerFrame[_currentFrame] * 4 + 40), new Rectangle(264 + ((who.FacingDirection == 3) ? 4 : 0), 2 + (who.currentEyes - 1) * 2, (who.FacingDirection == 2) ? 6 : 2, 2), _overrideColor, 0f, _origin, 4f * _scale, SpriteEffects.None, IncrementAndGetLayerDepth());
+                }
+
+                // Exiting early from this method, as copied from the vanilla logic
+                return;
+            }
+
+            // Draw blinking / eyes closed animation, if conditions are met
+            FishingRod fishing_rod;
+            if (who.currentEyes != 0 && _facingDirection != 0 && (Game1.timeOfDay < 2600 || (who.isInBed.Value && who.timeWentToBed.Value != 0)) && ((!who.FarmerSprite.PauseForSingleAnimation && !who.UsingTool) || (who.UsingTool && who.CurrentTool is FishingRod)) && (!who.UsingTool || (fishing_rod = who.CurrentTool as FishingRod) == null || fishing_rod.isFishing))
+            {
+                int x_adjustment = 5;
+                x_adjustment = (_animationFrame.flip ? (x_adjustment - FarmerRenderer.featureXOffsetPerFrame[_currentFrame]) : (x_adjustment + FarmerRenderer.featureXOffsetPerFrame[_currentFrame]));
+                switch (_facingDirection)
+                {
+                    case 1:
+                        x_adjustment += 3;
+                        break;
+                    case 3:
+                        x_adjustment++;
+                        break;
+                }
+
+                x_adjustment *= 4;
+                _spriteBatch.Draw(_baseTexture, _position + _origin + _positionOffset + new Vector2(x_adjustment, FarmerRenderer.featureYOffsetPerFrame[_currentFrame] * 4 + ((who.IsMale && who.FacingDirection != 2) ? 36 : 40)), new Rectangle(5, 16, (_facingDirection == 2) ? 6 : 2, 2), _overrideColor, 0f, _origin, 4f * _scale, SpriteEffects.None, IncrementAndGetLayerDepth());
+                _spriteBatch.Draw(_baseTexture, _position + _origin + _positionOffset + new Vector2(x_adjustment, FarmerRenderer.featureYOffsetPerFrame[_currentFrame] * 4 + ((who.FacingDirection == 1 || who.FacingDirection == 3) ? 40 : 44)), new Rectangle(264 + ((_facingDirection == 3) ? 4 : 0), 2 + (who.currentEyes - 1) * 2, (_facingDirection == 2) ? 6 : 2, 2), _overrideColor, 0f, _origin, 4f * _scale, SpriteEffects.None, IncrementAndGetLayerDepth());
+            }
+        }
+
         private void DrawPantsVanilla(Farmer who)
         {
             Rectangle pants_rect = new Rectangle(_farmerSourceRectangle.X, _farmerSourceRectangle.Y, _farmerSourceRectangle.Width, _farmerSourceRectangle.Height);
@@ -699,7 +833,7 @@ namespace FashionSense.Framework.Managers
 
         private float IncrementAndGetLayerDepth()
         {
-            LayerDepth += 0.000001f;
+            LayerDepth += 0.0001f;
             return LayerDepth;
         }
         #endregion

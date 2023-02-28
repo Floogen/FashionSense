@@ -18,7 +18,8 @@ namespace FashionSense.Framework.Models.Appearances
             Shirt,
             Pants,
             Sleeves,
-            Shoes
+            Shoes,
+            Player
         }
 
         public bool IsLocked { get; set; }

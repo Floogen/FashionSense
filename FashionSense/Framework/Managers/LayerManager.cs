@@ -70,6 +70,7 @@ namespace FashionSense.Framework.Managers
             // Establish the initial sorted order, assuming no conditional changes are required
             List<LayerData> sortedLayerData = new List<LayerData>()
             {
+                rawLayerData.First(d => d.AppearanceType is AppearanceContentPack.Type.Player),
                 rawLayerData.First(d => d.AppearanceType is AppearanceContentPack.Type.Pants),
                 rawLayerData.First(d => d.AppearanceType is AppearanceContentPack.Type.Shoes),
                 rawLayerData.First(d => d.AppearanceType is AppearanceContentPack.Type.Shirt),
@@ -90,6 +91,9 @@ namespace FashionSense.Framework.Managers
 
                 switch (layerData.AppearanceType)
                 {
+                    case AppearanceContentPack.Type.Player:
+                        SortPlayer(layerData, ref sortedLayerData);
+                        break;
                     case AppearanceContentPack.Type.Pants:
                         SortPants(layerData, ref sortedLayerData);
                         break;
@@ -131,6 +135,7 @@ namespace FashionSense.Framework.Managers
 
         private void AddVanillaLayerData(List<AppearanceModel> models, ref List<LayerData> rawLayerData)
         {
+            rawLayerData.Add(new LayerData(AppearanceContentPack.Type.Player, null, isVanilla: true));
             if (models.Any(m => m is PantsModel) is false)
             {
                 rawLayerData.Add(new LayerData(AppearanceContentPack.Type.Pants, null, isVanilla: true));
@@ -256,6 +261,11 @@ namespace FashionSense.Framework.Managers
         #endregion
 
         #region Sort methods for sortedLayerData
+        private void SortPlayer(LayerData layerData, ref List<LayerData> sortedLayerData)
+        {
+            // Player layer has no conditional checks
+        }
+
         private void SortPants(LayerData layerData, ref List<LayerData> sortedLayerData)
         {
             // Pants have no conditional checks
@@ -278,19 +288,20 @@ namespace FashionSense.Framework.Managers
         private void SortAccessory(LayerData layerData, ref List<LayerData> sortedLayerData)
         {
             var accessoryModel = layerData.AppearanceModel as AccessoryModel;
-            if (accessoryModel.DrawBeforeHair)
-            {
-                MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Hair), layerData, ref sortedLayerData);
-            }
-            else if (accessoryModel.DrawAfterSleeves)
-            {
-                MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Sleeves), layerData, ref sortedLayerData);
-            }
-            else if (accessoryModel.DrawAfterPlayer)
+            // TODO: Update to actually draw before the player's base texture
+            if (accessoryModel.DrawAfterPlayer)
             {
                 // Move to bottom of list
                 sortedLayerData.Remove(layerData);
                 sortedLayerData.Add(layerData);
+            }
+            else if (accessoryModel.DrawBeforeHair)
+            {
+                MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Player), layerData, ref sortedLayerData);
+            }
+            else if (accessoryModel.DrawAfterSleeves)
+            {
+                MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Sleeves), layerData, ref sortedLayerData);
             }
         }
 

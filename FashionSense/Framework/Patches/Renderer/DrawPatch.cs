@@ -227,101 +227,8 @@ namespace FashionSense.Framework.Patches.Renderer
                 facingDirection = ((!animationFrame.flip) ? 1 : 3);
             }
 
-            // Check if the player's legs need to be hidden
-            var adjustedBaseRectangle = sourceRect;
-            if (AppearanceHelpers.ShouldHideLegs(who, facingDirection) && !(bool)who.swimming)
-            {
-                switch (who.FarmerSprite.CurrentFrame)
-                {
-                    case 2:
-                    case 16:
-                    case 54:
-                    case 57:
-                    case 62:
-                    case 66:
-                    case 84:
-                    case 90:
-                    case 124:
-                    case 125:
-                        adjustedBaseRectangle.Height -= 6;
-                        break;
-                    case 6:
-                    case 7:
-                    case 9:
-                    case 19:
-                    case 21:
-                    case 30:
-                    case 31:
-                    case 32:
-                    case 33:
-                    case 43:
-                    case 45:
-                    case 55:
-                    case 59:
-                    case 61:
-                    case 64:
-                    case 68:
-                    case 72:
-                    case 74:
-                    case 76:
-                    case 94:
-                    case 95:
-                    case 97:
-                    case 99:
-                    case 105:
-                        adjustedBaseRectangle.Height -= 8;
-                        break;
-                    case 11:
-                    case 17:
-                    case 20:
-                    case 22:
-                    case 23:
-                    case 49:
-                    case 50:
-                    case 53:
-                    case 56:
-                    case 60:
-                    case 69:
-                    case 70:
-                    case 71:
-                    case 73:
-                    case 75:
-                    case 112:
-                        adjustedBaseRectangle.Height -= 9;
-                        break;
-                    case 51:
-                    case 106:
-                        adjustedBaseRectangle.Height -= 12;
-                        break;
-                    case 52:
-                        adjustedBaseRectangle.Height -= 11;
-                        break;
-                    case 77:
-                        adjustedBaseRectangle.Height -= 10;
-                        break;
-                    case 107:
-                    case 113:
-                        adjustedBaseRectangle.Height -= 14;
-                        break;
-                    case 117:
-                        adjustedBaseRectangle.Height -= 13;
-                        break;
-                    default:
-                        adjustedBaseRectangle.Height -= 7;
-                        break;
-                }
-
-                if (who.isMale)
-                {
-                    adjustedBaseRectangle.Height -= 1;
-                }
-            }
-
-            // Draw the player's base texture
-            b.Draw(baseTexture, position + origin + ___positionOffset, adjustedBaseRectangle, overrideColor, rotation, origin, 4f * scale, animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
-
             // Get skin tone
-            var skinTone = DrawPatch.GetSkinTone(___farmerTextureManager, ___baseTexture, null, ___skin, ____sickFrame);
+            var skinTone = DrawPatch.GetSkinTone(___farmerTextureManager, baseTexture, null, ___skin, ____sickFrame);
 
             // Establish the source rectangles for models
             Dictionary<AppearanceModel, Rectangle> appearanceTypeToSourceRectangles = new Dictionary<AppearanceModel, Rectangle>();
@@ -338,21 +245,15 @@ namespace FashionSense.Framework.Patches.Renderer
             AppearanceHelpers.OffsetSourceRectangles(who, facingDirection, rotation, ref ___shirtSourceRect, ref dyedShirtSourceRect, ref ___accessorySourceRect, ref ___hatSourceRect, ref ___rotationAdjustment);
 
             // Prepare the DrawManager
-            DrawManager drawManager = new DrawManager(b, __instance, skinTone, ___baseTexture, sourceRect, ___shirtSourceRect, dyedShirtSourceRect, ___accessorySourceRect, ___hatSourceRect, appearanceTypeToSourceRectangles, animationFrame, overrideColor, position, origin, ___positionOffset, ___rotationAdjustment, facingDirection, currentFrame, scale, rotation, FarmerRendererPatch.AreColorMasksPendingRefresh, FarmerRenderer.isDrawingForUI, AppearanceHelpers.AreSleevesForcedHidden(equippedModels))
+            DrawManager drawManager = new DrawManager(b, __instance, skinTone, baseTexture, sourceRect, ___shirtSourceRect, dyedShirtSourceRect, ___accessorySourceRect, ___hatSourceRect, appearanceTypeToSourceRectangles, animationFrame, overrideColor, position, origin, ___positionOffset, ___rotationAdjustment, facingDirection, currentFrame, scale, rotation, FarmerRendererPatch.AreColorMasksPendingRefresh, FarmerRenderer.isDrawingForUI, AppearanceHelpers.AreSleevesForcedHidden(equippedModels))
             {
-                LayerDepth = layerDepth + 0.001f
+                LayerDepth = layerDepth
             };
 
-            // Draw the player's eyes
+            // Vanilla swim draw logic
             if (!FarmerRenderer.isDrawingForUI && (bool)who.swimming)
             {
-                if (who.currentEyes != 0 && who.FacingDirection != 0 && (Game1.timeOfDay < 2600 || (who.isInBed.Value && who.timeWentToBed.Value != 0)) && ((!who.FarmerSprite.PauseForSingleAnimation && !who.UsingTool) || (who.UsingTool && who.CurrentTool is FishingRod)))
-                {
-                    b.Draw(baseTexture, position + origin + ___positionOffset + new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4 + 20 + ((who.FacingDirection == 1) ? 12 : ((who.FacingDirection == 3) ? 4 : 0)), FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + 40), new Rectangle(5, 16, (who.FacingDirection == 2) ? 6 : 2, 2), overrideColor, 0f, origin, 4f * scale, SpriteEffects.None, layerDepth + 5E-08f);
-                    b.Draw(baseTexture, position + origin + ___positionOffset + new Vector2(FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4 + 20 + ((who.FacingDirection == 1) ? 12 : ((who.FacingDirection == 3) ? 4 : 0)), FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + 40), new Rectangle(264 + ((who.FacingDirection == 3) ? 4 : 0), 2 + (who.currentEyes - 1) * 2, (who.FacingDirection == 2) ? 6 : 2, 2), overrideColor, 0f, origin, 4f * scale, SpriteEffects.None, layerDepth + 1.2E-07f);
-                }
-
-                // Draw all clothing related assets
+                // Draw all sorted layers
                 drawManager.DrawLayers(who, layers);
                 if (!AppearanceHelpers.ShouldHideWaterLine(equippedModels))
                 {
@@ -361,28 +262,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 return;
             }
 
-            // Draw blinking / eyes closed animation, if conditions are met
-            FishingRod fishing_rod;
-            if (who.currentEyes != 0 && facingDirection != 0 && (Game1.timeOfDay < 2600 || (who.isInBed.Value && who.timeWentToBed.Value != 0)) && ((!who.FarmerSprite.PauseForSingleAnimation && !who.UsingTool) || (who.UsingTool && who.CurrentTool is FishingRod)) && (!who.UsingTool || (fishing_rod = who.CurrentTool as FishingRod) == null || fishing_rod.isFishing))
-            {
-                int x_adjustment = 5;
-                x_adjustment = (animationFrame.flip ? (x_adjustment - FarmerRenderer.featureXOffsetPerFrame[currentFrame]) : (x_adjustment + FarmerRenderer.featureXOffsetPerFrame[currentFrame]));
-                switch (facingDirection)
-                {
-                    case 1:
-                        x_adjustment += 3;
-                        break;
-                    case 3:
-                        x_adjustment++;
-                        break;
-                }
-
-                x_adjustment *= 4;
-                b.Draw(baseTexture, position + origin + ___positionOffset + new Vector2(x_adjustment, FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + ((who.IsMale && who.FacingDirection != 2) ? 36 : 40)), new Rectangle(5, 16, (facingDirection == 2) ? 6 : 2, 2), overrideColor, 0f, origin, 4f * scale, SpriteEffects.None, layerDepth + 5E-08f);
-                b.Draw(baseTexture, position + origin + ___positionOffset + new Vector2(x_adjustment, FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + ((who.FacingDirection == 1 || who.FacingDirection == 3) ? 40 : 44)), new Rectangle(264 + ((facingDirection == 3) ? 4 : 0), 2 + (who.currentEyes - 1) * 2, (facingDirection == 2) ? 6 : 2, 2), overrideColor, 0f, origin, 4f * scale, SpriteEffects.None, layerDepth + 1.2E-07f);
-            }
-
-            // Draw all clothing related assets
+            // Draw all sorted layers
             drawManager.DrawLayers(who, layers);
 
             FarmerRendererPatch.AreColorMasksPendingRefresh = false;
