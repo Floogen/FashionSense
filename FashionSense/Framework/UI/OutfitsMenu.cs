@@ -224,24 +224,27 @@ namespace FashionSense.Framework.UI
                         var outfit = FashionSense.outfitManager.GetOutfit(Game1.player, _pages[_currentPage][i].Name);
                         if (outfit.IsGlobal is false)
                         {
-                            if (saveButtons[i].containsPoint(x, y))
+                            if (outfit.IsBeingShared is false)
                             {
-                                FashionSense.outfitManager.OverrideOutfit(Game1.player, _pages[_currentPage][i].Name);
-                                Game1.activeClickableMenu = _callbackMenu;
-                                base.exitThisMenu();
+                                if (saveButtons[i].containsPoint(x, y))
+                                {
+                                    FashionSense.outfitManager.OverrideOutfit(Game1.player, _pages[_currentPage][i].Name);
+                                    Game1.activeClickableMenu = _callbackMenu;
+                                    base.exitThisMenu();
 
-                                return;
-                            }
-                            if (renameButtons[i].containsPoint(x, y))
-                            {
-                                Game1.activeClickableMenu = new NameMenu(FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.outfit_naming"), this, _pages[_currentPage][i].Name);
-                                return;
-                            }
-                            if (deleteButtons[i].containsPoint(x, y))
-                            {
-                                FashionSense.outfitManager.DeleteOutfit(Game1.player, _pages[_currentPage][i].Name);
-                                PaginatePacks();
-                                return;
+                                    return;
+                                }
+                                if (renameButtons[i].containsPoint(x, y))
+                                {
+                                    Game1.activeClickableMenu = new NameMenu(FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.outfit_naming"), this, _pages[_currentPage][i].Name);
+                                    return;
+                                }
+                                if (deleteButtons[i].containsPoint(x, y))
+                                {
+                                    FashionSense.outfitManager.DeleteOutfit(Game1.player, _pages[_currentPage][i].Name);
+                                    PaginatePacks();
+                                    return;
+                                }
                             }
                             if (shareButtons[i].containsPoint(x, y))
                             {
@@ -310,20 +313,23 @@ namespace FashionSense.Framework.UI
                     var outfit = FashionSense.outfitManager.GetOutfit(Game1.player, _pages[_currentPage][i].Name);
                     if (outfit.IsGlobal is false)
                     {
-                        if (saveButtons[i].containsPoint(x, y))
+                        if (outfit.IsBeingShared is false)
                         {
-                            _hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.outfit_info.save");
-                            return;
-                        }
-                        if (renameButtons[i].containsPoint(x, y))
-                        {
-                            _hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.outfit_info.rename");
-                            return;
-                        }
-                        if (deleteButtons[i].containsPoint(x, y))
-                        {
-                            _hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.outfit_info.delete");
-                            return;
+                            if (saveButtons[i].containsPoint(x, y))
+                            {
+                                _hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.outfit_info.save");
+                                return;
+                            }
+                            if (renameButtons[i].containsPoint(x, y))
+                            {
+                                _hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.outfit_info.rename");
+                                return;
+                            }
+                            if (deleteButtons[i].containsPoint(x, y))
+                            {
+                                _hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.outfit_info.delete");
+                                return;
+                            }
                         }
                         if (shareButtons[i].containsPoint(x, y))
                         {
@@ -379,9 +385,12 @@ namespace FashionSense.Framework.UI
                     // Draw the functional buttons
                     if (outfit.IsGlobal is false)
                     {
-                        saveButtons[j].draw(b);
-                        renameButtons[j].draw(b);
-                        deleteButtons[j].draw(b);
+                        if (outfit.IsBeingShared is false)
+                        {
+                            saveButtons[j].draw(b);
+                            renameButtons[j].draw(b);
+                            deleteButtons[j].draw(b);
+                        }
                         shareButtons[j].draw(b, outfit.IsBeingShared ? Color.White : new Color(55, 55, 55, 55), 1f);
                     }
                     else
