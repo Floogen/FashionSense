@@ -15,7 +15,7 @@ namespace FashionSense.Framework.Models.Appearances.Accessory
 
         public Position HeadPosition { get; set; } = new Position() { X = 0, Y = 0 };
         public Size AccessorySize { get; set; }
-        public bool DrawBeforeBase { get; set; }
+        public bool DrawBehindHead { get; set; }
         public bool DrawAfterPlayer { get; set; }
         public bool DrawAfterSleeves { get; set; }
 
@@ -24,7 +24,7 @@ namespace FashionSense.Framework.Models.Appearances.Accessory
 
         // Old property, has been renamed to DrawBeforeBase
         [Obsolete("Has been renamed to DrawBeforeBase.")]
-        public bool DrawBeforeHair { set { DrawBeforeBase = value; } }
+        public bool DrawBeforeHair { set { DrawBehindHead = value; } }
 
         // Old property, has been renamed to DrawAfterPlayer
         [Obsolete("Has been renamed to DrawAfterPlayer.")]

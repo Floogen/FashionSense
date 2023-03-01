@@ -118,6 +118,15 @@ namespace FashionSense.Framework.Managers
                 }
             }
 
+            /* Debugging block
+            int index = 0;
+            foreach (var layerData in sortedLayerData)
+            {
+                _monitor.Log($"[{index}] {layerData.AppearanceType} ({(layerData.AppearanceModel is null ? string.Empty : layerData.AppearanceModel.Pack.Id)}", LogLevel.Debug);
+                index++;
+            }
+            */
+
             return sortedLayerData;
         }
 
@@ -294,9 +303,18 @@ namespace FashionSense.Framework.Managers
                 sortedLayerData.Remove(layerData);
                 sortedLayerData.Add(layerData);
             }
-            else if (accessoryModel.DrawBeforeBase)
+            else if (accessoryModel.DrawBehindHead)
             {
-                MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Player), layerData, ref sortedLayerData);
+                // If the player is facing backwards, place the accessory after the hair
+                // Need to do this for backwards compatibility reasons, as packs that use DrawBeforeHair (DrawBehindHead) rely on this unintended behavior
+                if (_facingDirection == 0)
+                {
+                    MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Hair) + 1, layerData, ref sortedLayerData);
+                }
+                else
+                {
+                    MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Player), layerData, ref sortedLayerData);
+                }
             }
             else if (accessoryModel.DrawAfterSleeves)
             {
@@ -316,7 +334,7 @@ namespace FashionSense.Framework.Managers
             {
                 MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Shirt), layerData, ref sortedLayerData);
             }
-            else if (sleevesModel.DrawBeforeBase)
+            else if (sleevesModel.DrawBehindHead)
             {
                 MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Player), layerData, ref sortedLayerData);
             }

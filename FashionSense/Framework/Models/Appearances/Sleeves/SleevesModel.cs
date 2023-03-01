@@ -9,12 +9,12 @@ namespace FashionSense.Framework.Models.Appearances.Sleeves
         public Position BodyPosition { get; set; } = new Position() { X = 0, Y = 0 };
         public Size SleevesSize { get; set; }
         public bool DrawBeforeShirt { get; set; }
-        public bool DrawBeforeBase { get; set; }
+        public bool DrawBehindHead { get; set; }
         public bool UseShirtColors { get; set; }
 
         // Old property, has been renamed to DrawBeforeBase
         [Obsolete("Has been renamed to DrawBeforeBase.")]
-        public bool DrawBeforeHair { set { DrawBeforeBase = value; } }
+        public bool DrawBeforeHair { set { DrawBehindHead = value; } }
 
         public SkinToneModel ShirtToneMask { get; set; }
 
