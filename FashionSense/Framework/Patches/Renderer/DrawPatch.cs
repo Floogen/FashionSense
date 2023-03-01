@@ -422,7 +422,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 models.Add(new AppearanceMetadata(shModel, GetColorValue(who, shModel)));
             }
 
-            return models.Where(m => m is not null).ToList();
+            return models.Where(m => m is not null && m.Model is not null && m.Model.Pack is not null).ToList();
         }
 
         internal static SkinToneModel GetSkinTone(LocalizedContentManager farmerTextureManager, Texture2D baseTexture, Color[] pixels, NetInt skin, bool sickFrame)
