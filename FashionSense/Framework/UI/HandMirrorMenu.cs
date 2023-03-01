@@ -581,7 +581,7 @@ namespace FashionSense.Framework.UI
                     Game1.player.changeHairColor(color);
                     break;
                 case ACCESSORY_FILTER_BUTTON:
-                    Game1.player.modData[FashionSense.accessoryManager.GetKeyForAccessoryColor(GetAccessoryIndex())] = color.PackedValue.ToString();
+                    FashionSense.accessoryManager.SetColorForIndex(Game1.player, GetAccessoryIndex(), color);
                     break;
                 case HAT_FILTER_BUTTON:
                     Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_HAT_COLOR] = color.PackedValue.ToString();
@@ -931,7 +931,7 @@ namespace FashionSense.Framework.UI
                         randomContentPack = FashionSense.textureManager.GetRandomAppearanceModel<HairContentPack>();
                         break;
                     case ACCESSORY_FILTER_BUTTON:
-                        modDataKey = GetCurrentAccessorySlotKey();
+                        modDataKey = FashionSense.accessoryManager.GetKeyForAccessoryId(GetAccessoryIndex());
                         randomContentPack = FashionSense.textureManager.GetRandomAppearanceModel<AccessoryContentPack>();
                         break;
                     case HAT_FILTER_BUTTON:

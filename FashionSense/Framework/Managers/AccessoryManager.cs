@@ -44,8 +44,10 @@ namespace FashionSense.Framework.Managers
 
                 foreach (string accessoryId in accessoryIds)
                 {
-                    var index = AddAccessory(who, accessoryId);
+                    var index = AddAccessory(who, accessoryId, skipCacheUpdate: true);
                     who.modData[GetKeyForAccessoryColor(index)] = uint.Parse(colors[index]).ToString();
+
+                    UpdateAccessoryCache(who);
                 }
             }
             catch (Exception)
@@ -85,7 +87,7 @@ namespace FashionSense.Framework.Managers
             _farmerToActiveAccessorySlots[who] = new HashSet<int>();
         }
 
-        internal int AddAccessory(Farmer who, string accessoryId, int index = -1, bool preserveColor = false)
+        internal int AddAccessory(Farmer who, string accessoryId, int index = -1, bool preserveColor = false, bool skipCacheUpdate = false)
         {
             if (_farmerToActiveAccessorySlots.ContainsKey(who) is false)
             {
@@ -112,7 +114,10 @@ namespace FashionSense.Framework.Managers
                 who.modData[GetKeyForAccessoryId(index)] = accessoryId;
                 who.modData[GetKeyForAccessoryColor(index)] = preserveColor is true && who.modData.ContainsKey(GetKeyForAccessoryColor(index)) is true && String.IsNullOrEmpty(who.modData[GetKeyForAccessoryColor(index)]) is false ? who.modData[GetKeyForAccessoryColor(index)] : Color.White.PackedValue.ToString();
 
-                UpdateAccessoryCache(who);
+                if (skipCacheUpdate is false)
+                {
+                    UpdateAccessoryCache(who);
+                }
 
                 return index;
             }
@@ -139,6 +144,13 @@ namespace FashionSense.Framework.Managers
             {
                 who.modData.Remove(colorKey);
             }
+
+            UpdateAccessoryCache(who);
+        }
+
+        internal void SetColorForIndex(Farmer who, int index, Color color)
+        {
+            who.modData[GetKeyForAccessoryColor(index)] = color.PackedValue.ToString();
 
             UpdateAccessoryCache(who);
         }
