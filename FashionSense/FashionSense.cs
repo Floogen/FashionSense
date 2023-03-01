@@ -1,34 +1,36 @@
-using HarmonyLib;
+using FashionSense.Framework.External.ContentPatcher;
+using FashionSense.Framework.Interfaces.API;
 using FashionSense.Framework.Managers;
-using FashionSense.Framework.Models;
+using FashionSense.Framework.Models.Appearances;
+using FashionSense.Framework.Models.Appearances.Accessory;
+using FashionSense.Framework.Models.Appearances.Generic;
+using FashionSense.Framework.Models.Appearances.Hair;
+using FashionSense.Framework.Models.Appearances.Hat;
+using FashionSense.Framework.Models.Appearances.Pants;
+using FashionSense.Framework.Models.Appearances.Shirt;
+using FashionSense.Framework.Models.Appearances.Shoes;
+using FashionSense.Framework.Models.Appearances.Sleeves;
+using FashionSense.Framework.Patches.Entities;
+using FashionSense.Framework.Patches.GameLocations;
 using FashionSense.Framework.Patches.Menus;
 using FashionSense.Framework.Patches.Renderer;
 using FashionSense.Framework.Patches.ShopLocations;
 using FashionSense.Framework.Patches.Tools;
+using FashionSense.Framework.UI;
 using FashionSense.Framework.Utilities;
-using Microsoft.Xna.Framework;
+using HarmonyLib;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.Menus;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using FashionSense.Framework.Models.Hair;
-using FashionSense.Framework.Models.Accessory;
-using FashionSense.Framework.External.ContentPatcher;
-using FashionSense.Framework.Models.Hat;
-using FashionSense.Framework.Models.Shirt;
-using StardewModdingAPI.Events;
-using FashionSense.Framework.Models.Pants;
-using FashionSense.Framework.Patches.Entities;
-using FashionSense.Framework.Models.Sleeves;
-using FashionSense.Framework.UI;
-using FashionSense.Framework.Models.Shoes;
-using FashionSense.Framework.Interfaces.API;
-using StardewModdingAPI.Utilities;
-using FashionSense.Framework.Patches.GameLocations;
-using FashionSense.Framework.Models.Generic;
+using System.Threading;
 
 namespace FashionSense
 {
@@ -39,10 +41,12 @@ namespace FashionSense
         internal static IModHelper modHelper;
 
         // Managers
+        internal static AccessoryManager accessoryManager;
         internal static ApiManager apiManager;
         internal static AssetManager assetManager;
-        internal static TextureManager textureManager;
+        internal static LayerManager layerManager;
         internal static OutfitManager outfitManager;
+        internal static TextureManager textureManager;
 
         // Utilities
         internal static ConditionData conditionData;
@@ -62,10 +66,12 @@ namespace FashionSense
             modHelper = helper;
 
             // Load managers
+            accessoryManager = new AccessoryManager(monitor);
             apiManager = new ApiManager(monitor);
             assetManager = new AssetManager(modHelper);
-            textureManager = new TextureManager(monitor, modHelper);
-            outfitManager = new OutfitManager(monitor, modHelper);
+            layerManager = new LayerManager(monitor);
+            outfitManager = new OutfitManager(monitor);
+            textureManager = new TextureManager(monitor);
 
             // Setup our utilities
             conditionData = new ConditionData();
@@ -87,6 +93,7 @@ namespace FashionSense
                 // Apply UI related patches
                 new CharacterCustomizationPatch(monitor, modHelper).Apply(harmony);
                 new LetterViewerMenuPatch(monitor, modHelper).Apply(harmony);
+                new SaveFileSlotPatch(monitor, modHelper).Apply(harmony);
 
                 // Apply entity related patches
                 new CharacterPatch(monitor, modHelper).Apply(harmony);
@@ -104,6 +111,7 @@ namespace FashionSense
             helper.ConsoleCommands.Add("fs_add_mirror", "Gives you a Hand Mirror tool.\n\nUsage: fs_add_mirror", delegate { Game1.player.addItemToInventory(SeedShopPatch.GetHandMirrorTool()); });
 
             helper.Events.Content.AssetRequested += OnAssetRequested;
+            helper.Events.Content.AssetsInvalidated += OnAssetInvalidated;
             helper.Events.GameLoop.GameLaunched += OnGameLaunched;
             helper.Events.GameLoop.SaveLoaded += OnSaveLoaded;
             helper.Events.GameLoop.DayStarted += OnDayStarted;
@@ -153,18 +161,15 @@ namespace FashionSense
             {
                 e.OldLocation.sharedLights.Remove(hair_id);
             }
-            if (e.Player.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_LIGHT_ID) && Int32.TryParse(e.Player.modData[ModDataKeys.ANIMATION_ACCESSORY_LIGHT_ID], out int acc_id))
+
+            foreach (int index in accessoryManager.GetActiveAccessoryIndices(e.Player))
             {
-                e.OldLocation.sharedLights.Remove(acc_id);
+                if (Int32.TryParse(accessoryManager.GetModData(e.Player, index, AccessoryManager.AnimationKey.LightId), out int accessoryLightId))
+                {
+                    e.OldLocation.sharedLights.Remove(accessoryLightId);
+                }
             }
-            if (e.Player.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_LIGHT_ID) && Int32.TryParse(e.Player.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_LIGHT_ID], out int acc_sec_id))
-            {
-                e.OldLocation.sharedLights.Remove(acc_sec_id);
-            }
-            if (e.Player.modData.ContainsKey(ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_LIGHT_ID) && Int32.TryParse(e.Player.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_LIGHT_ID], out int acc_ter_id))
-            {
-                e.OldLocation.sharedLights.Remove(acc_ter_id);
-            }
+
             if (e.Player.modData.ContainsKey(ModDataKeys.ANIMATION_HAT_LIGHT_ID) && Int32.TryParse(e.Player.modData[ModDataKeys.ANIMATION_HAT_LIGHT_ID], out int hat_id))
             {
                 e.OldLocation.sharedLights.Remove(hat_id);
@@ -209,6 +214,22 @@ namespace FashionSense
                     data[ModDataKeys.LETTER_HAND_MIRROR] = modHelper.Translation.Get("letters.hand_mirror");
                 });
             }
+            else if (e.NameWithoutLocale.IsEquivalentTo("Data/PeacefulEnd/FashionSense/AppearanceData"))
+            {
+                e.LoadFrom(() => textureManager.GetIdToAppearanceModels(), AssetLoadPriority.High);
+            }
+        }
+
+        private void OnAssetInvalidated(object sender, AssetsInvalidatedEventArgs e)
+        {
+            var asset = e.NamesWithoutLocale.FirstOrDefault(a => a.IsEquivalentTo("Data/PeacefulEnd/FashionSense/AppearanceData"));
+            if (asset is null)
+            {
+                return;
+            }
+
+            // Force load the changes
+            _ = Helper.GameContent.Load<Dictionary<string, AppearanceContentPack>>(asset);
         }
 
         private void OnSaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
@@ -237,6 +258,7 @@ namespace FashionSense
         private void OnDayStarted(object sender, StardewModdingAPI.Events.DayStartedEventArgs e)
         {
             EnsureKeyExists(ModDataKeys.CUSTOM_HAIR_ID);
+            EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID);
@@ -246,8 +268,14 @@ namespace FashionSense
             EnsureKeyExists(ModDataKeys.CUSTOM_SLEEVES_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_SHOES_ID);
 
+            // Handle the loading cached accessories
+            LoadCachedAccessories(Game1.player);
+
             // Set sprite to dirty in order to refresh sleeves and other tied-in appearances
             SetSpriteDirty();
+
+            // Load our Data/PeacefulEnd/FashionSense/AppearanceData
+            _ = Helper.GameContent.Load<Dictionary<string, AppearanceContentPack>>("Data/PeacefulEnd/FashionSense/AppearanceData");
 
             // Check if we need to give a Hand Mirror at the start of the game
             if (SDate.Now().DaysSinceStart == 1 && Game1.player.modData.ContainsKey(ModDataKeys.STARTS_WITH_HAND_MIRROR))
@@ -271,9 +299,12 @@ namespace FashionSense
         private void UpdateElapsedDuration(Farmer who)
         {
             UpdateElapsedDuration(who, ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION);
-            UpdateElapsedDuration(who, ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION);
-            UpdateElapsedDuration(who, ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ELAPSED_DURATION);
-            UpdateElapsedDuration(who, ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION);
+
+            foreach (int index in accessoryManager.GetActiveAccessoryIndices(who))
+            {
+                UpdateElapsedDuration(who, accessoryManager.GetModDataKey(who, AccessoryManager.AnimationKey.ElapsedDuration, index));
+            }
+
             UpdateElapsedDuration(who, ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION);
             UpdateElapsedDuration(who, ModDataKeys.ANIMATION_SHIRT_ELAPSED_DURATION);
             UpdateElapsedDuration(who, ModDataKeys.ANIMATION_PANTS_ELAPSED_DURATION);
@@ -1210,7 +1241,11 @@ namespace FashionSense
         internal static bool ResetTextureIfNecessary(string appearanceId)
         {
             // See if we need to reset the texture (i.e. it has been overriden by the API and not using the shouldOverridePersist parameter)
-            var appearancePack = textureManager.GetSpecificAppearanceModel<AppearanceContentPack>(appearanceId);
+            return ResetTextureIfNecessary(textureManager.GetSpecificAppearanceModel<AppearanceContentPack>(appearanceId));
+        }
+
+        internal static bool ResetTextureIfNecessary(AppearanceContentPack appearancePack)
+        {
             if (appearancePack is null)
             {
                 return false;
@@ -1234,29 +1269,17 @@ namespace FashionSense
                 who.modData[ModDataKeys.ANIMATION_HAIR_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
             }
 
-            if (model is null || (model is AccessoryModel accessoryModel && accessoryModel.Priority == AccessoryModel.Type.Primary))
+            if (model is AccessoryModel accessoryModel && accessoryModel is not null)
             {
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_ITERATOR] = "0";
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_STARTING_INDEX] = "0";
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_FRAME_DURATION] = duration.ToString();
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_ELAPSED_DURATION] = "0";
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
+                var accessoryIndex = accessoryManager.GetAccessoryIndexById(who, accessoryModel.Pack.Id);
+                if (accessoryIndex != -1)
+                {
+                    accessoryManager.ResetAccessory(accessoryIndex, who, duration, animationType, ignoreAnimationType);
+                }
             }
-            if (model is null || (model is AccessoryModel secondaryAccessoryModel && secondaryAccessoryModel.Priority == AccessoryModel.Type.Secondary))
+            else if (model is null)
             {
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ITERATOR] = "0";
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_STARTING_INDEX] = "0";
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_FRAME_DURATION] = duration.ToString();
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_ELAPSED_DURATION] = "0";
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
-            }
-            if (model is null || (model is AccessoryModel tertiaryAccessoryModel && tertiaryAccessoryModel.Priority == AccessoryModel.Type.Tertiary))
-            {
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ITERATOR] = "0";
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_STARTING_INDEX] = "0";
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_FRAME_DURATION] = duration.ToString();
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION] = "0";
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
+                accessoryManager.ResetAllAccessories(who);
             }
 
             if (model is null || model is HatModel)
@@ -1312,13 +1335,31 @@ namespace FashionSense
             if (!ignoreAnimationType)
             {
                 who.modData[ModDataKeys.ANIMATION_HAIR_TYPE] = animationType.ToString();
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_TYPE] = animationType.ToString();
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_SECONDARY_TYPE] = animationType.ToString();
-                who.modData[ModDataKeys.ANIMATION_ACCESSORY_TERTIARY_TYPE] = animationType.ToString();
                 who.modData[ModDataKeys.ANIMATION_HAT_TYPE] = animationType.ToString();
                 who.modData[ModDataKeys.ANIMATION_SHIRT_TYPE] = animationType.ToString();
                 who.modData[ModDataKeys.ANIMATION_PANTS_TYPE] = animationType.ToString();
                 who.modData[ModDataKeys.ANIMATION_SLEEVES_TYPE] = animationType.ToString();
+            }
+        }
+
+        internal static void LoadCachedAccessories(Farmer farmer)
+        {
+            if (accessoryManager.HandleOldAccessoryFormat(farmer) is false && farmer.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID) && String.IsNullOrEmpty(farmer.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID]) is false)
+            {
+                try
+                {
+                    List<string> accessoryIds = JsonConvert.DeserializeObject<List<string>>(farmer.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID]);
+                    List<string> accessoryColors = JsonConvert.DeserializeObject<List<string>>(farmer.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR]);
+                    if (accessoryIds is not null && accessoryColors is not null)
+                    {
+                        accessoryManager.SetAccessories(farmer, accessoryIds, accessoryColors);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    monitor.Log($"Failed to load accessory data for {farmer.Name}, see the log for details.", LogLevel.Warn);
+                    monitor.Log($"Failed to load accessory data for {farmer.Name}: {ex}", LogLevel.Trace);
+                }
             }
         }
     }

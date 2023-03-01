@@ -1,30 +1,23 @@
-﻿using FashionSense.Framework.Models;
-using FashionSense.Framework.Models.Accessory;
-using FashionSense.Framework.Models.Generic;
-using FashionSense.Framework.Models.Hair;
-using FashionSense.Framework.Models.Hat;
-using FashionSense.Framework.Models.Pants;
-using FashionSense.Framework.Models.Shirt;
-using FashionSense.Framework.Models.Shoes;
-using FashionSense.Framework.Models.Sleeves;
+﻿using FashionSense.Framework.Managers;
+using FashionSense.Framework.Models.Appearances;
+using FashionSense.Framework.Models.Appearances.Accessory;
+using FashionSense.Framework.Models.Appearances.Hair;
+using FashionSense.Framework.Models.Appearances.Hat;
+using FashionSense.Framework.Models.Appearances.Pants;
+using FashionSense.Framework.Models.Appearances.Shirt;
+using FashionSense.Framework.Models.Appearances.Shoes;
+using FashionSense.Framework.Models.Appearances.Sleeves;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
-using StardewValley.Buildings;
-using StardewValley.Locations;
 using StardewValley.Menus;
-using StardewValley.Objects;
-using StardewValley.TerrainFeatures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Object = StardewValley.Object;
 
 namespace FashionSense.Framework.UI
 {
@@ -130,6 +123,8 @@ namespace FashionSense.Framework.UI
                     {
                         fakeFarmer.modData[key] = _displayFarmer.modData[key];
                     }
+                    FashionSense.accessoryManager.CopyAccessories(_displayFarmer, fakeFarmer);
+
                     fakeFarmers.Add(fakeFarmer);
                 }
             }
@@ -191,39 +186,30 @@ namespace FashionSense.Framework.UI
                     var targetPack = filteredTextureOptions[textureIndex];
 
                     string modDataKey = null;
-                    AppearanceModel appearanceModel = null;
                     switch (_appearanceFilter)
                     {
                         case HandMirrorMenu.HAIR_FILTER_BUTTON:
                             modDataKey = ModDataKeys.CUSTOM_HAIR_ID;
-                            appearanceModel = (targetPack as HairContentPack).GetHairFromFacingDirection(fakeFarmers[i].facingDirection);
                             break;
                         case HandMirrorMenu.ACCESSORY_FILTER_BUTTON:
-                            modDataKey = _callbackMenu.GetCurrentAccessorySlotKey();
-                            appearanceModel = (targetPack as AccessoryContentPack).GetAccessoryFromFacingDirection(fakeFarmers[i].facingDirection);
-                            break;
+                            FashionSense.accessoryManager.AddAccessory(fakeFarmers[i], targetPack.Id, _callbackMenu.GetAccessoryIndex(), preserveColor: true);
+                            FashionSense.ResetAnimationModDataFields(fakeFarmers[i], 0, AnimationModel.Type.Idle, fakeFarmers[i].facingDirection);
+                            FashionSense.SetSpriteDirty();
+                            continue;
                         case HandMirrorMenu.HAT_FILTER_BUTTON:
                             modDataKey = ModDataKeys.CUSTOM_HAT_ID;
-                            appearanceModel = (targetPack as HatContentPack).GetHatFromFacingDirection(fakeFarmers[i].facingDirection);
                             break;
                         case HandMirrorMenu.SHIRT_FILTER_BUTTON:
                             modDataKey = ModDataKeys.CUSTOM_SHIRT_ID;
-                            appearanceModel = (targetPack as ShirtContentPack).GetShirtFromFacingDirection(fakeFarmers[i].facingDirection);
                             break;
                         case HandMirrorMenu.PANTS_FILTER_BUTTON:
                             modDataKey = ModDataKeys.CUSTOM_PANTS_ID;
-                            appearanceModel = (targetPack as PantsContentPack).GetPantsFromFacingDirection(fakeFarmers[i].facingDirection);
                             break;
                         case HandMirrorMenu.SLEEVES_FILTER_BUTTON:
+                            modDataKey = ModDataKeys.CUSTOM_SLEEVES_ID;
                             if (_callbackMenu.GetCurrentFeatureSlotKey() == ModDataKeys.CUSTOM_SHOES_ID)
                             {
                                 modDataKey = ModDataKeys.CUSTOM_SHOES_ID;
-                                appearanceModel = (targetPack as ShoesContentPack).GetShoesFromFacingDirection(fakeFarmers[i].facingDirection);
-                            }
-                            else
-                            {
-                                modDataKey = ModDataKeys.CUSTOM_SLEEVES_ID;
-                                appearanceModel = (targetPack as SleevesContentPack).GetSleevesFromFacingDirection(fakeFarmers[i].facingDirection);
                             }
                             break;
                     }
@@ -307,6 +293,8 @@ namespace FashionSense.Framework.UI
                     {
                         _displayFarmer.modData[key] = fakeFarmers[i].modData[key];
                     }
+                    FashionSense.accessoryManager.CopyAccessories(fakeFarmers[i], _displayFarmer);
+
                     FashionSense.ResetAnimationModDataFields(_displayFarmer, 0, AnimationModel.Type.Idle, _displayFarmer.facingDirection);
                     FashionSense.SetSpriteDirty();
                     base.exitThisMenu();

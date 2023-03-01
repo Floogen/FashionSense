@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FashionSense.Framework.Utilities
+﻿namespace FashionSense.Framework.Utilities
 {
     public static class ModDataKeys
     {
@@ -13,6 +7,7 @@ namespace FashionSense.Framework.Utilities
         internal const string CUSTOM_ACCESSORY_ID = "FashionSense.CustomAccessory.Id";
         internal const string CUSTOM_ACCESSORY_SECONDARY_ID = "FashionSense.CustomAccessory.Secondary.Id";
         internal const string CUSTOM_ACCESSORY_TERTIARY_ID = "FashionSense.CustomAccessory.Tertiary.Id";
+        internal const string CUSTOM_ACCESSORY_COLLECTIVE_ID = "FashionSense.CustomAccessory.Collective.Id";
         internal const string CUSTOM_HAT_ID = "FashionSense.CustomHat.Id";
         internal const string CUSTOM_SHIRT_ID = "FashionSense.CustomShirt.Id";
         internal const string CUSTOM_PANTS_ID = "FashionSense.CustomPants.Id";
@@ -24,6 +19,7 @@ namespace FashionSense.Framework.Utilities
         internal const string UI_HAND_MIRROR_ACCESSORY_COLOR = "FashionSense.UI.HandMirror.Color.Accessory";
         internal const string UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR = "FashionSense.UI.HandMirror.Color.Accessory.Secondary";
         internal const string UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR = "FashionSense.UI.HandMirror.Color.Accessory.Tertiary";
+        internal const string UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR = "FashionSense.UI.HandMirror.Color.Accessory.Collective";
         internal const string UI_HAND_MIRROR_HAT_COLOR = "FashionSense.UI.HandMirror.Color.Hat";
         internal const string UI_HAND_MIRROR_SHIRT_COLOR = "FashionSense.UI.HandMirror.Color.Shirt";
         internal const string UI_HAND_MIRROR_PANTS_COLOR = "FashionSense.UI.HandMirror.Color.Pants";
@@ -40,7 +36,8 @@ namespace FashionSense.Framework.Utilities
         // Etc
         internal const string STARTS_WITH_HAND_MIRROR = "FashionSense.StartsWithHandMirror";
         internal const string INTERNAL_COLOR_OVERRIDE_SHOE_ID = "Override Shoe Color";
-        internal const string LETTER_HAND_MIRROR = $"FashionSense.Mail.HandMirror";
+        internal const string LETTER_HAND_MIRROR = "FashionSense.Mail.HandMirror";
+        internal const string ACTIVE_ACCESSORIES_COUNT = $"FashionSense.Counters.ActiveAccessories";
 
         // General animation related keys
         internal const string ANIMATION_FACING_DIRECTION = "FashionSense.Animation.FacingDirection";
@@ -54,6 +51,7 @@ namespace FashionSense.Framework.Utilities
         internal const string ANIMATION_HAIR_LIGHT_ID = "FashionSense.Animation.Hair.Light.Id";
         internal const string ANIMATION_HAIR_FARMER_FRAME = "FashionSense.Animation.Hair.FarmerFrame";
 
+        #region Start of obsolete accessory animation keys
         // Accessory animation related keys
         internal const string ANIMATION_ACCESSORY_TYPE = "FashionSense.Animation.Accessory.Type";
         internal const string ANIMATION_ACCESSORY_ITERATOR = "FashionSense.Animation.Accessory.Iterator";
@@ -80,6 +78,7 @@ namespace FashionSense.Framework.Utilities
         internal const string ANIMATION_ACCESSORY_TERTIARY_ELAPSED_DURATION = "FashionSense.Animation.Accessory.Tertiary.ElapsedDuration";
         internal const string ANIMATION_ACCESSORY_TERTIARY_LIGHT_ID = "FashionSense.Animation.Accessory.Tertiary.Light.Id";
         internal const string ANIMATION_ACCESSORY_TERTIARY_FARMER_FRAME = "FashionSense.Animation.Accessory.Tertiary.FarmerFrame";
+        #endregion
 
         // Hat animation related keys
         internal const string ANIMATION_HAT_TYPE = "FashionSense.Animation.Hat.Type";

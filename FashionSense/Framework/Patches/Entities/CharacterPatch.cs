@@ -1,14 +1,10 @@
-﻿using HarmonyLib;
+﻿using FashionSense.Framework.Models.Appearances.Pants;
 using FashionSense.Framework.Utilities;
+using HarmonyLib;
+using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Locations;
-using StardewValley.Tools;
 using System;
-using System.Collections.Generic;
-using FashionSense.Framework.Models.Shirt;
-using Microsoft.Xna.Framework;
-using FashionSense.Framework.Models.Pants;
 
 namespace FashionSense.Framework.Patches.Entities
 {
