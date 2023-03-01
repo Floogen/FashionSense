@@ -25,6 +25,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.Menus;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -92,6 +93,7 @@ namespace FashionSense
                 // Apply UI related patches
                 new CharacterCustomizationPatch(monitor, modHelper).Apply(harmony);
                 new LetterViewerMenuPatch(monitor, modHelper).Apply(harmony);
+                new SaveFileSlotPatch(monitor, modHelper).Apply(harmony);
 
                 // Apply entity related patches
                 new CharacterPatch(monitor, modHelper).Apply(harmony);
@@ -266,16 +268,8 @@ namespace FashionSense
             EnsureKeyExists(ModDataKeys.CUSTOM_SLEEVES_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_SHOES_ID);
 
-            // Handle the old CUSTOM_ACCESSORY_ID format
-            if (accessoryManager.HandleOldAccessoryFormat(Game1.player) is false && String.IsNullOrEmpty(Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID]) is false)
-            {
-                List<string> accessoryIds = JsonConvert.DeserializeObject<List<string>>(Game1.player.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID]);
-                List<string> accessoryColors = JsonConvert.DeserializeObject<List<string>>(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR]);
-                if (accessoryIds is not null && accessoryColors is not null)
-                {
-                    accessoryManager.SetAccessories(Game1.player, accessoryIds, accessoryColors);
-                }
-            }
+            // Handle the loading cached accessories
+            LoadCachedAccessories(Game1.player);
 
             // Set sprite to dirty in order to refresh sleeves and other tied-in appearances
             SetSpriteDirty();
@@ -1345,6 +1339,27 @@ namespace FashionSense
                 who.modData[ModDataKeys.ANIMATION_SHIRT_TYPE] = animationType.ToString();
                 who.modData[ModDataKeys.ANIMATION_PANTS_TYPE] = animationType.ToString();
                 who.modData[ModDataKeys.ANIMATION_SLEEVES_TYPE] = animationType.ToString();
+            }
+        }
+
+        internal static void LoadCachedAccessories(Farmer farmer)
+        {
+            if (accessoryManager.HandleOldAccessoryFormat(farmer) is false && farmer.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID) && String.IsNullOrEmpty(farmer.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID]) is false)
+            {
+                try
+                {
+                    List<string> accessoryIds = JsonConvert.DeserializeObject<List<string>>(farmer.modData[ModDataKeys.CUSTOM_ACCESSORY_COLLECTIVE_ID]);
+                    List<string> accessoryColors = JsonConvert.DeserializeObject<List<string>>(farmer.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLLECTIVE_COLOR]);
+                    if (accessoryIds is not null && accessoryColors is not null)
+                    {
+                        accessoryManager.SetAccessories(farmer, accessoryIds, accessoryColors);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    monitor.Log($"Failed to load accessory data for {farmer.Name}, see the log for details.", LogLevel.Warn);
+                    monitor.Log($"Failed to load accessory data for {farmer.Name}: {ex}", LogLevel.Trace);
+                }
             }
         }
     }
