@@ -86,13 +86,13 @@ namespace FashionSense.Framework.External.ContentPatcher
                     targetKey = ModDataKeys.CUSTOM_HAIR_ID;
                     break;
                 case "accessory":
-                    targetKey = ModDataKeys.CUSTOM_ACCESSORY_ID;
+                    targetKey = FashionSense.accessoryManager.GetAccessoryIdByIndex(Game1.player, 0);
                     break;
                 case "accessorysecondary":
-                    targetKey = ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID;
+                    targetKey = FashionSense.accessoryManager.GetAccessoryIdByIndex(Game1.player, 1);
                     break;
                 case "accessorytertiary":
-                    targetKey = ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID;
+                    targetKey = FashionSense.accessoryManager.GetAccessoryIdByIndex(Game1.player, 2);
                     break;
                 case "hat":
                     targetKey = ModDataKeys.CUSTOM_HAT_ID;
