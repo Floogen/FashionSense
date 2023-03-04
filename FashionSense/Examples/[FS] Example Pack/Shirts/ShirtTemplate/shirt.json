@@ -1,0 +1,104 @@
+{
+  // See the wiki for all shirt properties: https://github.com/Floogen/FashionSense/wiki/Shirt-Model-Properties
+  "Name": "Shirt Template",
+  "FrontShirt": {
+    "ColorMasks": [
+      [ 207, 207, 207 ],
+      [ 166, 166, 166 ],
+      [ 107, 107, 107 ],
+      [ 74, 74, 74 ]
+    ],
+    "SleeveColors": [
+      [ 107, 107, 107 ],
+      [ 166, 166, 166 ],
+      [ 207, 207, 207 ]
+    ],
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "ShirtSize": {
+      "Width": 8,
+      "Length": 8
+    }
+  },
+  "RightShirt": {
+    "ColorMasks": [
+      [ 207, 207, 207 ],
+      [ 166, 166, 166 ],
+      [ 107, 107, 107 ],
+      [ 74, 74, 74 ]
+    ],
+    "SleeveColors": [
+      [ 107, 107, 107 ],
+      [ 166, 166, 166 ],
+      [ 207, 207, 207 ]
+    ],
+    "StartingPosition": {
+      "X": 0,
+      "Y": 8
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "ShirtSize": {
+      "Width": 8,
+      "Length": 8
+    }
+  },
+  "LeftShirt": {
+    "ColorMasks": [
+      [ 207, 207, 207 ],
+      [ 166, 166, 166 ],
+      [ 107, 107, 107 ],
+      [ 74, 74, 74 ]
+    ],
+    "SleeveColors": [
+      [ 107, 107, 107 ],
+      [ 166, 166, 166 ],
+      [ 207, 207, 207 ]
+    ],
+    "StartingPosition": {
+      "X": 0,
+      "Y": 16
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "ShirtSize": {
+      "Width": 8,
+      "Length": 8
+    }
+  },
+  "BackShirt": {
+    "ColorMasks": [
+      [ 207, 207, 207 ],
+      [ 166, 166, 166 ],
+      [ 107, 107, 107 ],
+      [ 74, 74, 74 ]
+    ],
+    "SleeveColors": [
+      [ 107, 107, 107 ],
+      [ 166, 166, 166 ],
+      [ 207, 207, 207 ]
+    ],
+    "StartingPosition": {
+      "X": 0,
+      "Y": 24
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "ShirtSize": {
+      "Width": 8,
+      "Length": 8
+    }
+  }
+}
