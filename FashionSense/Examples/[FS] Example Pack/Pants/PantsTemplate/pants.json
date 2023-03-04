@@ -1,0 +1,4202 @@
+{
+  // Copied, with permission, from violetlizabet's Vanilla Pants and Skirts pack (https://www.nexusmods.com/stardewvalley/mods/14154?tab=description)
+  // See violetlizabet's SkirtConverter to easily convert JA or recolored vanilla pants / skirts into FS packs: https://github.com/elizabethcd/SkirtConverter
+
+  // See the wiki for all pants properties: https://github.com/Floogen/FashionSense/wiki/Pants-Model-Properties
+
+  // Refer to https://stardewvalleywiki.com/Modding:Farmer_sprite for frame data
+  // You do not need to follow this convention if using a custom tilesheet
+
+  "Name": "Pants Template",
+  "FrontPants": {
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "PantsSize": {
+      "Width": 16,
+      "Length": 32
+    },
+    "HideWhileSwimming": true,
+    "HideWhileWearingBathingSuit": true,
+    "DisableGrayscale": false,
+    "IdleAnimation": [
+      {
+        "Frame": 0,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsSitting",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 2,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "RidingHorse",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 3,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsSitting",
+            "Value": false
+          }
+        ]
+      },
+      {
+        "Frame": 4,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingSlingshot",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 18,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "EqualTo",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 19,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 20,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 21,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 22,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 23,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 24,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 25,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 26,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "EqualTo",
+            "Value": 0
+          }
+        ]
+      },
+      {
+        "Frame": 27,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "EqualTo",
+            "Value": 0
+          }
+        ]
+      },
+      {
+        "Frame": 28,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "EqualTo",
+            "Value": 0
+          }
+        ]
+      },
+      {
+        "Frame": 29,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "EqualTo",
+            "Value": 0
+          }
+        ]
+      },
+      {
+        "Frame": 30,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "EqualTo",
+            "Value": 0
+          }
+        ]
+      },
+      {
+        "Frame": 31,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingScythe",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 32,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingScythe",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 33,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingScythe",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 34,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingScythe",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 35,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingScythe",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 36,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingScythe",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 37,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 28
+          }
+        ]
+      },
+      {
+        "Frame": 38,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMeleeWeapon",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 39,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMeleeWeapon",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 40,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMeleeWeapon",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 41,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMeleeWeapon",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 42,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMeleeWeapon",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 43,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMeleeWeapon",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 44,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingDagger",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 45,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingDagger",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 46,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingDagger",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 47,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingDagger",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 48,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingDagger",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 49,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingDagger",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 50,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsWatering",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 51,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsWatering",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 52,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsWatering",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 53,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsHarvesting",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 54,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsHarvesting",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 55,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsHarvesting",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 56,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsHarvesting",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 57,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 66
+          }
+        ]
+      },
+      {
+        "Frame": 58,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 67
+          }
+        ]
+      },
+      {
+        "Frame": 59,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 68
+          }
+        ]
+      },
+      {
+        "Frame": 60,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 69
+          }
+        ]
+      },
+      {
+        "Frame": 61,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 70
+          }
+        ]
+      },
+      {
+        "Frame": 62,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 70
+          }
+        ]
+      },
+      {
+        "Frame": 63,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 66
+          }
+        ]
+      },
+      {
+        "Frame": 64,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 74
+          }
+        ]
+      },
+      {
+        "Frame": 65,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 57
+          }
+        ]
+      },
+      {
+        "Frame": 66,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 84
+          }
+        ]
+      },
+      {
+        "Frame": 67,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMilkPail",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 68,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMilkPail",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 69,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMilkPail",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 70,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMilkPail",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 71,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingShears",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 72,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingShears",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 73,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingShears",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 74,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingShears",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 75,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsEating",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 76,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsEating",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 77,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsEating",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 78,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsEating",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 79,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsEating",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 80,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsEating",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 81,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsEating",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 82,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsEating",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 83,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsEating",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 84,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsDrinking",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 85,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsDrinking",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 86,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsDrinking",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 87,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsDrinking",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 88,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsDrinking",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 89,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsDrinking",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 90,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsDrinking",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 91,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsDrinking",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 92,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsDrinking",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 93,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsDrinking",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 94,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingPan",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 95,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingPan",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 96,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingPan",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 97,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingPan",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 98,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingPan",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 99,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingPan",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 100,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingPan",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 101,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingPan",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 102,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingPan",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 103,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingPan",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 104,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingPan",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 105,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingPan",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 106,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingPan",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 107,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingPan",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 108,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingPan",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 109,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsPassingOut",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 110,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsPassingOut",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 111,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsPassingOut",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 112,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsPassingOut",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 113,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsPassingOut",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 114,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsSick",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 115,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsSick",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 116,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsSick",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 117,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsSick",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 118,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsSick",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 119,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsSick",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 120,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsSick",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 121,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsSick",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 122,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 15
+          }
+        ]
+      },
+      {
+        "Frame": 123,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 95
+          }
+        ]
+      },
+      {
+        "Frame": 124,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 96
+          }
+        ]
+      },
+      {
+        "Frame": 125,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 97
+          }
+        ]
+      },
+      {
+        "Frame": 126,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 98
+          }
+        ]
+      },
+      {
+        "Frame": 127,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 99
+          }
+        ]
+      },
+      {
+        "Frame": 128,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 100
+          }
+        ]
+      },
+      {
+        "Frame": 129,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 111
+          }
+        ]
+      },
+      {
+        "Frame": 130,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 112
+          }
+        ]
+      }
+    ],
+    "MovementAnimation": [
+      {
+        "Frame": 1,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "RidingHorse",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 5,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 0
+          }
+        ]
+      },
+      {
+        "Frame": 6,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 7,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 0
+          }
+        ]
+      },
+      {
+        "Frame": 8,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 2
+          }
+        ]
+      },
+      {
+        "Frame": 9,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 10,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 11,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 12,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 13,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 14,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 15,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 16,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      }
+    ]
+  },
+  "RightPants": {
+    "StartingPosition": {
+      "X": 0,
+      "Y": 32
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": 1
+    },
+    "PantsSize": {
+      "Width": 16,
+      "Length": 32
+    },
+    "HideWhileSwimming": true,
+    "HideWhileWearingBathingSuit": true,
+    "DisableGrayscale": false,
+    "IdleAnimation": [
+      {
+        "Frame": 0,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsSitting",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 2,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "RidingHorse",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 3,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsSitting",
+            "Value": false
+          }
+        ]
+      },
+      {
+        "Frame": 4,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingSlingshot",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 18,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "EqualTo",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 19,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 20,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 21,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 22,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 23,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 24,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 25,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 26,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "EqualTo",
+            "Value": 0
+          }
+        ]
+      },
+      {
+        "Frame": 27,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "EqualTo",
+            "Value": 0
+          }
+        ]
+      },
+      {
+        "Frame": 28,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "EqualTo",
+            "Value": 0
+          }
+        ]
+      },
+      {
+        "Frame": 29,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "EqualTo",
+            "Value": 0
+          }
+        ]
+      },
+      {
+        "Frame": 30,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "EqualTo",
+            "Value": 0
+          }
+        ]
+      },
+      {
+        "Frame": 31,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingScythe",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 32,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingScythe",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 33,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingScythe",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 34,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingScythe",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 35,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingScythe",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 36,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingScythe",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 37,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 34
+          }
+        ]
+      },
+      {
+        "Frame": 38,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMeleeWeapon",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 39,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMeleeWeapon",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 40,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMeleeWeapon",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 41,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMeleeWeapon",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 42,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMeleeWeapon",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 43,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMeleeWeapon",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 44,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingDagger",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 45,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingDagger",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 46,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingDagger",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 47,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingDagger",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 48,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingDagger",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 49,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingDagger",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 50,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsWatering",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 51,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsWatering",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 52,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsWatering",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 53,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsHarvesting",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 54,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsHarvesting",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 55,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsHarvesting",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 56,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsHarvesting",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 57,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 48
+          }
+        ]
+      },
+      {
+        "Frame": 58,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 49
+          }
+        ]
+      },
+      {
+        "Frame": 59,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 50
+          }
+        ]
+      },
+      {
+        "Frame": 60,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 51
+          }
+        ]
+      },
+      {
+        "Frame": 61,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 52
+          }
+        ]
+      },
+      {
+        "Frame": 62,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 91
+          }
+        ]
+      },
+      {
+        "Frame": 63,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 48
+          }
+        ]
+      },
+      {
+        "Frame": 64,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 72
+          }
+        ]
+      },
+      {
+        "Frame": 65,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 57
+          }
+        ]
+      },
+      {
+        "Frame": 66,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 84
+          }
+        ]
+      },
+      {
+        "Frame": 67,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMilkPail",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 68,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMilkPail",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 69,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMilkPail",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 70,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMilkPail",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 71,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingShears",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 72,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingShears",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 73,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingShears",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 74,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingShears",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 122,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 15
+          }
+        ]
+      },
+      {
+        "Frame": 123,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 95
+          }
+        ]
+      },
+      {
+        "Frame": 124,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 96
+          }
+        ]
+      },
+      {
+        "Frame": 125,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 97
+          }
+        ]
+      },
+      {
+        "Frame": 126,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 98
+          }
+        ]
+      },
+      {
+        "Frame": 127,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 99
+          }
+        ]
+      },
+      {
+        "Frame": 128,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 100
+          }
+        ]
+      },
+      {
+        "Frame": 129,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 111
+          }
+        ]
+      },
+      {
+        "Frame": 130,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 112
+          }
+        ]
+      }
+    ],
+    "MovementAnimation": [
+      {
+        "Frame": 1,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "RidingHorse",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 5,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 6
+          }
+        ]
+      },
+      {
+        "Frame": 6,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 7
+          }
+        ]
+      },
+      {
+        "Frame": 7,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 6
+          }
+        ]
+      },
+      {
+        "Frame": 8,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 8
+          }
+        ]
+      },
+      {
+        "Frame": 9,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 10,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 11,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 12,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 13,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 14,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      }
+    ]
+  },
+  "BackPants": {
+    "StartingPosition": {
+      "X": 0,
+      "Y": 64
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "PantsSize": {
+      "Width": 16,
+      "Length": 32
+    },
+    "HideWhileSwimming": true,
+    "HideWhileWearingBathingSuit": true,
+    "DisableGrayscale": false,
+    "IdleAnimation": [
+      {
+        "Frame": 0,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsSitting",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 2,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "RidingHorse",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 3,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsSitting",
+            "Value": false
+          }
+        ]
+      },
+      {
+        "Frame": 4,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingSlingshot",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 18,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "EqualTo",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 19,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 20,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 21,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 22,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 23,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 24,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 25,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 26,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "EqualTo",
+            "Value": 0
+          }
+        ]
+      },
+      {
+        "Frame": 27,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "EqualTo",
+            "Value": 0
+          }
+        ]
+      },
+      {
+        "Frame": 28,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "EqualTo",
+            "Value": 0
+          }
+        ]
+      },
+      {
+        "Frame": 29,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "EqualTo",
+            "Value": 0
+          }
+        ]
+      },
+      {
+        "Frame": 30,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "EqualTo",
+            "Value": 0
+          }
+        ]
+      },
+      {
+        "Frame": 31,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingScythe",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 32,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingScythe",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 33,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingScythe",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 34,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingScythe",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 35,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingScythe",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 36,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingScythe",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 37,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 40
+          }
+        ]
+      },
+      {
+        "Frame": 38,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMeleeWeapon",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 39,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMeleeWeapon",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 40,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMeleeWeapon",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 41,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMeleeWeapon",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 42,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMeleeWeapon",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 43,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMeleeWeapon",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 44,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingDagger",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 45,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingDagger",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 46,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingDagger",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 47,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingDagger",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 48,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingDagger",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 49,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingDagger",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 50,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsWatering",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 51,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsWatering",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 52,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsWatering",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 53,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsHarvesting",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 54,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsHarvesting",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 55,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsHarvesting",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 56,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsHarvesting",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 57,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 76
+          }
+        ]
+      },
+      {
+        "Frame": 58,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 38
+          }
+        ]
+      },
+      {
+        "Frame": 59,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 63
+          }
+        ]
+      },
+      {
+        "Frame": 60,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 62
+          }
+        ]
+      },
+      {
+        "Frame": 61,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 63
+          }
+        ]
+      },
+      {
+        "Frame": 62,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 44
+          }
+        ]
+      },
+      {
+        "Frame": 63,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 36
+          }
+        ]
+      },
+      {
+        "Frame": 64,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 76
+          }
+        ]
+      },
+      {
+        "Frame": 65,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 57
+          }
+        ]
+      },
+      {
+        "Frame": 66,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 84
+          }
+        ]
+      },
+      {
+        "Frame": 67,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMilkPail",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 68,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMilkPail",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 69,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMilkPail",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 70,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMilkPail",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 71,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingShears",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 72,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingShears",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 73,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingShears",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 74,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingShears",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 122,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 15
+          }
+        ]
+      },
+      {
+        "Frame": 123,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 95
+          }
+        ]
+      },
+      {
+        "Frame": 124,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 96
+          }
+        ]
+      },
+      {
+        "Frame": 125,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 97
+          }
+        ]
+      },
+      {
+        "Frame": 126,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 98
+          }
+        ]
+      },
+      {
+        "Frame": 127,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 99
+          }
+        ]
+      },
+      {
+        "Frame": 128,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 100
+          }
+        ]
+      },
+      {
+        "Frame": 129,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 111
+          }
+        ]
+      },
+      {
+        "Frame": 130,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 112
+          }
+        ]
+      }
+    ],
+    "MovementAnimation": [
+      {
+        "Frame": 1,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "RidingHorse",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 5,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 12
+          }
+        ]
+      },
+      {
+        "Frame": 6,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 13
+          }
+        ]
+      },
+      {
+        "Frame": 7,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 12
+          }
+        ]
+      },
+      {
+        "Frame": 8,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 14
+          }
+        ]
+      },
+      {
+        "Frame": 9,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 10,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 11,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 12,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 13,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 14,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 15,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 16,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      }
+    ]
+  },
+  "LeftPants": {
+    "StartingPosition": {
+      "X": 0,
+      "Y": 32
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "PantsSize": {
+      "Width": 16,
+      "Length": 32
+    },
+    "Flipped": true,
+    "HideWhileSwimming": true,
+    "HideWhileWearingBathingSuit": true,
+    "DisableGrayscale": false,
+    "IdleAnimation": [
+      {
+        "Frame": 0,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsSitting",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 2,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "RidingHorse",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 3,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsSitting",
+            "Value": false
+          }
+        ]
+      },
+      {
+        "Frame": 4,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingSlingshot",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 18,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "EqualTo",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 19,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 20,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 21,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 22,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 23,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 24,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 25,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "GreaterThan",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Frame": 26,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "EqualTo",
+            "Value": 0
+          }
+        ]
+      },
+      {
+        "Frame": 27,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "EqualTo",
+            "Value": 0
+          }
+        ]
+      },
+      {
+        "Frame": 28,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "EqualTo",
+            "Value": 0
+          }
+        ]
+      },
+      {
+        "Frame": 29,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "EqualTo",
+            "Value": 0
+          }
+        ]
+      },
+      {
+        "Frame": 30,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingHeavyTool",
+            "Value": true
+          },
+          {
+            "Name": "ToolChargeLevel",
+            "Operator": "EqualTo",
+            "Value": 0
+          }
+        ]
+      },
+      {
+        "Frame": 31,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingScythe",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 32,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingScythe",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 33,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingScythe",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 34,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingScythe",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 35,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingScythe",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 36,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingScythe",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 37,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 34
+          }
+        ]
+      },
+      {
+        "Frame": 38,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMeleeWeapon",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 39,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMeleeWeapon",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 40,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMeleeWeapon",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 41,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMeleeWeapon",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 42,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMeleeWeapon",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 43,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMeleeWeapon",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 44,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingDagger",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 45,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingDagger",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 46,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingDagger",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 47,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingDagger",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 48,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingDagger",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 49,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingDagger",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 50,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsWatering",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 51,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsWatering",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 52,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsWatering",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 53,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsHarvesting",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 54,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsHarvesting",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 55,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsHarvesting",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 56,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsHarvesting",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 57,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 48
+          }
+        ]
+      },
+      {
+        "Frame": 58,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 49
+          }
+        ]
+      },
+      {
+        "Frame": 59,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 50
+          }
+        ]
+      },
+      {
+        "Frame": 60,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 51
+          }
+        ]
+      },
+      {
+        "Frame": 61,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 52
+          }
+        ]
+      },
+      {
+        "Frame": 62,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 91
+          }
+        ]
+      },
+      {
+        "Frame": 63,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 48
+          }
+        ]
+      },
+      {
+        "Frame": 64,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 72
+          }
+        ]
+      },
+      {
+        "Frame": 65,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 57
+          }
+        ]
+      },
+      {
+        "Frame": 66,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 84
+          }
+        ]
+      },
+      {
+        "Frame": 67,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMilkPail",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 68,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMilkPail",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 69,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMilkPail",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 70,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingMilkPail",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 71,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingShears",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 72,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingShears",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 73,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingShears",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 74,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsUsingShears",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 122,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 15
+          }
+        ]
+      },
+      {
+        "Frame": 123,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 95
+          }
+        ]
+      },
+      {
+        "Frame": 124,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 96
+          }
+        ]
+      },
+      {
+        "Frame": 125,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 97
+          }
+        ]
+      },
+      {
+        "Frame": 126,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 98
+          }
+        ]
+      },
+      {
+        "Frame": 127,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 99
+          }
+        ]
+      },
+      {
+        "Frame": 128,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 100
+          }
+        ]
+      },
+      {
+        "Frame": 129,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 111
+          }
+        ]
+      },
+      {
+        "Frame": 130,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 112
+          }
+        ]
+      }
+    ],
+    "MovementAnimation": [
+      {
+        "Frame": 1,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "RidingHorse",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 5,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 6
+          }
+        ]
+      },
+      {
+        "Frame": 6,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 7
+          }
+        ]
+      },
+      {
+        "Frame": 7,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 6
+          }
+        ]
+      },
+      {
+        "Frame": 8,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Operator": "EqualTo",
+            "Value": 8
+          }
+        ]
+      },
+      {
+        "Frame": 9,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 10,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 11,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 12,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 13,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      },
+      {
+        "Frame": 14,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "IsRunning",
+            "Value": true
+          }
+        ]
+      }
+    ]
+  }
+}
