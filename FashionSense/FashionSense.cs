@@ -287,7 +287,7 @@ namespace FashionSense
 
         public override object GetApi()
         {
-            return new Api(Monitor, textureManager);
+            return new Api(Monitor, textureManager, accessoryManager);
         }
 
         private void ReloadFashionSense(string command, string[] args)

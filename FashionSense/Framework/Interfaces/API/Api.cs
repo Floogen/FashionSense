@@ -31,6 +31,7 @@ namespace FashionSense.Framework.Interfaces.API
         public record RawTextureData(int Width, int Height, Color[] Data) : IRawTextureData;
 
         KeyValuePair<bool, string> SetAppearance(Type appearanceType, string targetPackId, string targetAppearanceName, IManifest callerManifest);
+        KeyValuePair<bool, string> SetAccessorySlot(string accessoryId, int accessorySlot);
         KeyValuePair<bool, string> SetHatAppearance(string targetPackId, string targetAppearanceName, IManifest callerManifest);
         KeyValuePair<bool, string> SetHairAppearance(string targetPackId, string targetAppearanceName, IManifest callerManifest);
         KeyValuePair<bool, string> SetAccessoryPrimaryAppearance(string targetPackId, string targetAppearanceName, IManifest callerManifest);
@@ -42,6 +43,7 @@ namespace FashionSense.Framework.Interfaces.API
         KeyValuePair<bool, string> SetShoesAppearance(string targetPackId, string targetAppearanceName, IManifest callerManifest);
 
         KeyValuePair<bool, string> ClearAppearance(Type appearanceType, IManifest callerManifest);
+        KeyValuePair<bool, string> ClearAccessorySlot(int accessorySlot, IManifest callerManifest);
         KeyValuePair<bool, string> ClearHatAppearance(IManifest callerManifest);
         KeyValuePair<bool, string> ClearHairAppearance(IManifest callerManifest);
         KeyValuePair<bool, string> ClearAccessoryPrimaryAppearance(IManifest callerManifest);
@@ -131,11 +133,13 @@ namespace FashionSense.Framework.Interfaces.API
     {
         private IMonitor _monitor;
         private readonly TextureManager _textureManager;
+        private readonly AccessoryManager _accessoryManager;
 
-        internal Api(IMonitor monitor, TextureManager textureManager)
+        internal Api(IMonitor monitor, TextureManager textureManager, AccessoryManager accessoryManager)
         {
             _monitor = monitor;
             _textureManager = textureManager;
+            _accessoryManager = accessoryManager;
         }
 
         private string GetAppearanceModDataKey(IApi.Type appearanceType)
@@ -267,6 +271,25 @@ namespace FashionSense.Framework.Interfaces.API
             return SetFashionSenseAppearance(appearanceType, targetPackId, targetAppearanceName, callerManifest);
         }
 
+        public KeyValuePair<bool, string> SetAccessorySlot(string accessoryId, int accessorySlot)
+        {
+            if (accessorySlot < 0)
+            {
+                return GenerateResponsePair(false, $"Invalid accessorySlot given: {accessorySlot}! Must be at least 0.");
+            }
+
+            if (IsAppearanceIdValid(accessoryId) is false)
+            {
+                return GenerateResponsePair(false, $"No Fashion Sense Accessory found with the id of {accessoryId}");
+            }
+
+            _accessoryManager.AddAccessory(Game1.player, accessoryId, accessorySlot, preserveColor: true);
+            FashionSense.SetSpriteDirty();
+
+            return GenerateResponsePair(true, $"Set farmer's accessory slot ({accessorySlot}) to accessory {accessoryId}.");
+        }
+
+        #region Obsolete set methods
         public KeyValuePair<bool, string> SetHatAppearance(string targetPackId, string targetAppearanceName, IManifest callerManifest)
         {
             return SetFashionSenseAppearance(IApi.Type.Hat, targetPackId, targetAppearanceName, callerManifest);
@@ -318,6 +341,20 @@ namespace FashionSense.Framework.Interfaces.API
             return ClearFashionSenseAppearance(appearanceType, callerManifest);
         }
 
+        public KeyValuePair<bool, string> ClearAccessorySlot(int accessorySlot, IManifest callerManifest)
+        {
+            if (accessorySlot < 0)
+            {
+                return GenerateResponsePair(false, $"Invalid accessorySlot given: {accessorySlot}! Must be at least 0.");
+            }
+
+            _accessoryManager.RemoveAccessory(Game1.player, accessorySlot);
+            FashionSense.SetSpriteDirty();
+
+            return GenerateResponsePair(true, $"Cleared farmer's accessory slot ({accessorySlot}).");
+        }
+
+        #region Obsolete clear methods
         public KeyValuePair<bool, string> ClearHatAppearance(IManifest callerManifest)
         {
             return ClearFashionSenseAppearance(IApi.Type.Hat, callerManifest);
