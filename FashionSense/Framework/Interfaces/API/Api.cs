@@ -212,28 +212,12 @@ namespace FashionSense.Framework.Interfaces.API
         private bool SetFarmerAppearance(string appearanceId, IApi.Type appearanceType)
         {
             string modDataKey = GetAppearanceModDataKey(appearanceType);
-
-            if (appearanceType is IApi.Type.Accessory)
-            {
-                SetAccessorySlot(appearanceId, 0);
-            }
-            else if (appearanceType is IApi.Type.AccessorySecondary)
-            {
-                SetAccessorySlot(appearanceId, 1);
-            }
-            else if (appearanceType is IApi.Type.AccessoryTertiary)
-            {
-                SetAccessorySlot(appearanceId, 2);
-            }
-            else if (String.IsNullOrEmpty(modDataKey))
+            if (String.IsNullOrEmpty(modDataKey))
             {
                 return false;
             }
-            else
-            {
-                Game1.player.modData[modDataKey] = appearanceId;
-            }
 
+            Game1.player.modData[modDataKey] = appearanceId;
             FashionSense.SetSpriteDirty();
 
             return true;
@@ -274,7 +258,24 @@ namespace FashionSense.Framework.Interfaces.API
             }
 
             // Attempt to set the sprite
-            if (SetFarmerAppearance(appearanceId, packType) is false)
+            if (packType is IApi.Type.Accessory || packType is IApi.Type.AccessorySecondary || packType is IApi.Type.AccessoryTertiary)
+            {
+                if (packType is IApi.Type.Accessory)
+                {
+                    SetAccessorySlot(appearanceId, 0);
+                }
+                else if (packType is IApi.Type.AccessorySecondary)
+                {
+                    SetAccessorySlot(appearanceId, 1);
+                }
+                else if (packType is IApi.Type.AccessoryTertiary)
+                {
+                    SetAccessorySlot(appearanceId, 2);
+                }
+
+                FashionSense.SetSpriteDirty();
+            }
+            else if (SetFarmerAppearance(appearanceId, packType) is false)
             {
                 return GenerateResponsePair(false, $"Failed to set the {packType} appearance with the id of {appearanceId}");
             }
