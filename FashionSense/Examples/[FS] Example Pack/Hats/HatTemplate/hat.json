@@ -1,0 +1,89 @@
+{
+  // See the wiki for all hat properties: https://github.com/Floogen/FashionSense/wiki/Hat-Model-Properties
+
+  "Name": "Hat Template",
+  "FrontHat": {
+    "ColorMasks": [
+      [ 35, 35, 36 ],
+      [ 84, 86, 86 ],
+      [ 129, 135, 137 ],
+      [ 191, 201, 204 ],
+      [ 255, 255, 255 ]
+    ],
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "HeadPosition": {
+      "X": -2,
+      "Y": 0
+    },
+    "HatSize": {
+      "Width": 16,
+      "Length": 16
+    }
+  },
+  "RightHat": {
+    "ColorMasks": [
+      [ 35, 35, 36 ],
+      [ 84, 86, 86 ],
+      [ 129, 135, 137 ],
+      [ 191, 201, 204 ],
+      [ 255, 255, 255 ]
+    ],
+    "StartingPosition": {
+      "X": 0,
+      "Y": 16
+    },
+    "HeadPosition": {
+      "X": -2,
+      "Y": 0
+    },
+    "HatSize": {
+      "Width": 16,
+      "Length": 16
+    }
+  },
+  "LeftHat": {
+    "ColorMasks": [
+      [ 35, 35, 36 ],
+      [ 84, 86, 86 ],
+      [ 129, 135, 137 ],
+      [ 191, 201, 204 ],
+      [ 255, 255, 255 ]
+    ],
+    "StartingPosition": {
+      "X": 0,
+      "Y": 32
+    },
+    "HeadPosition": {
+      "X": -2,
+      "Y": 0
+    },
+    "HatSize": {
+      "Width": 16,
+      "Length": 16
+    }
+  },
+  "BackHat": {
+    "ColorMasks": [
+      [ 35, 35, 36 ],
+      [ 84, 86, 86 ],
+      [ 129, 135, 137 ],
+      [ 191, 201, 204 ],
+      [ 255, 255, 255 ]
+    ],
+    "StartingPosition": {
+      "X": 0,
+      "Y": 48
+    },
+    "HeadPosition": {
+      "X": -2,
+      "Y": 0
+    },
+    "HatSize": {
+      "Width": 16,
+      "Length": 16
+    }
+  }
+}
