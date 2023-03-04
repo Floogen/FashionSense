@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using static FashionSense.Framework.Interfaces.API.IApi;
+using static StardewValley.Minigames.MineCart.Track;
 
 namespace FashionSense.Framework.Interfaces.API
 {
@@ -19,7 +20,9 @@ namespace FashionSense.Framework.Interfaces.API
             Unknown,
             Hair,
             Accessory,
+            [Obsolete("No longer maintained. Use Accessory instead.")]
             AccessorySecondary,
+            [Obsolete("No longer maintained. Use Accessory instead.")]
             AccessoryTertiary,
             Hat,
             Shirt,
@@ -32,26 +35,45 @@ namespace FashionSense.Framework.Interfaces.API
 
         KeyValuePair<bool, string> SetAppearance(Type appearanceType, string targetPackId, string targetAppearanceName, IManifest callerManifest);
         KeyValuePair<bool, string> SetAccessorySlot(string accessoryId, int accessorySlot);
+
+        [Obsolete("No longer maintained as of Fashion Sense v5. Use SetAppearance.")]
         KeyValuePair<bool, string> SetHatAppearance(string targetPackId, string targetAppearanceName, IManifest callerManifest);
+        [Obsolete("No longer maintained as of Fashion Sense v5. Use SetAppearance.")]
         KeyValuePair<bool, string> SetHairAppearance(string targetPackId, string targetAppearanceName, IManifest callerManifest);
+        [Obsolete("No longer maintained as of Fashion Sense v5. Use SetAccessorySlot.")]
         KeyValuePair<bool, string> SetAccessoryPrimaryAppearance(string targetPackId, string targetAppearanceName, IManifest callerManifest);
+        [Obsolete("No longer maintained as of Fashion Sense v5. Use SetAccessorySlot.")]
         KeyValuePair<bool, string> SetAccessorySecondaryAppearance(string targetPackId, string targetAppearanceName, IManifest callerManifest);
+        [Obsolete("No longer maintained as of Fashion Sense v5. Use SetAccessorySlot.")]
         KeyValuePair<bool, string> SetAccessoryTertiaryAppearance(string targetPackId, string targetAppearanceName, IManifest callerManifest);
+        [Obsolete("No longer maintained as of Fashion Sense v5. Use SetAppearance.")]
         KeyValuePair<bool, string> SetShirtAppearance(string targetPackId, string targetAppearanceName, IManifest callerManifest);
+        [Obsolete("No longer maintained as of Fashion Sense v5. Use SetAppearance.")]
         KeyValuePair<bool, string> SetSleevesAppearance(string targetPackId, string targetAppearanceName, IManifest callerManifest);
+        [Obsolete("No longer maintained as of Fashion Sense v5. Use SetAppearance.")]
         KeyValuePair<bool, string> SetPantsAppearance(string targetPackId, string targetAppearanceName, IManifest callerManifest);
+        [Obsolete("No longer maintained as of Fashion Sense v5. Use SetAppearance.")]
         KeyValuePair<bool, string> SetShoesAppearance(string targetPackId, string targetAppearanceName, IManifest callerManifest);
 
         KeyValuePair<bool, string> ClearAppearance(Type appearanceType, IManifest callerManifest);
         KeyValuePair<bool, string> ClearAccessorySlot(int accessorySlot, IManifest callerManifest);
+        [Obsolete("No longer maintained as of Fashion Sense v5. Use ClearAppearance.")]
         KeyValuePair<bool, string> ClearHatAppearance(IManifest callerManifest);
+        [Obsolete("No longer maintained as of Fashion Sense v5. Use ClearAppearance.")]
         KeyValuePair<bool, string> ClearHairAppearance(IManifest callerManifest);
+        [Obsolete("No longer maintained as of Fashion Sense v5. Use ClearAppearance (for all accessories) or ClearAccessorySlot.")]
         KeyValuePair<bool, string> ClearAccessoryPrimaryAppearance(IManifest callerManifest);
+        [Obsolete("No longer maintained as of Fashion Sense v5. Use ClearAppearance (for all accessories) or ClearAccessorySlot.")]
         KeyValuePair<bool, string> ClearAccessorySecondaryAppearance(IManifest callerManifest);
+        [Obsolete("No longer maintained as of Fashion Sense v5. Use ClearAppearance (for all accessories) or ClearAccessorySlot.")]
         KeyValuePair<bool, string> ClearAccessoryTertiaryAppearance(IManifest callerManifest);
+        [Obsolete("No longer maintained as of Fashion Sense v5. Use ClearAppearance.")]
         KeyValuePair<bool, string> ClearShirtAppearance(IManifest callerManifest);
+        [Obsolete("No longer maintained as of Fashion Sense v5. Use ClearAppearance.")]
         KeyValuePair<bool, string> ClearSleevesAppearance(IManifest callerManifest);
+        [Obsolete("No longer maintained as of Fashion Sense v5. Use ClearAppearance.")]
         KeyValuePair<bool, string> ClearPantsAppearance(IManifest callerManifest);
+        [Obsolete("No longer maintained as of Fashion Sense v5. Use ClearAppearance.")]
         KeyValuePair<bool, string> ClearShoesAppearance(IManifest callerManifest);
 
         KeyValuePair<bool, string> GetCurrentAppearanceId(Type appearanceType, Farmer target = null);
@@ -189,12 +211,27 @@ namespace FashionSense.Framework.Interfaces.API
         {
             string modDataKey = GetAppearanceModDataKey(appearanceType);
 
-            if (String.IsNullOrEmpty(modDataKey))
+            if (appearanceType is IApi.Type.Accessory)
+            {
+                SetAccessorySlot(appearanceId, 0);
+            }
+            else if (appearanceType is IApi.Type.AccessorySecondary)
+            {
+                SetAccessorySlot(appearanceId, 1);
+            }
+            else if (appearanceType is IApi.Type.AccessoryTertiary)
+            {
+                SetAccessorySlot(appearanceId, 2);
+            }
+            else if (String.IsNullOrEmpty(modDataKey))
             {
                 return false;
             }
+            else
+            {
+                Game1.player.modData[modDataKey] = appearanceId;
+            }
 
-            Game1.player.modData[modDataKey] = appearanceId;
             FashionSense.SetSpriteDirty();
 
             return true;
@@ -254,7 +291,11 @@ namespace FashionSense.Framework.Interfaces.API
             }
 
             // Attempt to clear the sprite
-            if (SetFarmerAppearance("None", packType) is false)
+            if (packType is IApi.Type.Accessory || packType is IApi.Type.AccessorySecondary || packType is IApi.Type.AccessoryTertiary)
+            {
+                _accessoryManager.ClearAccessories(Game1.player);
+            }
+            else if (SetFarmerAppearance("None", packType) is false)
             {
                 return GenerateResponsePair(false, $"Failed to clear the {packType} appearance");
             }
@@ -334,6 +375,7 @@ namespace FashionSense.Framework.Interfaces.API
         {
             return SetFashionSenseAppearance(IApi.Type.Shoes, targetPackId, targetAppearanceName, callerManifest);
         }
+        #endregion
 
 
         public KeyValuePair<bool, string> ClearAppearance(IApi.Type appearanceType, IManifest callerManifest)
@@ -399,7 +441,7 @@ namespace FashionSense.Framework.Interfaces.API
         {
             return ClearFashionSenseAppearance(IApi.Type.Shoes, callerManifest);
         }
-
+        #endregion
 
         public KeyValuePair<bool, string> GetCurrentAppearanceId(IApi.Type appearanceType, Farmer target = null)
         {
@@ -420,7 +462,7 @@ namespace FashionSense.Framework.Interfaces.API
                 return GenerateResponsePair(false, $"The player has not worn a Fashion Sense appearance of the type {appearanceType} | {modDataKey}");
             }
 
-            var appearancePack = FashionSense.textureManager.GetSpecificAppearanceModel<AppearanceContentPack>(Game1.player.modData[modDataKey]);
+            var appearancePack = _textureManager.GetSpecificAppearanceModel<AppearanceContentPack>(Game1.player.modData[modDataKey]);
             if (appearancePack is null)
             {
                 return GenerateResponsePair(false, $"Invalid or deleted appearance pack is currently saved for the type {appearanceType} | {Game1.player.modData[modDataKey]}");
@@ -436,7 +478,7 @@ namespace FashionSense.Framework.Interfaces.API
 
         public KeyValuePair<bool, IRawTextureData> GetAppearanceTexture(string appearanceId, bool getOriginalTexture = false)
         {
-            var appearancePack = FashionSense.textureManager.GetSpecificAppearanceModel<AppearanceContentPack>(appearanceId);
+            var appearancePack = _textureManager.GetSpecificAppearanceModel<AppearanceContentPack>(appearanceId);
             if (appearancePack is null)
             {
                 return new KeyValuePair<bool, IRawTextureData>(false, null);
@@ -461,7 +503,7 @@ namespace FashionSense.Framework.Interfaces.API
                 return GenerateResponsePair(false, "Given manifest is null or invalid. This API endpoint requires the caller to pass over their manifest in order to inform players of forceful changes.");
             }
 
-            var appearancePack = FashionSense.textureManager.GetSpecificAppearanceModel<AppearanceContentPack>(appearanceId);
+            var appearancePack = _textureManager.GetSpecificAppearanceModel<AppearanceContentPack>(appearanceId);
             if (appearancePack is null)
             {
                 return GenerateResponsePair(false, $"Invalid or deleted appearance pack is currently saved for {appearanceId}!");
@@ -502,7 +544,7 @@ namespace FashionSense.Framework.Interfaces.API
                 return GenerateResponsePair(false, "Given manifest is null or invalid. This API endpoint requires the caller to pass over their manifest in order to inform players of forceful changes.");
             }
 
-            var appearancePack = FashionSense.textureManager.GetSpecificAppearanceModel<AppearanceContentPack>(appearanceId);
+            var appearancePack = _textureManager.GetSpecificAppearanceModel<AppearanceContentPack>(appearanceId);
             if (appearancePack is null)
             {
                 return GenerateResponsePair(false, $"Invalid or deleted appearance pack is currently saved for {appearanceId}!");
