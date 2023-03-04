@@ -503,6 +503,7 @@ namespace FashionSense.Framework.Interfaces.API
             {
                 return GenerateResponsePair(false, $"No outfit matched for {outfitId}!");
             }
+            _monitor.Log($"The mod {callerManifest.Name} set your Fashion Sense outfit to {outfitId}.", LogLevel.Info);
 
             Outfit outfit = FashionSense.outfitManager.GetOutfit(Game1.player, outfitId);
             FashionSense.outfitManager.SetOutfit(Game1.player, outfit);
