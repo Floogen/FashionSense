@@ -35,6 +35,8 @@ namespace FashionSense.Framework.Interfaces.API
 
         KeyValuePair<bool, string> SetAppearance(Type appearanceType, string targetPackId, string targetAppearanceName, IManifest callerManifest);
         KeyValuePair<bool, string> SetAccessorySlot(string accessoryId, int accessorySlot);
+        KeyValuePair<bool, string> SetAppearanceColor(Type appearanceType, Color color, IManifest callerManifest);
+        KeyValuePair<bool, string> SetAccessoryColor(Color color, int accessorySlot);
 
         [Obsolete("No longer maintained as of Fashion Sense v5. Use SetAppearance.")]
         KeyValuePair<bool, string> SetHatAppearance(string targetPackId, string targetAppearanceName, IManifest callerManifest);
@@ -328,6 +330,53 @@ namespace FashionSense.Framework.Interfaces.API
             FashionSense.SetSpriteDirty();
 
             return GenerateResponsePair(true, $"Set farmer's accessory slot ({accessorySlot}) to accessory {accessoryId}.");
+        }
+
+        public KeyValuePair<bool, string> SetAppearanceColor(IApi.Type appearanceType, Color color, IManifest callerManifest)
+        {
+            switch (appearanceType)
+            {
+                case IApi.Type.Hat:
+                    Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_HAT_COLOR] = color.PackedValue.ToString();
+                    break;
+                case IApi.Type.Hair:
+                    Game1.player.changeHairColor(color);
+                    break;
+                case IApi.Type.Accessory:
+                    _accessoryManager.SetColorForIndex(Game1.player, 0, color);
+                    break;
+                case IApi.Type.AccessorySecondary:
+                    _accessoryManager.SetColorForIndex(Game1.player, 1, color);
+                    break;
+                case IApi.Type.AccessoryTertiary:
+                    _accessoryManager.SetColorForIndex(Game1.player, 2, color);
+                    break;
+                case IApi.Type.Shirt:
+                    Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR] = color.PackedValue.ToString();
+                    break;
+                case IApi.Type.Sleeves:
+                    Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR] = color.PackedValue.ToString();
+                    break;
+                case IApi.Type.Pants:
+                    Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR] = color.PackedValue.ToString();
+                    break;
+                case IApi.Type.Shoes:
+                    Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR] = color.PackedValue.ToString();
+                    break;
+            }
+
+            return GenerateResponsePair(true, $"Successfully set the color for {appearanceType} appearance to color {color.PackedValue}");
+        }
+
+        public KeyValuePair<bool, string> SetAccessoryColor(Color color, int accessorySlot)
+        {
+            if (accessorySlot < 0)
+            {
+                return GenerateResponsePair(false, $"Invalid accessorySlot given: {accessorySlot}! Must be at least 0.");
+            }
+            _accessoryManager.SetColorForIndex(Game1.player, accessorySlot, color);
+
+            return GenerateResponsePair(true, $"Set color of farmer's accessory slot ({accessorySlot}) to {color.PackedValue}.");
         }
 
         #region Obsolete set methods
