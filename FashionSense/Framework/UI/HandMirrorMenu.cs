@@ -705,10 +705,13 @@ namespace FashionSense.Framework.UI
                     Game1.playSound("pickUpItem");
                     break;
                 case LIMIT_TO_ACCCESSORIES:
-                    currentAccessorySlot = currentAccessorySlot + change < 0 ? 0 : currentAccessorySlot + change;
-                    accessorySlotLabel.name = (currentAccessorySlot + 1).ToString();
+                    if (Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON) && Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON] == ACCESSORY_FILTER_BUTTON)
+                    {
+                        currentAccessorySlot = currentAccessorySlot + change < 0 ? 0 : currentAccessorySlot + change;
+                        accessorySlotLabel.name = (currentAccessorySlot + 1).ToString();
 
-                    colorPicker.SetColor(FashionSense.accessoryManager.GetColorFromIndex(Game1.player, GetAccessoryIndex()));
+                        colorPicker.SetColor(FashionSense.accessoryManager.GetColorFromIndex(Game1.player, GetAccessoryIndex()));
+                    }
 
                     break;
             }
