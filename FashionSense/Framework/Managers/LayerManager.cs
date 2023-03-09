@@ -300,16 +300,7 @@ namespace FashionSense.Framework.Managers
             }
             else if (accessoryModel.DrawAfterPlayer)
             {
-                if (_facingDirection == 2)
-                {
-                    MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Player) + 1, layerData, ref sortedLayerData);
-                }
-                else
-                {
-                    // Move to bottom of list
-                    sortedLayerData.Remove(layerData);
-                    sortedLayerData.Add(layerData);
-                }
+                MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Sleeves), layerData, ref sortedLayerData);
             }
             else if (accessoryModel.DrawBehindHead)
             {
