@@ -82,7 +82,14 @@ namespace FashionSense.Framework.Managers
                 rawLayerData.First(d => d.AppearanceType is AppearanceContentPack.Type.Sleeves),
                 rawLayerData.First(d => d.AppearanceType is AppearanceContentPack.Type.Hat),
             };
-            sortedLayerData.InsertRange(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Sleeves) + 1, rawLayerData.Where(d => d.AppearanceType is AppearanceContentPack.Type.Accessory));
+            sortedLayerData.InsertRange(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Hair) + 1, rawLayerData.Where(d => d.AppearanceType is AppearanceContentPack.Type.Accessory));
+
+            // If facing backwards, move the sleeves to before the hair
+            if (_facingDirection == 0)
+            {
+                var sleevesLayerData = sortedLayerData.Find(d => d.AppearanceType is AppearanceContentPack.Type.Sleeves);
+                MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Hair) - 1, sleevesLayerData, ref sortedLayerData);
+            }
 
             // Sort the models in the actual correct order
             foreach (var layerData in sortedLayerData.ToList())
@@ -286,21 +293,9 @@ namespace FashionSense.Framework.Managers
         private void SortAccessory(LayerData layerData, ref List<LayerData> sortedLayerData)
         {
             var accessoryModel = layerData.AppearanceModel as AccessoryModel;
-            if (accessoryModel.DrawAfterPlayer && accessoryModel.DrawBehindHead)
+            if (accessoryModel.DrawAfterPlayer)
             {
-                // Special condition handling for backwards compatibility reasons, as packs that set both to true rely on this unintended behavior
-                if (_facingDirection == 0)
-                {
-                    MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Sleeves) + 1, layerData, ref sortedLayerData);
-                }
-                else
-                {
-                    MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Player), layerData, ref sortedLayerData);
-                }
-            }
-            else if (accessoryModel.DrawAfterPlayer)
-            {
-                MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Sleeves), layerData, ref sortedLayerData);
+                MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Hair) + 1, layerData, ref sortedLayerData);
             }
             else if (accessoryModel.DrawBehindHead)
             {
@@ -318,6 +313,11 @@ namespace FashionSense.Framework.Managers
             else if (accessoryModel.DrawAfterSleeves)
             {
                 MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Sleeves) + 1, layerData, ref sortedLayerData);
+            }
+            else if (_facingDirection == 0)
+            {
+                // If the player is facing backwards, place the accessory before the hair
+                MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Hair), layerData, ref sortedLayerData);
             }
         }
 
