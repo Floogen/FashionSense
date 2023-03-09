@@ -10,6 +10,7 @@ using FashionSense.Framework.UI.Components;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Menus;
@@ -55,6 +56,7 @@ namespace FashionSense.Framework.UI
         public List<ClickableComponent> filterButtons = new List<ClickableComponent>();
         public List<ClickableComponent> optionButtons = new List<ClickableComponent>();
         public List<ClickableComponent> featureButtons = new List<ClickableComponent>();
+        public List<ClickableComponent> sidePanelButtons = new List<ClickableComponent>();
         public List<ClickableComponent> colorPickerCCs = new List<ClickableComponent>();
 
         public SimpleColorPicker colorPicker;
@@ -91,58 +93,42 @@ namespace FashionSense.Framework.UI
             int yOffset = 160;
             leftSelectionButtons.Add(new ClickableTextureComponent("Direction", new Rectangle(_portraitBox.X - 32, _portraitBox.Y + yOffset, 48, 48), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 44), 1f)
             {
-                myID = 520,
-                upNeighborID = -99998,
-                leftNeighborID = -99998,
+                myID = 604,
+                upNeighborID = 603,
                 leftNeighborImmutable = true,
-                rightNeighborID = -99998,
+                rightNeighborID = 605,
                 downNeighborID = -99998
             });
             rightSelectionButtons.Add(new ClickableTextureComponent("Direction", new Rectangle(_portraitBox.Right - 32, _portraitBox.Y + yOffset, 48, 48), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 33), 1f)
             {
-                myID = 521,
-                upNeighborID = -99998,
-                leftNeighborID = -99998,
-                rightNeighborID = -99998,
+                myID = 605,
+                upNeighborID = 608,
+                leftNeighborID = 604,
+                rightNeighborID = 624,
                 downNeighborID = -99998
             });
 
-            leftSelectionButtons.Add(new ClickableTextureComponent(LIMIT_TO_ACCCESSORIES, new Rectangle(_portraitBox.X + 8, _portraitBox.Y + yOffset + 60, 48, 48), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 44), 0.5f)
-            {
-                myID = 520,
-                upNeighborID = -99998,
-                leftNeighborID = -99998,
-                leftNeighborImmutable = true,
-                rightNeighborID = -99998,
-                downNeighborID = -99998
-            });
-            rightSelectionButtons.Add(new ClickableTextureComponent(LIMIT_TO_ACCCESSORIES, new Rectangle(_portraitBox.Right - 40, _portraitBox.Y + yOffset + 60, 48, 48), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 33), 0.5f)
-            {
-                myID = 521,
-                upNeighborID = -99998,
-                leftNeighborID = -99998,
-                rightNeighborID = -99998,
-                downNeighborID = -99998
-            });
+            leftSelectionButtons.Add(new ClickableTextureComponent(LIMIT_TO_ACCCESSORIES, new Rectangle(_portraitBox.X + 8, _portraitBox.Y + yOffset + 60, 48, 48), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 44), 0.5f));
+            rightSelectionButtons.Add(new ClickableTextureComponent(LIMIT_TO_ACCCESSORIES, new Rectangle(_portraitBox.Right - 40, _portraitBox.Y + yOffset + 60, 48, 48), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 33), 0.5f));
 
             yOffset += 64;
             leftSelectionButtons.Add(new ClickableTextureComponent("Appearance", new Rectangle(_portraitBox.X - 64, _portraitBox.Y + yOffset + 16, 48, 48), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 44), 1f)
             {
-                myID = 514,
+                myID = 611,
                 upNeighborID = -99998,
-                leftNeighborID = -99998,
-                rightNeighborID = -99998,
+                leftNeighborImmutable = true,
+                rightNeighborID = 612,
                 downNeighborID = -99998
             });
             labels.Add(descriptionLabel = new ClickableComponent(new Rectangle(_portraitBox.Right - 84, _portraitBox.Y + yOffset + 32, 1, 1), FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.hair")));
             rightSelectionButtons.Add(new ClickableTextureComponent("Appearance", new Rectangle(_portraitBox.Right, _portraitBox.Y + yOffset + 16, 48, 48), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 33), 1f)
             {
-                myID = 515,
+                myID = 612,
                 upNeighborID = -99998,
-                leftNeighborID = -99998,
-                rightNeighborID = -99998,
+                leftNeighborID = 611,
+                rightNeighborID = 624,
                 downNeighborID = -99998
-            }); ;
+            });
             appearanceLabel = new ClickableComponent(new Rectangle(_portraitBox.Right - 86, _portraitBox.Y + yOffset + 64, 1, 1), String.Empty);
 
             // Get the last selected filter button
@@ -177,21 +163,21 @@ namespace FashionSense.Framework.UI
                 upNeighborID = -99998,
                 leftNeighborID = -99998,
                 rightNeighborID = -99998,
-                downNeighborID = -99998
+                downNeighborID = 604
             });
 
             filterButtons.Add(new ClickableTextureComponent(SHIRT_FILTER_BUTTON, new Rectangle(_portraitBox.Right + 25, base.yPositionOnScreen + 70, 64, 64), null, lastSelectedFilter == SHIRT_FILTER_BUTTON ? "enabled" : "disabled", FashionSense.assetManager.shirtButtonTexture, new Rectangle(0, 0, 15, 15), 3f)
             {
-                myID = 604,
+                myID = 606,
                 upNeighborID = -99998,
                 leftNeighborID = -99998,
-                rightNeighborID = -99998,
+                rightNeighborID = 619,
                 downNeighborID = -99998
             });
 
             filterButtons.Add(new ClickableTextureComponent(PANTS_FILTER_BUTTON, new Rectangle(_portraitBox.Right + 25, base.yPositionOnScreen + 125, 64, 64), null, lastSelectedFilter == PANTS_FILTER_BUTTON ? "enabled" : "disabled", FashionSense.assetManager.pantsButtonTexture, new Rectangle(0, 0, 15, 15), 3f)
             {
-                myID = 605,
+                myID = 607,
                 upNeighborID = -99998,
                 leftNeighborID = -99998,
                 rightNeighborID = -99998,
@@ -200,11 +186,11 @@ namespace FashionSense.Framework.UI
 
             filterButtons.Add(new ClickableTextureComponent(SLEEVES_FILTER_BUTTON, new Rectangle(_portraitBox.Right + 25, base.yPositionOnScreen + 180, 64, 64), null, lastSelectedFilter == SLEEVES_FILTER_BUTTON ? "enabled" : "disabled", FashionSense.assetManager.sleevesAndShoesButtonTexture, new Rectangle(0, 0, 15, 15), 3f)
             {
-                myID = 605,
+                myID = 608,
                 upNeighborID = -99998,
                 leftNeighborID = -99998,
-                rightNeighborID = -99998,
-                downNeighborID = -99998
+                rightNeighborID = 624,
+                downNeighborID = 605
             });
             labels.Add(new ClickableComponent(new Rectangle(_portraitBox.Right - 100, _portraitBox.Y + yOffset - 32, 1, 1), "Acc. #", LIMIT_TO_ACCCESSORIES));
             labels.Add(accessorySlotLabel = new ClickableComponent(new Rectangle(_portraitBox.Right - 72, _portraitBox.Y + yOffset - 2, 1, 1), "1", LIMIT_TO_ACCCESSORIES));
@@ -244,76 +230,85 @@ namespace FashionSense.Framework.UI
             {
                 myID = 613,
                 upNeighborID = -99998,
-                leftNeighborID = -99998,
-                rightNeighborID = -99998,
-                downNeighborID = -99998
+                rightNeighborID = 614,
+                downNeighborID = 611
             });
             featureButtons.Add(new ClickableTextureComponent(SHOES_OPTION_BUTTON, new Rectangle(_portraitBox.Right - 34, _portraitBox.Y + yOffset - 10, 32, 32), null, "disabled", FashionSense.assetManager.shoesButtonTexture, new Rectangle(0, 0, 15, 15), 2f)
             {
-                myID = 613,
+                myID = 614,
                 upNeighborID = -99998,
-                leftNeighborID = -99998,
-                rightNeighborID = -99998,
-                downNeighborID = -99998
+                leftNeighborID = 613,
+                rightNeighborID = 624,
+                downNeighborID = 612
             });
 
             // Add the leftover buttons
             okButton = new ClickableTextureComponent("OK", new Rectangle(base.xPositionOnScreen + base.width - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder - 56, base.yPositionOnScreen + base.height - IClickableMenu.borderWidth - IClickableMenu.spaceToClearTopBorder + 20, 64, 64), null, null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46), 1f)
             {
-                myID = 505,
-                upNeighborID = -99998,
-                leftNeighborID = -99998,
-                rightNeighborID = -99998,
-                downNeighborID = -99998
+                myID = 618,
+                upNeighborID = 612,
+                leftNeighborImmutable = true,
+                rightNeighborImmutable = true,
+                downNeighborImmutable = true
             };
 
             searchButton = new ClickableTextureComponent("Search", new Rectangle(base.xPositionOnScreen + base.width + IClickableMenu.spaceToClearSideBorder - 16, base.yPositionOnScreen + IClickableMenu.spaceToClearTopBorder - 48, 32, 32), null, null, Game1.mouseCursors, new Rectangle(208, 320, 16, 16), 2f)
             {
-                myID = 701,
+                myID = 619,
                 upNeighborID = -99998,
-                leftNeighborID = -99998,
-                rightNeighborID = -99998,
+                leftNeighborID = 606,
+                rightNeighborImmutable = true,
                 downNeighborID = -99998
             };
             outfitButton = new ClickableTextureComponent("Outfits", new Rectangle(searchButton.bounds.X, searchButton.bounds.Y + 48, 32, 32), null, null, Game1.mouseCursors2, new Rectangle(6, 52, 7, 8), 4f)
             {
-                myID = 701,
+                myID = 620,
                 upNeighborID = -99998,
                 leftNeighborID = -99998,
-                rightNeighborID = -99998,
+                rightNeighborImmutable = true,
                 downNeighborID = -99998
             };
             colorCopyButton = new ClickableTextureComponent("Copy", new Rectangle(searchButton.bounds.X + 3, searchButton.bounds.Y + 96, 32, 32), null, null, Game1.mouseCursors, new Rectangle(278, 288, 5, 6), 4f)
             {
-                myID = 701,
+                myID = 621,
                 upNeighborID = -99998,
                 leftNeighborID = -99998,
-                rightNeighborID = -99998,
+                rightNeighborImmutable = true,
                 downNeighborID = -99998
             };
             colorPasteButton = new ClickableTextureComponent("Paste", new Rectangle(searchButton.bounds.X + 3, searchButton.bounds.Y + 136, 32, 32), null, null, Game1.mouseCursors, new Rectangle(296, 504, 5, 5), 4f)
             {
-                myID = 701,
+                myID = 622,
                 upNeighborID = -99998,
                 leftNeighborID = -99998,
-                rightNeighborID = -99998,
+                rightNeighborImmutable = true,
                 downNeighborID = -99998
             };
             randomButton = new ClickableTextureComponent("Randomize", new Rectangle(searchButton.bounds.X, searchButton.bounds.Y + 170, 32, 32), null, null, Game1.mouseCursors, new Rectangle(50, 428, 10, 10), 3f)
             {
-                myID = 703,
+                myID = 623,
                 upNeighborID = -99998,
                 leftNeighborID = -99998,
-                rightNeighborID = -99998,
+                rightNeighborImmutable = true,
                 downNeighborID = -99998
             };
             clearButton = new ClickableTextureComponent("Clear", new Rectangle(searchButton.bounds.X + 1, searchButton.bounds.Y + 208, 32, 32), null, null, Game1.mouseCursors, new Rectangle(323, 433, 9, 10), 3f)
             {
-                myID = 702,
+                myID = 624,
                 upNeighborID = -99998,
-                leftNeighborID = -99998,
-                rightNeighborID = -99998,
+                leftNeighborID = 608,
+                rightNeighborImmutable = true,
                 downNeighborID = -99998
+            };
+            sidePanelButtons = new List<ClickableComponent>()
+            {
+                okButton,
+                searchButton,
+                outfitButton,
+                colorCopyButton,
+                colorPasteButton,
+                randomButton,
+                clearButton
             };
 
             // Add color picker
@@ -357,28 +352,32 @@ namespace FashionSense.Framework.UI
             }
             colorPickerCCs.Add(new ClickableComponent(new Rectangle(top.X, top.Y, 128, 20), "")
             {
-                myID = 525,
+                myID = 615,
                 downNeighborID = -99998,
                 upNeighborID = -99998,
-                leftNeighborImmutable = true,
-                rightNeighborImmutable = true
+                leftNeighborImmutable = true
             });
             colorPickerCCs.Add(new ClickableComponent(new Rectangle(top.X, top.Y + 20, 128, 20), "")
             {
-                myID = 526,
+                myID = 616,
                 upNeighborID = -99998,
                 downNeighborID = -99998,
-                leftNeighborImmutable = true,
-                rightNeighborImmutable = true
+                leftNeighborImmutable = true
             });
             colorPickerCCs.Add(new ClickableComponent(new Rectangle(top.X, top.Y + 40, 128, 20), "")
             {
-                myID = 527,
+                myID = 617,
                 upNeighborID = -99998,
                 downNeighborID = -99998,
-                leftNeighborImmutable = true,
-                rightNeighborImmutable = true
+                leftNeighborImmutable = true
             });
+
+            // Handle GamePad integration
+            if (Game1.options.snappyMenus && Game1.options.gamepadControls)
+            {
+                base.populateClickableComponentList();
+                this.snapToDefaultClickableComponent();
+            }
         }
 
         internal static string GetColorPickerLabel(bool isDisabled = false, bool isCompact = false, string enabledFilterName = null)
@@ -1271,8 +1270,73 @@ namespace FashionSense.Framework.UI
             HandleColorPicker();
         }
 
+        public override void gamePadButtonHeld(Buttons b)
+        {
+            base.gamePadButtonHeld(b);
+            if (base.currentlySnappedComponent == null)
+            {
+                return;
+            }
+            switch (b)
+            {
+                case Buttons.DPadRight:
+                case Buttons.LeftThumbstickRight:
+                    switch (base.currentlySnappedComponent.myID)
+                    {
+                        case 615:
+                            colorPicker.recentSliderBar = colorPicker.hueSlider;
+                            colorPicker.Scroll(1);
+                            HandleColorPicker();
+                            break;
+                        case 616:
+                            colorPicker.recentSliderBar = colorPicker.saturationSlider;
+                            colorPicker.Scroll(1);
+                            HandleColorPicker();
+                            break;
+                        case 617:
+                            colorPicker.recentSliderBar = colorPicker.lightnessSlider;
+                            colorPicker.Scroll(1);
+                            HandleColorPicker();
+                            break;
+                    }
+                    break;
+                case Buttons.DPadLeft:
+                case Buttons.LeftThumbstickLeft:
+                    switch (base.currentlySnappedComponent.myID)
+                    {
+                        case 615:
+                            colorPicker.recentSliderBar = colorPicker.hueSlider;
+                            colorPicker.Scroll(-1);
+                            HandleColorPicker();
+                            break;
+                        case 616:
+                            colorPicker.recentSliderBar = colorPicker.saturationSlider;
+                            colorPicker.Scroll(-1);
+                            HandleColorPicker();
+                            break;
+                        case 617:
+                            colorPicker.recentSliderBar = colorPicker.lightnessSlider;
+                            colorPicker.Scroll(-1);
+                            HandleColorPicker();
+                            break;
+                    }
+                    break;
+            }
+        }
+
+        public override void snapToDefaultClickableComponent()
+        {
+            base.currentlySnappedComponent = base.getComponentWithID(601);
+            this.snapCursorToCurrentSnappedComponent();
+        }
+
         public override void draw(SpriteBatch b)
         {
+            if (this.currentlySnappedComponent is not null)
+            {
+                //FashionSense.monitor.Log(this.currentlySnappedComponent.myID.ToString(), StardewModdingAPI.LogLevel.Debug);
+            }
+
             if (Game1.dialogueUp || Game1.IsFading())
             {
                 return;
