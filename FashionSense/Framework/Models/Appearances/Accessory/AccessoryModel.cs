@@ -22,8 +22,8 @@ namespace FashionSense.Framework.Models.Appearances.Accessory
         public override bool HideWhileSwimming { get; set; } = false;
         public override bool HideWhileWearingBathingSuit { get; set; } = false;
 
-        // Old property, has been renamed to DrawBeforeBase
-        [Obsolete("Has been renamed to DrawBeforeBase.")]
+        // Old property, has been renamed to DrawBehindHead
+        [Obsolete("Has been renamed to DrawBehindHead.")]
         public bool DrawBeforeHair { set { DrawBehindHead = value; } }
 
         // Old property, has been renamed to DrawAfterPlayer
