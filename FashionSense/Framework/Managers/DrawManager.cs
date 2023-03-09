@@ -472,8 +472,13 @@ namespace FashionSense.Framework.Managers
             // Get any positional offset
             Position positionOffset = GetPositionOffset(model);
 
-            var featureOffset = GetFeatureOffset(_facingDirection, _currentFrame, _scale, _farmerRenderer, model, false);
-            featureOffset.Y -= who.IsMale ? 4 : 0;
+            // Get any feature offset
+            var featureOffset = GetFeatureOffset(_facingDirection, _currentFrame, _scale, _farmerRenderer, model, who);
+            if (model is SleevesModel || model is PantsModel || model is ShoesModel || model is HairModel)
+            {
+                featureOffset.Y -= who.IsMale ? 4 : 0;
+            }
+
             _spriteBatch.Draw(modelPack.Texture, GetScaledPosition(_position, model, _isDrawingForUI) + _origin + _positionOffset + featureOffset, GetSourceRectangle(model, _appearanceTypeToSourceRectangles), model.HasColorMask() ? Color.White : modelColor, _rotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), model.Scale * _scale, model.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
 
             if (model.HasColorMask())
@@ -505,8 +510,10 @@ namespace FashionSense.Framework.Managers
             // Get any positional offset
             Position positionOffset = GetPositionOffset(sleevesModel);
 
-            var featureOffset = GetFeatureOffset(_facingDirection, _currentFrame, _scale, _farmerRenderer, sleevesModel, false);
-            featureOffset.Y -= who.IsMale ? 4 : 0;
+            // Get any feature offset
+            var featureOffset = GetFeatureOffset(_facingDirection, _currentFrame, _scale, _farmerRenderer, sleevesModel, who);
+            featureOffset.Y -= who.IsMale ? 4 : 0; // Manually adjusting for male sleeves
+
             _spriteBatch.Draw(sleevesModelPack.Texture, GetScaledPosition(_position, sleevesModel, _isDrawingForUI) + _origin + _positionOffset + featureOffset, GetSourceRectangle(sleevesModel, _appearanceTypeToSourceRectangles), sleevesModel.HasColorMask() ? Color.White : modelColor, _rotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), sleevesModel.Scale * _scale, sleevesModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
 
             Rectangle customSleevesSourceRect = _appearanceTypeToSourceRectangles[sleevesModel];
@@ -760,9 +767,23 @@ namespace FashionSense.Framework.Managers
             return appearanceTypeToSourceRectangles[model];
         }
 
-        private Vector2 GetFeatureOffset(int facingDirection, int currentFrame, float scale, FarmerRenderer renderer, AppearanceModel model, bool flip = false)
+        private Vector2 GetFeatureOffset(int facingDirection, int currentFrame, float scale, FarmerRenderer renderer, AppearanceModel model, Farmer who)
         {
+            // Determine if sprite his flipped
+            bool flip = false;
+            if (model is HairModel)
+            {
+                flip = true;
+            }
+            else if (model is HatModel && who.FarmerSprite.CurrentAnimationFrame.flip)
+            {
+                flip = true;
+            }
+
+            // Establish the base offset
             Vector2 offset = Vector2.Zero;
+
+            // Return without any further modifications if DisableNativeOffset is true
             if (model.DisableNativeOffset)
             {
                 return offset;
