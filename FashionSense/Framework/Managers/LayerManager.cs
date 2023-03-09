@@ -20,6 +20,7 @@ namespace FashionSense.Framework.Managers
     {
         private IMonitor _monitor;
         private int _facingDirection;
+        private List<AppearanceMetadata> _metadata;
 
         public LayerManager(IMonitor monitor)
         {
@@ -30,6 +31,9 @@ namespace FashionSense.Framework.Managers
         {
             // Set the required variables
             _facingDirection = facingDirection;
+            _metadata = metadata;
+
+            // Establish the models list
             List<AppearanceModel> models = metadata.Where(m => m.Model is not null).Select(m => m.Model).ToList();
 
             // Establish the rawLayerData list
@@ -174,7 +178,7 @@ namespace FashionSense.Framework.Managers
             var layerData = new LayerData(AppearanceContentPack.Type.Pants, pantsModel);
             if (AppearanceHelpers.ShouldHideWhileSwimmingOrWearingBathingSuit(who, pantsModel))
             {
-                layerData.IsVanilla = true;
+                layerData.IsHidden = true;
             }
             layerData.Color = color;
 
@@ -186,7 +190,7 @@ namespace FashionSense.Framework.Managers
             var layerData = new LayerData(AppearanceContentPack.Type.Shoes, shoesModel);
             if (AppearanceHelpers.ShouldHideWhileSwimmingOrWearingBathingSuit(who, shoesModel) || AppearanceHelpers.ShouldHideLegs(who, _facingDirection))
             {
-                layerData.IsVanilla = true;
+                layerData.IsHidden = true;
             }
             layerData.Color = color;
 
@@ -198,7 +202,7 @@ namespace FashionSense.Framework.Managers
             var layerData = new LayerData(AppearanceContentPack.Type.Shirt, shirtModel);
             if (AppearanceHelpers.ShouldHideWhileSwimmingOrWearingBathingSuit(who, shirtModel))
             {
-                layerData.IsVanilla = true;
+                layerData.IsHidden = true;
             }
             layerData.Color = color;
 
@@ -210,7 +214,7 @@ namespace FashionSense.Framework.Managers
             var layerData = new LayerData(AppearanceContentPack.Type.Accessory, accessoryModel);
             if (AppearanceHelpers.ShouldHideWhileSwimmingOrWearingBathingSuit(who, accessoryModel))
             {
-                layerData.IsVanilla = true;
+                layerData.IsHidden = true;
             }
             layerData.Color = color;
 
@@ -220,12 +224,9 @@ namespace FashionSense.Framework.Managers
         private void AddHair(Farmer who, HairModel hairModel, Color color, ref List<LayerData> rawLayerData)
         {
             var layerData = new LayerData(AppearanceContentPack.Type.Hair, hairModel);
-            if (AppearanceHelpers.ShouldHideWhileSwimmingOrWearingBathingSuit(who, hairModel))
+            if (AppearanceHelpers.ShouldHideWhileSwimmingOrWearingBathingSuit(who, hairModel) || AppearanceHelpers.IsHatHidingHair(_metadata))
             {
-                if (IsHatHidingHair(rawLayerData))
-                {
-                    layerData.IsVanilla = true;
-                }
+                layerData.IsHidden = true;
             }
             layerData.Color = color;
 
@@ -235,9 +236,9 @@ namespace FashionSense.Framework.Managers
         private void AddSleeves(Farmer who, SleevesModel sleevesModel, Color color, ref List<LayerData> rawLayerData)
         {
             var layerData = new LayerData(AppearanceContentPack.Type.Sleeves, sleevesModel);
-            if (AppearanceHelpers.ShouldHideWhileSwimmingOrWearingBathingSuit(who, sleevesModel) || AreSleevesForcedHidden(rawLayerData))
+            if (AppearanceHelpers.ShouldHideWhileSwimmingOrWearingBathingSuit(who, sleevesModel) || AppearanceHelpers.AreSleevesForcedHidden(_metadata))
             {
-                layerData.IsVanilla = true;
+                layerData.IsHidden = true;
             }
             layerData.Color = color;
 
@@ -249,7 +250,7 @@ namespace FashionSense.Framework.Managers
             var layerData = new LayerData(AppearanceContentPack.Type.Hat, hatModel);
             if (AppearanceHelpers.ShouldHideWhileSwimmingOrWearingBathingSuit(who, hatModel))
             {
-                layerData.IsVanilla = true;
+                layerData.IsHidden = true;
             }
             layerData.Color = color;
 

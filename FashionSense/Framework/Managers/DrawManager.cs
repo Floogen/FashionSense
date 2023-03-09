@@ -78,6 +78,11 @@ namespace FashionSense.Framework.Managers
         {
             foreach (var layer in layers)
             {
+                if (layer.IsHidden)
+                {
+                    continue;
+                }
+
                 if (layer.IsVanilla)
                 {
                     DrawVanillaLayer(who, layer);

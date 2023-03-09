@@ -9,6 +9,7 @@ namespace FashionSense.Framework.Models.General
         public AppearanceModel AppearanceModel { get; set; }
         public Color Color { get; set; }
         public bool IsVanilla { get; set; }
+        public bool IsHidden { get; set; }
 
         public LayerData(AppearanceContentPack.Type type, AppearanceModel model, bool isVanilla = false)
         {
