@@ -1324,6 +1324,26 @@ namespace FashionSense.Framework.UI
             }
         }
 
+        public override void receiveGamePadButton(Buttons b)
+        {
+            if (b == Buttons.RightTrigger)
+            {
+                selectionClick("Appearance", 1);
+            }
+            else if (b == Buttons.LeftTrigger)
+            {
+                selectionClick("Appearance", -1);
+            }
+            else if (b == Buttons.RightShoulder)
+            {
+                selectionClick("Direction", 1);
+            }
+            else if (b == Buttons.LeftShoulder)
+            {
+                selectionClick("Direction", -1);
+            }
+        }
+
         public override void snapToDefaultClickableComponent()
         {
             base.currentlySnappedComponent = base.getComponentWithID(601);

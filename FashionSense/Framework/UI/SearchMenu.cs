@@ -340,6 +340,22 @@ namespace FashionSense.Framework.UI
             }
         }
 
+        public override void receiveGamePadButton(Buttons b)
+        {
+            if ((b == Buttons.RightTrigger || b == Buttons.RightShoulder) && (_maxRows + _startingRow) * _texturesPerRow < filteredTextureOptions.Count)
+            {
+                _startingRow++;
+                UpdateDisplayFarmers();
+                Game1.playSound("shiny4");
+            }
+            else if ((b == Buttons.LeftTrigger || b == Buttons.LeftShoulder) && _startingRow > 0)
+            {
+                _startingRow--;
+                UpdateDisplayFarmers();
+                Game1.playSound("shiny4");
+            }
+        }
+
         public override void snapToDefaultClickableComponent()
         {
             base.currentlySnappedComponent = base.getComponentWithID(0);

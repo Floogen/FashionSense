@@ -355,6 +355,26 @@ namespace FashionSense.Framework.UI
             }
         }
 
+        public override void receiveGamePadButton(Buttons b)
+        {
+            if ((b == Buttons.RightTrigger || b == Buttons.RightShoulder) && _currentPage < _pages.Count - 1)
+            {
+                _currentPage++;
+                Game1.playSound("shiny4");
+            }
+            else if ((b == Buttons.LeftTrigger || b == Buttons.LeftShoulder) && _currentPage > 0)
+            {
+                _currentPage--;
+                Game1.playSound("shiny4");
+            }
+        }
+
+        public override void snapToDefaultClickableComponent()
+        {
+            base.currentlySnappedComponent = base.getComponentWithID(0);
+            this.currentlySnappedComponent.snapMouseCursorToCenter();
+        }
+
         public override void draw(SpriteBatch b)
         {
             if (Game1.dialogueUp || Game1.IsFading())
