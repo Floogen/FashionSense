@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Newtonsoft.Json;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Menus;
@@ -112,8 +113,8 @@ namespace FashionSense.Framework.UI
                     {
                         myID = componentId,
                         downNeighborID = componentId + _texturesPerRow,
-                        upNeighborID = r >= _texturesPerRow ? componentId - _texturesPerRow : -1,
-                        rightNeighborID = c == 5 ? 9997 : componentId + 1,
+                        upNeighborID = componentId >= _texturesPerRow ? componentId - _texturesPerRow : -1,
+                        rightNeighborID = c == _texturesPerRow - 1 ? 9997 : componentId + 1,
                         leftNeighborID = c > 0 ? componentId - 1 : 9998
                     });
 
@@ -133,7 +134,10 @@ namespace FashionSense.Framework.UI
             backButton = new ClickableTextureComponent(new Rectangle(base.xPositionOnScreen - 64, base.yPositionOnScreen + 8, 48, 44), Game1.mouseCursors, new Rectangle(352, 495, 12, 11), 4f)
             {
                 myID = 9998,
-                rightNeighborID = 0
+                rightNeighborID = 0,
+                leftNeighborImmutable = true,
+                upNeighborImmutable = true,
+                downNeighborImmutable = true
             };
             forwardButton = new ClickableTextureComponent(new Rectangle(base.xPositionOnScreen + base.width + 64 - 48, base.yPositionOnScreen + base.height - 48, 48, 44), Game1.mouseCursors, new Rectangle(365, 495, 12, 11), 4f)
             {
@@ -155,24 +159,21 @@ namespace FashionSense.Framework.UI
             _searchBoxCC = new ClickableComponent(new Rectangle(xTextbox, yTextbox, 192, 48), "")
             {
                 myID = 9999,
-                upNeighborID = -99998,
-                leftNeighborID = -99998,
-                rightNeighborID = -99998,
-                downNeighborID = -99998
+                downNeighborID = 0,
+                upNeighborImmutable = true,
+                leftNeighborImmutable = true,
+                rightNeighborImmutable = true
             };
             Game1.keyboardDispatcher.Subscriber = _searchBox;
             _searchBox.Selected = true;
 
-            queryButton = new ClickableTextureComponent(new Rectangle(xTextbox - 32, base.yPositionOnScreen - 48, 48, 44), Game1.mouseCursors, new Rectangle(208, 320, 16, 16), 2f)
-            {
-                myID = -1
-            };
+            queryButton = new ClickableTextureComponent(new Rectangle(xTextbox - 32, base.yPositionOnScreen - 48, 48, 44), Game1.mouseCursors, new Rectangle(208, 320, 16, 16), 2f);
 
-            // Call snap functions
-            if (Game1.options.SnappyMenus)
+            // Handle GamePad integration
+            if (Game1.options.snappyMenus && Game1.options.gamepadControls)
             {
                 base.populateClickableComponentList();
-                snapToDefaultClickableComponent();
+                this.snapToDefaultClickableComponent();
             }
         }
 
@@ -246,11 +247,14 @@ namespace FashionSense.Framework.UI
 
         public override void receiveKeyPress(Keys key)
         {
-            if (key == Keys.Escape && base.readyToClose())
+            if ((key == Keys.Escape || key == Keys.E) && base.readyToClose())
             {
                 Game1.activeClickableMenu = _callbackMenu;
                 base.exitThisMenu();
+                return;
             }
+
+            base.receiveKeyPress(key);
         }
 
         public override void update(GameTime time)
@@ -334,6 +338,12 @@ namespace FashionSense.Framework.UI
                 UpdateDisplayFarmers();
                 Game1.playSound("shiny4");
             }
+        }
+
+        public override void snapToDefaultClickableComponent()
+        {
+            base.currentlySnappedComponent = base.getComponentWithID(0);
+            this.snapCursorToCurrentSnappedComponent();
         }
 
         public override void draw(SpriteBatch b)
