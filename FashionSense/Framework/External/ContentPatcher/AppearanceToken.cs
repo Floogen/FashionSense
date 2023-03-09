@@ -1,13 +1,9 @@
-﻿using FashionSense.Framework.Managers;
-using FashionSense.Framework.Utilities;
+﻿using FashionSense.Framework.Utilities;
 using StardewModdingAPI;
 using StardewValley;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FashionSense.Framework.External.ContentPatcher
 {
@@ -22,7 +18,8 @@ namespace FashionSense.Framework.External.ContentPatcher
             "Hat",
             "Shirt",
             "Pants",
-            "Sleeves"
+            "Sleeves",
+            "Shoes"
         };
 
         /// <summary>Get whether the token allows input arguments (e.g. an NPC name for a relationship token).</summary>
@@ -90,13 +87,13 @@ namespace FashionSense.Framework.External.ContentPatcher
                     targetKey = ModDataKeys.CUSTOM_HAIR_ID;
                     break;
                 case "accessory":
-                    targetKey = ModDataKeys.CUSTOM_ACCESSORY_ID;
+                    targetKey = FashionSense.accessoryManager.GetAccessoryIdByIndex(Game1.player, 0);
                     break;
                 case "accessorysecondary":
-                    targetKey = ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID;
+                    targetKey = FashionSense.accessoryManager.GetAccessoryIdByIndex(Game1.player, 1);
                     break;
                 case "accessorytertiary":
-                    targetKey = ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID;
+                    targetKey = FashionSense.accessoryManager.GetAccessoryIdByIndex(Game1.player, 2);
                     break;
                 case "hat":
                     targetKey = ModDataKeys.CUSTOM_HAT_ID;
@@ -109,6 +106,9 @@ namespace FashionSense.Framework.External.ContentPatcher
                     break;
                 case "sleeves":
                     targetKey = ModDataKeys.CUSTOM_SLEEVES_ID;
+                    break;
+                case "shoes":
+                    targetKey = ModDataKeys.CUSTOM_SHOES_ID;
                     break;
             }
 

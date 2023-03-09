@@ -1,0 +1,93 @@
+{
+  // See the wiki for all haor properties: https://github.com/Floogen/FashionSense/wiki/Hair-Model-Properties
+  "Name": "Hair Template",
+  "FrontHair": {
+    "ColorMasks": [
+      [ 57, 57, 57 ],
+      [ 81, 81, 81 ],
+      [ 110, 110, 110 ],
+      [ 165, 165, 165 ],
+      [ 217, 217, 217 ],
+      [ 254, 254, 254 ]
+    ],
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "HeadPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "HairSize": {
+      "Width": 16,
+      "Length": 16
+    }
+  },
+  "RightHair": {
+    "ColorMasks": [
+      [ 57, 57, 57 ],
+      [ 81, 81, 81 ],
+      [ 110, 110, 110 ],
+      [ 165, 165, 165 ],
+      [ 217, 217, 217 ],
+      [ 254, 254, 254 ]
+    ],
+    "StartingPosition": {
+      "X": 0,
+      "Y": 32
+    },
+    "HeadPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "HairSize": {
+      "Width": 16,
+      "Length": 16
+    }
+  },
+  "LeftHair": {
+    "Flipped": true,
+    "ColorMasks": [
+      [ 57, 57, 57 ],
+      [ 81, 81, 81 ],
+      [ 110, 110, 110 ],
+      [ 165, 165, 165 ],
+      [ 217, 217, 217 ],
+      [ 254, 254, 254 ]
+    ],
+    "StartingPosition": {
+      "X": 0,
+      "Y": 32
+    },
+    "HeadPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "HairSize": {
+      "Width": 16,
+      "Length": 16
+    }
+  },
+  "BackHair": {
+    "ColorMasks": [
+      [ 57, 57, 57 ],
+      [ 81, 81, 81 ],
+      [ 110, 110, 110 ],
+      [ 165, 165, 165 ],
+      [ 217, 217, 217 ],
+      [ 254, 254, 254 ]
+    ],
+    "StartingPosition": {
+      "X": 0,
+      "Y": 64
+    },
+    "HeadPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "HairSize": {
+      "Width": 16,
+      "Length": 16
+    }
+  }
+}

@@ -1,11 +1,4 @@
 ﻿using FashionSense.Framework.Models;
-using FashionSense.Framework.Models.Accessory;
-using FashionSense.Framework.Models.Hair;
-using FashionSense.Framework.Models.Hat;
-using FashionSense.Framework.Models.Pants;
-using FashionSense.Framework.Models.Shirt;
-using FashionSense.Framework.Models.Sleeves;
-using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -15,8 +8,6 @@ using StardewValley.Menus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FashionSense.Framework.UI
 {
@@ -30,6 +21,7 @@ namespace FashionSense.Framework.UI
         public ClickableTextureComponent backButton;
         public ClickableTextureComponent forwardButton;
         public List<ClickableComponent> outfitButtons = new List<ClickableComponent>();
+        public List<ClickableTextureComponent> shareButtons = new List<ClickableTextureComponent>();
         public List<ClickableTextureComponent> saveButtons = new List<ClickableTextureComponent>();
         public List<ClickableTextureComponent> renameButtons = new List<ClickableTextureComponent>();
         public List<ClickableTextureComponent> deleteButtons = new List<ClickableTextureComponent>();
@@ -60,43 +52,54 @@ namespace FashionSense.Framework.UI
                 ClickableComponent packButton = new ClickableComponent(new Rectangle(base.xPositionOnScreen + 16, base.yPositionOnScreen + 16 + i * ((base.height - 32) / 6), base.width - 32, (base.height - 32) / 6 + 4), string.Concat(i))
                 {
                     myID = i,
-                    downNeighborID = -7777,
-                    upNeighborID = ((i > 0) ? (i - 1) : (-1)),
-                    rightNeighborID = i + 103,
-                    leftNeighborID = -7777,
-                    fullyImmutable = true
+                    downNeighborID = i < OUTFITS_PER_PAGE - 1 ? i + 1 : -1,
+                    upNeighborID = i > 0 ? i - 1 : -1,
+                    rightNeighborID = i + 200,
+                    leftNeighborID = 102
                 };
                 outfitButtons.Add(packButton);
 
-                ClickableTextureComponent renameButton = new ClickableTextureComponent(new Rectangle(packButton.bounds.Right - 192, packButton.bounds.Y + packButton.bounds.Height / 4 + 8, 56, 48), Game1.mouseCursors, new Rectangle(66, 4, 14, 12), 3f)
+                ClickableTextureComponent shareButton = new ClickableTextureComponent(new Rectangle(packButton.bounds.Right - 256, packButton.bounds.Y + packButton.bounds.Height / 4 + 2, 56, 48), Game1.mouseCursors, new Rectangle(0, 592, 16, 16), 3f)
                 {
                     myID = i + 200,
-                    downNeighborID = -7777,
-                    upNeighborID = ((i > 0) ? (i + 100 - 1) : (-1)),
-                    rightNeighborID = -7777,
-                    leftNeighborID = -7777,
+                    downNeighborID = i < OUTFITS_PER_PAGE - 1 ? i + 200 + 1 : -1,
+                    upNeighborID = i > 0 ? i + 200 - 1 : -1,
+                    rightNeighborID = i + 300,
+                    leftNeighborID = i,
+                    fullyImmutable = true,
+                    name = "inactive"
+                };
+                shareButtons.Add(shareButton);
+
+                ClickableTextureComponent renameButton = new ClickableTextureComponent(new Rectangle(packButton.bounds.Right - 192, packButton.bounds.Y + packButton.bounds.Height / 4 + 8, 56, 48), Game1.mouseCursors, new Rectangle(66, 4, 14, 12), 3f)
+                {
+                    myID = i + 300,
+                    downNeighborID = i < OUTFITS_PER_PAGE - 1 ? i + 300 + 1 : -1,
+                    upNeighborID = i > 0 ? i + 300 - 1 : -1,
+                    rightNeighborID = i + 400,
+                    leftNeighborID = i + 200,
                     fullyImmutable = true
                 };
                 renameButtons.Add(renameButton);
 
                 ClickableTextureComponent saveButton = new ClickableTextureComponent(new Rectangle(renameButton.bounds.X + 64, packButton.bounds.Y + packButton.bounds.Height / 4 - 2, 56, 48), Game1.mouseCursors, new Rectangle(240, 320, 16, 16), 3f)
                 {
-                    myID = i + 100,
-                    downNeighborID = -7777,
-                    upNeighborID = ((i > 0) ? (i + 100 - 1) : (-1)),
-                    rightNeighborID = -7777,
-                    leftNeighborID = -7777,
+                    myID = i + 400,
+                    downNeighborID = i < OUTFITS_PER_PAGE - 1 ? i + 400 + 1 : -1,
+                    upNeighborID = i > 0 ? i + 400 - 1 : -1,
+                    rightNeighborID = i + 500,
+                    leftNeighborID = i + 300,
                     fullyImmutable = true
                 };
                 saveButtons.Add(saveButton);
 
                 ClickableTextureComponent deleteButton = new ClickableTextureComponent(new Rectangle(renameButton.bounds.X + 128, packButton.bounds.Y + packButton.bounds.Height / 4 + 4, 56, 48), Game1.mouseCursors, new Rectangle(323, 433, 9, 10), 4f)
                 {
-                    myID = i + 300,
-                    downNeighborID = -7777,
-                    upNeighborID = ((i > 0) ? (i + 100 - 1) : (-1)),
-                    rightNeighborID = -7777,
-                    leftNeighborID = -7777,
+                    myID = i + 500,
+                    downNeighborID = i < OUTFITS_PER_PAGE - 1 ? i + 500 + 1 : -1,
+                    upNeighborID = i > 0 ? i + 500 - 1 : -1,
+                    rightNeighborID = 101,
+                    leftNeighborID = i + 400,
                     fullyImmutable = true
                 };
                 deleteButtons.Add(deleteButton);
@@ -113,6 +116,13 @@ namespace FashionSense.Framework.UI
                 myID = 101
             };
             base.upperRightCloseButton = new ClickableTextureComponent(new Rectangle(base.xPositionOnScreen + base.width - 20, base.yPositionOnScreen - 8, 48, 48), Game1.mouseCursors, new Rectangle(337, 494, 12, 12), 4f);
+
+            // Handle GamePad integration
+            if (Game1.options.snappyMenus && Game1.options.gamepadControls)
+            {
+                base.populateClickableComponentList();
+                this.snapToDefaultClickableComponent();
+            }
         }
 
         public void PaginatePacks()
@@ -173,10 +183,12 @@ namespace FashionSense.Framework.UI
                 {
                     Game1.activeClickableMenu = _callbackMenu;
                     base.exitThisMenu();
+                    return;
                 }
                 else if (Game1.options.snappyMenus && Game1.options.gamepadControls && !base.overrideSnappyMenuCursorMovementBan())
                 {
                     this.applyMovementKey(key);
+                    this.currentlySnappedComponent.snapMouseCursorToCenter();
                 }
             }
         }
@@ -216,27 +228,42 @@ namespace FashionSense.Framework.UI
                     else
                     {
                         // Check if the functional buttons are being clicked
-                        if (saveButtons[i].containsPoint(x, y))
-                        {
-                            FashionSense.outfitManager.OverrideOutfit(Game1.player, _pages[_currentPage][i].Name);
-                            Game1.activeClickableMenu = _callbackMenu;
-                            base.exitThisMenu();
 
-                            return;
-                        }
-                        if (renameButtons[i].containsPoint(x, y))
+                        var outfit = FashionSense.outfitManager.GetOutfit(Game1.player, _pages[_currentPage][i].Name);
+                        if (outfit.IsGlobal is false)
                         {
-                            Game1.activeClickableMenu = new NameMenu(FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.outfit_naming"), this, _pages[_currentPage][i].Name);
-                            return;
-                        }
-                        if (deleteButtons[i].containsPoint(x, y))
-                        {
-                            FashionSense.outfitManager.DeleteOutfit(Game1.player, _pages[_currentPage][i].Name);
-                            PaginatePacks();
-                            return;
+                            if (outfit.IsBeingShared is false)
+                            {
+                                if (saveButtons[i].containsPoint(x, y))
+                                {
+                                    FashionSense.outfitManager.OverrideOutfit(Game1.player, _pages[_currentPage][i].Name);
+                                    Game1.activeClickableMenu = _callbackMenu;
+                                    base.exitThisMenu();
+
+                                    return;
+                                }
+                                if (renameButtons[i].containsPoint(x, y))
+                                {
+                                    Game1.activeClickableMenu = new NameMenu(FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.outfit_naming"), this, _pages[_currentPage][i].Name);
+                                    return;
+                                }
+                                if (deleteButtons[i].containsPoint(x, y))
+                                {
+                                    FashionSense.outfitManager.DeleteOutfit(Game1.player, _pages[_currentPage][i].Name);
+                                    PaginatePacks();
+                                    return;
+                                }
+                            }
+                            if (shareButtons[i].containsPoint(x, y))
+                            {
+                                FashionSense.outfitManager.SetOutfitShareState(Game1.player, _pages[_currentPage][i].Name, !outfit.IsBeingShared);
+
+                                return;
+                            }
                         }
 
                         FashionSense.outfitManager.SetOutfit(Game1.player, _pages[_currentPage][i]);
+                        _callbackMenu.colorPicker.SetColor(FashionSense.accessoryManager.GetColorFromIndex(Game1.player, _callbackMenu.GetAccessoryIndex()));
 
                         Game1.activeClickableMenu = _callbackMenu;
                         base.exitThisMenu();
@@ -291,29 +318,68 @@ namespace FashionSense.Framework.UI
                     }
 
                     // Check if the functional buttons are being hovered
-                    if (saveButtons[i].containsPoint(x, y))
+                    var outfit = FashionSense.outfitManager.GetOutfit(Game1.player, _pages[_currentPage][i].Name);
+                    if (outfit.IsGlobal is false)
                     {
-                        _hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.outfit_info.save");
-                        return;
-                    }
-                    if (renameButtons[i].containsPoint(x, y))
-                    {
-                        _hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.outfit_info.rename");
-                        return;
-                    }
-                    if (deleteButtons[i].containsPoint(x, y))
-                    {
-                        _hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.outfit_info.delete");
-                        return;
+                        if (outfit.IsBeingShared is false)
+                        {
+                            if (saveButtons[i].containsPoint(x, y))
+                            {
+                                _hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.outfit_info.save");
+                                return;
+                            }
+                            if (renameButtons[i].containsPoint(x, y))
+                            {
+                                _hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.outfit_info.rename");
+                                return;
+                            }
+                            if (deleteButtons[i].containsPoint(x, y))
+                            {
+                                _hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.outfit_info.delete");
+                                return;
+                            }
+                        }
+                        if (shareButtons[i].containsPoint(x, y))
+                        {
+                            _hoverText = outfit.IsBeingShared ? FashionSense.modHelper.Translation.Get("ui.fashion_sense.outfit_info.share.active") : FashionSense.modHelper.Translation.Get("ui.fashion_sense.outfit_info.share.inactive");
+                            return;
+                        }
                     }
 
                     if (_pages[_currentPage][i].Name.Length > 18)
                     {
-                        _hoverText = $"{ _pages[_currentPage][i].Name}";
+                        _hoverText = $"{_pages[_currentPage][i].Name}";
                         return;
                     }
                 }
             }
+        }
+
+        public override void receiveGamePadButton(Buttons b)
+        {
+            if (b == Buttons.B && base.readyToClose())
+            {
+                Game1.activeClickableMenu = _callbackMenu;
+                base.exitThisMenu();
+                return;
+            }
+
+            if ((b == Buttons.RightTrigger || b == Buttons.RightShoulder) && _currentPage < _pages.Count - 1)
+            {
+                _currentPage++;
+                Game1.playSound("shiny4");
+            }
+            else if ((b == Buttons.LeftTrigger || b == Buttons.LeftShoulder) && _currentPage > 0)
+            {
+                _currentPage--;
+                Game1.playSound("shiny4");
+            }
+        }
+
+        public override void snapToDefaultClickableComponent()
+        {
+            base.currentlySnappedComponent = base.getComponentWithID(0);
+            this.currentlySnappedComponent.snapMouseCursorToCenter();
         }
 
         public override void draw(SpriteBatch b)
@@ -342,6 +408,7 @@ namespace FashionSense.Framework.UI
                         continue;
                     }
 
+                    var outfit = FashionSense.outfitManager.GetOutfit(Game1.player, packName);
                     if (packName.Length > 18)
                     {
                         packName = $"{packName.Substring(0, 18).TrimEnd()}...";
@@ -351,9 +418,20 @@ namespace FashionSense.Framework.UI
                     SpriteText.drawString(b, packName, outfitButtons[j].bounds.X + 32, outfitButtons[j].bounds.Y + 20);
 
                     // Draw the functional buttons
-                    saveButtons[j].draw(b);
-                    renameButtons[j].draw(b);
-                    deleteButtons[j].draw(b);
+                    if (outfit.IsGlobal is false)
+                    {
+                        if (outfit.IsBeingShared is false)
+                        {
+                            saveButtons[j].draw(b);
+                            renameButtons[j].draw(b);
+                            deleteButtons[j].draw(b);
+                        }
+                        shareButtons[j].draw(b, outfit.IsBeingShared ? Color.White : new Color(55, 55, 55, 55), 1f);
+                    }
+                    else
+                    {
+                        SpriteText.drawString(b, FashionSense.modHelper.Translation.Get("ui.fashion_sense.outfit_info.shared"), outfitButtons[j].bounds.Width + 135, outfitButtons[j].bounds.Y + 20);
+                    }
                 }
             }
 

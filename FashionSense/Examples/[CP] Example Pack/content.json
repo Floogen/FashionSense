@@ -1,0 +1,31 @@
+{
+  "Format": "1.26.0",
+  "Changes": [
+    {
+      "Action": "EditData",
+      "Target": "Data/PeacefulEnd/FashionSense/AppearanceData",
+      "Fields": {
+        "ExampleAuthor.ExampleFashionSensePack/Hat/Animated Pumpkin Head": {
+          "IsLocked": true
+        }
+      },
+      "When": {
+        "Time": "{{Range: 0600, 1800}}"
+      },
+      "Update": "OnTimeChange"
+    },
+    {
+      "Action": "EditData",
+      "Target": "Data/PeacefulEnd/FashionSense/AppearanceData",
+      "Fields": {
+        "ExampleAuthor.ExampleFashionSensePack/Hat/Animated Pumpkin Head": {
+          "IsLocked": false
+        }
+      },
+      "When": {
+        "Time": "{{Range: 1900, 2600}}"
+      },
+      "Update": "OnTimeChange"
+    }
+  ]
+}

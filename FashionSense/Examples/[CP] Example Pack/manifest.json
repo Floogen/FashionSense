@@ -1,0 +1,17 @@
+﻿{
+  "Name": "Content Patcher Examples For Fashion Sense",
+  "Author": "PeacefulEnd",
+  "Version": "1.0.0",
+  "Description": "Tests for using Content Patcher to modify Fashion Sense packs.",
+  "UniqueID": "PeacefulEnd.ContentPatcherForFashionSense",
+  "UpdateKeys": [ "Nexus:???" ],
+  "ContentPackFor": {
+    "UniqueID": "Pathoschild.ContentPatcher"
+  },
+  "Dependencies": [
+    {
+      "UniqueID": "PeacefulEnd.FashionSense",
+      "IsRequired": true
+    }
+  ]
+}
