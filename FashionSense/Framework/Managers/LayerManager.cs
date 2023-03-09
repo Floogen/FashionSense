@@ -78,8 +78,8 @@ namespace FashionSense.Framework.Managers
                 rawLayerData.First(d => d.AppearanceType is AppearanceContentPack.Type.Pants),
                 rawLayerData.First(d => d.AppearanceType is AppearanceContentPack.Type.Shoes),
                 rawLayerData.First(d => d.AppearanceType is AppearanceContentPack.Type.Shirt),
-                rawLayerData.First(d => d.AppearanceType is AppearanceContentPack.Type.Sleeves),
                 rawLayerData.First(d => d.AppearanceType is AppearanceContentPack.Type.Hair),
+                rawLayerData.First(d => d.AppearanceType is AppearanceContentPack.Type.Sleeves),
                 rawLayerData.First(d => d.AppearanceType is AppearanceContentPack.Type.Hat),
             };
             sortedLayerData.InsertRange(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Sleeves) + 1, rawLayerData.Where(d => d.AppearanceType is AppearanceContentPack.Type.Accessory));
@@ -126,7 +126,7 @@ namespace FashionSense.Framework.Managers
             int index = 0;
             foreach (var layerData in sortedLayerData)
             {
-                _monitor.Log($"[{index}] {layerData.AppearanceType} ({(layerData.AppearanceModel is null ? string.Empty : layerData.AppearanceModel.Pack.Id)}", LogLevel.Debug);
+                _monitor.Log($"[{index}] {layerData.AppearanceType} ({(layerData.AppearanceModel is null ? string.Empty : layerData.AppearanceModel.Pack.Id)})", LogLevel.Debug);
                 index++;
             }
             */
