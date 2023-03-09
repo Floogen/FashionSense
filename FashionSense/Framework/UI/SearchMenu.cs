@@ -247,14 +247,17 @@ namespace FashionSense.Framework.UI
 
         public override void receiveKeyPress(Keys key)
         {
-            if ((key == Keys.Escape || key == Keys.E) && base.readyToClose())
+            if (key == Keys.Escape && base.readyToClose())
             {
                 Game1.activeClickableMenu = _callbackMenu;
                 base.exitThisMenu();
                 return;
             }
-
-            base.receiveKeyPress(key);
+            else if (Game1.options.snappyMenus && Game1.options.gamepadControls && !base.overrideSnappyMenuCursorMovementBan())
+            {
+                this.applyMovementKey(key);
+                this.currentlySnappedComponent.snapMouseCursorToCenter();
+            }
         }
 
         public override void update(GameTime time)
@@ -342,6 +345,13 @@ namespace FashionSense.Framework.UI
 
         public override void receiveGamePadButton(Buttons b)
         {
+            if (b == Buttons.B && base.readyToClose())
+            {
+                Game1.activeClickableMenu = _callbackMenu;
+                base.exitThisMenu();
+                return;
+            }
+
             if ((b == Buttons.RightTrigger || b == Buttons.RightShoulder) && (_maxRows + _startingRow) * _texturesPerRow < filteredTextureOptions.Count)
             {
                 _startingRow++;

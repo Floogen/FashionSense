@@ -179,7 +179,7 @@ namespace FashionSense.Framework.UI
         {
             if (key != 0)
             {
-                if ((key == Keys.Escape || key == Keys.E) && base.readyToClose())
+                if (key == Keys.Escape && base.readyToClose())
                 {
                     Game1.activeClickableMenu = _callbackMenu;
                     base.exitThisMenu();
@@ -357,6 +357,13 @@ namespace FashionSense.Framework.UI
 
         public override void receiveGamePadButton(Buttons b)
         {
+            if (b == Buttons.B && base.readyToClose())
+            {
+                Game1.activeClickableMenu = _callbackMenu;
+                base.exitThisMenu();
+                return;
+            }
+
             if ((b == Buttons.RightTrigger || b == Buttons.RightShoulder) && _currentPage < _pages.Count - 1)
             {
                 _currentPage++;
