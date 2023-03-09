@@ -88,7 +88,7 @@
 			xcopy /s /y /i "C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\bin\Debug\net5.0" "C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\releases\latest\FashionSense"
 			7z a -tzip "C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\releases\FashionSense-$(Version).zip" "C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\releases\latest\FashionSense"
 
-			powershell Remove-Item -Path '$(GameModsPath)\FashionSense' -Recurse -Force
+			powershell Remove-Item -Path '$(GameModsPath)\FashionSense' -Recurse -Exclude "Outfits.json", "Data" -Force
 			powershell Remove-Item -Path '$(GameModsPath)\Fashion Sense Examples' -Recurse -Force
 
 			xcopy /s /y /i "C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\releases\latest\FashionSense" "$(GameModsPath)\FashionSense"
