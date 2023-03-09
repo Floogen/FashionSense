@@ -130,18 +130,6 @@ namespace FashionSense.Framework.Managers
             return sortedLayerData;
         }
 
-        #region Conditional check methods
-        private bool IsHatHidingHair(List<LayerData> rawLayerData)
-        {
-            return rawLayerData.Any(d => d.AppearanceModel is HatModel hatModel && hatModel.HideHair is true);
-        }
-
-        private bool AreSleevesForcedHidden(List<LayerData> rawLayerData)
-        {
-            return rawLayerData.Any(d => d.AppearanceModel is not null && d.AppearanceModel.HideSleeves is true);
-        }
-        #endregion
-
         private void AddVanillaLayerData(List<AppearanceModel> models, ref List<LayerData> rawLayerData)
         {
             rawLayerData.Add(new LayerData(AppearanceContentPack.Type.Player, null, isVanilla: true));

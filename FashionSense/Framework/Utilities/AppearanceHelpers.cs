@@ -8,6 +8,7 @@ using FashionSense.Framework.Models.Appearances.Pants;
 using FashionSense.Framework.Models.Appearances.Shirt;
 using FashionSense.Framework.Models.Appearances.Shoes;
 using FashionSense.Framework.Models.Appearances.Sleeves;
+using FashionSense.Framework.Models.General;
 using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Tools;
@@ -527,6 +528,19 @@ namespace FashionSense.Framework.Utilities
             foreach (var data in metadata.Where(d => d.Model is not null))
             {
                 if (data.Model.HideSleeves)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        internal static bool IsHatHidingHair(List<AppearanceMetadata> metadata)
+        {
+            foreach (var data in metadata.Where(d => d.Model is not null && d.Model is HatModel))
+            {
+                if ((data.Model as HatModel).HideHair)
                 {
                     return true;
                 }
