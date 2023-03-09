@@ -286,11 +286,30 @@ namespace FashionSense.Framework.Managers
         private void SortAccessory(LayerData layerData, ref List<LayerData> sortedLayerData)
         {
             var accessoryModel = layerData.AppearanceModel as AccessoryModel;
-            if (accessoryModel.DrawAfterPlayer)
+            if (accessoryModel.DrawAfterPlayer && accessoryModel.DrawBehindHead)
             {
-                // Move to bottom of list
-                sortedLayerData.Remove(layerData);
-                sortedLayerData.Add(layerData);
+                // Special condition handling for backwards compatibility reasons, as packs that set both to true rely on this unintended behavior
+                if (_facingDirection == 0)
+                {
+                    MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Sleeves) + 1, layerData, ref sortedLayerData);
+                }
+                else
+                {
+                    MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Player), layerData, ref sortedLayerData);
+                }
+            }
+            else if (accessoryModel.DrawAfterPlayer)
+            {
+                if (_facingDirection == 2)
+                {
+                    MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Player) + 1, layerData, ref sortedLayerData);
+                }
+                else
+                {
+                    // Move to bottom of list
+                    sortedLayerData.Remove(layerData);
+                    sortedLayerData.Add(layerData);
+                }
             }
             else if (accessoryModel.DrawBehindHead)
             {
