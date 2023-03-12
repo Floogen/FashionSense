@@ -166,7 +166,7 @@ namespace FashionSense.Framework.Managers
             }
             if (models.Any(m => m is HairModel) is false)
             {
-                rawLayerData.Add(new LayerData(AppearanceContentPack.Type.Hair, null, isVanilla: true));
+                rawLayerData.Add(new LayerData(AppearanceContentPack.Type.Hair, null, isVanilla: true) {  IsHidden = AppearanceHelpers.IsHatHidingHair(_metadata) });
             }
             if (models.Any(m => m is HatModel) is false)
             {
