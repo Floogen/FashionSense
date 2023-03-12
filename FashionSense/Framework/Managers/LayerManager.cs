@@ -303,7 +303,7 @@ namespace FashionSense.Framework.Managers
                 // Need to do this for backwards compatibility reasons, as packs that use DrawBeforeHair (DrawBehindHead) rely on this unintended behavior
                 if (_facingDirection == 0)
                 {
-                    MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Hair) + 1, layerData, ref sortedLayerData);
+                    MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Hat), layerData, ref sortedLayerData);
                 }
                 else
                 {
