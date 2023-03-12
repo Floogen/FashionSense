@@ -18,8 +18,6 @@ using StardewValley.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using static StardewValley.HouseRenovation;
 
 namespace FashionSense.Framework.Utilities
 {
@@ -63,11 +61,8 @@ namespace FashionSense.Framework.Utilities
                 return;
             }
 
-            if (model.GetPackType() is AppearanceContentPack.Type.Accessory && FashionSense.animationManager.GetSpecificAnimationData(who, model) is AnimationData animationData)
-            {
-                //FashionSense.monitor.LogOnce($"[{DateTime.Now.ToString("T")}] {model.Pack.Name}", StardewModdingAPI.LogLevel.Debug);
-                //FashionSense.monitor.LogOnce($"[{DateTime.Now.ToString("T")}] {animationData.Iterator}", StardewModdingAPI.LogLevel.Debug);
-            }
+            // Debug line
+            //FashionSense.monitor.LogOnce($"[{DateTime.Now.ToString("T")}] {model.Pack.Name}", StardewModdingAPI.LogLevel.Debug);
 
             // Establish the source rectangle for the model
             appearanceTypeToSourceRectangles[model] = new Rectangle(model.StartingPosition.X, model.StartingPosition.Y, size.Width, size.Length);

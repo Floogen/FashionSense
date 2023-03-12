@@ -63,7 +63,7 @@ namespace FashionSense.Framework.Managers
         {
             if (_farmerToAppearanceIdToAppearanceAnimationData.ContainsKey(who) is false)
             {
-                return null;
+                _farmerToAppearanceIdToAppearanceAnimationData[who] = new Dictionary<string, AnimationData>();
             }
 
             if (_farmerToAppearanceIdToAppearanceAnimationData[who].ContainsKey(appearanceId) is false)
