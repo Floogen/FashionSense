@@ -1,5 +1,6 @@
 ﻿using FashionSense.Framework.Models;
 using FashionSense.Framework.Models.Appearances;
+using FashionSense.Framework.Models.General;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
@@ -18,17 +19,6 @@ namespace FashionSense.Framework.Managers
     {
         private IMonitor _monitor;
         private const int MAX_ACCESSORY_LIMIT = 100;
-
-        internal enum AnimationKey
-        {
-            Iterator,
-            StartingIndex,
-            FrameDuration,
-            ElapsedDuration,
-            LightId,
-            FarmerFrame,
-            AnimationType
-        }
 
         public AccessoryManager(IMonitor monitor)
         {
@@ -248,94 +238,35 @@ namespace FashionSense.Framework.Managers
             return accessoryColorValues;
         }
 
-        internal static string GetAnimationKeyString(AnimationKey animationKey)
-        {
-            switch (animationKey)
-            {
-                case AnimationKey.AnimationType:
-                    return "Type";
-                case AnimationKey.Iterator:
-                    return "Iterator";
-                case AnimationKey.StartingIndex:
-                    return "StartingIndex";
-                case AnimationKey.FrameDuration:
-                    return "FrameDuration";
-                case AnimationKey.ElapsedDuration:
-                    return "ElapsedDuration";
-                case AnimationKey.LightId:
-                    return "Light.Id";
-                case AnimationKey.FarmerFrame:
-                    return "FarmerFrame";
-            }
-
-            return null;
-        }
-
-        internal string GetModDataKey(Farmer who, AnimationKey animationKey, int index)
-        {
-            var idKey = GetKeyForAccessoryId(index);
-            if (IsKeyValid(who, idKey, checkForValue: true) is false)
-            {
-                return null;
-            }
-
-            var animationString = GetAnimationKeyString(animationKey);
-            if (String.IsNullOrEmpty(animationString))
-            {
-                return null;
-            }
-
-            return $"FashionSense.Animation.Accessory.{index}.{animationString}";
-        }
-
-        internal void SetModData(Farmer who, int index, AnimationKey animationType, string value)
-        {
-            var modDataKey = GetModDataKey(who, animationType, index);
-            if (String.IsNullOrEmpty(modDataKey))
-            {
-                return;
-            }
-
-            who.modData[modDataKey] = value;
-        }
-
-        internal string GetModData(Farmer who, int index, AnimationKey animationType)
-        {
-            var modDataKey = GetModDataKey(who, animationType, index);
-            if (String.IsNullOrEmpty(modDataKey) || who.modData.ContainsKey(modDataKey) is false)
-            {
-                return null;
-            }
-
-            return who.modData[modDataKey];
-        }
-
         internal void ResetAccessory(Farmer who, int index, int startingIndex = 0)
         {
-            if (GetModDataKey(who, AnimationKey.AnimationType, index) is null)
+            var animationData = FashionSense.animationManager.GetSpecificAnimationData(who, GetKeyForAccessoryId(index));
+            if (animationData is null)
             {
                 return;
             }
 
-            who.modData[GetModDataKey(who, AnimationKey.Iterator, index)] = "0";
-            who.modData[GetModDataKey(who, AnimationKey.StartingIndex, index)] = startingIndex.ToString();
-            who.modData[GetModDataKey(who, AnimationKey.FrameDuration, index)] = "0";
-            who.modData[GetModDataKey(who, AnimationKey.ElapsedDuration, index)] = "0";
-            who.modData[GetModDataKey(who, AnimationKey.FarmerFrame, index)] = "0";
-            who.modData[GetModDataKey(who, AnimationKey.LightId, index)] = "0";
+            animationData.Reset(0, 0);
+            animationData.StartingIndex = startingIndex;
+            animationData.LightId = null;
         }
 
         internal void ResetAccessory(int index, Farmer who, int duration, AnimationModel.Type animationType, bool ignoreAnimationType = false, int startingIndex = 0)
         {
-            ResetAccessory(who, index, startingIndex: startingIndex);
+            var animationData = FashionSense.animationManager.GetSpecificAnimationData(who, GetKeyForAccessoryId(index));
+            if (animationData is null)
+            {
+                return;
+            }
+
+            animationData.Reset(duration, who.FarmerSprite.CurrentFrame);
+            animationData.StartingIndex = startingIndex;
+            animationData.LightId = null;
 
             if (ignoreAnimationType is false)
             {
-                who.modData[GetModDataKey(who, AnimationKey.AnimationType, index)] = animationType.ToString();
+                animationData.Type = animationType;
             }
-
-            who.modData[GetModDataKey(who, AnimationKey.FrameDuration, index)] = duration.ToString();
-            who.modData[GetModDataKey(who, AnimationKey.FarmerFrame, index)] = who.FarmerSprite.CurrentFrame.ToString();
         }
 
         internal void ResetAllAccessories(Farmer who)
