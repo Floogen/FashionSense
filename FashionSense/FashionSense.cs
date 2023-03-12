@@ -10,6 +10,7 @@ using FashionSense.Framework.Models.Appearances.Pants;
 using FashionSense.Framework.Models.Appearances.Shirt;
 using FashionSense.Framework.Models.Appearances.Shoes;
 using FashionSense.Framework.Models.Appearances.Sleeves;
+using FashionSense.Framework.Models.General;
 using FashionSense.Framework.Patches.Entities;
 using FashionSense.Framework.Patches.GameLocations;
 using FashionSense.Framework.Patches.Menus;
@@ -42,6 +43,7 @@ namespace FashionSense
 
         // Managers
         internal static AccessoryManager accessoryManager;
+        internal static AnimationManager animationManager;
         internal static ApiManager apiManager;
         internal static AssetManager assetManager;
         internal static LayerManager layerManager;
@@ -67,6 +69,7 @@ namespace FashionSense
 
             // Load managers
             accessoryManager = new AccessoryManager(monitor);
+            animationManager = new AnimationManager(monitor);
             apiManager = new ApiManager(monitor);
             assetManager = new AssetManager(modHelper);
             layerManager = new LayerManager(monitor);
@@ -132,17 +135,20 @@ namespace FashionSense
         {
             if (Context.IsWorldReady)
             {
-                // Update movement trackers
-                conditionData.Update(Game1.player, Game1.currentGameTime);
-
                 if (_continuousReloading && e.IsMultipleOf(120))
                 {
                     this.LoadContentPacks(true);
                 }
-            }
 
-            // Update elapsed durations for the player
-            UpdateElapsedDuration(Game1.player);
+                // Update elapsed durations for the player
+                foreach (var farmer in Game1.getAllFarmers())
+                {
+                    UpdateElapsedDuration(farmer);
+
+                    // Update movement trackers
+                    conditionData.Update(farmer, Game1.currentGameTime);
+                }
+            }
 
             // Update elapsed durations when the player is using the SearchMenu
             if (Game1.activeClickableMenu is SearchMenu searchMenu && searchMenu is not null)
@@ -157,38 +163,9 @@ namespace FashionSense
         private void OnWarped(object sender, StardewModdingAPI.Events.WarpedEventArgs e)
         {
             // Remove old lights
-            if (e.Player.modData.ContainsKey(ModDataKeys.ANIMATION_HAIR_LIGHT_ID) && Int32.TryParse(e.Player.modData[ModDataKeys.ANIMATION_HAIR_LIGHT_ID], out int hair_id))
+            foreach (var animationData in animationManager.GetAllAnimationData(e.Player).Where(a => a.LightId is not null))
             {
-                e.OldLocation.sharedLights.Remove(hair_id);
-            }
-
-            foreach (int index in accessoryManager.GetActiveAccessoryIndices(e.Player))
-            {
-                if (Int32.TryParse(accessoryManager.GetModData(e.Player, index, AccessoryManager.AnimationKey.LightId), out int accessoryLightId))
-                {
-                    e.OldLocation.sharedLights.Remove(accessoryLightId);
-                }
-            }
-
-            if (e.Player.modData.ContainsKey(ModDataKeys.ANIMATION_HAT_LIGHT_ID) && Int32.TryParse(e.Player.modData[ModDataKeys.ANIMATION_HAT_LIGHT_ID], out int hat_id))
-            {
-                e.OldLocation.sharedLights.Remove(hat_id);
-            }
-            if (e.Player.modData.ContainsKey(ModDataKeys.ANIMATION_SHIRT_LIGHT_ID) && Int32.TryParse(e.Player.modData[ModDataKeys.ANIMATION_SHIRT_LIGHT_ID], out int shirt_id))
-            {
-                e.OldLocation.sharedLights.Remove(shirt_id);
-            }
-            if (e.Player.modData.ContainsKey(ModDataKeys.ANIMATION_PANTS_LIGHT_ID) && Int32.TryParse(e.Player.modData[ModDataKeys.ANIMATION_PANTS_LIGHT_ID], out int pants_id))
-            {
-                e.OldLocation.sharedLights.Remove(pants_id);
-            }
-            if (e.Player.modData.ContainsKey(ModDataKeys.ANIMATION_SLEEVES_LIGHT_ID) && Int32.TryParse(e.Player.modData[ModDataKeys.ANIMATION_SLEEVES_LIGHT_ID], out int sleeves_id))
-            {
-                e.OldLocation.sharedLights.Remove(sleeves_id);
-            }
-            if (e.Player.modData.ContainsKey(ModDataKeys.ANIMATION_SHOES_LIGHT_ID) && Int32.TryParse(e.Player.modData[ModDataKeys.ANIMATION_SHOES_LIGHT_ID], out int shoes_id))
-            {
-                e.OldLocation.sharedLights.Remove(shoes_id);
+                e.OldLocation.sharedLights.Remove(animationData.LightId.Value);
             }
         }
 
@@ -298,28 +275,12 @@ namespace FashionSense
 
         private void UpdateElapsedDuration(Farmer who)
         {
-            UpdateElapsedDuration(who, ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION);
-
-            foreach (int index in accessoryManager.GetActiveAccessoryIndices(who))
+            foreach (var animationData in animationManager.GetAllAnimationData(who))
             {
-                UpdateElapsedDuration(who, accessoryManager.GetModDataKey(who, AccessoryManager.AnimationKey.ElapsedDuration, index));
-            }
-
-            UpdateElapsedDuration(who, ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION);
-            UpdateElapsedDuration(who, ModDataKeys.ANIMATION_SHIRT_ELAPSED_DURATION);
-            UpdateElapsedDuration(who, ModDataKeys.ANIMATION_PANTS_ELAPSED_DURATION);
-            UpdateElapsedDuration(who, ModDataKeys.ANIMATION_SLEEVES_ELAPSED_DURATION);
-            UpdateElapsedDuration(who, ModDataKeys.ANIMATION_SHOES_ELAPSED_DURATION);
-        }
-
-        private void UpdateElapsedDuration(Farmer who, string durationKey)
-        {
-            if (who.modData.ContainsKey(durationKey))
-            {
-                var elapsedDuration = Int32.Parse(who.modData[durationKey]);
+                var elapsedDuration = animationData.ElapsedDuration;
                 if (elapsedDuration < MAX_TRACKED_MILLISECONDS)
                 {
-                    who.modData[durationKey] = (elapsedDuration + Game1.currentGameTime.ElapsedGameTime.Milliseconds).ToString();
+                    animationData.ElapsedDuration = (elapsedDuration + Game1.currentGameTime.ElapsedGameTime.Milliseconds);
                 }
             }
         }
@@ -1260,85 +1221,28 @@ namespace FashionSense
 
         internal static void ResetAnimationModDataFields(Farmer who, int duration, AnimationModel.Type animationType, int facingDirection, bool ignoreAnimationType = false, AppearanceModel model = null)
         {
-            if (model is null || model is HairModel)
+            // Reset all apperances animation data if given model is null, otherwise reset the specific model id
+            if (model is null)
             {
-                who.modData[ModDataKeys.ANIMATION_HAIR_ITERATOR] = "0";
-                who.modData[ModDataKeys.ANIMATION_HAIR_STARTING_INDEX] = "0";
-                who.modData[ModDataKeys.ANIMATION_HAIR_FRAME_DURATION] = duration.ToString();
-                who.modData[ModDataKeys.ANIMATION_HAIR_ELAPSED_DURATION] = "0";
-                who.modData[ModDataKeys.ANIMATION_HAIR_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
-            }
+                foreach (var animationData in animationManager.GetAllAnimationData(who))
+                {
+                    animationData.Reset(duration, who.FarmerSprite.CurrentFrame, ignoreAnimationType is true ? animationData.Type : animationType);
+                }
 
-            if (model is AccessoryModel accessoryModel && accessoryModel is not null)
+                // Resetting facing direction, though only if model is null
+                who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] = facingDirection.ToString();
+            }
+            else if (model.Pack.PackType is not AppearanceContentPack.Type.Accessory && animationManager.GetSpecificAnimationData(who, model.Pack.PackType) is AnimationData animationData)
+            {
+                animationData?.Reset(duration, who.FarmerSprite.CurrentFrame, ignoreAnimationType is true ? animationData.Type : animationType);
+            }
+            else if (model is AccessoryModel accessoryModel && accessoryModel is not null)
             {
                 var accessoryIndex = accessoryManager.GetAccessoryIndexById(who, accessoryModel.Pack.Id);
                 if (accessoryIndex != -1)
                 {
                     accessoryManager.ResetAccessory(accessoryIndex, who, duration, animationType, ignoreAnimationType);
                 }
-            }
-            else if (model is null)
-            {
-                accessoryManager.ResetAllAccessories(who);
-            }
-
-            if (model is null || model is HatModel)
-            {
-                who.modData[ModDataKeys.ANIMATION_HAT_ITERATOR] = "0";
-                who.modData[ModDataKeys.ANIMATION_HAT_STARTING_INDEX] = "0";
-                who.modData[ModDataKeys.ANIMATION_HAT_FRAME_DURATION] = duration.ToString();
-                who.modData[ModDataKeys.ANIMATION_HAT_ELAPSED_DURATION] = "0";
-                who.modData[ModDataKeys.ANIMATION_HAT_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
-            }
-
-            if (model is null || model is ShirtModel)
-            {
-                who.modData[ModDataKeys.ANIMATION_SHIRT_ITERATOR] = "0";
-                who.modData[ModDataKeys.ANIMATION_SHIRT_STARTING_INDEX] = "0";
-                who.modData[ModDataKeys.ANIMATION_SHIRT_FRAME_DURATION] = duration.ToString();
-                who.modData[ModDataKeys.ANIMATION_SHIRT_ELAPSED_DURATION] = "0";
-                who.modData[ModDataKeys.ANIMATION_SHIRT_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
-            }
-
-            if (model is null || model is PantsModel)
-            {
-                who.modData[ModDataKeys.ANIMATION_PANTS_ITERATOR] = "0";
-                who.modData[ModDataKeys.ANIMATION_PANTS_STARTING_INDEX] = "0";
-                who.modData[ModDataKeys.ANIMATION_PANTS_FRAME_DURATION] = duration.ToString();
-                who.modData[ModDataKeys.ANIMATION_PANTS_ELAPSED_DURATION] = "0";
-                who.modData[ModDataKeys.ANIMATION_PANTS_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
-            }
-
-            if (model is null || model is SleevesModel)
-            {
-                who.modData[ModDataKeys.ANIMATION_SLEEVES_ITERATOR] = "0";
-                who.modData[ModDataKeys.ANIMATION_SLEEVES_STARTING_INDEX] = "0";
-                who.modData[ModDataKeys.ANIMATION_SLEEVES_FRAME_DURATION] = duration.ToString();
-                who.modData[ModDataKeys.ANIMATION_SLEEVES_ELAPSED_DURATION] = "0";
-                who.modData[ModDataKeys.ANIMATION_SLEEVES_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
-            }
-
-            if (model is null || model is ShoesModel)
-            {
-                who.modData[ModDataKeys.ANIMATION_SHOES_ITERATOR] = "0";
-                who.modData[ModDataKeys.ANIMATION_SHOES_STARTING_INDEX] = "0";
-                who.modData[ModDataKeys.ANIMATION_SHOES_FRAME_DURATION] = duration.ToString();
-                who.modData[ModDataKeys.ANIMATION_SHOES_ELAPSED_DURATION] = "0";
-                who.modData[ModDataKeys.ANIMATION_SHOES_FARMER_FRAME] = who.FarmerSprite.CurrentFrame.ToString();
-            }
-
-            if (model is null)
-            {
-                who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] = facingDirection.ToString();
-            }
-
-            if (!ignoreAnimationType)
-            {
-                who.modData[ModDataKeys.ANIMATION_HAIR_TYPE] = animationType.ToString();
-                who.modData[ModDataKeys.ANIMATION_HAT_TYPE] = animationType.ToString();
-                who.modData[ModDataKeys.ANIMATION_SHIRT_TYPE] = animationType.ToString();
-                who.modData[ModDataKeys.ANIMATION_PANTS_TYPE] = animationType.ToString();
-                who.modData[ModDataKeys.ANIMATION_SLEEVES_TYPE] = animationType.ToString();
             }
         }
 

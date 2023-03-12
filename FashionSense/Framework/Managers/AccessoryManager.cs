@@ -1,5 +1,6 @@
 ﻿using FashionSense.Framework.Models;
 using FashionSense.Framework.Models.Appearances;
+using FashionSense.Framework.Models.General;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
@@ -8,6 +9,7 @@ using StardewValley;
 using StardewValley.Monsters;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 
@@ -16,24 +18,16 @@ namespace FashionSense.Framework.Managers
     internal class AccessoryManager
     {
         private IMonitor _monitor;
-        private Dictionary<Farmer, HashSet<int>> _farmerToActiveAccessorySlots;
         private const int MAX_ACCESSORY_LIMIT = 100;
-
-        internal enum AnimationKey
-        {
-            Iterator,
-            StartingIndex,
-            FrameDuration,
-            ElapsedDuration,
-            LightId,
-            FarmerFrame,
-            AnimationType
-        }
 
         public AccessoryManager(IMonitor monitor)
         {
             _monitor = monitor;
-            _farmerToActiveAccessorySlots = new Dictionary<Farmer, HashSet<int>>();
+        }
+
+        internal IEnumerable<int> GetAllPossibleIndices()
+        {
+            return Enumerable.Range(0, 100);
         }
 
         internal void SetAccessories(Farmer who, List<string> accessoryIds, List<string> colors)
@@ -58,16 +52,8 @@ namespace FashionSense.Framework.Managers
 
         internal bool CopyAccessories(Farmer sourceFarmer, Farmer destinationFarmer)
         {
-            if (_farmerToActiveAccessorySlots.ContainsKey(sourceFarmer) is false)
+            foreach (int index in GetActiveAccessoryIndices(sourceFarmer))
             {
-                return false;
-            }
-
-            _farmerToActiveAccessorySlots[destinationFarmer] = new HashSet<int>();
-            foreach (int index in _farmerToActiveAccessorySlots[sourceFarmer])
-            {
-                _farmerToActiveAccessorySlots[destinationFarmer].Add(index);
-
                 ResetAccessory(destinationFarmer, index);
 
                 destinationFarmer.modData[GetKeyForAccessoryId(index)] = GetAccessoryIdByIndex(sourceFarmer, index);
@@ -83,22 +69,15 @@ namespace FashionSense.Framework.Managers
             {
                 RemoveAccessory(who, i);
             }
-
-            _farmerToActiveAccessorySlots[who] = new HashSet<int>();
         }
 
         internal int AddAccessory(Farmer who, string accessoryId, int index = -1, bool preserveColor = false, bool skipCacheUpdate = false)
         {
-            if (_farmerToActiveAccessorySlots.ContainsKey(who) is false)
-            {
-                _farmerToActiveAccessorySlots[who] = new HashSet<int>();
-            }
-
             if (index == -1)
             {
                 for (int i = 0; i < MAX_ACCESSORY_LIMIT; i++)
                 {
-                    if (_farmerToActiveAccessorySlots[who].Contains(i) is false)
+                    if (who.modData.ContainsKey(GetKeyForAccessoryId(i)) is false)
                     {
                         index = i;
                         break;
@@ -108,7 +87,6 @@ namespace FashionSense.Framework.Managers
 
             if (index > -1)
             {
-                _farmerToActiveAccessorySlots[who].Add(index);
                 ResetAccessory(who, index);
 
                 who.modData[GetKeyForAccessoryId(index)] = accessoryId;
@@ -127,16 +105,10 @@ namespace FashionSense.Framework.Managers
 
         internal void RemoveAccessory(Farmer who, int index)
         {
-            if (_farmerToActiveAccessorySlots.ContainsKey(who) is false)
-            {
-                _farmerToActiveAccessorySlots[who] = new HashSet<int>();
-            }
-
             var idKey = GetKeyForAccessoryId(index);
             if (who.modData.ContainsKey(idKey))
             {
                 who.modData.Remove(idKey);
-                _farmerToActiveAccessorySlots[who].Remove(index);
             }
 
             var colorKey = GetKeyForAccessoryColor(index);
@@ -230,14 +202,18 @@ namespace FashionSense.Framework.Managers
             return null;
         }
 
-        internal HashSet<int> GetActiveAccessoryIndices(Farmer who)
+        internal IEnumerable<int> GetActiveAccessoryIndices(Farmer who)
         {
-            if (_farmerToActiveAccessorySlots.ContainsKey(who) is false)
+            List<int> activeIndices = new List<int>();
+            foreach (int index in GetAllPossibleIndices())
             {
-                _farmerToActiveAccessorySlots[who] = new HashSet<int>();
+                if (who.modData.ContainsKey(GetKeyForAccessoryId(index)) is true)
+                {
+                    activeIndices.Add(index);
+                }
             }
 
-            return _farmerToActiveAccessorySlots[who];
+            return activeIndices;
         }
 
         internal List<string> GetActiveAccessoryIds(Farmer who)
@@ -262,94 +238,35 @@ namespace FashionSense.Framework.Managers
             return accessoryColorValues;
         }
 
-        internal static string GetAnimationKeyString(AnimationKey animationKey)
-        {
-            switch (animationKey)
-            {
-                case AnimationKey.AnimationType:
-                    return "Type";
-                case AnimationKey.Iterator:
-                    return "Iterator";
-                case AnimationKey.StartingIndex:
-                    return "StartingIndex";
-                case AnimationKey.FrameDuration:
-                    return "FrameDuration";
-                case AnimationKey.ElapsedDuration:
-                    return "ElapsedDuration";
-                case AnimationKey.LightId:
-                    return "Light.Id";
-                case AnimationKey.FarmerFrame:
-                    return "FarmerFrame";
-            }
-
-            return null;
-        }
-
-        internal string GetModDataKey(Farmer who, AnimationKey animationKey, int index)
-        {
-            var idKey = GetKeyForAccessoryId(index);
-            if (IsKeyValid(who, idKey, checkForValue: true) is false)
-            {
-                return null;
-            }
-
-            var animationString = GetAnimationKeyString(animationKey);
-            if (String.IsNullOrEmpty(animationString))
-            {
-                return null;
-            }
-
-            return $"FashionSense.Animation.Accessory.{index}.{animationString}";
-        }
-
-        internal void SetModData(Farmer who, int index, AnimationKey animationType, string value)
-        {
-            var modDataKey = GetModDataKey(who, animationType, index);
-            if (String.IsNullOrEmpty(modDataKey))
-            {
-                return;
-            }
-
-            who.modData[modDataKey] = value;
-        }
-
-        internal string GetModData(Farmer who, int index, AnimationKey animationType)
-        {
-            var modDataKey = GetModDataKey(who, animationType, index);
-            if (String.IsNullOrEmpty(modDataKey) || who.modData.ContainsKey(modDataKey) is false)
-            {
-                return null;
-            }
-
-            return who.modData[modDataKey];
-        }
-
         internal void ResetAccessory(Farmer who, int index, int startingIndex = 0)
         {
-            if (GetModDataKey(who, AnimationKey.AnimationType, index) is null)
+            var animationData = FashionSense.animationManager.GetSpecificAnimationData(who, GetKeyForAccessoryId(index));
+            if (animationData is null)
             {
                 return;
             }
 
-            who.modData[GetModDataKey(who, AnimationKey.Iterator, index)] = "0";
-            who.modData[GetModDataKey(who, AnimationKey.StartingIndex, index)] = startingIndex.ToString();
-            who.modData[GetModDataKey(who, AnimationKey.FrameDuration, index)] = "0";
-            who.modData[GetModDataKey(who, AnimationKey.ElapsedDuration, index)] = "0";
-            who.modData[GetModDataKey(who, AnimationKey.FarmerFrame, index)] = "0";
-            who.modData[GetModDataKey(who, AnimationKey.LightId, index)] = "0";
+            animationData.Reset(0, 0);
+            animationData.StartingIndex = startingIndex;
+            animationData.LightId = null;
         }
 
         internal void ResetAccessory(int index, Farmer who, int duration, AnimationModel.Type animationType, bool ignoreAnimationType = false, int startingIndex = 0)
         {
-            ResetAccessory(who, index, startingIndex: startingIndex);
+            var animationData = FashionSense.animationManager.GetSpecificAnimationData(who, GetKeyForAccessoryId(index));
+            if (animationData is null)
+            {
+                return;
+            }
+
+            animationData.Reset(duration, who.FarmerSprite.CurrentFrame);
+            animationData.StartingIndex = startingIndex;
+            animationData.LightId = null;
 
             if (ignoreAnimationType is false)
             {
-                who.modData[GetModDataKey(who, AnimationKey.AnimationType, index)] = animationType.ToString();
+                animationData.Type = animationType;
             }
-
-            who.modData[GetModDataKey(who, AnimationKey.FrameDuration, index)] = duration.ToString();
-            who.modData[GetModDataKey(who, AnimationKey.FarmerFrame, index)] = who.FarmerSprite.CurrentFrame.ToString();
         }
 
         internal void ResetAllAccessories(Farmer who)
