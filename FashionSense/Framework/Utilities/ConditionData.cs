@@ -11,8 +11,8 @@ namespace FashionSense.Framework.Utilities
 {
     class ConditionData
     {
-        private Dictionary<Farmer, double> _farmerToMovementDuration = new Dictionary<Farmer, double>();
-        private Dictionary<Farmer, double> _farmerToElapsedMilliseconds = new Dictionary<Farmer, double>();
+        private Dictionary<Farmer, float> _farmerToMovementDuration = new Dictionary<Farmer, float>();
+        private Dictionary<Farmer, float> _farmerToElapsedMilliseconds = new Dictionary<Farmer, float>();
 
         internal bool IsMovingFastEnough(Farmer who, long requiredMovementSpeed)
         {
@@ -27,7 +27,7 @@ namespace FashionSense.Framework.Utilities
         internal bool IsElapsedTimeMultipleOf(Farmer who, Condition condition, bool probe)
         {
             var elapsedMilliseconds = GetElapsedMilliseconds(who);
-            if (elapsedMilliseconds > condition.GetCache<float>() + condition.GetParsedValue<long>(!probe) || condition.GetCache<float>() > elapsedMilliseconds)
+            if (elapsedMilliseconds > condition.GetCache<float>() + condition.GetParsedValue<float>(!probe) || condition.GetCache<float>() > elapsedMilliseconds)
             {
                 if (!probe)
                 {
@@ -66,7 +66,7 @@ namespace FashionSense.Framework.Utilities
             return movementSpeed;
         }
 
-        internal double GetMovementDuration(Farmer who)
+        internal float GetMovementDuration(Farmer who)
         {
             if (_farmerToMovementDuration.ContainsKey(who) is false)
             {
@@ -76,7 +76,7 @@ namespace FashionSense.Framework.Utilities
             return _farmerToMovementDuration[who];
         }
 
-        internal double GetElapsedMilliseconds(Farmer who)
+        internal float GetElapsedMilliseconds(Farmer who)
         {
             if (_farmerToElapsedMilliseconds.ContainsKey(who) is false)
             {
@@ -93,7 +93,7 @@ namespace FashionSense.Framework.Utilities
             {
                 elapsedMilliseconds = 0;
             }
-            _farmerToElapsedMilliseconds[who] = (elapsedMilliseconds + time.ElapsedGameTime.TotalMilliseconds);
+            _farmerToElapsedMilliseconds[who] = (elapsedMilliseconds + (float)time.ElapsedGameTime.TotalMilliseconds);
 
             _farmerToMovementDuration[who] = (GetMovementDuration(who) + (float)time.ElapsedGameTime.TotalMilliseconds);
             if (GetMovementSpeed(who) == 0)
