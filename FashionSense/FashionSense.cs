@@ -135,19 +135,19 @@ namespace FashionSense
         {
             if (Context.IsWorldReady)
             {
-                // Update movement trackers
-                conditionData.Update(Game1.player, Game1.currentGameTime);
-
                 if (_continuousReloading && e.IsMultipleOf(120))
                 {
                     this.LoadContentPacks(true);
                 }
-            }
 
-            // Update elapsed durations for the player
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                UpdateElapsedDuration(farmer);
+                // Update elapsed durations for the player
+                foreach (var farmer in Game1.getAllFarmers())
+                {
+                    UpdateElapsedDuration(farmer);
+
+                    // Update movement trackers
+                    conditionData.Update(farmer, Game1.currentGameTime);
+                }
             }
 
             // Update elapsed durations when the player is using the SearchMenu

@@ -1,14 +1,19 @@
 ﻿using FashionSense.Framework.Models.Appearances.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Events;
 using StardewValley;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace FashionSense.Framework.Utilities
 {
     class ConditionData
     {
+        private Dictionary<Farmer, double> _farmerToMovementDuration = new Dictionary<Farmer, double>();
+        private Dictionary<Farmer, double> _farmerToElapsedMilliseconds = new Dictionary<Farmer, double>();
+
         internal bool IsMovingFastEnough(Farmer who, long requiredMovementSpeed)
         {
             return GetMovementSpeed(who) >= requiredMovementSpeed;
@@ -63,32 +68,22 @@ namespace FashionSense.Framework.Utilities
 
         internal double GetMovementDuration(Farmer who)
         {
-            if (who.modData.ContainsKey(ModDataKeys.MOVEMENT_DURATION_MILLISECONDS) is false)
+            if (_farmerToMovementDuration.ContainsKey(who) is false)
             {
-                who.modData[ModDataKeys.MOVEMENT_DURATION_MILLISECONDS] = "0";
+                _farmerToMovementDuration[who] = 0;
             }
 
-            if (double.TryParse(who.modData[ModDataKeys.MOVEMENT_DURATION_MILLISECONDS], out var movementDurationMilliseconds))
-            {
-                return movementDurationMilliseconds;
-            }
-
-            return 0;
+            return _farmerToMovementDuration[who];
         }
 
         internal double GetElapsedMilliseconds(Farmer who)
         {
-            if (who.modData.ContainsKey(ModDataKeys.ELAPSED_MILLISECONDS) is false)
+            if (_farmerToElapsedMilliseconds.ContainsKey(who) is false)
             {
-                who.modData[ModDataKeys.ELAPSED_MILLISECONDS] = "0";
+                _farmerToElapsedMilliseconds[who] = 0;
             }
 
-            if (double.TryParse(who.modData[ModDataKeys.ELAPSED_MILLISECONDS], out var elapsedMilliseconds))
-            {
-                return elapsedMilliseconds;
-            }
-
-            return 0;
+            return _farmerToElapsedMilliseconds[who];
         }
 
         internal void Update(Farmer who, GameTime time)
@@ -96,14 +91,14 @@ namespace FashionSense.Framework.Utilities
             var elapsedMilliseconds = GetElapsedMilliseconds(who);
             if (elapsedMilliseconds > FashionSense.MAX_TRACKED_MILLISECONDS)
             {
-                who.modData[ModDataKeys.ELAPSED_MILLISECONDS] = "0";
+                elapsedMilliseconds = 0;
             }
-            who.modData[ModDataKeys.ELAPSED_MILLISECONDS] = (elapsedMilliseconds + time.ElapsedGameTime.TotalMilliseconds).ToString();
+            _farmerToElapsedMilliseconds[who] = (elapsedMilliseconds + time.ElapsedGameTime.TotalMilliseconds);
 
-            who.modData[ModDataKeys.MOVEMENT_DURATION_MILLISECONDS] = (GetMovementDuration(who) + (float)time.ElapsedGameTime.TotalMilliseconds).ToString();
+            _farmerToMovementDuration[who] = (GetMovementDuration(who) + (float)time.ElapsedGameTime.TotalMilliseconds);
             if (GetMovementSpeed(who) == 0)
             {
-                who.modData[ModDataKeys.MOVEMENT_DURATION_MILLISECONDS] = "0";
+                _farmerToMovementDuration[who] = 0;
             }
         }
 
