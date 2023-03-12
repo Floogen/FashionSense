@@ -10,6 +10,7 @@ using FashionSense.Framework.Models.Appearances.Shoes;
 using FashionSense.Framework.Models.Appearances.Sleeves;
 using FashionSense.Framework.Models.General;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 using StardewValley.Tools;
 using System;
@@ -59,7 +60,7 @@ namespace FashionSense.Framework.Utilities
             }
 
             // Reset any cached animation data, if needed
-            if (model.HasMovementAnimation() && FashionSense.conditionData.IsPlayerMoving() && !HasCorrectAnimationTypeCached(model, who, AnimationModel.Type.Moving))
+            if (model.HasMovementAnimation() && FashionSense.conditionData.IsPlayerMoving(who) && !HasCorrectAnimationTypeCached(model, who, AnimationModel.Type.Moving))
             {
                 SetAnimationType(model, who, AnimationModel.Type.Moving);
                 FashionSense.ResetAnimationModDataFields(who, model.MovementAnimation.ElementAt(0).GetDuration(true), AnimationModel.Type.Moving, facingDirection, true, model);
@@ -69,7 +70,7 @@ namespace FashionSense.Framework.Utilities
                     animation.Reset();
                 }
             }
-            else if (model.HasIdleAnimation() && !FashionSense.conditionData.IsPlayerMoving() && !HasCorrectAnimationTypeCached(model, who, AnimationModel.Type.Idle))
+            else if (model.HasIdleAnimation() && !FashionSense.conditionData.IsPlayerMoving(who) && !HasCorrectAnimationTypeCached(model, who, AnimationModel.Type.Idle))
             {
                 SetAnimationType(model, who, AnimationModel.Type.Idle);
                 FashionSense.ResetAnimationModDataFields(who, model.IdleAnimation.ElementAt(0).GetDuration(true), AnimationModel.Type.Idle, facingDirection, true, model);
@@ -92,11 +93,11 @@ namespace FashionSense.Framework.Utilities
 
             // Update the animations
             appearanceTypeToSourceRectangles[model] = new Rectangle(model.StartingPosition.X, model.StartingPosition.Y, size.Width, size.Length);
-            if (model.HasMovementAnimation() && (FashionSense.conditionData.IsPlayerMoving() || IsWaitingOnRequiredAnimation(who, model)))
+            if (model.HasMovementAnimation() && (FashionSense.conditionData.IsPlayerMoving(who) || IsWaitingOnRequiredAnimation(who, model)))
             {
-                HandleAppearanceAnimation(models, model, who, AnimationModel.Type.Moving, model.MovementAnimation, facingDirection, ref appearanceTypeToSourceRectangles, !FashionSense.conditionData.IsPlayerMoving() && IsWaitingOnRequiredAnimation(who, model), forceUpdate);
+                HandleAppearanceAnimation(models, model, who, AnimationModel.Type.Moving, model.MovementAnimation, facingDirection, ref appearanceTypeToSourceRectangles, !FashionSense.conditionData.IsPlayerMoving(who) && IsWaitingOnRequiredAnimation(who, model), forceUpdate);
             }
-            else if (model.HasIdleAnimation() && !FashionSense.conditionData.IsPlayerMoving())
+            else if (model.HasIdleAnimation() && !FashionSense.conditionData.IsPlayerMoving(who))
             {
                 HandleAppearanceAnimation(models, model, who, AnimationModel.Type.Idle, model.IdleAnimation, facingDirection, ref appearanceTypeToSourceRectangles, forceUpdate);
             }
@@ -703,7 +704,7 @@ namespace FashionSense.Framework.Utilities
                 }
                 else if (condition.Name is Condition.Type.MovementDuration)
                 {
-                    passedCheck = condition.IsValid(true, FashionSense.conditionData.IsMovingLongEnough(condition.GetParsedValue<long>(!probe)));
+                    passedCheck = condition.IsValid(true, FashionSense.conditionData.IsMovingLongEnough(who, condition.GetParsedValue<long>(!probe)));
                 }
                 else if (condition.Name is Condition.Type.MovementDurationLogical)
                 {
@@ -711,7 +712,7 @@ namespace FashionSense.Framework.Utilities
                 }
                 else if (condition.Name is Condition.Type.IsElapsedTimeMultipleOf)
                 {
-                    passedCheck = condition.IsValid(true, FashionSense.conditionData.IsElapsedTimeMultipleOf(condition, probe));
+                    passedCheck = condition.IsValid(true, FashionSense.conditionData.IsElapsedTimeMultipleOf(who, condition, probe));
                 }
                 else if (condition.Name is Condition.Type.DidPreviousFrameDisplay)
                 {
@@ -729,7 +730,7 @@ namespace FashionSense.Framework.Utilities
                 }
                 else if (condition.Name is Condition.Type.MovementSpeed)
                 {
-                    passedCheck = condition.IsValid(true, FashionSense.conditionData.IsMovingFastEnough(condition.GetParsedValue<long>(!probe)));
+                    passedCheck = condition.IsValid(true, FashionSense.conditionData.IsMovingFastEnough(who, condition.GetParsedValue<long>(!probe)));
                 }
                 else if (condition.Name is Condition.Type.MovementSpeedLogical)
                 {
