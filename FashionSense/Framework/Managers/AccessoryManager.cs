@@ -8,6 +8,7 @@ using StardewValley;
 using StardewValley.Monsters;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 
@@ -16,7 +17,6 @@ namespace FashionSense.Framework.Managers
     internal class AccessoryManager
     {
         private IMonitor _monitor;
-        private Dictionary<Farmer, HashSet<int>> _farmerToActiveAccessorySlots;
         private const int MAX_ACCESSORY_LIMIT = 100;
 
         internal enum AnimationKey
@@ -33,7 +33,11 @@ namespace FashionSense.Framework.Managers
         public AccessoryManager(IMonitor monitor)
         {
             _monitor = monitor;
-            _farmerToActiveAccessorySlots = new Dictionary<Farmer, HashSet<int>>();
+        }
+
+        internal IEnumerable<int> GetAllPossibleIndices()
+        {
+            return Enumerable.Range(0, 100);
         }
 
         internal void SetAccessories(Farmer who, List<string> accessoryIds, List<string> colors)
@@ -58,16 +62,8 @@ namespace FashionSense.Framework.Managers
 
         internal bool CopyAccessories(Farmer sourceFarmer, Farmer destinationFarmer)
         {
-            if (_farmerToActiveAccessorySlots.ContainsKey(sourceFarmer) is false)
+            foreach (int index in GetActiveAccessoryIndices(sourceFarmer))
             {
-                return false;
-            }
-
-            _farmerToActiveAccessorySlots[destinationFarmer] = new HashSet<int>();
-            foreach (int index in _farmerToActiveAccessorySlots[sourceFarmer])
-            {
-                _farmerToActiveAccessorySlots[destinationFarmer].Add(index);
-
                 ResetAccessory(destinationFarmer, index);
 
                 destinationFarmer.modData[GetKeyForAccessoryId(index)] = GetAccessoryIdByIndex(sourceFarmer, index);
@@ -83,22 +79,15 @@ namespace FashionSense.Framework.Managers
             {
                 RemoveAccessory(who, i);
             }
-
-            _farmerToActiveAccessorySlots[who] = new HashSet<int>();
         }
 
         internal int AddAccessory(Farmer who, string accessoryId, int index = -1, bool preserveColor = false, bool skipCacheUpdate = false)
         {
-            if (_farmerToActiveAccessorySlots.ContainsKey(who) is false)
-            {
-                _farmerToActiveAccessorySlots[who] = new HashSet<int>();
-            }
-
             if (index == -1)
             {
                 for (int i = 0; i < MAX_ACCESSORY_LIMIT; i++)
                 {
-                    if (_farmerToActiveAccessorySlots[who].Contains(i) is false)
+                    if (who.modData.ContainsKey(GetKeyForAccessoryId(i)) is false)
                     {
                         index = i;
                         break;
@@ -108,7 +97,6 @@ namespace FashionSense.Framework.Managers
 
             if (index > -1)
             {
-                _farmerToActiveAccessorySlots[who].Add(index);
                 ResetAccessory(who, index);
 
                 who.modData[GetKeyForAccessoryId(index)] = accessoryId;
@@ -127,16 +115,10 @@ namespace FashionSense.Framework.Managers
 
         internal void RemoveAccessory(Farmer who, int index)
         {
-            if (_farmerToActiveAccessorySlots.ContainsKey(who) is false)
-            {
-                _farmerToActiveAccessorySlots[who] = new HashSet<int>();
-            }
-
             var idKey = GetKeyForAccessoryId(index);
             if (who.modData.ContainsKey(idKey))
             {
                 who.modData.Remove(idKey);
-                _farmerToActiveAccessorySlots[who].Remove(index);
             }
 
             var colorKey = GetKeyForAccessoryColor(index);
@@ -230,14 +212,18 @@ namespace FashionSense.Framework.Managers
             return null;
         }
 
-        internal HashSet<int> GetActiveAccessoryIndices(Farmer who)
+        internal IEnumerable<int> GetActiveAccessoryIndices(Farmer who)
         {
-            if (_farmerToActiveAccessorySlots.ContainsKey(who) is false)
+            List<int> activeIndices = new List<int>();
+            foreach (int index in GetAllPossibleIndices())
             {
-                _farmerToActiveAccessorySlots[who] = new HashSet<int>();
+                if (who.modData.ContainsKey(GetKeyForAccessoryId(index)) is true)
+                {
+                    activeIndices.Add(index);
+                }
             }
 
-            return _farmerToActiveAccessorySlots[who];
+            return activeIndices;
         }
 
         internal List<string> GetActiveAccessoryIds(Farmer who)
