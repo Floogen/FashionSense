@@ -72,11 +72,6 @@ namespace FashionSense.Framework.Utilities
             // Establish the source rectangle for the model
             appearanceTypeToSourceRectangles[model] = new Rectangle(model.StartingPosition.X, model.StartingPosition.Y, size.Width, size.Length);
 
-            if (FashionSense.animationManager.GetSpecificAnimationData(who, model) is null)
-            {
-                FashionSense.animationManager.EstablishAnimationData(who, model);
-            }
-
             // Reset any cached animation data, if needed
             if (model.HasMovementAnimation() && FashionSense.conditionData.IsPlayerMoving(who) && !HasCorrectAnimationTypeCached(model, who, AnimationModel.Type.Moving))
             {

@@ -2,6 +2,7 @@
 using FashionSense.Framework.Models.Appearances.Accessory;
 using FashionSense.Framework.Models.General;
 using FashionSense.Framework.Utilities;
+using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
 using System;
@@ -23,32 +24,6 @@ namespace FashionSense.Framework.Managers
         {
             _monitor = monitor;
             _farmerToAppearanceIdToAppearanceAnimationData = new Dictionary<Farmer, Dictionary<string, AnimationData>>();
-        }
-
-        public void EstablishAnimationData(Farmer who, AppearanceModel model)
-        {
-            if (model is null)
-            {
-                return;
-            }
-            else if (_farmerToAppearanceIdToAppearanceAnimationData.ContainsKey(who) is false)
-            {
-                _farmerToAppearanceIdToAppearanceAnimationData[who] = new Dictionary<string, AnimationData>();
-            }
-
-            var appearanceId = model.Pack.Id;
-            if (model is AccessoryModel)
-            {
-                var accessoryIndex = FashionSense.accessoryManager.GetAccessoryIndexById(who, model.Pack.Id);
-                if (accessoryIndex == -1)
-                {
-                    return;
-                }
-
-                appearanceId = FashionSense.accessoryManager.GetKeyForAccessoryId(accessoryIndex);
-            }
-
-            _farmerToAppearanceIdToAppearanceAnimationData[who][appearanceId] = new AnimationData();
         }
 
         public List<AnimationData> GetAllAnimationData(Farmer who)
@@ -93,7 +68,7 @@ namespace FashionSense.Framework.Managers
 
             if (_farmerToAppearanceIdToAppearanceAnimationData[who].ContainsKey(appearanceId) is false)
             {
-                return null;
+                _farmerToAppearanceIdToAppearanceAnimationData[who][appearanceId] = new AnimationData();
             }
 
             return _farmerToAppearanceIdToAppearanceAnimationData[who][appearanceId];
