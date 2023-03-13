@@ -12,6 +12,7 @@ using FashionSense.Framework.Models.Appearances.Shoes;
 using FashionSense.Framework.Models.Appearances.Sleeves;
 using FashionSense.Framework.Models.General;
 using FashionSense.Framework.Patches.Entities;
+using FashionSense.Framework.Patches.Core;
 using FashionSense.Framework.Patches.GameLocations;
 using FashionSense.Framework.Patches.Menus;
 using FashionSense.Framework.Patches.Renderer;
@@ -100,6 +101,9 @@ namespace FashionSense
 
                 // Apply entity related patches
                 new CharacterPatch(monitor, modHelper).Apply(harmony);
+
+                // Apply game related patches
+                new GamePatch(monitor, modHelper).Apply(harmony);
             }
             catch (Exception e)
             {

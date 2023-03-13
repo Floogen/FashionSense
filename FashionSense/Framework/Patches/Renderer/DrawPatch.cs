@@ -28,6 +28,7 @@ namespace FashionSense.Framework.Patches.Renderer
 {
     internal class DrawPatch : PatchTemplate
     {
+        internal static bool isUsingCustomDraw = false;
         private readonly Type _entity = typeof(FarmerRenderer);
 
         internal DrawPatch(IMonitor modMonitor, IModHelper modHelper) : base(modMonitor, modHelper)
@@ -144,6 +145,7 @@ namespace FashionSense.Framework.Patches.Renderer
             {
                 who = Game1.player;
             }
+            isUsingCustomDraw = false;
 
             // Get the currently equipped models
             List<AppearanceMetadata> equippedModels = GetCurrentlyEquippedModels(who, facingDirection);
@@ -179,6 +181,7 @@ namespace FashionSense.Framework.Patches.Renderer
             // Check if we need to utilize custom draw logic
             if (equippedModels.Count() > 0 || AppearanceHelpers.AreSleevesForcedHidden(equippedModels))
             {
+                isUsingCustomDraw = true;
                 HandleCustomDraw(equippedModels, __instance, ___farmerTextureManager, ___baseTexture, ___skin, ref ___hairstyleSourceRect, ref ___shirtSourceRect, ref ___accessorySourceRect, ref ___hatSourceRect, ref ___positionOffset, ref ___rotationAdjustment, ref ____sickFrame, ref ____shirtDirty, ref ____spriteDirty, b, animationFrame, currentFrame, sourceRect, position, origin, layerDepth, facingDirection, overrideColor, rotation, scale, who);
             }
             else
@@ -267,6 +270,12 @@ namespace FashionSense.Framework.Patches.Renderer
 
             // Draw all sorted layers
             drawManager.DrawLayers(who, layers);
+
+            // Utilize custom draw for held object, if applicable
+            if (who.ActiveObject != null && who.IsCarrying())
+            {
+                DrawHeldObject(b, who, drawManager.LayerDepth + 0.001f);
+            }
 
             FarmerRendererPatch.AreColorMasksPendingRefresh = false;
         }
@@ -457,6 +466,58 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             return new SkinToneModel(lightest, medium, darkest);
+        }
+
+        internal static void DrawHeldObject(SpriteBatch spriteBatch, Farmer who, float layerDepth)
+        {
+            if ((!Game1.eventUp || (Game1.currentLocation.currentEvent != null && Game1.currentLocation.currentEvent.showActiveObject)) && !who.FarmerSprite.PauseForSingleAnimation && !who.isRidingHorse() && !who.bathingClothes && !who.onBridge.Value)
+            {
+                float xPosition = who.getLocalPosition(Game1.viewport).X + (float)((who.rotation < 0f) ? (-8) : ((who.rotation > 0f) ? 8 : 0)) + (float)(who.FarmerSprite.CurrentAnimationFrame.xOffset * 4);
+                float objectYLoc = who.getLocalPosition(Game1.viewport).Y - 128f + (float)(who.FarmerSprite.CurrentAnimationFrame.positionOffset * 4) + (float)(FarmerRenderer.featureYOffsetPerFrame[who.FarmerSprite.CurrentFrame] * 4);
+                if (who.ActiveObject.bigCraftable.Value)
+                {
+                    objectYLoc -= 64f;
+                }
+                if (who.isEating)
+                {
+                    xPosition = who.getLocalPosition(Game1.viewport).X - 21f;
+                    objectYLoc = who.getLocalPosition(Game1.viewport).Y - 128f + 12f;
+                }
+                if (!who.isEating || (who.isEating && who.Sprite.currentFrame <= 218))
+                {
+                    DrawHeldObject(spriteBatch, who, layerDepth, new Vector2((int)xPosition, (int)objectYLoc));
+                }
+            }
+        }
+
+        internal static void DrawHeldObject(SpriteBatch spriteBatch, Farmer who, float layerDepth, Vector2 objectPosition)
+        {
+            if (who.ActiveObject == null)
+            {
+                return;
+            }
+
+            if (who.ActiveObject.bigCraftable.Value)
+            {
+                spriteBatch.Draw(Game1.bigCraftableSpriteSheet, objectPosition, StardewValley.Object.getSourceRectForBigCraftable(who.ActiveObject.ParentSheetIndex), Color.White, 0f, Vector2.Zero, 4f, SpriteEffects.None, layerDepth);
+                return;
+            }
+
+            spriteBatch.Draw(Game1.objectSpriteSheet, objectPosition, GameLocation.getSourceRectForObject(who.ActiveObject.ParentSheetIndex), Color.White, 0f, Vector2.Zero, 4f, SpriteEffects.None, layerDepth);
+            if (!who.ActiveObject.Name.Contains("="))
+            {
+                return;
+            }
+
+            spriteBatch.Draw(Game1.objectSpriteSheet, objectPosition + new Vector2(32f, 32f), GameLocation.getSourceRectForObject(who.ActiveObject.ParentSheetIndex), Color.White, 0f, new Vector2(32f, 32f), 4f + Math.Abs(Game1.starCropShimmerPause) / 8f, SpriteEffects.None, layerDepth);
+            if (!(Math.Abs(Game1.starCropShimmerPause) <= 0.05f) || !(Game1.random.NextDouble() < 0.97))
+            {
+                Game1.starCropShimmerPause += 0.04f;
+                if (Game1.starCropShimmerPause >= 0.8f)
+                {
+                    Game1.starCropShimmerPause = -0.8f;
+                }
+            }
         }
 
         internal static void ExecuteRecolorActionsReversePatch(FarmerRenderer __instance, Farmer who)
