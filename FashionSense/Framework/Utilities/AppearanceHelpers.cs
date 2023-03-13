@@ -61,9 +61,6 @@ namespace FashionSense.Framework.Utilities
                 return;
             }
 
-            // Debug line
-            //FashionSense.monitor.LogOnce($"[{DateTime.Now.ToString("T")}] {model.Pack.Name}", StardewModdingAPI.LogLevel.Debug);
-
             // Establish the source rectangle for the model
             appearanceTypeToSourceRectangles[model] = new Rectangle(model.StartingPosition.X, model.StartingPosition.Y, size.Width, size.Length);
 
