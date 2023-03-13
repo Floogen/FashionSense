@@ -257,7 +257,7 @@ namespace FashionSense.Framework.Patches.Renderer
             };
 
             // Vanilla swim draw logic
-            if (!FarmerRenderer.isDrawingForUI && (bool)who.swimming)
+            if (FarmerRenderer.isDrawingForUI is false && who.swimming.Value)
             {
                 // Draw all sorted layers
                 drawManager.DrawLayers(who, layers);
@@ -272,7 +272,7 @@ namespace FashionSense.Framework.Patches.Renderer
             drawManager.DrawLayers(who, layers);
 
             // Utilize custom draw for held object, if applicable
-            if (who.ActiveObject != null && who.IsCarrying())
+            if (FarmerRenderer.isDrawingForUI is false && who.ActiveObject is not null && who.IsCarrying())
             {
                 DrawHeldObject(b, who, drawManager.LayerDepth + 0.001f);
             }
