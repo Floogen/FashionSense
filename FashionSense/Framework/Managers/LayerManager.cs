@@ -133,7 +133,7 @@ namespace FashionSense.Framework.Managers
             int index = 0;
             foreach (var layerData in sortedLayerData)
             {
-                _monitor.Log($"[{index}] {layerData.AppearanceType} ({(layerData.AppearanceModel is null ? string.Empty : layerData.AppearanceModel.Pack.Id)})", LogLevel.Debug);
+                _monitor.LogOnce($"[{DateTime.Now.ToString("T")}] [{index}] {layerData.AppearanceType} ({(layerData.AppearanceModel is null ? string.Empty : layerData.AppearanceModel.Pack.Id)})", LogLevel.Debug);
                 index++;
             }
             */
