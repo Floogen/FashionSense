@@ -147,6 +147,19 @@ namespace FashionSense.Framework.Patches.Renderer
             }
             isUsingCustomDraw = false;
 
+            // Check what player base to use
+            if (AppearanceHelpers.ShouldUseBaldBase(who, facingDirection))
+            {
+                if (!__instance.textureName.Contains("_bald"))
+                {
+                    __instance.textureName.Set("Characters\\Farmer\\farmer_" + (who.IsMale ? "" : "girl_") + "base" + "_bald");
+                }
+            }
+            else if (__instance.textureName.Contains("_bald"))
+            {
+                __instance.textureName.Set("Characters\\Farmer\\farmer_" + (who.IsMale ? "" : "girl_") + "base");
+            }
+
             // Get the currently equipped models
             List<AppearanceMetadata> equippedModels = GetCurrentlyEquippedModels(who, facingDirection);
 
@@ -199,19 +212,6 @@ namespace FashionSense.Framework.Patches.Renderer
                 ____sickFrame = sick_frame;
                 ____shirtDirty = true;
                 ____spriteDirty = true;
-            }
-
-            // Check what player base to use
-            if (AppearanceHelpers.ShouldUseBaldBase(who, facingDirection))
-            {
-                if (!__instance.textureName.Contains("_bald"))
-                {
-                    __instance.textureName.Set("Characters\\Farmer\\farmer_" + (who.IsMale ? "" : "girl_") + "base" + "_bald");
-                }
-            }
-            else if (__instance.textureName.Contains("_bald"))
-            {
-                __instance.textureName.Set("Characters\\Farmer\\farmer_" + (who.IsMale ? "" : "girl_") + "base");
             }
 
             // Recolor the player's base
