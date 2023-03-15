@@ -178,8 +178,15 @@ namespace FashionSense.Framework.Utilities
                 return;
             }
 
+            // Pull values from animationData, as we don't want to modify them here
+            int iterator = animationData.Iterator;
+            int startingIndex = animationData.StartingIndex;
+            int frameDuration = animationData.FrameDuration;
+            int elapsedDuration = animationData.ElapsedDuration;
+            int lastFarmerFrame = animationData.FarmerFrame;
+
             // Get AnimationModel for this index
-            var animationModel = animations.ElementAtOrDefault(animationData.Iterator) is null ? animations.ElementAtOrDefault(0) : animations.ElementAtOrDefault(animationData.Iterator);
+            var animationModel = animations.ElementAtOrDefault(iterator) is null ? animations.ElementAtOrDefault(0) : animations.ElementAtOrDefault(iterator);
 
             // Handle animations that are syncing with other appearances 
             bool defaultToEndWhenFarmerFrameUpdates = false;
@@ -209,31 +216,31 @@ namespace FashionSense.Framework.Utilities
             }
 
             // Check if frame is valid
-            if (IsFrameValid(who, appearanceModel, animations, animationData.Iterator, probe: true))
+            if (IsFrameValid(who, appearanceModel, animations, iterator, probe: true))
             {
-                if (animationModel.OverrideStartingIndex && animationData.StartingIndex != animationData.Iterator)
+                if (animationModel.OverrideStartingIndex && startingIndex != iterator)
                 {
                     // See if this particular frame overrides the StartingIndex
-                    animationData.StartingIndex = animationData.Iterator;
+                    startingIndex = iterator;
                 }
                 else if (isAnimationFinishing)
                 {
-                    animationData.StartingIndex = 0;
+                    startingIndex = 0;
                 }
             }
             else
             {
                 // Frame isn't valid, get the next available frame starting from iterator
                 var hasFoundNextFrame = false;
-                foreach (var animation in animations.Skip(animationData.Iterator + 1).Where(a => IsFrameValid(who, appearanceModel, animations, animations.IndexOf(a), probe: true)))
+                foreach (var animation in animations.Skip(iterator + 1).Where(a => IsFrameValid(who, appearanceModel, animations, animations.IndexOf(a), probe: true)))
                 {
-                    animationData.Iterator = animations.IndexOf(animation);
+                    iterator = animations.IndexOf(animation);
 
                     if (animation.OverrideStartingIndex)
                     {
-                        animationData.StartingIndex = animationData.Iterator;
+                        startingIndex = iterator;
                     }
-                    animationData.ElapsedDuration = 0;
+                    elapsedDuration = 0;
 
                     hasFoundNextFrame = true;
                     break;
@@ -242,11 +249,11 @@ namespace FashionSense.Framework.Utilities
                 // If no frames are available from iterator onwards, then check backwards for the next available frame with OverrideStartingIndex
                 if (!hasFoundNextFrame)
                 {
-                    foreach (var animation in animations.Take(animationData.Iterator + 1).Reverse().Where(a => a.OverrideStartingIndex && IsFrameValid(who, appearanceModel, animations, animations.IndexOf(a), probe: true)))
+                    foreach (var animation in animations.Take(iterator + 1).Reverse().Where(a => a.OverrideStartingIndex && IsFrameValid(who, appearanceModel, animations, animations.IndexOf(a), probe: true)))
                     {
-                        animationData.Iterator = animations.IndexOf(animation);
-                        animationData.StartingIndex = animationData.Iterator;
-                        animationData.ElapsedDuration = 0;
+                        iterator = animations.IndexOf(animation);
+                        startingIndex = iterator;
+                        elapsedDuration = 0;
 
                         hasFoundNextFrame = true;
                         break;
@@ -256,14 +263,14 @@ namespace FashionSense.Framework.Utilities
                 // If next frame is not available, revert to the first one
                 if (!hasFoundNextFrame)
                 {
-                    animationData.Iterator = 0;
-                    animationData.StartingIndex = 0;
-                    animationData.ElapsedDuration = 0;
+                    iterator = 0;
+                    startingIndex = 0;
+                    elapsedDuration = 0;
                 }
 
-                animationModel = animations.ElementAt(animationData.Iterator);
+                animationModel = animations.ElementAt(iterator);
 
-                UpdatePlayerAnimationData(appearanceModel, who, animationType, animations, facingDirection, animationData.Iterator, animationData.StartingIndex);
+                UpdatePlayerAnimationData(appearanceModel, who, animationType, animations, facingDirection, iterator, startingIndex);
             }
 
             // Update the light, if any is given
@@ -271,21 +278,21 @@ namespace FashionSense.Framework.Utilities
 
             // Perform time based logic for elapsed animations
             // Note: ANIMATION_ELAPSED_DURATION is updated via UpdateTicked event
-            if ((animationData.ElapsedDuration >= animationData.FrameDuration && !animationModel.EndWhenFarmerFrameUpdates) || ((animationModel.EndWhenFarmerFrameUpdates || defaultToEndWhenFarmerFrameUpdates) && who.FarmerSprite.CurrentFrame != animationData.FarmerFrame) || forceUpdate)
+            if ((elapsedDuration >= frameDuration && !animationModel.EndWhenFarmerFrameUpdates) || ((animationModel.EndWhenFarmerFrameUpdates || defaultToEndWhenFarmerFrameUpdates) && who.FarmerSprite.CurrentFrame != lastFarmerFrame) || forceUpdate)
             {
                 // Force the frame's condition to evalute and update any caches
-                IsFrameValid(who, appearanceModel, animations, animationData.Iterator);
+                IsFrameValid(who, appearanceModel, animations, iterator);
                 UpdateLight(appearanceModel, animationModel, who, true);
 
                 // Set this frame as having been displayed
                 animationModel.WasDisplayed = true;
 
-                int nextValidIndex = GetNextValidFrame(animations, who, appearanceModel, animationData.Iterator, animationData.StartingIndex);
-                if (nextValidIndex <= animationData.Iterator)
+                int nextValidIndex = GetNextValidFrame(animations, who, appearanceModel, iterator, startingIndex);
+                if (nextValidIndex <= iterator)
                 {
-                    if (IsFrameValid(who, appearanceModel, animations, animationData.StartingIndex, probe: true))
+                    if (IsFrameValid(who, appearanceModel, animations, startingIndex, probe: true))
                     {
-                        nextValidIndex = animationData.StartingIndex;
+                        nextValidIndex = startingIndex;
                     }
 
                     // Reset any cached values with the AnimationModel
@@ -295,9 +302,9 @@ namespace FashionSense.Framework.Utilities
                     }
                 }
                 animationModel = animations.ElementAtOrDefault(nextValidIndex) is null ? animations.ElementAtOrDefault(0) : animations.ElementAtOrDefault(nextValidIndex);
-                animationData.Iterator = nextValidIndex;
+                iterator = nextValidIndex;
 
-                UpdatePlayerAnimationData(appearanceModel, who, animationType, animations, facingDirection, animationData.Iterator, animationData.StartingIndex);
+                UpdatePlayerAnimationData(appearanceModel, who, animationType, animations, facingDirection, iterator, startingIndex);
 
                 foreach (var model in activeModels.Where(m => m is not null))
                 {
