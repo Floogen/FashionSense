@@ -12,5 +12,10 @@ namespace FashionSense.Framework.Patches
             _monitor = modMonitor;
             _helper = modHelper;
         }
+
+        internal static bool IsBAGIUsed()
+        {
+            return _helper.ModRegistry.IsLoaded("cat.betterartisangoodicons");
+        }
     }
 }
