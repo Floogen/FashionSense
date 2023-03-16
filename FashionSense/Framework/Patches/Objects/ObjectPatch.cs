@@ -45,7 +45,7 @@ namespace FashionSense.Framework.Patches.Objects
                 }
 
                 // Insert the changes at the specified indices
-                foreach (var index in indices)
+                foreach (var index in indices.OrderByDescending(i => i))
                 {
                     list.Insert(index + 1, new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ObjectPatch), nameof(AdjustLayerDepthForHeldObjects))));
                 }
