@@ -271,9 +271,9 @@ namespace FashionSense.Framework.Patches.Renderer
             drawManager.DrawLayers(who, layers);
 
             // Utilize custom draw for held object, if applicable
+            DrawPatch.lastCustomLayerDepth = drawManager.LayerDepth;
             if (FarmerRenderer.isDrawingForUI is false && who.ActiveObject is not null && who.IsCarrying())
             {
-                DrawPatch.lastCustomLayerDepth = drawManager.LayerDepth;
                 Game1.drawPlayerHeldObject(who);
             }
 

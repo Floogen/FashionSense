@@ -33,6 +33,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using FashionSense.Framework.Patches.Core;
 
 namespace FashionSense
 {
@@ -104,6 +105,9 @@ namespace FashionSense
 
                 // Apply object related patches
                 new ObjectPatch(monitor, modHelper).Apply(harmony);
+
+                // Apply core related patches
+                new GamePatch(monitor, modHelper).Apply(harmony);
             }
             catch (Exception e)
             {
