@@ -295,11 +295,11 @@ namespace FashionSense.Framework.Managers
             var accessoryModel = layerData.AppearanceModel as AccessoryModel;
             if (accessoryModel.DrawAfterPlayer)
             {
-                MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Hair) + 1, layerData, ref sortedLayerData);
+                MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Hat), layerData, ref sortedLayerData);
             }
             else if (accessoryModel.DrawBehindHead)
             {
-                // If the player is facing backwards, place the accessory after the hair
+                // If the player is facing backwards, place the accessory after the hat
                 // Need to do this for backwards compatibility reasons, as packs that use DrawBeforeHair (DrawBehindHead) rely on this unintended behavior
                 if (_facingDirection == 0)
                 {
