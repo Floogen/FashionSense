@@ -252,6 +252,7 @@ namespace FashionSense
             EnsureKeyExists(ModDataKeys.CUSTOM_PANTS_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_SLEEVES_ID);
             EnsureKeyExists(ModDataKeys.CUSTOM_SHOES_ID);
+            EnsureKeyExists(ModDataKeys.ANIMATION_FACING_DIRECTION);
 
             // Handle the loading cached accessories
             LoadCachedAccessories(Game1.player);
