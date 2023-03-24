@@ -295,7 +295,14 @@ namespace FashionSense.Framework.Managers
             var accessoryModel = layerData.AppearanceModel as AccessoryModel;
             if (accessoryModel.DrawAfterPlayer)
             {
-                MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Hat), layerData, ref sortedLayerData);
+                if (_facingDirection == 0)
+                {
+                    MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Hat), layerData, ref sortedLayerData);
+                }
+                else
+                {
+                    MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType is AppearanceContentPack.Type.Hair) + 1, layerData, ref sortedLayerData);
+                }
             }
             else if (accessoryModel.DrawBehindHead)
             {
