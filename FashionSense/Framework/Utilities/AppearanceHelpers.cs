@@ -194,18 +194,7 @@ namespace FashionSense.Framework.Utilities
             {
                 if (HasModelOfType(activeModels, appearanceSync.TargetAppearanceType) && forceUpdate is false)
                 {
-                    var rectangle = appearanceTypeToSourceRectangles[appearanceModel];
-                    var frameOffset = (animationModel.Frame * rectangle.Width) - rectangle.Width;
-                    if (modelPack is not null && frameOffset > modelPack.Texture.Width)
-                    {
-                        rectangle.X += (frameOffset % modelPack.Texture.Width) - rectangle.Width;
-                        rectangle.Y += (frameOffset / modelPack.Texture.Width) * rectangle.Height;
-                    }
-                    else
-                    {
-                        rectangle.X += rectangle.Width * animationModel.Frame;
-                    }
-                    appearanceTypeToSourceRectangles[appearanceModel] = rectangle;
+                    appearanceTypeToSourceRectangles[appearanceModel] = GetAdjustedSourceRectangle(animationModel, modelPack, appearanceTypeToSourceRectangles[appearanceModel]);
 
                     return;
                 }
@@ -315,8 +304,17 @@ namespace FashionSense.Framework.Utilities
                 }
             }
 
-            var sourceRect = appearanceTypeToSourceRectangles[appearanceModel];
-            var sourceOffset = (animationModel.Frame * sourceRect.Width) - sourceRect.Width;
+            appearanceTypeToSourceRectangles[appearanceModel] = GetAdjustedSourceRectangle(animationModel, modelPack, appearanceTypeToSourceRectangles[appearanceModel]);
+        }
+
+        public static Rectangle GetAdjustedSourceRectangle(AnimationModel animationModel, AppearanceContentPack modelPack, Rectangle sourceRect)
+        {
+            var sourceOffset = (animationModel.Frame * sourceRect.Width);
+            if (modelPack.Format < new Version("5.0.12"))
+            {
+                sourceOffset -= sourceRect.Width;
+            }
+
             if (modelPack is not null && sourceOffset >= modelPack.Texture.Width)
             {
                 sourceRect.X += sourceOffset % modelPack.Texture.Width;
@@ -326,7 +324,8 @@ namespace FashionSense.Framework.Utilities
             {
                 sourceRect.X += sourceRect.Width * animationModel.Frame;
             }
-            appearanceTypeToSourceRectangles[appearanceModel] = sourceRect;
+
+            return sourceRect;
         }
 
         public static int GetNextValidFrame(List<AnimationModel> animations, Farmer who, AppearanceModel appearanceModel, int iterator, int startingIndex)
