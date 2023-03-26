@@ -1,5 +1,5 @@
 {
-  // See the wiki for all sleeve properties: https://github.com/Floogen/FashionSense/wiki/Shoes-Model-Properties
+  // See the wiki for all shoe properties: https://github.com/Floogen/FashionSense/wiki/Shoes-Model-Properties
 
   // Refer to https://stardewvalleywiki.com/Modding:Farmer_sprite for frame data
   // Note: When using the above the formula for converting R#F# from pants value to Shoes is generally:
@@ -7,6 +7,7 @@
   // You do not need to follow this convention if using a custom tilesheet
 
   "Name": "Shoes Template",
+  "Format": "5.0.12",
   "FrontShoes": {
     "DisableNativeOffset": true,
     "ColorMasks": [
