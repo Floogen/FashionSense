@@ -1,11 +1,4 @@
-﻿using FashionSense.Framework.Managers;
-using FashionSense.Framework.Models.Appearances;
-using FashionSense.Framework.Models.Appearances.Generic;
-using FashionSense.Framework.Utilities;
-using Microsoft.Xna.Framework;
-using StardewValley;
-using System;
-using System.Collections.Generic;
+﻿using FashionSense.Framework.Models.Appearances;
 
 namespace FashionSense.Framework.Models.General
 {

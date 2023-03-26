@@ -1,14 +1,8 @@
-﻿using FashionSense.Framework.Managers;
-using FashionSense.Framework.Patches.ShopLocations;
-using FashionSense.Framework.Utilities;
-using HarmonyLib;
-using Microsoft.Xna.Framework;
-using Newtonsoft.Json;
+﻿using HarmonyLib;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 using System;
-using System.Collections.Generic;
 using static StardewValley.Menus.LoadGameMenu;
 
 namespace FashionSense.Framework.Patches.Menus

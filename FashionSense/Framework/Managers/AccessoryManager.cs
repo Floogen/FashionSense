@@ -1,17 +1,12 @@
-﻿using FashionSense.Framework.Models;
-using FashionSense.Framework.Models.Appearances;
-using FashionSense.Framework.Models.General;
+﻿using FashionSense.Framework.Models.Appearances;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Monsters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Threading;
 
 namespace FashionSense.Framework.Managers
 {

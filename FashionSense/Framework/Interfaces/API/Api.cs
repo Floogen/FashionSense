@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using static FashionSense.Framework.Interfaces.API.IApi;
-using static StardewValley.Minigames.MineCart.Track;
 
 namespace FashionSense.Framework.Interfaces.API
 {
