@@ -572,69 +572,10 @@
       "Width": 16,
       "Length": 32
     },
-    "IdleAnimation": [
-      // Start of self-descriptive frames
-      {
-        "Frame": 25, // Also Dancing frame
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "GroupName": "IsIdle",
-            "Value": true
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
-          },
-          {
-            "Name": "IsPassingOut",
-            "Value": false
-          }
-        ]
-      },
-      {
-        "Frame": 31,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "IsCarrying",
-            "Value": true
-          },
-          {
-            "GroupName": "IsEatingOrDrinking",
-            "Value": false
-          },
-          {
-            "Name": "IsSick",
-            "Value": false
-          }
-        ]
-      },
-      {
-        "Frame": 222,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "RidingHorse",
-            "Value": true
-          }
-        ]
-      },
-      {
-        "Frame": 216,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "IsSitting",
-            "Value": true
-          }
-        ]
-      },
-      // End of self-descriptive frames
-
+    "UniformAnimation": [
       // Start of Dancing frames
       {
-        "Frame": 26,
+        "Frame": 13,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -644,7 +585,7 @@
         ]
       },
       {
-        "Frame": 27,
+        "Frame": 14,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -657,7 +598,7 @@
 
       // Start of Harvesting / Milking frames
       {
-        "Frame": 123,
+        "Frame": 62,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -667,7 +608,7 @@
         ]
       },
       {
-        "Frame": 124,
+        "Frame": 63,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -677,7 +618,7 @@
         ]
       },
       {
-        "Frame": 125,
+        "Frame": 64,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -687,7 +628,7 @@
         ]
       },
       {
-        "Frame": 126,
+        "Frame": 65,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -700,7 +641,7 @@
 
       // Start of Heavy Tool (including Fishing -> Casting) frames
       {
-        "Frame": 73, // Also Fishing -> Reeling frame
+        "Frame": 36, // Also Fishing -> Reeling frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -710,7 +651,7 @@
         ]
       },
       {
-        "Frame": 74,
+        "Frame": 37,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -720,7 +661,7 @@
         ]
       },
       {
-        "Frame": 75,
+        "Frame": 38,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -730,7 +671,7 @@
         ]
       },
       {
-        "Frame": 123,
+        "Frame": 62,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -740,7 +681,7 @@
         ]
       },
       {
-        "Frame": 124, // Also Fishing -> Reeling frame
+        "Frame": 63, // Also Fishing -> Reeling frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -750,7 +691,7 @@
         ]
       },
       {
-        "Frame": 149, // Also Fishing -> Caught frame
+        "Frame": 76, // Also Fishing -> Caught frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -760,7 +701,7 @@
         ]
       },
       {
-        "Frame": 150,
+        "Frame": 77,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -773,7 +714,7 @@
 
       // Start of Scythe / Melee Weapons frames
       {
-        "Frame": 79,
+        "Frame": 36,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -783,7 +724,7 @@
         ]
       },
       {
-        "Frame": 80, // Dagger frame
+        "Frame": 37, // Dagger frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -793,7 +734,7 @@
         ]
       },
       {
-        "Frame": 81,
+        "Frame": 38,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -803,7 +744,7 @@
         ]
       },
       {
-        "Frame": 82, // Dagger frame
+        "Frame": 39, // Dagger frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -813,7 +754,7 @@
         ]
       },
       {
-        "Frame": 83, // Sword -> Block frame
+        "Frame": 40, // Sword -> Block frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -823,7 +764,7 @@
         ]
       },
       {
-        "Frame": 84,
+        "Frame": 41,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -836,7 +777,7 @@
 
       // Start of Watering Can frames
       {
-        "Frame": 95,
+        "Frame": 46,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -848,13 +789,21 @@
       // End of Watering Can frames
 
       // Start of Slingshot frames
-      // NOTE: Purposely skipping the slingshot as it breaks all the conventions for the Shoes sprite
+      {
+        "Frame": 44,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 44
+          }
+        ]
+      },
       // End of Slingshot frames
-
 
       // Start of Shearing frames
       {
-        "Frame": 161,
+        "Frame": 82,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -864,7 +813,7 @@
         ]
       },
       {
-        "Frame": 162,
+        "Frame": 83,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -872,63 +821,50 @@
             "Value": 83
           }
         ]
-      }
+      },
       // End of Shearing frames
-    ],
-    "MovementAnimation": [
-      // Start of self-descriptive frames
+
+      // Start of sitting and riding horse frame
       {
-        "Frame": 222,
+        "Frame": 113,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
-            "Name": "RidingHorse",
-            "Value": true
+            "Name": "CurrentFarmerFrame",
+            "Value": 113
           }
         ]
       },
-      // End of self-descriptive frames
+      // End of sitting and riding horse frame
 
       // Start of Walking and Running frames
       {
-        "Frame": 25,
+        "Frame": 12,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
             "Name": "CurrentFarmerFrame",
             "Value": 12
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
           }
         ]
       },
       {
-        "Frame": 26,
+        "Frame": 13,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
             "Name": "CurrentFarmerFrame",
             "Value": 13
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
           }
         ]
       },
       {
-        "Frame": 27,
+        "Frame": 14,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
             "Name": "CurrentFarmerFrame",
             "Value": 14
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
           }
         ]
       },
@@ -936,110 +872,26 @@
 
       // Start of Running frames
       {
-        "Frame": 41,
+        "Frame": 22,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
             "Name": "CurrentFarmerFrame",
             "Value": 22
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
           }
         ]
       },
       {
-        "Frame": 42,
+        "Frame": 23,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
             "Name": "CurrentFarmerFrame",
             "Value": 23
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
-          }
-        ]
-      },
-      // End of Running frames
-
-      // Start of Carrying and Walking frames
-      {
-        "Frame": 31,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 12
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": true
-          }
-        ]
-      },
-      {
-        "Frame": 32,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 13
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": true
-          }
-        ]
-      },
-      {
-        "Frame": 33,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 14
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": true
-          }
-        ]
-      },
-      // End of Carrying and Walking frames
-
-      // Start of Carrying and Walking frames
-      {
-        "Frame": 47,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 22
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": true
-          }
-        ]
-      },
-      {
-        "Frame": 48,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 23
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": true
           }
         ]
       }
-      // End of Carrying and Walking frames
+      // End of Running frames
     ]
   },
   "RightShoes": {
@@ -1071,10 +923,6 @@
           {
             "GroupName": "IsIdle",
             "Value": true
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
           },
           {
             "Name": "IsPassingOut",
@@ -1364,10 +1212,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 6
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
           }
         ]
       },
@@ -1378,10 +1222,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 7
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
           }
         ]
       },
@@ -1392,10 +1232,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 8
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
           }
         ]
       },
@@ -1409,10 +1245,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 11
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
           }
         ]
       },
@@ -1423,10 +1255,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 17
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
           }
         ]
       },
@@ -1437,10 +1265,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 20
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
           }
         ]
       },
@@ -1451,10 +1275,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 21
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
           }
         ]
       },
@@ -1468,10 +1288,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 6
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": true
           }
         ]
       },
@@ -1482,10 +1298,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 7
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": true
           }
         ]
       },
@@ -1496,10 +1308,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 8
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": true
           }
         ]
       },
@@ -1513,10 +1321,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 11
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": true
           }
         ]
       },
@@ -1527,10 +1331,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 17
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": true
           }
         ]
       },
@@ -1541,10 +1341,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 20
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": true
           }
         ]
       },
@@ -1555,10 +1351,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 21
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": true
           }
         ]
       }
@@ -1597,10 +1389,6 @@
             "Value": true
           },
           {
-            "Name": "IsCarrying",
-            "Value": false
-          },
-          {
             "Name": "IsPassingOut",
             "Value": false
           }
@@ -1888,10 +1676,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 6
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
           }
         ]
       },
@@ -1902,10 +1686,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 7
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
           }
         ]
       },
@@ -1916,10 +1696,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 8
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
           }
         ]
       },
@@ -1933,10 +1709,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 11
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
           }
         ]
       },
@@ -1947,10 +1719,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 17
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
           }
         ]
       },
@@ -1961,10 +1729,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 20
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
           }
         ]
       },
@@ -1975,10 +1739,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 21
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
           }
         ]
       },
@@ -1992,10 +1752,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 6
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": true
           }
         ]
       },
@@ -2006,10 +1762,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 7
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": true
           }
         ]
       },
@@ -2020,10 +1772,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 8
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": true
           }
         ]
       },
@@ -2037,10 +1785,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 11
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": true
           }
         ]
       },
@@ -2051,10 +1795,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 17
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": true
           }
         ]
       },
@@ -2065,10 +1805,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 20
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": true
           }
         ]
       },
@@ -2079,10 +1815,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 21
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": true
           }
         ]
       }
