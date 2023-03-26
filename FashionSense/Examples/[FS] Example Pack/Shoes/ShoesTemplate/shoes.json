@@ -27,66 +27,7 @@
       "Width": 16,
       "Length": 32
     },
-    "IdleAnimation": [
-      // Start of self-descriptive frames
-      {
-        "Frame": 0, // Also Dancing frame
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "GroupName": "IsIdle",
-            "Value": true
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
-          },
-          {
-            "Name": "IsPassingOut",
-            "Value": false
-          }
-        ]
-      },
-      {
-        "Frame": 6,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "IsCarrying",
-            "Value": true
-          },
-          {
-            "GroupName": "IsEatingOrDrinking",
-            "Value": false
-          },
-          {
-            "Name": "IsSick",
-            "Value": false
-          }
-        ]
-      },
-      {
-        "Frame": 210,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "RidingHorse",
-            "Value": true
-          }
-        ]
-      },
-      {
-        "Frame": 216,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "IsSitting",
-            "Value": true
-          }
-        ]
-      },
-      // End of self-descriptive frames
-
+    "UniformAnimation": [
       // Start of Passing Out / Dancing frames
       {
         "Frame": 0,
@@ -137,7 +78,7 @@
         ]
       },
       {
-        "Frame": 29,
+        "Frame": 16,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -154,7 +95,7 @@
 
       // Start of Nausea frames
       {
-        "Frame": 207,
+        "Frame": 104,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -164,7 +105,7 @@
         ]
       },
       {
-        "Frame": 208,
+        "Frame": 105,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -177,7 +118,7 @@
 
       // Start of Harvesting / Milking frames
       {
-        "Frame": 109,
+        "Frame": 54,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -187,7 +128,7 @@
         ]
       },
       {
-        "Frame": 110,
+        "Frame": 55,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -197,7 +138,7 @@
         ]
       },
       {
-        "Frame": 111,
+        "Frame": 56,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -207,7 +148,7 @@
         ]
       },
       {
-        "Frame": 112, // Also Fishing -> Caught frame
+        "Frame": 57, // Also Fishing -> Caught frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -220,7 +161,7 @@
 
       // Start of Eating frames
       {
-        "Frame": 169, // Also Fishing -> Caught frame
+        "Frame": 84, // Also Fishing -> Caught frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -230,7 +171,7 @@
         ]
       },
       {
-        "Frame": 170,
+        "Frame": 85,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -240,7 +181,7 @@
         ]
       },
       {
-        "Frame": 171,
+        "Frame": 86,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -250,7 +191,7 @@
         ]
       },
       {
-        "Frame": 172,
+        "Frame": 87,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -260,7 +201,7 @@
         ]
       },
       {
-        "Frame": 173,
+        "Frame": 88,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -273,7 +214,7 @@
 
       // Start of Drinking frames
       {
-        "Frame": 181,
+        "Frame": 90,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -283,7 +224,7 @@
         ]
       },
       {
-        "Frame": 182,
+        "Frame": 91,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -293,7 +234,7 @@
         ]
       },
       {
-        "Frame": 183,
+        "Frame": 92,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -303,7 +244,7 @@
         ]
       },
       {
-        "Frame": 184,
+        "Frame": 93,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -316,7 +257,7 @@
 
       // Start of Heavy Tool (including Fishing -> Casting) frames
       {
-        "Frame": 133, // Also Fishing -> Reeling frame
+        "Frame": 66, // Also Fishing -> Reeling frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -326,7 +267,7 @@
         ]
       },
       {
-        "Frame": 134,
+        "Frame": 67,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -336,7 +277,7 @@
         ]
       },
       {
-        "Frame": 135,
+        "Frame": 68,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -346,7 +287,7 @@
         ]
       },
       {
-        "Frame": 136,
+        "Frame": 69,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -356,7 +297,7 @@
         ]
       },
       {
-        "Frame": 137, // Also Fishing -> Reeling frame
+        "Frame": 70, // Also Fishing -> Reeling frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -366,7 +307,7 @@
         ]
       },
       {
-        "Frame": 147, // Also Fishing -> Caught frame
+        "Frame": 74, // Also Fishing -> Caught frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -376,7 +317,7 @@
         ]
       },
       {
-        "Frame": 148,
+        "Frame": 75,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -389,7 +330,7 @@
 
       // Start of Scythe / Melee Weapons frames
       {
-        "Frame": 55,
+        "Frame": 24,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -399,7 +340,7 @@
         ]
       },
       {
-        "Frame": 56, // Dagger frame
+        "Frame": 25, // Dagger frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -413,7 +354,7 @@
         ]
       },
       {
-        "Frame": 57,
+        "Frame": 26,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -423,7 +364,7 @@
         ]
       },
       {
-        "Frame": 58, // Dagger frame
+        "Frame": 27, // Dagger frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -433,7 +374,7 @@
         ]
       },
       {
-        "Frame": 59, // Sword -> Block frame
+        "Frame": 28, // Sword -> Block frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -443,7 +384,7 @@
         ]
       },
       {
-        "Frame": 60,
+        "Frame": 29,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -456,7 +397,7 @@
 
       // Start of Watering Can frames
       {
-        "Frame": 50,
+        "Frame": 25,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -472,12 +413,21 @@
       // End of Watering Can frames
 
       // Start of Slingshot frames
-      // NOTE: Purposely skipping the slingshot as it breaks all the conventions for the Shoes sprite
+      {
+        "Frame": 42,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 42
+          }
+        ]
+      },
       // End of Slingshot frames
 
       // Start of Panning frames
       {
-        "Frame": 244,
+        "Frame": 123,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -487,7 +437,7 @@
         ]
       },
       {
-        "Frame": 245,
+        "Frame": 124,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -497,7 +447,7 @@
         ]
       },
       {
-        "Frame": 245,
+        "Frame": 125,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -510,7 +460,7 @@
 
       // Start of Shearing frames
       {
-        "Frame": 157,
+        "Frame": 78,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -520,7 +470,7 @@
         ]
       },
       {
-        "Frame": 158,
+        "Frame": 79,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -528,22 +478,8 @@
             "Value": 79
           }
         ]
-      }
-      // End of Shearing frames
-    ],
-    "MovementAnimation": [
-      // Start of self-descriptive frames
-      {
-        "Frame": 210,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "RidingHorse",
-            "Value": true
-          }
-        ]
       },
-      // End of self-descriptive frames
+      // End of Shearing frames
 
       // Start of Walking and Running frames
       {
@@ -553,10 +489,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 0
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
           }
         ]
       },
@@ -567,10 +499,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 1
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
           }
         ]
       },
@@ -581,10 +509,6 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 2
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
           }
         ]
       },
@@ -592,110 +516,39 @@
 
       // Start of Running frames
       {
-        "Frame": 37,
+        "Frame": 18,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
             "Name": "CurrentFarmerFrame",
             "Value": 18
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
           }
         ]
       },
       {
-        "Frame": 38,
+        "Frame": 19,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
             "Name": "CurrentFarmerFrame",
             "Value": 19
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
           }
         ]
       },
       // End of Running frames
 
-      // Start of Carrying and Walking frames
+      // Start of sitting and riding horse frame
       {
-        "Frame": 6,
+        "Frame": 107,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
             "Name": "CurrentFarmerFrame",
-            "Value": 0
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": true
-          }
-        ]
-      },
-      {
-        "Frame": 7,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 1
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": true
-          }
-        ]
-      },
-      {
-        "Frame": 8,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 2
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": true
-          }
-        ]
-      },
-      // End of Carrying and Walking frames
-
-      // Start of Carrying and Walking frames
-      {
-        "Frame": 43,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 18
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": true
-          }
-        ]
-      },
-      {
-        "Frame": 44,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 19
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": true
+            "Value": 107
           }
         ]
       }
-      // End of Carrying and Walking frames
+      // End of sitting and riding horse frame
     ]
   },
   "BackShoes": {
