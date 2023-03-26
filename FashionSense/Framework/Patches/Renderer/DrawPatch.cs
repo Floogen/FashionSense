@@ -14,15 +14,11 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
-using Newtonsoft.Json;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Menus;
-using StardewValley.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace FashionSense.Framework.Patches.Renderer
 {

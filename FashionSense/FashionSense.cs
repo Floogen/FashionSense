@@ -11,10 +11,11 @@ using FashionSense.Framework.Models.Appearances.Shirt;
 using FashionSense.Framework.Models.Appearances.Shoes;
 using FashionSense.Framework.Models.Appearances.Sleeves;
 using FashionSense.Framework.Models.General;
+using FashionSense.Framework.Patches.Core;
 using FashionSense.Framework.Patches.Entities;
-using FashionSense.Framework.Patches.Objects;
 using FashionSense.Framework.Patches.GameLocations;
 using FashionSense.Framework.Patches.Menus;
+using FashionSense.Framework.Patches.Objects;
 using FashionSense.Framework.Patches.Renderer;
 using FashionSense.Framework.Patches.ShopLocations;
 using FashionSense.Framework.Patches.Tools;
@@ -27,13 +28,10 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley;
-using StardewValley.Menus;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
-using FashionSense.Framework.Patches.Core;
 
 namespace FashionSense
 {

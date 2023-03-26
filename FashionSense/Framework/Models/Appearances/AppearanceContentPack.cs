@@ -27,6 +27,7 @@ namespace FashionSense.Framework.Models.Appearances
         internal string Owner { get; set; }
         internal string Author { get; set; }
         public string Name { get; set; }
+        public Version Format { get; set; } = new Version("1.0.0");
         internal string Id { get; set; }
         internal string PackName { get; set; }
         internal string PackId { get; set; }

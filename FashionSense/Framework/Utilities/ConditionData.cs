@@ -1,6 +1,5 @@
 ﻿using FashionSense.Framework.Models.Appearances.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Events;
 using StardewValley;
 using System;

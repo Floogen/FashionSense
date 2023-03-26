@@ -75,8 +75,8 @@ namespace FashionSense.Framework.Managers
             List<LayerData> sortedLayerData = new List<LayerData>()
             {
                 rawLayerData.First(d => d.AppearanceType is AppearanceContentPack.Type.Player),
-                rawLayerData.First(d => d.AppearanceType is AppearanceContentPack.Type.Pants),
                 rawLayerData.First(d => d.AppearanceType is AppearanceContentPack.Type.Shoes),
+                rawLayerData.First(d => d.AppearanceType is AppearanceContentPack.Type.Pants),
                 rawLayerData.First(d => d.AppearanceType is AppearanceContentPack.Type.Shirt),
                 rawLayerData.First(d => d.AppearanceType is AppearanceContentPack.Type.Hair),
                 rawLayerData.First(d => d.AppearanceType is AppearanceContentPack.Type.Sleeves),
@@ -166,7 +166,7 @@ namespace FashionSense.Framework.Managers
             }
             if (models.Any(m => m is HairModel) is false)
             {
-                rawLayerData.Add(new LayerData(AppearanceContentPack.Type.Hair, null, isVanilla: true) {  IsHidden = AppearanceHelpers.IsHatHidingHair(_metadata) });
+                rawLayerData.Add(new LayerData(AppearanceContentPack.Type.Hair, null, isVanilla: true) { IsHidden = AppearanceHelpers.IsHatHidingHair(_metadata) });
             }
             if (models.Any(m => m is HatModel) is false)
             {
