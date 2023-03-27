@@ -22,6 +22,7 @@ using FashionSense.Framework.Patches.Tools;
 using FashionSense.Framework.UI;
 using FashionSense.Framework.Utilities;
 using HarmonyLib;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using StardewModdingAPI;
@@ -60,6 +61,7 @@ namespace FashionSense
         // Debugging flags
         private bool _displayMovementData = false;
         private bool _continuousReloading = false;
+        private Vector2? _cachedPlayerPosition;
 
         public override void Entry(IModHelper helper)
         {
@@ -118,6 +120,7 @@ namespace FashionSense
             helper.ConsoleCommands.Add("fs_reload", "Reloads all Fashion Sense content packs. Can specify a manifest unique ID to only reload that pack.\n\nUsage: fs_reload [manifest_unique_id]", ReloadFashionSense);
             helper.ConsoleCommands.Add("fs_reload_continuous", "Debug usage only: reloads all Fashion Sense content packs every 2 seconds. Use the command again to stop the continuous reloading.\n\nUsage: fs_reload_continuous", delegate { _continuousReloading = !_continuousReloading; });
             helper.ConsoleCommands.Add("fs_add_mirror", "Gives you a Hand Mirror tool.\n\nUsage: fs_add_mirror", delegate { Game1.player.addItemToInventory(SeedShopPatch.GetHandMirrorTool()); });
+            helper.ConsoleCommands.Add("fs_freeze_self", "Locks yourself in place, which is useful for showcasing custom appearances. Use the command again to unfreeze yourself.\n\nUsage: fs_freeze_self", delegate { _ = _cachedPlayerPosition is null ? _cachedPlayerPosition = Game1.player.Position : _cachedPlayerPosition = null; });
 
             helper.Events.Content.AssetRequested += OnAssetRequested;
             helper.Events.Content.AssetsInvalidated += OnAssetInvalidated;
@@ -163,6 +166,12 @@ namespace FashionSense
                 {
                     UpdateElapsedDuration(fakeFarmer);
                 }
+            }
+
+            // Check if fs_freeze_self is active
+            if (_cachedPlayerPosition is not null)
+            {
+                Game1.MasterPlayer.Position = _cachedPlayerPosition.Value;
             }
         }
 
