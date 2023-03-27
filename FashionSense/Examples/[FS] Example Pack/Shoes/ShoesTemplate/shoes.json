@@ -554,7 +554,6 @@
   },
   "BackShoes": {
     "DisableNativeOffset": true,
-    "DrawBeforeHair": true,
     "ColorMasks": [
       [ 36, 36, 36 ],
       [ 119, 119, 119 ],
