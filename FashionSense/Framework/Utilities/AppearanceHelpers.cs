@@ -448,7 +448,7 @@ namespace FashionSense.Framework.Utilities
         public static int? GenerateLightId(int offset)
         {
             var baseKeyId = -1 * offset * 5000;
-            for (int x = 0; x < 10; x++)
+            for (int x = 0; x < 100; x++)
             {
                 if (!Game1.currentLocation.sharedLights.ContainsKey(baseKeyId + x))
                 {
