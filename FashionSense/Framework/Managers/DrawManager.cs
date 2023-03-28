@@ -301,6 +301,58 @@ namespace FashionSense.Framework.Managers
             if (sleevesModel is null && _hideSleeves is false)
             {
                 _spriteBatch.Draw(_baseTexture, _position + _origin + _positionOffset + who.armOffset, new Rectangle(_farmerSourceRectangle.X + (_animationFrame.secondaryArm ? 192 : 96), _farmerSourceRectangle.Y, _farmerSourceRectangle.Width, _farmerSourceRectangle.Height), _overrideColor, _rotation, _origin, 4f * _scale, _animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
+                
+                // Handle drawing slingshot
+                if (who.usingSlingshot is true && who.CurrentTool is Slingshot)
+                {
+                    Slingshot slingshot = who.CurrentTool as Slingshot;
+                    Point point = Utility.Vector2ToPoint(slingshot.AdjustForHeight(Utility.PointToVector2(slingshot.aimPos.Value)));
+                    int mouseX = point.X;
+                    int y = point.Y;
+                    int backArmDistance = slingshot.GetBackArmDistance(who);
+
+                    Vector2 shoot_origin = slingshot.GetShootOrigin(who);
+                    float frontArmRotation = (float)Math.Atan2((float)y - shoot_origin.Y, (float)mouseX - shoot_origin.X) + (float)Math.PI;
+                    if (Game1.options.useLegacySlingshotFiring is false)
+                    {
+                        frontArmRotation -= (float)Math.PI;
+                        if (frontArmRotation < 0f)
+                        {
+                            frontArmRotation += (float)Math.PI * 2f;
+                        }
+                    }
+
+                    switch (_facingDirection)
+                    {
+                        case 0:
+                            _spriteBatch.Draw(_baseTexture, _position + new Vector2(4f + frontArmRotation * 8f, -44f), new Rectangle(173, 238, 9, 14), Color.White, 0f, new Vector2(4f, 11f), 4f * _scale, SpriteEffects.None, IncrementAndGetLayerDepth() + ((_facingDirection != 0) ? 5.9E-05f : (-0.0005f)));
+                            break;
+                        case 1:
+                            {
+                                _spriteBatch.Draw(_baseTexture, _position + new Vector2(52 - backArmDistance, -32f), new Rectangle(147, 237, 10, 4), Color.White, 0f, new Vector2(8f, 3f), 4f * _scale, SpriteEffects.None, IncrementAndGetLayerDepth() + ((_facingDirection != 0) ? 5.9E-05f : 0f));
+                                _spriteBatch.Draw(_baseTexture, _position + new Vector2(36f, -44f), new Rectangle(156, 244, 9, 10), Color.White, frontArmRotation, new Vector2(0f, 3f), 4f * _scale, SpriteEffects.None, IncrementAndGetLayerDepth() + ((_facingDirection != 0) ? 1E-08f : 0f));
+                                int slingshotAttachX = (int)(Math.Cos(frontArmRotation + (float)Math.PI / 2f) * (double)(20 - backArmDistance - 8) - Math.Sin(frontArmRotation + (float)Math.PI / 2f) * -68.0);
+                                int slingshotAttachY = (int)(Math.Sin(frontArmRotation + (float)Math.PI / 2f) * (double)(20 - backArmDistance - 8) + Math.Cos(frontArmRotation + (float)Math.PI / 2f) * -68.0);
+                                Utility.drawLineWithScreenCoordinates((int)(_position.X + 52f - (float)backArmDistance), (int)(_position.Y - 32f - 4f), (int)(_position.X + 32f + (float)(slingshotAttachX / 2)), (int)(_position.Y - 32f - 12f + (float)(slingshotAttachY / 2)), _spriteBatch, Color.White);
+                                break;
+                            }
+                        case 3:
+                            {
+                                _spriteBatch.Draw(_baseTexture, _position + new Vector2(40 + backArmDistance, -32f), new Rectangle(147, 237, 10, 4), Color.White, 0f, new Vector2(9f, 4f), 4f * _scale, SpriteEffects.FlipHorizontally, IncrementAndGetLayerDepth() + ((_facingDirection != 0) ? 5.9E-05f : 0f));
+                                _spriteBatch.Draw(_baseTexture, _position + new Vector2(24f, -40f), new Rectangle(156, 244, 9, 10), Color.White, frontArmRotation + (float)Math.PI, new Vector2(8f, 3f), 4f * _scale, SpriteEffects.FlipHorizontally, IncrementAndGetLayerDepth() + ((_facingDirection != 0) ? 1E-08f : 0f));
+                                int slingshotAttachX = (int)(Math.Cos(frontArmRotation + (float)Math.PI * 2f / 5f) * (double)(20 + backArmDistance - 8) - Math.Sin(frontArmRotation + (float)Math.PI * 2f / 5f) * -68.0);
+                                int slingshotAttachY = (int)(Math.Sin(frontArmRotation + (float)Math.PI * 2f / 5f) * (double)(20 + backArmDistance - 8) + Math.Cos(frontArmRotation + (float)Math.PI * 2f / 5f) * -68.0);
+                                Utility.drawLineWithScreenCoordinates((int)(_position.X + 4f + (float)backArmDistance), (int)(_position.Y - 32f - 8f), (int)(_position.X + 26f + (float)slingshotAttachX * 4f / 10f), (int)(_position.Y - 32f - 8f + (float)slingshotAttachY * 4f / 10f), _spriteBatch, Color.White);
+                                break;
+                            }
+                        case 2:
+                            _spriteBatch.Draw(_baseTexture, _position + new Vector2(4f, -32 - backArmDistance / 2), new Rectangle(148, 244, 4, 4), Color.White, 0f, Vector2.Zero, 4f * _scale, SpriteEffects.None, IncrementAndGetLayerDepth() + ((_facingDirection != 0) ? 5.9E-05f : 0f));
+                            Utility.drawLineWithScreenCoordinates((int)(_position.X + 16f), (int)(_position.Y - 28f - (float)(backArmDistance / 2)), (int)(_position.X + 44f - frontArmRotation * 10f), (int)(_position.Y - 16f - 8f), _spriteBatch, Color.White);
+                            Utility.drawLineWithScreenCoordinates((int)(_position.X + 16f), (int)(_position.Y - 28f - (float)(backArmDistance / 2)), (int)(_position.X + 56f - frontArmRotation * 10f), (int)(_position.Y - 16f - 8f), _spriteBatch, Color.White);
+                            _spriteBatch.Draw(_baseTexture, _position + new Vector2(44f - frontArmRotation * 10f, -16f), new Rectangle(167, 235, 7, 9), Color.White, 0f, new Vector2(3f, 5f), 4f * _scale, SpriteEffects.None, IncrementAndGetLayerDepth() + ((_facingDirection != 0) ? 5.9E-05f : 0f));
+                            break;
+                    }
+                }
             }
         }
 
