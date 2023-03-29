@@ -36,6 +36,7 @@ namespace FashionSense.Framework.Models.Appearances
         private Texture2D _cachedTexture;
         internal Texture2D ColorMaskTexture { get; set; }
         internal Texture2D SkinMaskTexture { get; set; }
+        internal Texture2D CollectiveMaskTexture { get; set; }
         internal bool IsTextureDirty { get; set; }
 
         internal abstract void LinkId();

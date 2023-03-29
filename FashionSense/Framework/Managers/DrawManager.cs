@@ -15,6 +15,7 @@ using StardewValley;
 using StardewValley.Tools;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using static StardewValley.FarmerSprite;
 
 namespace FashionSense.Framework.Managers
@@ -30,7 +31,7 @@ namespace FashionSense.Framework.Managers
         private Rectangle _dyedShirtSourceRectangle { get; }
         private Rectangle _accessorySourceRectangle { get; }
         private Rectangle _hatSourceRectangle { get; }
-        private Dictionary<AppearanceModel, Rectangle> _appearanceTypeToSourceRectangles { get; }
+        private Dictionary<AppearanceModel, AnimationModel> _appearanceTypeToAnimationModels { get; }
         private AnimationFrame _animationFrame { get; }
         private bool _areColorMasksPendingRefresh { get; }
         private bool _isDrawingForUI { get; }
@@ -47,7 +48,7 @@ namespace FashionSense.Framework.Managers
 
         internal float LayerDepth { get; set; }
 
-        public DrawManager(SpriteBatch spriteBatch, FarmerRenderer farmerRenderer, SkinToneModel skinToneModel, Texture2D baseTexture, Rectangle farmerSourceRectangle, Rectangle shirtSourceRectangle, Rectangle dyedShirtSourceRectangle, Rectangle accessorySourceRectangle, Rectangle hatSourceRectangle, Dictionary<AppearanceModel, Rectangle> appearanceTypeToSourceRectangles, AnimationFrame animationFrame, Color overrideColor, Vector2 position, Vector2 origin, Vector2 positionOffset, Vector2 rotationAdjustment, int facingDirection, int currentFrame, float scale, float rotation, bool areColorMasksPendingRefresh, bool isDrawingForUI, bool hideSleeves)
+        public DrawManager(SpriteBatch spriteBatch, FarmerRenderer farmerRenderer, SkinToneModel skinToneModel, Texture2D baseTexture, Rectangle farmerSourceRectangle, Rectangle shirtSourceRectangle, Rectangle dyedShirtSourceRectangle, Rectangle accessorySourceRectangle, Rectangle hatSourceRectangle, Dictionary<AppearanceModel, AnimationModel> appearanceTypeToAnimationModels, AnimationFrame animationFrame, Color overrideColor, Vector2 position, Vector2 origin, Vector2 positionOffset, Vector2 rotationAdjustment, int facingDirection, int currentFrame, float scale, float rotation, bool areColorMasksPendingRefresh, bool isDrawingForUI, bool hideSleeves)
         {
             _spriteBatch = spriteBatch;
             _farmerRenderer = farmerRenderer;
@@ -58,7 +59,7 @@ namespace FashionSense.Framework.Managers
             _dyedShirtSourceRectangle = dyedShirtSourceRectangle;
             _accessorySourceRectangle = accessorySourceRectangle;
             _hatSourceRectangle = hatSourceRectangle;
-            _appearanceTypeToSourceRectangles = appearanceTypeToSourceRectangles;
+            _appearanceTypeToAnimationModels = appearanceTypeToAnimationModels;
             _animationFrame = animationFrame;
             _overrideColor = overrideColor;
             _position = position;
@@ -300,7 +301,66 @@ namespace FashionSense.Framework.Managers
             // Handle the vanilla sleeve / arm drawing, if a custom sleeve model isn't given
             if (sleevesModel is null && _hideSleeves is false)
             {
-                _spriteBatch.Draw(_baseTexture, _position + _origin + _positionOffset + who.armOffset, new Rectangle(_farmerSourceRectangle.X + (_animationFrame.secondaryArm ? 192 : 96), _farmerSourceRectangle.Y, _farmerSourceRectangle.Width, _farmerSourceRectangle.Height), _overrideColor, _rotation, _origin, 4f * _scale, _animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
+                DrawSlingshotVanilla(who);
+            }
+        }
+
+        private void DrawSlingshotVanilla(Farmer who)
+        {
+            _spriteBatch.Draw(_baseTexture, _position + _origin + _positionOffset + who.armOffset, new Rectangle(_farmerSourceRectangle.X + (_animationFrame.secondaryArm ? 192 : 96), _farmerSourceRectangle.Y, _farmerSourceRectangle.Width, _farmerSourceRectangle.Height), _overrideColor, _rotation, _origin, 4f * _scale, _animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
+
+            // Handle drawing slingshot
+            if (who.usingSlingshot is false || who.CurrentTool is not Slingshot)
+            {
+                return;
+            }
+
+            Slingshot slingshot = who.CurrentTool as Slingshot;
+            Point point = Utility.Vector2ToPoint(slingshot.AdjustForHeight(Utility.PointToVector2(slingshot.aimPos.Value)));
+            int mouseX = point.X;
+            int y = point.Y;
+            int backArmDistance = slingshot.GetBackArmDistance(who);
+
+            Vector2 shoot_origin = slingshot.GetShootOrigin(who);
+            float frontArmRotation = (float)Math.Atan2((float)y - shoot_origin.Y, (float)mouseX - shoot_origin.X) + (float)Math.PI;
+            if (Game1.options.useLegacySlingshotFiring is false)
+            {
+                frontArmRotation -= (float)Math.PI;
+                if (frontArmRotation < 0f)
+                {
+                    frontArmRotation += (float)Math.PI * 2f;
+                }
+            }
+
+            switch (_facingDirection)
+            {
+                case 0:
+                    _spriteBatch.Draw(_baseTexture, _position + new Vector2(4f + frontArmRotation * 8f, -44f), new Rectangle(173, 238, 9, 14), Color.White, 0f, new Vector2(4f, 11f), 4f * _scale, SpriteEffects.None, IncrementAndGetLayerDepth() + ((_facingDirection != 0) ? 5.9E-05f : (-0.0005f)));
+                    break;
+                case 1:
+                    {
+                        _spriteBatch.Draw(_baseTexture, _position + new Vector2(52 - backArmDistance, -32f), new Rectangle(147, 237, 10, 4), Color.White, 0f, new Vector2(8f, 3f), 4f * _scale, SpriteEffects.None, IncrementAndGetLayerDepth() + ((_facingDirection != 0) ? 5.9E-05f : 0f));
+                        _spriteBatch.Draw(_baseTexture, _position + new Vector2(36f, -44f), new Rectangle(156, 244, 9, 10), Color.White, frontArmRotation, new Vector2(0f, 3f), 4f * _scale, SpriteEffects.None, IncrementAndGetLayerDepth() + ((_facingDirection != 0) ? 1E-08f : 0f));
+                        int slingshotAttachX = (int)(Math.Cos(frontArmRotation + (float)Math.PI / 2f) * (double)(20 - backArmDistance - 8) - Math.Sin(frontArmRotation + (float)Math.PI / 2f) * -68.0);
+                        int slingshotAttachY = (int)(Math.Sin(frontArmRotation + (float)Math.PI / 2f) * (double)(20 - backArmDistance - 8) + Math.Cos(frontArmRotation + (float)Math.PI / 2f) * -68.0);
+                        Utility.drawLineWithScreenCoordinates((int)(_position.X + 52f - (float)backArmDistance), (int)(_position.Y - 32f - 4f), (int)(_position.X + 32f + (float)(slingshotAttachX / 2)), (int)(_position.Y - 32f - 12f + (float)(slingshotAttachY / 2)), _spriteBatch, Color.White);
+                        break;
+                    }
+                case 3:
+                    {
+                        _spriteBatch.Draw(_baseTexture, _position + new Vector2(40 + backArmDistance, -32f), new Rectangle(147, 237, 10, 4), Color.White, 0f, new Vector2(9f, 4f), 4f * _scale, SpriteEffects.FlipHorizontally, IncrementAndGetLayerDepth() + ((_facingDirection != 0) ? 5.9E-05f : 0f));
+                        _spriteBatch.Draw(_baseTexture, _position + new Vector2(24f, -40f), new Rectangle(156, 244, 9, 10), Color.White, frontArmRotation + (float)Math.PI, new Vector2(8f, 3f), 4f * _scale, SpriteEffects.FlipHorizontally, IncrementAndGetLayerDepth() + ((_facingDirection != 0) ? 1E-08f : 0f));
+                        int slingshotAttachX = (int)(Math.Cos(frontArmRotation + (float)Math.PI * 2f / 5f) * (double)(20 + backArmDistance - 8) - Math.Sin(frontArmRotation + (float)Math.PI * 2f / 5f) * -68.0);
+                        int slingshotAttachY = (int)(Math.Sin(frontArmRotation + (float)Math.PI * 2f / 5f) * (double)(20 + backArmDistance - 8) + Math.Cos(frontArmRotation + (float)Math.PI * 2f / 5f) * -68.0);
+                        Utility.drawLineWithScreenCoordinates((int)(_position.X + 4f + (float)backArmDistance), (int)(_position.Y - 32f - 8f), (int)(_position.X + 26f + (float)slingshotAttachX * 4f / 10f), (int)(_position.Y - 32f - 8f + (float)slingshotAttachY * 4f / 10f), _spriteBatch, Color.White);
+                        break;
+                    }
+                case 2:
+                    _spriteBatch.Draw(_baseTexture, _position + new Vector2(4f, -32 - backArmDistance / 2), new Rectangle(148, 244, 4, 4), Color.White, 0f, Vector2.Zero, 4f * _scale, SpriteEffects.None, IncrementAndGetLayerDepth() + ((_facingDirection != 0) ? 5.9E-05f : 0f));
+                    Utility.drawLineWithScreenCoordinates((int)(_position.X + 16f), (int)(_position.Y - 28f - (float)(backArmDistance / 2)), (int)(_position.X + 44f - frontArmRotation * 10f), (int)(_position.Y - 16f - 8f), _spriteBatch, Color.White);
+                    Utility.drawLineWithScreenCoordinates((int)(_position.X + 16f), (int)(_position.Y - 28f - (float)(backArmDistance / 2)), (int)(_position.X + 56f - frontArmRotation * 10f), (int)(_position.Y - 16f - 8f), _spriteBatch, Color.White);
+                    _spriteBatch.Draw(_baseTexture, _position + new Vector2(44f - frontArmRotation * 10f, -16f), new Rectangle(167, 235, 7, 9), Color.White, 0f, new Vector2(3f, 5f), 4f * _scale, SpriteEffects.None, IncrementAndGetLayerDepth() + ((_facingDirection != 0) ? 5.9E-05f : 0f));
+                    break;
             }
         }
 
@@ -479,15 +539,15 @@ namespace FashionSense.Framework.Managers
                 featureOffset.Y -= who.IsMale ? 4 : 0;
             }
 
-            _spriteBatch.Draw(modelPack.Texture, GetScaledPosition(_position, model, _isDrawingForUI) + _origin + _positionOffset + featureOffset, GetSourceRectangle(model, _appearanceTypeToSourceRectangles), model.HasColorMask() ? Color.White : modelColor, _rotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), model.Scale * _scale, model.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
+            _spriteBatch.Draw(modelPack.Texture, GetScaledPosition(_position, model, _isDrawingForUI) + _origin + _positionOffset + featureOffset, GetSourceRectangle(model, _appearanceTypeToAnimationModels), model.HasColorMask() ? Color.White : modelColor, _rotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), model.Scale * _scale, model.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
 
             if (model.HasColorMask())
             {
-                DrawColorMask(_spriteBatch, modelPack, model, _areColorMasksPendingRefresh, GetScaledPosition(_position, model, _isDrawingForUI) + _origin + _positionOffset + featureOffset, GetSourceRectangle(model, _appearanceTypeToSourceRectangles), modelColor, _rotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), model.Scale * _scale, IncrementAndGetLayerDepth());
+                DrawColorMask(_spriteBatch, modelPack, model, _areColorMasksPendingRefresh, GetScaledPosition(_position, model, _isDrawingForUI) + _origin + _positionOffset + featureOffset, GetSourceRectangle(model, _appearanceTypeToAnimationModels), modelColor, _rotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), model.Scale * _scale, IncrementAndGetLayerDepth());
             }
             if (model.HasSkinToneMask())
             {
-                DrawSkinToneMask(_spriteBatch, modelPack, model, _skinToneModel, _areColorMasksPendingRefresh, GetScaledPosition(_position, model, _isDrawingForUI) + _origin + _positionOffset + featureOffset, GetSourceRectangle(model, _appearanceTypeToSourceRectangles), modelColor, _rotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), model.Scale * _scale, IncrementAndGetLayerDepth());
+                DrawSkinToneMask(_spriteBatch, modelPack, model, _skinToneModel, _areColorMasksPendingRefresh, GetScaledPosition(_position, model, _isDrawingForUI) + _origin + _positionOffset + featureOffset, GetSourceRectangle(model, _appearanceTypeToAnimationModels), modelColor, _rotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), model.Scale * _scale, IncrementAndGetLayerDepth());
             }
         }
 
@@ -514,9 +574,28 @@ namespace FashionSense.Framework.Managers
             var featureOffset = GetFeatureOffset(_facingDirection, _currentFrame, _scale, _farmerRenderer, sleevesModel, who);
             featureOffset.Y -= who.IsMale ? 4 : 0; // Manually adjusting for male sleeves
 
-            _spriteBatch.Draw(sleevesModelPack.Texture, GetScaledPosition(_position, sleevesModel, _isDrawingForUI) + _origin + _positionOffset + featureOffset, GetSourceRectangle(sleevesModel, _appearanceTypeToSourceRectangles), sleevesModel.HasColorMask() ? Color.White : modelColor, _rotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), sleevesModel.Scale * _scale, sleevesModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
+            DrawSleevesCustom(who, sleevesModel, sleevesModelPack, modelColor, positionOffset, featureOffset, GetSourceRectangle(sleevesModel, _appearanceTypeToAnimationModels));
+            if (_appearanceTypeToAnimationModels.TryGetValue(sleevesModel, out var animationModel) is true)
+            {
+                foreach (var subFrame in animationModel.SubFrames.Where(s => s.Handling is SubFrame.Type.Normal))
+                {
+                    DrawSleevesCustom(who, sleevesModel, sleevesModelPack, modelColor, positionOffset, featureOffset, GetSourceRectangle(sleevesModel, _appearanceTypeToAnimationModels, subFrame));
+                }
 
-            Rectangle customSleevesSourceRect = _appearanceTypeToSourceRectangles[sleevesModel];
+                var slingshotFrontArmFrame = animationModel.SubFrames.FirstOrDefault(s => s.Handling is SubFrame.Type.SlingshotBackArm);
+                var slingshotBackArmFrame = animationModel.SubFrames.FirstOrDefault(s => s.Handling is SubFrame.Type.SlingshotFrontArm);
+
+                if (slingshotFrontArmFrame is not null || slingshotBackArmFrame is not null)
+                {
+                    DrawSlingshotCustom(who, sleevesModel, sleevesModelPack, _areColorMasksPendingRefresh, positionOffset, featureOffset, modelColor, GetSourceRectangle(sleevesModel, _appearanceTypeToAnimationModels, slingshotBackArmFrame), GetSourceRectangle(sleevesModel, _appearanceTypeToAnimationModels, slingshotFrontArmFrame));
+                }
+            }
+        }
+
+        private void DrawSleevesCustom(Farmer who, SleevesModel sleevesModel, SleevesContentPack sleevesModelPack, Color modelColor, Position positionOffset, Vector2 featureOffset, Rectangle customSleevesSourceRect)
+        {
+            _spriteBatch.Draw(sleevesModelPack.Texture, GetScaledPosition(_position, sleevesModel, _isDrawingForUI) + _origin + _positionOffset + featureOffset, customSleevesSourceRect, sleevesModel.HasColorMask() ? Color.White : modelColor, _rotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), sleevesModel.Scale * _scale, sleevesModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
+
             if ((sleevesModel.HasColorMask() || sleevesModel.HasShirtToneMask()) && sleevesModel.UseShirtColors)
             {
                 // Get the shirt model, if applicable
@@ -543,6 +622,107 @@ namespace FashionSense.Framework.Managers
             if (sleevesModel.HasSkinToneMask())
             {
                 DrawSkinToneMask(_spriteBatch, sleevesModelPack, sleevesModel, _skinToneModel, _areColorMasksPendingRefresh, GetScaledPosition(_position, sleevesModel, _isDrawingForUI) + _origin + _positionOffset + featureOffset, customSleevesSourceRect, modelColor, _rotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), sleevesModel.Scale * _scale, IncrementAndGetLayerDepth());
+            }
+        }
+
+        private void DrawSlingshotCustom(Farmer who, SleevesModel sleevesModel, SleevesContentPack sleevesContentPack, bool areColorMasksPendingRefresh, Position positionOffset, Vector2 featureOffset, Color modelColor, Rectangle frontArmSourceRectangle, Rectangle backArmSourceRectangle)
+        {
+            _spriteBatch.Draw(_baseTexture, _position + _origin + _positionOffset + who.armOffset, new Rectangle(_farmerSourceRectangle.X + (_animationFrame.secondaryArm ? 192 : 96), _farmerSourceRectangle.Y, _farmerSourceRectangle.Width, _farmerSourceRectangle.Height), _overrideColor, _rotation, _origin, 4f * _scale, _animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
+
+            // Handle drawing slingshot
+            if (who.usingSlingshot is false || who.CurrentTool is not Slingshot)
+            {
+                return;
+            }
+
+            Slingshot slingshot = who.CurrentTool as Slingshot;
+            Point point = Utility.Vector2ToPoint(slingshot.AdjustForHeight(Utility.PointToVector2(slingshot.aimPos.Value)));
+            int mouseX = point.X;
+            int y = point.Y;
+            int backArmDistance = slingshot.GetBackArmDistance(who);
+
+            Vector2 shoot_origin = slingshot.GetShootOrigin(who);
+            float frontArmRotation = (float)Math.Atan2((float)y - shoot_origin.Y, (float)mouseX - shoot_origin.X) + (float)Math.PI;
+            if (Game1.options.useLegacySlingshotFiring is false)
+            {
+                frontArmRotation -= (float)Math.PI;
+                if (frontArmRotation < 0f)
+                {
+                    frontArmRotation += (float)Math.PI * 2f;
+                }
+            }
+
+            // Collect textures to draw, if needed
+            if (sleevesContentPack.CollectiveMaskTexture is null || areColorMasksPendingRefresh)
+            {
+                List<Texture2D> textures = new List<Texture2D>()
+                {
+                    sleevesContentPack.ColorMaskTexture is not null ? sleevesContentPack.ColorMaskTexture : null,
+                    sleevesContentPack.ShirtToneTexture is not null ? sleevesContentPack.ShirtToneTexture : null,
+                    sleevesContentPack.SkinMaskTexture is not null ? sleevesContentPack.SkinMaskTexture : null
+                };
+
+                Color[] data = new Color[sleevesContentPack.Texture.Width * sleevesContentPack.Texture.Height];
+                sleevesContentPack.Texture.GetData(data);
+                foreach (var texture in textures)
+                {
+                    if (texture is null)
+                    {
+                        continue;
+                    }
+
+                    Color[] subData = new Color[texture.Width * texture.Height];
+                    texture.GetData(subData);
+
+                    for (int i = 0; i < data.Length; i++)
+                    {
+                        if (subData[i] != Color.Transparent)
+                        {
+                            data[i] = subData[i];
+
+                            if (texture == sleevesContentPack.ColorMaskTexture)
+                            {
+                                data[i] = Color.Lerp(data[i], modelColor, 0.5f);
+                            }
+                        }
+                    }
+                }
+
+                Texture2D collectiveTexture = new Texture2D(Game1.graphics.GraphicsDevice, sleevesContentPack.Texture.Width, sleevesContentPack.Texture.Height);
+                collectiveTexture.SetData(data);
+                sleevesContentPack.CollectiveMaskTexture = collectiveTexture;
+            }
+
+            // Draw the slingshot
+            switch (_facingDirection)
+            {
+                case 0:
+                    _spriteBatch.Draw(sleevesContentPack.CollectiveMaskTexture, GetScaledPosition(_position, sleevesModel, _isDrawingForUI) + _origin + _positionOffset + featureOffset + new Vector2((frontArmRotation * 8f) - 12f, -44f), frontArmSourceRectangle, Color.White, 0f, _origin + new Vector2(positionOffset.X, positionOffset.Y), sleevesModel.Scale * _scale, SpriteEffects.None, IncrementAndGetLayerDepth());
+                    break;
+                case 1:
+                    {
+                        _spriteBatch.Draw(sleevesContentPack.CollectiveMaskTexture, GetScaledPosition(_position, sleevesModel, _isDrawingForUI) + _origin + _positionOffset + featureOffset + new Vector2(-backArmDistance, 0f), backArmSourceRectangle, Color.White, 0f, _origin + new Vector2(positionOffset.X, positionOffset.Y), sleevesModel.Scale * _scale, SpriteEffects.None, IncrementAndGetLayerDepth());
+                        _spriteBatch.Draw(sleevesContentPack.CollectiveMaskTexture, GetScaledPosition(_position, sleevesModel, _isDrawingForUI) + _origin + _positionOffset + featureOffset + new Vector2(36f, -40f), frontArmSourceRectangle, Color.White, frontArmRotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), sleevesModel.Scale * _scale, SpriteEffects.None, IncrementAndGetLayerDepth() - 0.1f);
+                        int slingshotAttachX = (int)(Math.Cos(frontArmRotation + (float)Math.PI / 2f) * (double)(20 - backArmDistance - 8) - Math.Sin(frontArmRotation + (float)Math.PI / 2f) * -68.0);
+                        int slingshotAttachY = (int)(Math.Sin(frontArmRotation + (float)Math.PI / 2f) * (double)(20 - backArmDistance - 8) + Math.Cos(frontArmRotation + (float)Math.PI / 2f) * -68.0);
+                        Utility.drawLineWithScreenCoordinates((int)(_position.X + 52f - (float)backArmDistance), (int)(_position.Y - 32f - 4f), (int)(_position.X + 32f + (float)(slingshotAttachX / 2)), (int)(_position.Y - 32f - 12f + (float)(slingshotAttachY / 2)), _spriteBatch, Color.White);
+                        break;
+                    }
+                case 3:
+                    {
+                        _spriteBatch.Draw(sleevesContentPack.CollectiveMaskTexture, GetScaledPosition(_position, sleevesModel, _isDrawingForUI) + _origin + _positionOffset + featureOffset + new Vector2(backArmDistance, 0f), backArmSourceRectangle, Color.White, 0f, _origin + new Vector2(positionOffset.X, positionOffset.Y), sleevesModel.Scale * _scale, SpriteEffects.FlipHorizontally, IncrementAndGetLayerDepth());
+                        _spriteBatch.Draw(sleevesContentPack.CollectiveMaskTexture, GetScaledPosition(_position, sleevesModel, _isDrawingForUI) + _origin + _positionOffset + featureOffset + new Vector2(24f, -36f), frontArmSourceRectangle, Color.White, frontArmRotation + (float)Math.PI, _origin + new Vector2(positionOffset.X, positionOffset.Y) + new Vector2(16f, 0f), sleevesModel.Scale * _scale, SpriteEffects.FlipHorizontally, IncrementAndGetLayerDepth() - 0.1f);
+                        int slingshotAttachX = (int)(Math.Cos(frontArmRotation + (float)Math.PI * 2f / 5f) * (double)(20 + backArmDistance - 8) - Math.Sin(frontArmRotation + (float)Math.PI * 2f / 5f) * -68.0);
+                        int slingshotAttachY = (int)(Math.Sin(frontArmRotation + (float)Math.PI * 2f / 5f) * (double)(20 + backArmDistance - 8) + Math.Cos(frontArmRotation + (float)Math.PI * 2f / 5f) * -68.0);
+                        Utility.drawLineWithScreenCoordinates((int)(_position.X + 4f + (float)backArmDistance), (int)(_position.Y - 32f - 8f), (int)(_position.X + 26f + (float)slingshotAttachX * 4f / 10f), (int)(_position.Y - 32f - 8f + (float)slingshotAttachY * 4f / 10f), _spriteBatch, Color.White);
+                        break;
+                    }
+                case 2:
+                    _spriteBatch.Draw(sleevesContentPack.CollectiveMaskTexture, GetScaledPosition(_position, sleevesModel, _isDrawingForUI) + _origin + _positionOffset + featureOffset + new Vector2(4f, -backArmDistance / 2), backArmSourceRectangle, Color.White, 0f, _origin + new Vector2(positionOffset.X, positionOffset.Y), sleevesModel.Scale * _scale, SpriteEffects.None, IncrementAndGetLayerDepth());
+                    Utility.drawLineWithScreenCoordinates((int)(_position.X + 16f), (int)(_position.Y - 28f - (float)(backArmDistance / 2)), (int)(_position.X + 44f - frontArmRotation * 10f), (int)(_position.Y - 16f - 8f), _spriteBatch, Color.White);
+                    Utility.drawLineWithScreenCoordinates((int)(_position.X + 16f), (int)(_position.Y - 28f - (float)(backArmDistance / 2)), (int)(_position.X + 56f - frontArmRotation * 10f), (int)(_position.Y - 16f - 8f), _spriteBatch, Color.White);
+                    _spriteBatch.Draw(sleevesContentPack.CollectiveMaskTexture, GetScaledPosition(_position, sleevesModel, _isDrawingForUI) + _origin + _positionOffset + featureOffset + new Vector2(24f - frontArmRotation * 10f, 0f), frontArmSourceRectangle, Color.White, 0f, _origin + new Vector2(positionOffset.X, positionOffset.Y), sleevesModel.Scale * _scale, SpriteEffects.None, IncrementAndGetLayerDepth());
+                    break;
             }
         }
 
@@ -762,9 +942,17 @@ namespace FashionSense.Framework.Managers
             return new Position();
         }
 
-        private Rectangle GetSourceRectangle(AppearanceModel model, Dictionary<AppearanceModel, Rectangle> appearanceTypeToSourceRectangles)
+        private Rectangle GetSourceRectangle(AppearanceModel model, Dictionary<AppearanceModel, AnimationModel> appearanceTypeToAnimationModels, SubFrame subFrame = null)
         {
-            return appearanceTypeToSourceRectangles[model];
+            var size = AppearanceHelpers.GetModelSize(model);
+            Rectangle sourceRectangle = new Rectangle(model.StartingPosition.X, model.StartingPosition.Y, size.Width, size.Length);
+
+            if (appearanceTypeToAnimationModels.TryGetValue(model, out var animation) is false || animation is null)
+            {
+                return sourceRectangle;
+            }
+
+            return AppearanceHelpers.GetAdjustedSourceRectangle(animation, model.Pack, sourceRectangle, subFrame);
         }
 
         private Vector2 GetFeatureOffset(int facingDirection, int currentFrame, float scale, FarmerRenderer renderer, AppearanceModel model, Farmer who)
