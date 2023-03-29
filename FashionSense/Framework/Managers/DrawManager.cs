@@ -30,7 +30,7 @@ namespace FashionSense.Framework.Managers
         private Rectangle _dyedShirtSourceRectangle { get; }
         private Rectangle _accessorySourceRectangle { get; }
         private Rectangle _hatSourceRectangle { get; }
-        private Dictionary<AppearanceModel, Rectangle> _appearanceTypeToSourceRectangles { get; }
+        private Dictionary<AppearanceModel, AnimationModel> _appearanceTypeToAnimationModels { get; }
         private AnimationFrame _animationFrame { get; }
         private bool _areColorMasksPendingRefresh { get; }
         private bool _isDrawingForUI { get; }
@@ -47,7 +47,7 @@ namespace FashionSense.Framework.Managers
 
         internal float LayerDepth { get; set; }
 
-        public DrawManager(SpriteBatch spriteBatch, FarmerRenderer farmerRenderer, SkinToneModel skinToneModel, Texture2D baseTexture, Rectangle farmerSourceRectangle, Rectangle shirtSourceRectangle, Rectangle dyedShirtSourceRectangle, Rectangle accessorySourceRectangle, Rectangle hatSourceRectangle, Dictionary<AppearanceModel, Rectangle> appearanceTypeToSourceRectangles, AnimationFrame animationFrame, Color overrideColor, Vector2 position, Vector2 origin, Vector2 positionOffset, Vector2 rotationAdjustment, int facingDirection, int currentFrame, float scale, float rotation, bool areColorMasksPendingRefresh, bool isDrawingForUI, bool hideSleeves)
+        public DrawManager(SpriteBatch spriteBatch, FarmerRenderer farmerRenderer, SkinToneModel skinToneModel, Texture2D baseTexture, Rectangle farmerSourceRectangle, Rectangle shirtSourceRectangle, Rectangle dyedShirtSourceRectangle, Rectangle accessorySourceRectangle, Rectangle hatSourceRectangle, Dictionary<AppearanceModel, AnimationModel> appearanceTypeToAnimationModels, AnimationFrame animationFrame, Color overrideColor, Vector2 position, Vector2 origin, Vector2 positionOffset, Vector2 rotationAdjustment, int facingDirection, int currentFrame, float scale, float rotation, bool areColorMasksPendingRefresh, bool isDrawingForUI, bool hideSleeves)
         {
             _spriteBatch = spriteBatch;
             _farmerRenderer = farmerRenderer;
@@ -58,7 +58,7 @@ namespace FashionSense.Framework.Managers
             _dyedShirtSourceRectangle = dyedShirtSourceRectangle;
             _accessorySourceRectangle = accessorySourceRectangle;
             _hatSourceRectangle = hatSourceRectangle;
-            _appearanceTypeToSourceRectangles = appearanceTypeToSourceRectangles;
+            _appearanceTypeToAnimationModels = appearanceTypeToAnimationModels;
             _animationFrame = animationFrame;
             _overrideColor = overrideColor;
             _position = position;
@@ -301,7 +301,7 @@ namespace FashionSense.Framework.Managers
             if (sleevesModel is null && _hideSleeves is false)
             {
                 _spriteBatch.Draw(_baseTexture, _position + _origin + _positionOffset + who.armOffset, new Rectangle(_farmerSourceRectangle.X + (_animationFrame.secondaryArm ? 192 : 96), _farmerSourceRectangle.Y, _farmerSourceRectangle.Width, _farmerSourceRectangle.Height), _overrideColor, _rotation, _origin, 4f * _scale, _animationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
-                
+
                 // Handle drawing slingshot
                 if (who.usingSlingshot is true && who.CurrentTool is Slingshot)
                 {
@@ -531,15 +531,15 @@ namespace FashionSense.Framework.Managers
                 featureOffset.Y -= who.IsMale ? 4 : 0;
             }
 
-            _spriteBatch.Draw(modelPack.Texture, GetScaledPosition(_position, model, _isDrawingForUI) + _origin + _positionOffset + featureOffset, GetSourceRectangle(model, _appearanceTypeToSourceRectangles), model.HasColorMask() ? Color.White : modelColor, _rotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), model.Scale * _scale, model.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
+            _spriteBatch.Draw(modelPack.Texture, GetScaledPosition(_position, model, _isDrawingForUI) + _origin + _positionOffset + featureOffset, GetSourceRectangle(model, _appearanceTypeToAnimationModels), model.HasColorMask() ? Color.White : modelColor, _rotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), model.Scale * _scale, model.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
 
             if (model.HasColorMask())
             {
-                DrawColorMask(_spriteBatch, modelPack, model, _areColorMasksPendingRefresh, GetScaledPosition(_position, model, _isDrawingForUI) + _origin + _positionOffset + featureOffset, GetSourceRectangle(model, _appearanceTypeToSourceRectangles), modelColor, _rotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), model.Scale * _scale, IncrementAndGetLayerDepth());
+                DrawColorMask(_spriteBatch, modelPack, model, _areColorMasksPendingRefresh, GetScaledPosition(_position, model, _isDrawingForUI) + _origin + _positionOffset + featureOffset, GetSourceRectangle(model, _appearanceTypeToAnimationModels), modelColor, _rotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), model.Scale * _scale, IncrementAndGetLayerDepth());
             }
             if (model.HasSkinToneMask())
             {
-                DrawSkinToneMask(_spriteBatch, modelPack, model, _skinToneModel, _areColorMasksPendingRefresh, GetScaledPosition(_position, model, _isDrawingForUI) + _origin + _positionOffset + featureOffset, GetSourceRectangle(model, _appearanceTypeToSourceRectangles), modelColor, _rotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), model.Scale * _scale, IncrementAndGetLayerDepth());
+                DrawSkinToneMask(_spriteBatch, modelPack, model, _skinToneModel, _areColorMasksPendingRefresh, GetScaledPosition(_position, model, _isDrawingForUI) + _origin + _positionOffset + featureOffset, GetSourceRectangle(model, _appearanceTypeToAnimationModels), modelColor, _rotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), model.Scale * _scale, IncrementAndGetLayerDepth());
             }
         }
 
@@ -566,9 +566,9 @@ namespace FashionSense.Framework.Managers
             var featureOffset = GetFeatureOffset(_facingDirection, _currentFrame, _scale, _farmerRenderer, sleevesModel, who);
             featureOffset.Y -= who.IsMale ? 4 : 0; // Manually adjusting for male sleeves
 
-            _spriteBatch.Draw(sleevesModelPack.Texture, GetScaledPosition(_position, sleevesModel, _isDrawingForUI) + _origin + _positionOffset + featureOffset, GetSourceRectangle(sleevesModel, _appearanceTypeToSourceRectangles), sleevesModel.HasColorMask() ? Color.White : modelColor, _rotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), sleevesModel.Scale * _scale, sleevesModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
+            _spriteBatch.Draw(sleevesModelPack.Texture, GetScaledPosition(_position, sleevesModel, _isDrawingForUI) + _origin + _positionOffset + featureOffset, GetSourceRectangle(sleevesModel, _appearanceTypeToAnimationModels), sleevesModel.HasColorMask() ? Color.White : modelColor, _rotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), sleevesModel.Scale * _scale, sleevesModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
 
-            Rectangle customSleevesSourceRect = _appearanceTypeToSourceRectangles[sleevesModel];
+            Rectangle customSleevesSourceRect = GetSourceRectangle(sleevesModel, _appearanceTypeToAnimationModels);
             if ((sleevesModel.HasColorMask() || sleevesModel.HasShirtToneMask()) && sleevesModel.UseShirtColors)
             {
                 // Get the shirt model, if applicable
@@ -814,9 +814,17 @@ namespace FashionSense.Framework.Managers
             return new Position();
         }
 
-        private Rectangle GetSourceRectangle(AppearanceModel model, Dictionary<AppearanceModel, Rectangle> appearanceTypeToSourceRectangles)
+        private Rectangle GetSourceRectangle(AppearanceModel model, Dictionary<AppearanceModel, AnimationModel> appearanceTypeToAnimationModels)
         {
-            return appearanceTypeToSourceRectangles[model];
+            var size = AppearanceHelpers.GetModelSize(model);
+            Rectangle sourceRectangle = new Rectangle(model.StartingPosition.X, model.StartingPosition.Y, size.Width, size.Length);
+
+            if (appearanceTypeToAnimationModels.TryGetValue(model, out var animation) is false || animation is null)
+            {
+                return sourceRectangle;
+            }
+
+            return AppearanceHelpers.GetAdjustedSourceRectangle(animation, model.Pack, sourceRectangle);
         }
 
         private Vector2 GetFeatureOffset(int facingDirection, int currentFrame, float scale, FarmerRenderer renderer, AppearanceModel model, Farmer who)

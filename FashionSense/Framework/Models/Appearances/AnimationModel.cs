@@ -20,6 +20,7 @@ namespace FashionSense.Framework.Models.Appearances
         }
 
         public int Frame { get; set; }
+        public SubFrame SubFrame { get; set; }
         public bool OverrideStartingIndex { get; set; }
         public LightModel Light { get; set; }
         public List<Condition> Conditions { get; set; } = new List<Condition>();

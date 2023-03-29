@@ -231,22 +231,21 @@ namespace FashionSense.Framework.Patches.Renderer
             // Get skin tone
             var skinTone = DrawPatch.GetSkinTone(___farmerTextureManager, baseTexture, null, ___skin, ____sickFrame);
 
-            // Establish the source rectangles for models
-            Dictionary<AppearanceModel, Rectangle> appearanceTypeToSourceRectangles = new Dictionary<AppearanceModel, Rectangle>();
+            // Establish the animation data for models
+            Dictionary<AppearanceModel, AnimationModel> appearanceTypeToAnimationModels = new Dictionary<AppearanceModel, AnimationModel>();
 
             // Generate the list of layers to draw
-            List<LayerData> layers = GenerateDrawLayers(equippedModels, __instance, ref appearanceTypeToSourceRectangles, FarmerRenderer.isDrawingForUI, ___positionOffset, ___rotationAdjustment, ___farmerTextureManager, ___baseTexture, ___skin, ____sickFrame, ref ___hairstyleSourceRect, ref ___shirtSourceRect, ref ___accessorySourceRect, ref ___hatSourceRect, b, facingDirection, who, position, origin, scale, currentFrame, rotation, overrideColor, layerDepth);
+            List<LayerData> layers = GenerateDrawLayers(equippedModels, __instance, ref appearanceTypeToAnimationModels, FarmerRenderer.isDrawingForUI, ___positionOffset, ___rotationAdjustment, ___farmerTextureManager, ___baseTexture, ___skin, ____sickFrame, ref ___hairstyleSourceRect, ref ___shirtSourceRect, ref ___accessorySourceRect, ref ___hatSourceRect, b, facingDirection, who, position, origin, scale, currentFrame, rotation, overrideColor, layerDepth);
 
             // Get the dyed_shirt_source_rect
             Rectangle dyedShirtSourceRect = ___shirtSourceRect;
-            dyedShirtSourceRect = ___shirtSourceRect;
             dyedShirtSourceRect.Offset(128, 0);
 
             // Offset the source rectangles for shirts, accessories and hats according to facingDirection
             AppearanceHelpers.OffsetSourceRectangles(who, facingDirection, rotation, ref ___shirtSourceRect, ref dyedShirtSourceRect, ref ___accessorySourceRect, ref ___hatSourceRect, ref ___rotationAdjustment);
 
             // Prepare the DrawManager
-            DrawManager drawManager = new DrawManager(b, __instance, skinTone, baseTexture, sourceRect, ___shirtSourceRect, dyedShirtSourceRect, ___accessorySourceRect, ___hatSourceRect, appearanceTypeToSourceRectangles, animationFrame, overrideColor, position, origin, ___positionOffset, ___rotationAdjustment, facingDirection, currentFrame, scale, rotation, FarmerRendererPatch.AreColorMasksPendingRefresh, FarmerRenderer.isDrawingForUI, AppearanceHelpers.AreSleevesForcedHidden(equippedModels))
+            DrawManager drawManager = new DrawManager(b, __instance, skinTone, baseTexture, sourceRect, ___shirtSourceRect, dyedShirtSourceRect, ___accessorySourceRect, ___hatSourceRect, appearanceTypeToAnimationModels, animationFrame, overrideColor, position, origin, ___positionOffset, ___rotationAdjustment, facingDirection, currentFrame, scale, rotation, FarmerRendererPatch.AreColorMasksPendingRefresh, FarmerRenderer.isDrawingForUI, AppearanceHelpers.AreSleevesForcedHidden(equippedModels))
             {
                 LayerDepth = layerDepth
             };
@@ -276,7 +275,7 @@ namespace FashionSense.Framework.Patches.Renderer
             FarmerRendererPatch.AreColorMasksPendingRefresh = false;
         }
 
-        private static List<LayerData> GenerateDrawLayers(List<AppearanceMetadata> metadata, FarmerRenderer __instance, ref Dictionary<AppearanceModel, Rectangle> appearanceTypeToSourceRectangles, bool ___isDrawingForUI, Vector2 ___positionOffset, Vector2 ___rotationAdjustment, LocalizedContentManager ___farmerTextureManager, Texture2D ___baseTexture, NetInt ___skin, bool ____sickFrame, ref Rectangle ___hairstyleSourceRect, ref Rectangle ___shirtSourceRect, ref Rectangle ___accessorySourceRect, ref Rectangle ___hatSourceRect, SpriteBatch b, int facingDirection, Farmer who, Vector2 position, Vector2 origin, float scale, int currentFrame, float rotation, Color overrideColor, float layerDepth)
+        private static List<LayerData> GenerateDrawLayers(List<AppearanceMetadata> metadata, FarmerRenderer __instance, ref Dictionary<AppearanceModel, AnimationModel> appearanceTypeToAnimationModels, bool ___isDrawingForUI, Vector2 ___positionOffset, Vector2 ___rotationAdjustment, LocalizedContentManager ___farmerTextureManager, Texture2D ___baseTexture, NetInt ___skin, bool ____sickFrame, ref Rectangle ___hairstyleSourceRect, ref Rectangle ___shirtSourceRect, ref Rectangle ___accessorySourceRect, ref Rectangle ___hatSourceRect, SpriteBatch b, int facingDirection, Farmer who, Vector2 position, Vector2 origin, float scale, int currentFrame, float rotation, Color overrideColor, float layerDepth)
         {
             // Check if all the models are null, if so revert back to vanilla logic
             List<AppearanceModel> models = metadata.Where(m => m.Model is not null).Select(m => m.Model).ToList();
@@ -285,16 +284,16 @@ namespace FashionSense.Framework.Patches.Renderer
                 return new List<LayerData>();
             }
 
-            // Set up the initial source rectangles
+            // Set up the initial data
             foreach (var model in models)
             {
-                appearanceTypeToSourceRectangles[model] = new Rectangle();
+                appearanceTypeToAnimationModels[model] = null;
             }
 
             // Handle any animations
             foreach (var model in models)
             {
-                AppearanceHelpers.HandleAppearanceAnimation(models, model, who, facingDirection, ref appearanceTypeToSourceRectangles);
+                AppearanceHelpers.HandleAppearanceAnimation(models, model, who, facingDirection, ref appearanceTypeToAnimationModels);
             }
 
             // Check if the cached facing direction needs to be updated
