@@ -6,7 +6,8 @@
         {
             Unknown,
             Normal,
-            Slingshot
+            SlingshotFrontArm,
+            SlingshotBackArm
         }
 
 

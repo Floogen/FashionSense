@@ -266,9 +266,11 @@ namespace FashionSense.Framework.Utilities
             appearanceTypeToAnimationModels[appearanceModel] = animationModel;
         }
 
-        public static Rectangle GetAdjustedSourceRectangle(AnimationModel animationModel, AppearanceContentPack modelPack, Rectangle sourceRect)
+        public static Rectangle GetAdjustedSourceRectangle(AnimationModel animationModel, AppearanceContentPack modelPack, Rectangle sourceRect, SubFrame subframe = null)
         {
-            var sourceOffset = (animationModel.Frame * sourceRect.Width);
+            int frame = subframe is null ? animationModel.Frame : subframe.Frame;
+
+            var sourceOffset = (frame * sourceRect.Width);
             if (modelPack.Format < new Version("5.0.12"))
             {
                 sourceOffset -= sourceRect.Width;
@@ -281,7 +283,7 @@ namespace FashionSense.Framework.Utilities
             }
             else
             {
-                sourceRect.X += sourceRect.Width * animationModel.Frame;
+                sourceRect.X += sourceRect.Width * frame;
             }
 
             return sourceRect;
