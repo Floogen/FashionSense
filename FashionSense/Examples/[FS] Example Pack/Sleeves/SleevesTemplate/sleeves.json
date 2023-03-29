@@ -479,7 +479,26 @@
       // End of Watering Can frames
 
       // Start of Slingshot frames
-      // NOTE: Purposely skipping the slingshot as it breaks all the conventions for the sleeves sprite
+      {
+        "Frame": 84,
+        "SubFrames": [
+          {
+            "Frame": 87,
+            "Handling": "SlingshotBackArm"
+          },
+          {
+            "Frame": 90,
+            "Handling": "SlingshotFrontArm"
+          }
+        ],
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 42
+          }
+        ]
+      },
       // End of Slingshot frames
 
       // Start of Panning frames
@@ -1008,9 +1027,23 @@
       // End of Watering Can frames
 
       // Start of Slingshot frames
-      // NOTE: Purposely skipping the slingshot as it breaks all the conventions for the sleeves sprite
+      {
+        "Frame": 86,
+        "SubFrames": [
+          {
+            "Frame": 91,
+            "Handling": "SlingshotFrontArm"
+          }
+        ],
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 44
+          }
+        ]
+      },
       // End of Slingshot frames
-
 
       // Start of Shearing frames
       {
@@ -1481,9 +1514,27 @@
       // End of Watering Can frames
 
       // Start of Slingshot frames
-      // NOTE: Purposely skipping the slingshot as it breaks all the conventions for the sleeves sprite
+      {
+        "Frame": 92,
+        "SubFrames": [
+          {
+            "Frame": 88,
+            "Handling": "SlingshotBackArm"
+          },
+          {
+            "Frame": 89,
+            "Handling": "SlingshotFrontArm"
+          }
+        ],
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 43
+          }
+        ]
+      },
       // End of Slingshot frames
-
 
       // Start of Shearing frames
       {
@@ -2011,7 +2062,26 @@
       // End of Watering Can frames
 
       // Start of Slingshot frames
-      // NOTE: Purposely skipping the slingshot as it breaks all the conventions for the sleeves sprite
+      {
+        "Frame": 92,
+        "SubFrames": [
+          {
+            "Frame": 88,
+            "Handling": "SlingshotBackArm"
+          },
+          {
+            "Frame": 89,
+            "Handling": "SlingshotFrontArm"
+          }
+        ],
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 43
+          }
+        ]
+      },
       // End of Slingshot frames
 
 
