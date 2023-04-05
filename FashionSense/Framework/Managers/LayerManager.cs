@@ -1,5 +1,6 @@
 ﻿using FashionSense.Framework.Models.Appearances;
 using FashionSense.Framework.Models.Appearances.Accessory;
+using FashionSense.Framework.Models.Appearances.Generic;
 using FashionSense.Framework.Models.Appearances.Hair;
 using FashionSense.Framework.Models.Appearances.Hat;
 using FashionSense.Framework.Models.Appearances.Pants;
@@ -11,6 +12,7 @@ using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -100,6 +102,7 @@ namespace FashionSense.Framework.Managers
                     continue;
                 }
 
+                // Perform conditional sorting
                 switch (layerData.AppearanceType)
                 {
                     case AppearanceContentPack.Type.Player:
@@ -126,6 +129,13 @@ namespace FashionSense.Framework.Managers
                     case AppearanceContentPack.Type.Hat:
                         SortHat(layerData, ref sortedLayerData);
                         break;
+                }
+
+                // Perform sorting for DrawOrder property
+                var drawOrderOverride = layerData.AppearanceModel.DrawOrderOverride;
+                if (drawOrderOverride is not null && drawOrderOverride.IsValid())
+                {
+                    MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType == drawOrderOverride.AppearanceType) + (drawOrderOverride.Preposition is DrawOrder.Order.After ? 1 : 0), layerData, ref sortedLayerData);
                 }
             }
 
