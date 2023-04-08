@@ -1,13 +1,13 @@
 ﻿{
   "Name": "Example Fashion Sense Pack",
   "Author": "ExampleAuthor",
-  "Version": "5.2.0",
+  "Version": "5.3.0",
   "Description": "Example pack for the Fashion Sense framework.",
   "UniqueID": "ExampleAuthor.ExampleFashionSensePack",
   "UpdateKeys": [],
   "Dependencies": [],
   "ContentPackFor": {
     "UniqueID": "PeacefulEnd.FashionSense",
-    "MinimumVersion": "5.2.0"
+    "MinimumVersion": "5.3.0"
   }
 }

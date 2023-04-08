@@ -1,8 +1,12 @@
 {
   "Name": "Priestess",
+  "Format": "5.3.0",
   "FrontAccessory": {
     "DisableGrayscale": true,
-    "DrawBeforeHair": true,
+    "DrawOrderOverride": {
+      "Preposition": "Before",
+      "AppearanceType": "Player"
+    },
     "StartingPosition": {
       "X": 0,
       "Y": 0
@@ -60,7 +64,10 @@
   },
   "BackAccessory": {
     "DisableGrayscale": true,
-    "DrawBeforeHair": true,
+    "DrawOrderOverride": {
+      "Preposition": "Before",
+      "AppearanceType": "Hair"
+    },
     "StartingPosition": {
       "X": 0,
       "Y": 32
