@@ -696,7 +696,7 @@ namespace FashionSense.Framework.Utilities
                 {
                     passedCheck = condition.IsValid(Game1.mine != null);
                 }
-                else if (condition.Name is Condition.Type.IsOutdoors)
+                else if (condition.Name is Condition.Type.IsOutdoors && Game1.currentLocation is not null)
                 {
                     passedCheck = condition.IsValid(Game1.currentLocation.IsOutdoors);
                 }
