@@ -1321,6 +1321,19 @@
       },
       // End of self-descriptive frames
 
+      // Start of Kissing frames
+      {
+        "Frame": 197,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 101
+          }
+        ]
+      },
+      // End of Kissing frames
+
       // Start of Harvesting / Milking frames
       {
         "Frame": 117,
@@ -1572,6 +1585,19 @@
         ]
       },
       // End of self-descriptive frames
+
+      // Start of Kissing frames
+      {
+        "Frame": 197,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 101
+          }
+        ]
+      },
+      // End of Kissing frames
 
       // Start of Walking frames
       {
@@ -1869,6 +1895,19 @@
       },
       // End of self-descriptive frames
 
+      // Start of Kissing frames
+      {
+        "Frame": 197,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 101
+          }
+        ]
+      },
+      // End of Kissing frames
+
       // Start of Harvesting / Milking frames
       {
         "Frame": 117,
@@ -2121,6 +2160,19 @@
         ]
       },
       // End of self-descriptive frames
+
+      // Start of Kissing frames
+      {
+        "Frame": 197,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 101
+          }
+        ]
+      },
+      // End of Kissing frames
 
       // Start of Walking frames
       {
