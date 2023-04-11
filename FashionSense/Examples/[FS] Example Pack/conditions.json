@@ -37,5 +37,22 @@
       "Value": 12,
       "Independent": true
     }
+  ],
+  "IsPlayingFlute": [
+    {
+      "Name": "CurrentFarmerFrame",
+      "Value": 98,
+      "Independent": true
+    },
+    {
+      "Name": "CurrentFarmerFrame",
+      "Value": 99,
+      "Independent": true
+    },
+    {
+      "Name": "CurrentFarmerFrame",
+      "Value": 100,
+      "Independent": true
+    }
   ]
 }

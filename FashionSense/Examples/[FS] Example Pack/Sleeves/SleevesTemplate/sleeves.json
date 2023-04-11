@@ -69,6 +69,10 @@
           {
             "Name": "IsSick",
             "Value": false
+          },
+          {
+            "GroupName": "IsPlayingFlute",
+            "Value": false
           }
         ]
       },
@@ -93,6 +97,39 @@
         ]
       },
       // End of self-descriptive frames
+
+      // Start of flute playing frames
+      {
+        "Frame": 200,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 98
+          }
+        ]
+      },
+      {
+        "Frame": 201,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 99
+          }
+        ]
+      },
+      {
+        "Frame": 202,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 100
+          }
+        ]
+      },
+      // End of flute playing frames
 
       // Start of Passing Out / Dancing frames
       {
@@ -570,6 +607,39 @@
         ]
       },
       // End of self-descriptive frames
+
+      // Start of flute playing frames
+      {
+        "Frame": 200,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 98
+          }
+        ]
+      },
+      {
+        "Frame": 201,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 99
+          }
+        ]
+      },
+      {
+        "Frame": 202,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 100
+          }
+        ]
+      },
+      // End of flute playing frames
 
       // Start of Walking and Running frames
       {
