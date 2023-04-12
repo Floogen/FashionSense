@@ -1,4 +1,36 @@
 ﻿{
+  "IsOutdoorsAndHasPrecipitation": [
+    {
+      "Name": "IsOutdoors",
+      "Value": true
+    },
+    {
+      "GroupName": "HasPrecipitation",
+      "Value": true
+    }
+  ],
+  "IsOutdoorsAndNoPrecipitation": [
+    {
+      "Name": "IsOutdoors",
+      "Value": true
+    },
+    {
+      "GroupName": "HasPrecipitation",
+      "Value": false
+    }
+  ],
+  "HasPrecipitation": [
+    {
+      "Name": "IsRaining",
+      "Value": true,
+      "Independent": true
+    },
+    {
+      "Name": "IsSnowing",
+      "Value": true,
+      "Independent": true
+    }
+  ],
   "IsOutdoorsAndRaining": [
     {
       "Name": "IsOutdoors",
