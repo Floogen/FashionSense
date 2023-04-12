@@ -612,6 +612,10 @@ namespace FashionSense.Framework.Utilities
                 {
                     passedCheck = condition.IsValid(Game1.IsRainingHere(Game1.currentLocation));
                 }
+                else if (condition.Name is Condition.Type.IsSnowing)
+                {
+                    passedCheck = condition.IsValid(Game1.IsSnowingHere(Game1.currentLocation));
+                }
                 else if (condition.Name is Condition.Type.IsWalking)
                 {
                     passedCheck = condition.IsValid(!FashionSense.conditionData.IsRunning(who));

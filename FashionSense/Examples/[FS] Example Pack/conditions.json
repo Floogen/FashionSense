@@ -1,4 +1,56 @@
 ﻿{
+  "IsOutdoorsAndHasPrecipitation": [
+    {
+      "Name": "IsOutdoors",
+      "Value": true
+    },
+    {
+      "GroupName": "HasPrecipitation",
+      "Value": true
+    }
+  ],
+  "IsOutdoorsAndNoPrecipitation": [
+    {
+      "Name": "IsOutdoors",
+      "Value": true
+    },
+    {
+      "GroupName": "HasPrecipitation",
+      "Value": false
+    }
+  ],
+  "HasPrecipitation": [
+    {
+      "Name": "IsRaining",
+      "Value": true,
+      "Independent": true
+    },
+    {
+      "Name": "IsSnowing",
+      "Value": true,
+      "Independent": true
+    }
+  ],
+  "IsOutdoorsAndRaining": [
+    {
+      "Name": "IsOutdoors",
+      "Value": true
+    },
+    {
+      "Name": "IsRaining",
+      "Value": true
+    }
+  ],
+  "IsOutdoorsAndNotRaining": [
+    {
+      "Name": "IsOutdoors",
+      "Value": true
+    },
+    {
+      "Name": "IsRaining",
+      "Value": false
+    }
+  ],
   "IsDarkOutAndWalking": [
     {
       "Name": "IsDarkOut",
@@ -35,6 +87,23 @@
     {
       "Name": "CurrentFarmerFrame",
       "Value": 12,
+      "Independent": true
+    }
+  ],
+  "IsPlayingFlute": [
+    {
+      "Name": "CurrentFarmerFrame",
+      "Value": 98,
+      "Independent": true
+    },
+    {
+      "Name": "CurrentFarmerFrame",
+      "Value": 99,
+      "Independent": true
+    },
+    {
+      "Name": "CurrentFarmerFrame",
+      "Value": 100,
       "Independent": true
     }
   ]
