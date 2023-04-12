@@ -30,6 +30,7 @@ namespace FashionSense.Framework.Models.Appearances.Generic
             IsInventoryFull,
             IsDarkOut,
             IsRaining,
+            IsSnowing,
             IsWalking,
             IsRunning,
             IsEating,
