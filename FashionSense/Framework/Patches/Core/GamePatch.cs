@@ -20,6 +20,9 @@ namespace FashionSense.Framework.Patches.Core
         internal void Apply(Harmony harmony)
         {
             harmony.Patch(AccessTools.Method(_entity, nameof(Game1.drawTool), new[] { typeof(Farmer), typeof(int) }), transpiler: new HarmonyMethod(GetType(), nameof(DrawToolTranspiler)));
+
+            harmony.CreateReversePatcher(AccessTools.Method(_entity, nameof(Game1.IsRainingHere), new[] { typeof(GameLocation) }), new HarmonyMethod(GetType(), nameof(IsRainingHereReversePatch))).Patch();
+            harmony.CreateReversePatcher(AccessTools.Method(_entity, nameof(Game1.IsSnowingHere), new[] { typeof(GameLocation) }), new HarmonyMethod(GetType(), nameof(IsSnowingHereReversePatch))).Patch();
         }
 
         private static IEnumerable<CodeInstruction> DrawToolTranspiler(IEnumerable<CodeInstruction> instructions)
@@ -56,6 +59,16 @@ namespace FashionSense.Framework.Patches.Core
         private static float AdjustLayerDepthForHeldObjects(float layerDepth)
         {
             return Game1.player.FacingDirection == 0 || DrawPatch.lastCustomLayerDepth is null ? layerDepth : DrawPatch.lastCustomLayerDepth.Value + 0.0001f;
+        }
+
+        internal static bool IsRainingHereReversePatch(GameLocation location = null)
+        {
+            return false;
+        }
+
+        internal static bool IsSnowingHereReversePatch(GameLocation location = null)
+        {
+            return false;
         }
     }
 }

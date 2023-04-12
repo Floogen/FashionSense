@@ -7,6 +7,7 @@ using FashionSense.Framework.Models.Appearances.Pants;
 using FashionSense.Framework.Models.Appearances.Shirt;
 using FashionSense.Framework.Models.Appearances.Shoes;
 using FashionSense.Framework.Models.Appearances.Sleeves;
+using FashionSense.Framework.Patches.Core;
 using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Tools;
@@ -610,11 +611,11 @@ namespace FashionSense.Framework.Utilities
                 }
                 else if (condition.Name is Condition.Type.IsRaining)
                 {
-                    passedCheck = condition.IsValid(Game1.IsRainingHere(Game1.currentLocation));
+                    passedCheck = condition.IsValid(GamePatch.IsRainingHereReversePatch(Game1.currentLocation));
                 }
                 else if (condition.Name is Condition.Type.IsSnowing)
                 {
-                    passedCheck = condition.IsValid(Game1.IsSnowingHere(Game1.currentLocation));
+                    passedCheck = condition.IsValid(GamePatch.IsSnowingHereReversePatch(Game1.currentLocation));
                 }
                 else if (condition.Name is Condition.Type.IsWalking)
                 {
