@@ -752,44 +752,8 @@
       "Width": 16,
       "Length": 32
     },
-    "IdleAnimation": [
+    "UniformAnimation": [
       // Start of self-descriptive frames
-      {
-        "Frame": 24, // Also Dancing frame
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "GroupName": "IsIdle",
-            "Value": true
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
-          },
-          {
-            "Name": "IsPassingOut",
-            "Value": false
-          }
-        ]
-      },
-      {
-        "Frame": 30,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "IsCarrying",
-            "Value": true
-          },
-          {
-            "GroupName": "IsEatingOrDrinking",
-            "Value": false
-          },
-          {
-            "Name": "IsSick",
-            "Value": false
-          }
-        ]
-      },
       {
         "Frame": 221,
         "EndWhenFarmerFrameUpdates": true,
@@ -811,29 +775,6 @@
         ]
       },
       // End of self-descriptive frames
-
-      // Start of Dancing frames
-      {
-        "Frame": 25,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 13
-          }
-        ]
-      },
-      {
-        "Frame": 26,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 14
-          }
-        ]
-      },
-      // End of Dancing frames
 
       // Start of Harvesting / Milking frames
       {
@@ -909,26 +850,7 @@
           }
         ]
       },
-      {
-        "Frame": 122,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 62
-          }
-        ]
-      },
-      {
-        "Frame": 123, // Also Fishing -> Reeling frame
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 63
-          }
-        ]
-      },
+      // Frame 122 and 123 also are used, but they are already accounted for in Harvesting / Milking frames
       {
         "Frame": 148, // Also Fishing -> Caught frame
         "EndWhenFarmerFrameUpdates": true,
@@ -1066,22 +988,8 @@
             "Value": 83
           }
         ]
-      }
-      // End of Shearing frames
-    ],
-    "MovementAnimation": [
-      // Start of self-descriptive frames
-      {
-        "Frame": 221,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "RidingHorse",
-            "Value": true
-          }
-        ]
       },
-      // End of self-descriptive frames
+      // End of Shearing frames
 
       // Start of Walking and Running frames
       {
