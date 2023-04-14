@@ -1166,7 +1166,7 @@
 
       // Start of Harvesting / Milking frames
       {
-        "Frame": 117,
+        "Frame": 112,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -1176,7 +1176,7 @@
         ]
       },
       {
-        "Frame": 118,
+        "Frame": 113,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -1688,7 +1688,7 @@
 
       // Start of Harvesting / Milking frames
       {
-        "Frame": 117,
+        "Frame": 112,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -1698,7 +1698,7 @@
         ]
       },
       {
-        "Frame": 118,
+        "Frame": 113,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
