@@ -112,6 +112,27 @@
       },
       // End of Uh? frames
 
+      // Start of No frames
+      {
+        "Frame": 49,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 25
+          },
+          {
+            "Name": "IsUsingDagger",
+            "Value": false
+          },
+          {
+            "Name": "IsWatering",
+            "Value": false
+          }
+        ]
+      },
+      // End of No frames
+
       // Start of flute playing frames
       {
         "Frame": 200,
@@ -465,8 +486,8 @@
             "Value": 25
           },
           {
-            "Name": "IsWatering", // Need to check IsWater, as the dagger and watering can share the same frame index (but not position)
-            "Value": false
+            "Name": "IsUsingDagger",
+            "Value": true
           }
         ]
       },
