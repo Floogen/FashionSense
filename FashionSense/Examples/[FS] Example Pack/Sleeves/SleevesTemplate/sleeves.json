@@ -1259,6 +1259,16 @@
         ]
       },
       {
+        "Frame": 173, // Also Fishing -> Idle frame
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 89
+          }
+        ]
+      },
+      {
         "Frame": 144, // Also Fishing -> Caught frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
@@ -1767,6 +1777,16 @@
           {
             "Name": "CurrentFarmerFrame",
             "Value": 52
+          }
+        ]
+      },
+      {
+        "Frame": 173, // Also Fishing -> Idle frame
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 89
           }
         ]
       },
