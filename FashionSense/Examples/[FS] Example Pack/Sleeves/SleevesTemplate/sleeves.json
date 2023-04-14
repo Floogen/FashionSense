@@ -99,6 +99,19 @@
       },
       // End of Laughing frames
 
+      // Start of Uh? frames
+      {
+        "Frame": 16,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 10
+          }
+        ]
+      },
+      // End of Uh? frames
+
       // Start of flute playing frames
       {
         "Frame": 200,
