@@ -7,7 +7,7 @@
   // You do not need to follow this convention if using a custom tilesheet
 
   "Name": "Sleeves Template",
-  "Format": "5.0.12",
+  "Format": "5.4.2",
   "FrontSleeves": {
     "DisableNativeOffset": true,
     "ColorMasks": [
@@ -34,7 +34,7 @@
       "Width": 16,
       "Length": 32
     },
-    "IdleAnimation": [
+    "UniformAnimation": [
       // Start of self-descriptive frames
       {
         "Frame": 0, // Also Dancing frame
@@ -50,28 +50,6 @@
           },
           {
             "Name": "IsPassingOut",
-            "Value": false
-          }
-        ]
-      },
-      {
-        "Frame": 6,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "IsCarrying",
-            "Value": true
-          },
-          {
-            "GroupName": "IsEatingOrDrinking",
-            "Value": false
-          },
-          {
-            "Name": "IsSick",
-            "Value": false
-          },
-          {
-            "GroupName": "IsPlayingFlute",
             "Value": false
           }
         ]
@@ -97,6 +75,89 @@
         ]
       },
       // End of self-descriptive frames
+
+      // Start of Laughing frames
+      {
+        "Frame": 204,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 102
+          }
+        ]
+      },
+      {
+        "Frame": 205,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 103
+          }
+        ]
+      },
+      // End of Laughing frames
+
+      // Start of Uh? frames
+      {
+        "Frame": 16,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 10
+          }
+        ]
+      },
+      // End of Uh? frames
+
+      // Start of No frames
+      {
+        "Frame": 49,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 25
+          },
+          {
+            "Name": "IsUsingDagger",
+            "Value": false
+          },
+          {
+            "Name": "IsWatering",
+            "Value": false
+          }
+        ]
+      },
+      // End of No frames
+
+      // Start of Surprised frames
+      {
+        "Frame": 184,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 94
+          }
+        ]
+      },
+      // End of Surprised frames
+
+      // Start of Sitting / Clasped frames
+      {
+        "Frame": 185,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 95
+          }
+        ]
+      },
+      // End of Sitting / Clasped frames
 
       // Start of flute playing frames
       {
@@ -451,8 +512,8 @@
             "Value": 25
           },
           {
-            "Name": "IsWatering", // Need to check IsWater, as the dagger and watering can share the same frame index (but not position)
-            "Value": false
+            "Name": "IsUsingDagger",
+            "Value": true
           }
         ]
       },
@@ -560,7 +621,7 @@
         ]
       },
       {
-        "Frame": 244,
+        "Frame": 245,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -591,55 +652,8 @@
             "Value": 79
           }
         ]
-      }
+      },
       // End of Shearing frames
-    ],
-    "MovementAnimation": [
-      // Start of self-descriptive frames
-      {
-        "Frame": 209,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "RidingHorse",
-            "Value": true
-          }
-        ]
-      },
-      // End of self-descriptive frames
-
-      // Start of flute playing frames
-      {
-        "Frame": 200,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 98
-          }
-        ]
-      },
-      {
-        "Frame": 201,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 99
-          }
-        ]
-      },
-      {
-        "Frame": 202,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 100
-          }
-        ]
-      },
-      // End of flute playing frames
 
       // Start of Walking and Running frames
       {
@@ -796,7 +810,10 @@
   },
   "BackSleeves": {
     "DisableNativeOffset": true,
-    "DrawBeforeHair": true,
+    "DrawOrderOverride": {
+      "Preposition": "Before",
+      "AppearanceType": "Player"
+    },
     "ColorMasks": [
       [ 36, 36, 36 ],
       [ 119, 119, 119 ],
@@ -821,44 +838,8 @@
       "Width": 16,
       "Length": 32
     },
-    "IdleAnimation": [
+    "UniformAnimation": [
       // Start of self-descriptive frames
-      {
-        "Frame": 24, // Also Dancing frame
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "GroupName": "IsIdle",
-            "Value": true
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
-          },
-          {
-            "Name": "IsPassingOut",
-            "Value": false
-          }
-        ]
-      },
-      {
-        "Frame": 30,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "IsCarrying",
-            "Value": true
-          },
-          {
-            "GroupName": "IsEatingOrDrinking",
-            "Value": false
-          },
-          {
-            "Name": "IsSick",
-            "Value": false
-          }
-        ]
-      },
       {
         "Frame": 221,
         "EndWhenFarmerFrameUpdates": true,
@@ -880,29 +861,6 @@
         ]
       },
       // End of self-descriptive frames
-
-      // Start of Dancing frames
-      {
-        "Frame": 25,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 13
-          }
-        ]
-      },
-      {
-        "Frame": 26,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 14
-          }
-        ]
-      },
-      // End of Dancing frames
 
       // Start of Harvesting / Milking frames
       {
@@ -978,26 +936,7 @@
           }
         ]
       },
-      {
-        "Frame": 122,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 62
-          }
-        ]
-      },
-      {
-        "Frame": 123, // Also Fishing -> Reeling frame
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 63
-          }
-        ]
-      },
+      // Frame 122 and 123 also are used, but they are already accounted for in Harvesting / Milking frames
       {
         "Frame": 148, // Also Fishing -> Caught frame
         "EndWhenFarmerFrameUpdates": true,
@@ -1021,36 +960,6 @@
       // End of Heavy Tool frames
 
       // Start of Scythe / Melee Weapons frames
-      {
-        "Frame": 78,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 36
-          }
-        ]
-      },
-      {
-        "Frame": 79, // Dagger frame
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 37
-          }
-        ]
-      },
-      {
-        "Frame": 80,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 38
-          }
-        ]
-      },
       {
         "Frame": 81, // Dagger frame
         "EndWhenFarmerFrameUpdates": true,
@@ -1135,22 +1044,8 @@
             "Value": 83
           }
         ]
-      }
-      // End of Shearing frames
-    ],
-    "MovementAnimation": [
-      // Start of self-descriptive frames
-      {
-        "Frame": 221,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "RidingHorse",
-            "Value": true
-          }
-        ]
       },
-      // End of self-descriptive frames
+      // End of Shearing frames
 
       // Start of Walking and Running frames
       {
@@ -1331,44 +1226,8 @@
       "Width": 16,
       "Length": 32
     },
-    "IdleAnimation": [
+    "UniformAnimation": [
       // Start of self-descriptive frames
-      {
-        "Frame": 12, // Also Dancing frame
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "GroupName": "IsIdle",
-            "Value": true
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
-          },
-          {
-            "Name": "IsPassingOut",
-            "Value": false
-          }
-        ]
-      },
-      {
-        "Frame": 18,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "IsCarrying",
-            "Value": true
-          },
-          {
-            "GroupName": "IsEatingOrDrinking",
-            "Value": false
-          },
-          {
-            "Name": "IsSick",
-            "Value": false
-          }
-        ]
-      },
       {
         "Frame": 208,
         "EndWhenFarmerFrameUpdates": true,
@@ -1391,22 +1250,45 @@
       },
       // End of self-descriptive frames
 
-      // Start of Kissing frames
+      // Start of jar opening frames
       {
-        "Frame": 197,
+        "Frame": 219,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
             "Name": "CurrentFarmerFrame",
-            "Value": 101
+            "Value": 111
           }
         ]
       },
-      // End of Kissing frames
+      {
+        "Frame": 220,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 112
+          }
+        ]
+      },
+      // End of jar opening frames
+
+      // Start of cheer / wave frames
+      {
+        "Frame": 193,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 97
+          }
+        ]
+      },
+      // End of cheer / wave frames
 
       // Start of Harvesting / Milking frames
       {
-        "Frame": 117,
+        "Frame": 112,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -1416,7 +1298,7 @@
         ]
       },
       {
-        "Frame": 118,
+        "Frame": 113,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -1499,6 +1381,16 @@
         ]
       },
       {
+        "Frame": 173, // Also Fishing -> Idle frame
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 89
+          }
+        ]
+      },
+      {
         "Frame": 144, // Also Fishing -> Caught frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
@@ -1552,7 +1444,7 @@
         ]
       },
       {
-        "Frame": 69, // Dagger frame
+        "Frame": 63, // Dagger frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -1562,7 +1454,7 @@
         ]
       },
       {
-        "Frame": 70, // Sword -> Block frame
+        "Frame": 64, // Sword -> Block frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -1619,6 +1511,7 @@
       },
       // End of Slingshot frames
 
+
       // Start of Shearing frames
       {
         "Frame": 158,
@@ -1639,22 +1532,8 @@
             "Value": 81
           }
         ]
-      }
-      // End of Shearing frames
-    ],
-    "MovementAnimation": [
-      // Start of self-descriptive frames
-      {
-        "Frame": 208,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "RidingHorse",
-            "Value": true
-          }
-        ]
       },
-      // End of self-descriptive frames
+      // End of Shearing frames
 
       // Start of Kissing frames
       {
@@ -1905,44 +1784,8 @@
       "Width": 16,
       "Length": 32
     },
-    "IdleAnimation": [
+    "UniformAnimation": [
       // Start of self-descriptive frames
-      {
-        "Frame": 12, // Also Dancing frame
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "GroupName": "IsIdle",
-            "Value": true
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
-          },
-          {
-            "Name": "IsPassingOut",
-            "Value": false
-          }
-        ]
-      },
-      {
-        "Frame": 18,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "IsCarrying",
-            "Value": true
-          },
-          {
-            "GroupName": "IsEatingOrDrinking",
-            "Value": false
-          },
-          {
-            "Name": "IsSick",
-            "Value": false
-          }
-        ]
-      },
       {
         "Frame": 208,
         "EndWhenFarmerFrameUpdates": true,
@@ -1965,22 +1808,45 @@
       },
       // End of self-descriptive frames
 
-      // Start of Kissing frames
+      // Start of jar opening frames
       {
-        "Frame": 197,
+        "Frame": 219,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
             "Name": "CurrentFarmerFrame",
-            "Value": 101
+            "Value": 111
           }
         ]
       },
-      // End of Kissing frames
+      {
+        "Frame": 220,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 112
+          }
+        ]
+      },
+      // End of jar opening frames
+
+      // Start of cheer / wave frames
+      {
+        "Frame": 193,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 97
+          }
+        ]
+      },
+      // End of cheer / wave frames
 
       // Start of Harvesting / Milking frames
       {
-        "Frame": 117,
+        "Frame": 112,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -1990,7 +1856,7 @@
         ]
       },
       {
-        "Frame": 118,
+        "Frame": 113,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -2073,6 +1939,16 @@
         ]
       },
       {
+        "Frame": 173, // Also Fishing -> Idle frame
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 89
+          }
+        ]
+      },
+      {
         "Frame": 144, // Also Fishing -> Caught frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
@@ -2126,7 +2002,7 @@
         ]
       },
       {
-        "Frame": 69, // Dagger frame
+        "Frame": 63, // Dagger frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -2136,7 +2012,7 @@
         ]
       },
       {
-        "Frame": 70, // Sword -> Block frame
+        "Frame": 64, // Sword -> Block frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -2214,22 +2090,8 @@
             "Value": 81
           }
         ]
-      }
-      // End of Shearing frames
-    ],
-    "MovementAnimation": [
-      // Start of self-descriptive frames
-      {
-        "Frame": 208,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "RidingHorse",
-            "Value": true
-          }
-        ]
       },
-      // End of self-descriptive frames
+      // End of Shearing frames
 
       // Start of Kissing frames
       {

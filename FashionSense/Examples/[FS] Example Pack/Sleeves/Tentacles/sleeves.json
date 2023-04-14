@@ -104,7 +104,10 @@
       "MediumTone": [ 121, 121, 121 ],
       "DarkTone": [ 73, 73, 73 ]
     },
-    "DrawBeforeHair": true,
+    "DrawOrderOverride": {
+      "Preposition": "Before",
+      "AppearanceType": "Hair"
+    },
     "StartingPosition": {
       "X": 0,
       "Y": 0
