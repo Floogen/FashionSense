@@ -3,8 +3,10 @@
   "FrontAccessory": {
     "DisableGrayscale": true,
     "HideWhileSwimming": true,
-    "DrawBeforeHair": true,
-    "DrawBeforePlayer": false,
+    "DrawOrderOverride": {
+      "Preposition": "Before",
+      "AppearanceType": "Player"
+    },
     "StartingPosition": {
       "X": 0,
       "Y": 0
@@ -28,6 +30,10 @@
     "DisableGrayscale": true,
     "HideWhileSwimming": true,
     "Flipped": true,
+    "DrawOrderOverride": {
+      "Preposition": "After",
+      "AppearanceType": "Sleeves"
+    },
     "StartingPosition": {
       "X": 0,
       "Y": 0

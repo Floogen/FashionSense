@@ -810,7 +810,10 @@
   },
   "BackSleeves": {
     "DisableNativeOffset": true,
-    "DrawBeforeHair": true,
+    "DrawOrderOverride": {
+      "Preposition": "Before",
+      "AppearanceType": "Hair"
+    },
     "ColorMasks": [
       [ 36, 36, 36 ],
       [ 119, 119, 119 ],
