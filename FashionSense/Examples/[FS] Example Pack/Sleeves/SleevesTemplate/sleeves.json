@@ -76,6 +76,29 @@
       },
       // End of self-descriptive frames
 
+      // Start of Laughing frames
+      {
+        "Frame": 204,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 102
+          }
+        ]
+      },
+      {
+        "Frame": 205,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 103
+          }
+        ]
+      },
+      // End of Laughing frames
+
       // Start of flute playing frames
       {
         "Frame": 200,
