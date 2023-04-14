@@ -7,7 +7,7 @@
   // You do not need to follow this convention if using a custom tilesheet
 
   "Name": "Sleeves Template",
-  "Format": "5.0.12",
+  "Format": "5.4.2",
   "FrontSleeves": {
     "DisableNativeOffset": true,
     "ColorMasks": [
