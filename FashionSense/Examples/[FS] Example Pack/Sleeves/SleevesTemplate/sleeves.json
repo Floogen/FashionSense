@@ -1247,6 +1247,29 @@
       },
       // End of self-descriptive frames
 
+      // Start of jar opening frames
+      {
+        "Frame": 219,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 111
+          }
+        ]
+      },
+      {
+        "Frame": 220,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 112
+          }
+        ]
+      },
+      // End of jar opening frames
+
       // Start of Harvesting / Milking frames
       {
         "Frame": 112,
@@ -1768,6 +1791,29 @@
         ]
       },
       // End of self-descriptive frames
+
+      // Start of jar opening frames
+      {
+        "Frame": 219,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 111
+          }
+        ]
+      },
+      {
+        "Frame": 220,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 112
+          }
+        ]
+      },
+      // End of jar opening frames
 
       // Start of Harvesting / Milking frames
       {
