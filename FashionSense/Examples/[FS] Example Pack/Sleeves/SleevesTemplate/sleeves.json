@@ -1714,44 +1714,8 @@
       "Width": 16,
       "Length": 32
     },
-    "IdleAnimation": [
+    "UniformAnimation": [
       // Start of self-descriptive frames
-      {
-        "Frame": 12, // Also Dancing frame
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "GroupName": "IsIdle",
-            "Value": true
-          },
-          {
-            "Name": "IsCarrying",
-            "Value": false
-          },
-          {
-            "Name": "IsPassingOut",
-            "Value": false
-          }
-        ]
-      },
-      {
-        "Frame": 18,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "IsCarrying",
-            "Value": true
-          },
-          {
-            "GroupName": "IsEatingOrDrinking",
-            "Value": false
-          },
-          {
-            "Name": "IsSick",
-            "Value": false
-          }
-        ]
-      },
       {
         "Frame": 208,
         "EndWhenFarmerFrameUpdates": true,
@@ -1773,19 +1737,6 @@
         ]
       },
       // End of self-descriptive frames
-
-      // Start of Kissing frames
-      {
-        "Frame": 197,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 101
-          }
-        ]
-      },
-      // End of Kissing frames
 
       // Start of Harvesting / Milking frames
       {
@@ -2023,22 +1974,8 @@
             "Value": 81
           }
         ]
-      }
-      // End of Shearing frames
-    ],
-    "MovementAnimation": [
-      // Start of self-descriptive frames
-      {
-        "Frame": 208,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "RidingHorse",
-            "Value": true
-          }
-        ]
       },
-      // End of self-descriptive frames
+      // End of Shearing frames
 
       // Start of Kissing frames
       {
