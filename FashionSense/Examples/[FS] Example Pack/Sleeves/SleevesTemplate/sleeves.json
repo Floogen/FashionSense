@@ -538,7 +538,7 @@
         ]
       },
       {
-        "Frame": 244,
+        "Frame": 245,
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
