@@ -875,36 +875,6 @@
 
       // Start of Scythe / Melee Weapons frames
       {
-        "Frame": 78,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 36
-          }
-        ]
-      },
-      {
-        "Frame": 79, // Dagger frame
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 37
-          }
-        ]
-      },
-      {
-        "Frame": 80,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 38
-          }
-        ]
-      },
-      {
         "Frame": 81, // Dagger frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
