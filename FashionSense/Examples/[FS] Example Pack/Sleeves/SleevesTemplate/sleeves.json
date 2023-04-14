@@ -133,6 +133,19 @@
       },
       // End of No frames
 
+      // Start of Surprised frames
+      {
+        "Frame": 184,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 94
+          }
+        ]
+      },
+      // End of Surprised frames
+
       // Start of flute playing frames
       {
         "Frame": 200,
