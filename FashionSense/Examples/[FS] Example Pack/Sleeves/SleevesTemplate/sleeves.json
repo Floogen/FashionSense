@@ -1312,7 +1312,7 @@
         ]
       },
       {
-        "Frame": 69, // Dagger frame
+        "Frame": 63, // Dagger frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -1322,7 +1322,7 @@
         ]
       },
       {
-        "Frame": 70, // Sword -> Block frame
+        "Frame": 64, // Sword -> Block frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -1824,7 +1824,7 @@
         ]
       },
       {
-        "Frame": 69, // Dagger frame
+        "Frame": 63, // Dagger frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
@@ -1834,7 +1834,7 @@
         ]
       },
       {
-        "Frame": 70, // Sword -> Block frame
+        "Frame": 64, // Sword -> Block frame
         "EndWhenFarmerFrameUpdates": true,
         "Conditions": [
           {
