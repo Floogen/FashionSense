@@ -575,7 +575,7 @@ namespace FashionSense.Framework.Managers
             featureOffset.Y -= who.IsMale ? 4 : 0; // Manually adjusting for male sleeves
 
             DrawSleevesCustom(who, sleevesModel, sleevesModelPack, modelColor, positionOffset, featureOffset, GetSourceRectangle(sleevesModel, _appearanceTypeToAnimationModels));
-            if (_appearanceTypeToAnimationModels.TryGetValue(sleevesModel, out var animationModel) is true)
+            if (_appearanceTypeToAnimationModels.TryGetValue(sleevesModel, out var animationModel) is true && animationModel is not null)
             {
                 foreach (var subFrame in animationModel.SubFrames.Where(s => s.Handling is SubFrame.Type.Normal))
                 {
