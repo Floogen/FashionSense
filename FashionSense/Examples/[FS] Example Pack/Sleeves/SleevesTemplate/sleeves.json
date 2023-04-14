@@ -1270,6 +1270,19 @@
       },
       // End of jar opening frames
 
+      // Start of cheer / wave frames
+      {
+        "Frame": 193,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 97
+          }
+        ]
+      },
+      // End of cheer / wave frames
+
       // Start of Harvesting / Milking frames
       {
         "Frame": 112,
@@ -1814,6 +1827,19 @@
         ]
       },
       // End of jar opening frames
+
+      // Start of cheer / wave frames
+      {
+        "Frame": 193,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 97
+          }
+        ]
+      },
+      // End of cheer / wave frames
 
       // Start of Harvesting / Milking frames
       {
