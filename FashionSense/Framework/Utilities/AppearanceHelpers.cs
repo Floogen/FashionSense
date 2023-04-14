@@ -715,7 +715,7 @@ namespace FashionSense.Framework.Utilities
                 }
                 else if (condition.Name is Condition.Type.IsSitting)
                 {
-                    passedCheck = condition.IsValid(who.IsSitting());
+                    passedCheck = condition.IsValid(who.FarmerSprite.CurrentFrame == 107 || who.FarmerSprite.CurrentFrame == 117 || who.FarmerSprite.CurrentFrame == 113);
                 }
                 else if (condition.Name is Condition.Type.IsCarrying)
                 {
