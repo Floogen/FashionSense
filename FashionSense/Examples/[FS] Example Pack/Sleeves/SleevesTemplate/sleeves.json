@@ -34,7 +34,7 @@
       "Width": 16,
       "Length": 32
     },
-    "IdleAnimation": [
+    "UniformAnimation": [
       // Start of self-descriptive frames
       {
         "Frame": 0, // Also Dancing frame
@@ -50,28 +50,6 @@
           },
           {
             "Name": "IsPassingOut",
-            "Value": false
-          }
-        ]
-      },
-      {
-        "Frame": 6,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "IsCarrying",
-            "Value": true
-          },
-          {
-            "GroupName": "IsEatingOrDrinking",
-            "Value": false
-          },
-          {
-            "Name": "IsSick",
-            "Value": false
-          },
-          {
-            "GroupName": "IsPlayingFlute",
             "Value": false
           }
         ]
@@ -591,55 +569,8 @@
             "Value": 79
           }
         ]
-      }
+      },
       // End of Shearing frames
-    ],
-    "MovementAnimation": [
-      // Start of self-descriptive frames
-      {
-        "Frame": 209,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "RidingHorse",
-            "Value": true
-          }
-        ]
-      },
-      // End of self-descriptive frames
-
-      // Start of flute playing frames
-      {
-        "Frame": 200,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 98
-          }
-        ]
-      },
-      {
-        "Frame": 201,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 99
-          }
-        ]
-      },
-      {
-        "Frame": 202,
-        "EndWhenFarmerFrameUpdates": true,
-        "Conditions": [
-          {
-            "Name": "CurrentFarmerFrame",
-            "Value": 100
-          }
-        ]
-      },
-      // End of flute playing frames
 
       // Start of Walking and Running frames
       {
