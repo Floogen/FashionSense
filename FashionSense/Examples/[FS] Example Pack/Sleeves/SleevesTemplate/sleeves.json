@@ -146,6 +146,19 @@
       },
       // End of Surprised frames
 
+      // Start of Sitting / Clasped frames
+      {
+        "Frame": 185,
+        "EndWhenFarmerFrameUpdates": true,
+        "Conditions": [
+          {
+            "Name": "CurrentFarmerFrame",
+            "Value": 95
+          }
+        ]
+      },
+      // End of Sitting / Clasped frames
+
       // Start of flute playing frames
       {
         "Frame": 200,
