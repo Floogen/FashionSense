@@ -812,7 +812,7 @@
     "DisableNativeOffset": true,
     "DrawOrderOverride": {
       "Preposition": "Before",
-      "AppearanceType": "Hair"
+      "AppearanceType": "Player"
     },
     "ColorMasks": [
       [ 36, 36, 36 ],
