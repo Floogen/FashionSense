@@ -778,15 +778,15 @@ namespace FashionSense.Framework.Managers
                         continue;
                     }
 
-                    if (sleevesModel.ShirtToneMask.DarkTone is not null && data[i] == sleevesModel.ShirtToneMask.Darkest && (shirtModel is null || shirtModel.HasSleeveColorAtLayer(0)))
+                    if (data[i] == sleevesModel.ShirtToneMask.Darkest && (shirtModel is null || shirtModel.HasSleeveColorAtLayer(0)))
                     {
                         data[i] = firstSleeveColor;
                     }
-                    else if (sleevesModel.ShirtToneMask.MediumTone is not null && data[i] == sleevesModel.ShirtToneMask.Medium && (shirtModel is null || shirtModel.HasSleeveColorAtLayer(1)))
+                    else if (data[i] == sleevesModel.ShirtToneMask.Medium && (shirtModel is null || shirtModel.HasSleeveColorAtLayer(1)))
                     {
                         data[i] = secondSleeveColor;
                     }
-                    else if (sleevesModel.ShirtToneMask.LightTone is not null && data[i] == sleevesModel.ShirtToneMask.Lightest && (shirtModel is null || shirtModel.HasSleeveColorAtLayer(2)))
+                    else if (data[i] == sleevesModel.ShirtToneMask.Lightest && (shirtModel is null || shirtModel.HasSleeveColorAtLayer(2)))
                     {
                         data[i] = thirdSleeveColor;
                     }
@@ -799,15 +799,15 @@ namespace FashionSense.Framework.Managers
                         continue;
                     }
 
-                    if (sleevesModel.ColorMasks.Count > 0 && data[i] == AppearanceModel.GetColor(sleevesModel.ColorMasks[0]) && (shirtModel is null || shirtModel.HasSleeveColorAtLayer(0)))
+                    if (data[i] == sleevesModel.GetColorMaskByIndex(0) && (shirtModel is null || shirtModel.HasSleeveColorAtLayer(0)))
                     {
                         data[i] = firstSleeveColor;
                     }
-                    else if (sleevesModel.ColorMasks.Count > 1 && data[i] == AppearanceModel.GetColor(sleevesModel.ColorMasks[1]) && (shirtModel is null || shirtModel.HasSleeveColorAtLayer(1)))
+                    else if (data[i] == sleevesModel.GetColorMaskByIndex(1) && (shirtModel is null || shirtModel.HasSleeveColorAtLayer(1)))
                     {
                         data[i] = secondSleeveColor;
                     }
-                    else if (sleevesModel.ColorMasks.Count > 2 && data[i] == AppearanceModel.GetColor(sleevesModel.ColorMasks[2]) && (shirtModel is null || shirtModel.HasSleeveColorAtLayer(2)))
+                    else if (data[i] == sleevesModel.GetColorMaskByIndex(2) && (shirtModel is null || shirtModel.HasSleeveColorAtLayer(2)))
                     {
                         data[i] = thirdSleeveColor;
                     }

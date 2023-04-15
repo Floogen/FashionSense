@@ -182,6 +182,16 @@ namespace FashionSense.Framework.Models.Appearances
             return packType;
         }
 
+        internal Color? GetColorMaskByIndex(int index)
+        {
+            if (ColorMasks.Count > index)
+            {
+                return GetColor(ColorMasks[index]);
+            }
+
+            return null;
+        }
+
         internal static int GetColorIndex(int[] colorArray, int position)
         {
             if (position >= colorArray.Length)
