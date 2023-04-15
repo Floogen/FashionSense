@@ -791,23 +791,23 @@ namespace FashionSense.Framework.Managers
                         data[i] = thirdSleeveColor;
                     }
                 }
-                else if (sleevesModel.ColorMasks is not null)
+                else if (sleevesModel.ColorMaskLayers is not null)
                 {
-                    if (sleevesModel.IsMaskedColor(data[i]) is false)
+                    if (sleevesModel.IsMaskedColor(data[i], true) is false)
                     {
                         data[i] = Color.Transparent;
                         continue;
                     }
 
-                    if (data[i] == sleevesModel.GetColorMaskByIndex(0) && (shirtModel is null || shirtModel.HasSleeveColorAtLayer(0)))
+                    if (data[i] == sleevesModel.GetColorMaskByIndex(layerIndex: 0, maskIndex: 0) && (shirtModel is null || shirtModel.HasSleeveColorAtLayer(0)))
                     {
                         data[i] = firstSleeveColor;
                     }
-                    else if (data[i] == sleevesModel.GetColorMaskByIndex(1) && (shirtModel is null || shirtModel.HasSleeveColorAtLayer(1)))
+                    else if (data[i] == sleevesModel.GetColorMaskByIndex(layerIndex: 0, maskIndex: 1) && (shirtModel is null || shirtModel.HasSleeveColorAtLayer(1)))
                     {
                         data[i] = secondSleeveColor;
                     }
-                    else if (data[i] == sleevesModel.GetColorMaskByIndex(2) && (shirtModel is null || shirtModel.HasSleeveColorAtLayer(2)))
+                    else if (data[i] == sleevesModel.GetColorMaskByIndex(layerIndex: 0, maskIndex: 2) && (shirtModel is null || shirtModel.HasSleeveColorAtLayer(2)))
                     {
                         data[i] = thirdSleeveColor;
                     }
