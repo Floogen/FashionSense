@@ -33,7 +33,7 @@ namespace FashionSense.Framework.Models.Appearances
         public List<ColorMaskLayer> ColorMaskLayers { get; set; } = new List<ColorMaskLayer>();
         public List<int[]> ColorMasks
         {
-            set { ColorMaskLayers.Insert(0, new ColorMaskLayer() { Name = "Base", Values = value }); }
+            set { ColorMaskLayers.Insert(0, new ColorMaskLayer() { Name = FashionSense.modHelper.Translation.Get("ui.fashion_sense.mask_layer.base"), Values = value }); }
         }
         public SkinToneModel SkinToneMasks { get; set; }
         public List<AppearanceSync> AppearanceSyncing { get; set; } = new List<AppearanceSync>();
@@ -44,6 +44,35 @@ namespace FashionSense.Framework.Models.Appearances
         internal bool IsPlayerColorChoiceIgnored()
         {
             return DisableGrayscale || IsPrismatic;
+        }
+
+        internal bool IsMaskedColor(Color color, int layerIndexToCheck)
+        {
+            if (!HasColorMask() || ColorMaskLayers.Count <= layerIndexToCheck)
+            {
+                return false;
+            }
+
+            var layer = ColorMaskLayers[layerIndexToCheck];
+            foreach (Color maskedColor in layer.Values.Select(c => new Color(c[0], c[1], c[2], c.Length > 3 ? c[3] : 255)))
+            {
+                if (maskedColor == color)
+                {
+                    return true;
+                }
+
+                if (maskedColor.A is not (byte.MinValue or byte.MaxValue))
+                {
+                    // Premultiply the color for the mask, as SMAPI premultiplies the alpha
+                    Color adjustedColor = new Color(maskedColor.R * maskedColor.A / 255, maskedColor.G * maskedColor.A / 255, maskedColor.B * maskedColor.A / 255, maskedColor.A);
+                    if (adjustedColor == color)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         internal bool IsMaskedColor(Color color, bool checkFirstLayerOnly = false)
@@ -202,6 +231,11 @@ namespace FashionSense.Framework.Models.Appearances
             }
 
             return null;
+        }
+
+        internal string GetColorKey(int appearanceIndex = 0, int maskLayerIndex = 0)
+        {
+            return $"FashionSense.{GetPackType()}.{appearanceIndex}.Mask.{maskLayerIndex}.Color";
         }
 
         internal static int GetColorIndex(int[] colorArray, int position)
