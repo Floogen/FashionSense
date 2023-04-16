@@ -115,9 +115,9 @@ namespace FashionSense.Framework.Managers
             UpdateAccessoryCache(who);
         }
 
-        internal void SetColorForIndex(Farmer who, int index, Color color)
+        internal void SetColorForIndex(Farmer who, int index, Color color, int maskLayerIndex = 0)
         {
-            who.modData[GetKeyForAccessoryColor(index)] = color.PackedValue.ToString();
+            who.modData[GetKeyForAccessoryColor(index, maskLayerIndex)] = color.PackedValue.ToString();
 
             UpdateAccessoryCache(who);
         }
@@ -141,8 +141,12 @@ namespace FashionSense.Framework.Managers
             return $"FashionSense.CustomAccessory.{index}.Id";
         }
 
-        internal string GetKeyForAccessoryColor(int index)
+        internal string GetKeyForAccessoryColor(int index, int maskLayerIndex = 0)
         {
+            if (maskLayerIndex > 0)
+            {
+                return $"FashionSense.CustomAccessory.{index}.Color.{maskLayerIndex}.Mask";
+            }
             return $"FashionSense.CustomAccessory.{index}.Color";
         }
 
@@ -175,9 +179,9 @@ namespace FashionSense.Framework.Managers
             return true;
         }
 
-        internal Color GetColorFromIndex(Farmer who, int index)
+        internal Color GetColorFromIndex(Farmer who, int index, int maskLayerIndex = 0)
         {
-            var colorKey = GetKeyForAccessoryColor(index);
+            var colorKey = GetKeyForAccessoryColor(index, maskLayerIndex);
             if (IsKeyValid(who, colorKey, checkForValue: true) && uint.TryParse(who.modData[colorKey], out var parsedColor))
             {
                 return new Color(parsedColor);

@@ -543,7 +543,7 @@ namespace FashionSense.Framework.Utilities
 
         public static Color GetAppearanceColorByLayer(AppearanceModel model, Farmer who, int appearanceIndex = 0, int maskLayerIndex = 0)
         {
-            if (model is null || who.modData.ContainsKey(model.GetColorKey(appearanceIndex, maskLayerIndex)) is false)
+            if (model is null || who.modData.ContainsKey(model.GetColorKey(appearanceIndex, maskLayerIndex)) is false || String.IsNullOrEmpty(who.modData[model.GetColorKey(appearanceIndex, maskLayerIndex)]))
             {
                 return Color.White;
             }
