@@ -521,6 +521,44 @@ namespace FashionSense.Framework.Utilities
             return model.RequireAnimationToFinish && animationData.Iterator != 0;
         }
 
+        public static List<Color> GetAllAppearanceColors(Farmer who, AppearanceModel model, int appearanceIndex = 0)
+        {
+            List<Color> colors = new List<Color>();
+            if (model is null)
+            {
+                return colors;
+            }
+
+            for (int x = 0; x < model.ColorMaskLayers.Count; x++)
+            {
+                if (who.modData.ContainsKey(model.GetColorKey(appearanceIndex, x)))
+                {
+                    colors.Add(new Color() { PackedValue = uint.Parse(who.modData[model.GetColorKey(appearanceIndex, x)]) });
+                }
+            }
+
+            return colors;
+        }
+
+        public static Color GetAppearanceColorByLayer(AppearanceModel model, Farmer who, int appearanceIndex = 0, int maskLayerIndex = 0)
+        {
+            if (model is null || who.modData.ContainsKey(model.GetColorKey(appearanceIndex, maskLayerIndex)) is false)
+            {
+                return Color.White;
+            }
+
+            return new Color() { PackedValue = uint.Parse(who.modData[model.GetColorKey(appearanceIndex, maskLayerIndex)]) };
+        }
+
+        public static void SetAppearanceColorForLayer(AppearanceModel model, Farmer who, Color color, int appearanceIndex = 0, int maskLayerIndex = 0)
+        {
+            if (model is null)
+            {
+                return;
+            }
+
+            who.modData[model.GetColorKey(appearanceIndex, maskLayerIndex)] = color.PackedValue.ToString();
+        }
 
         public static bool HasRequiredModDataKeys(AppearanceModel model, Farmer who)
         {
