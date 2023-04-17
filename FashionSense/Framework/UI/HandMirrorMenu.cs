@@ -367,6 +367,24 @@ namespace FashionSense.Framework.UI
             }
         }
 
+        internal void Reset()
+        {
+            currentAccessorySlot = 0;
+            currentColorMaskLayerIndex = 0;
+            switch (GetNameOfEnabledFilter())
+            {
+                case HAIR_FILTER_BUTTON:
+                    colorPicker.SetColor(Game1.player.hairstyleColor);
+                    break;
+                case ACCESSORY_FILTER_BUTTON:
+                    colorPicker.SetColor(FashionSense.accessoryManager.GetColorFromIndex(Game1.player, GetAccessoryIndex()));
+                    break;
+                default:
+                    colorPicker.SetColor(AppearanceHelpers.GetAppearanceColorByLayer(GetActiveModel(), Game1.player));
+                    break;
+            }
+        }
+
         internal string GetColorPickerLabel(bool isDisabled = false, bool isCompact = false, string enabledFilterName = null)
         {
             string labelName = FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_active.generic");

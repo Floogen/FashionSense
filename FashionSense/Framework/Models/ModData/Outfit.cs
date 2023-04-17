@@ -1,4 +1,7 @@
-﻿using FashionSense.Framework.Utilities;
+﻿using FashionSense.Framework.Models.Appearances;
+using FashionSense.Framework.Patches.Renderer;
+using FashionSense.Framework.Utilities;
+using Microsoft.Xna.Framework;
 using StardewValley;
 using System;
 using System.Collections.Generic;
@@ -36,11 +39,18 @@ namespace FashionSense.Framework.Models
         public string AccessoryThreeColor { get; set; }
         public List<string> AccessoryColors { get; set; }
         public string HairColor { get; set; }
+
+        [Obsolete("No longer used as of Fashion Sense v5.5, use AppearanceToMaskColors instead.")]
         public string HatColor { get; set; }
+        [Obsolete("No longer used as of Fashion Sense v5.5, use AppearanceToMaskColors instead.")]
         public string ShirtColor { get; set; }
+        [Obsolete("No longer used as of Fashion Sense v5.5, use AppearanceToMaskColors instead.")]
         public string SleevesColor { get; set; }
+        [Obsolete("No longer used as of Fashion Sense v5.5, use AppearanceToMaskColors instead.")]
         public string PantsColor { get; set; }
+        [Obsolete("No longer used as of Fashion Sense v5.5, use AppearanceToMaskColors instead.")]
         public string ShoesColor { get; set; }
+        public Dictionary<AppearanceContentPack.Type, List<Color>> AppearanceToMaskColors { get; set; }
 
         public Outfit()
         {
@@ -50,7 +60,7 @@ namespace FashionSense.Framework.Models
         public Outfit(Farmer who, string name)
         {
             Name = name;
-            Version = 2;
+            Version = 3;
 
             HairId = who.modData[ModDataKeys.CUSTOM_HAIR_ID];
             AccessoryOneId = who.modData[ModDataKeys.CUSTOM_ACCESSORY_ID];
@@ -64,15 +74,18 @@ namespace FashionSense.Framework.Models
             ShoesId = who.modData[ModDataKeys.CUSTOM_SHOES_ID];
 
             HairColor = who.hairstyleColor.Value.PackedValue.ToString();
-            AccessoryOneColor = who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR];
-            AccessoryTwoColor = who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR];
-            AccessoryThreeColor = who.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR];
             AccessoryColors = FashionSense.accessoryManager.GetActiveAccessoryColorValues(who);
-            HatColor = who.modData[ModDataKeys.UI_HAND_MIRROR_HAT_COLOR];
-            ShirtColor = who.modData[ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR];
-            SleevesColor = who.modData[ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR];
-            PantsColor = who.modData[ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR];
-            ShoesColor = who.modData[ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR];
+
+            AppearanceToMaskColors = new Dictionary<AppearanceContentPack.Type, List<Color>>();
+            foreach (var metadata in DrawPatch.GetCurrentlyEquippedModels(who, who.FacingDirection))
+            {
+                if (metadata is null)
+                {
+                    continue;
+                }
+
+                AppearanceToMaskColors[metadata.Model.Pack.PackType] = metadata.Colors;
+            }
         }
     }
 }

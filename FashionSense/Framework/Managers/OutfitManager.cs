@@ -1,4 +1,5 @@
 ﻿using FashionSense.Framework.Models;
+using FashionSense.Framework.Models.Appearances;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
@@ -152,12 +153,26 @@ namespace FashionSense.Framework.Managers
             who.modData[ModDataKeys.CUSTOM_PANTS_ID] = String.IsNullOrEmpty(outfit.PantsId) ? "None" : outfit.PantsId;
             who.modData[ModDataKeys.CUSTOM_SHOES_ID] = String.IsNullOrEmpty(outfit.ShoesId) ? "None" : outfit.ShoesId;
 
+            // Handle old outfits without ColorMaskLayers
             who.changeHairColor(new Color() { PackedValue = uint.Parse(outfit.HairColor) });
-            who.modData[ModDataKeys.UI_HAND_MIRROR_HAT_COLOR] = outfit.HatColor;
-            who.modData[ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR] = outfit.ShirtColor;
-            who.modData[ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR] = outfit.SleevesColor;
-            who.modData[ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR] = outfit.PantsColor;
-            who.modData[ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR] = outfit.ShoesColor;
+            if (outfit.Version < 3)
+            {
+                who.modData[ModDataKeys.UI_HAND_MIRROR_HAT_COLOR] = outfit.HatColor;
+                who.modData[ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR] = outfit.ShirtColor;
+                who.modData[ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR] = outfit.SleevesColor;
+                who.modData[ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR] = outfit.PantsColor;
+                who.modData[ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR] = outfit.ShoesColor;
+            }
+            else
+            {
+                foreach (var data in outfit.AppearanceToMaskColors.Where(d => d.Key is not AppearanceContentPack.Type.Accessory))
+                {
+                    for (int x = 0; x < data.Value.Count; x++)
+                    {
+                        who.modData[AppearanceModel.GetColorKey(data.Key, maskLayerIndex: x)] = data.Value[x].PackedValue.ToString();
+                    }
+                }
+            }
 
             // Handle any old outfit versions
             if (outfit.Version == 1)

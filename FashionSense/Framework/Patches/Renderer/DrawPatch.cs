@@ -409,7 +409,6 @@ namespace FashionSense.Framework.Patches.Renderer
             // Shirt pack
             if (who.modData.ContainsKey(ModDataKeys.CUSTOM_SHIRT_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<ShirtContentPack>(who.modData[ModDataKeys.CUSTOM_SHIRT_ID]) is ShirtContentPack sPack && sPack != null)
             {
-                // TODO: Update AppearanceMetadata to take a list of colors (create the list based on the model's ColorMaskLayers count)
                 var shirtModel = sPack.GetShirtFromFacingDirection(facingDirection);
                 models.Add(new AppearanceMetadata(shirtModel, AppearanceHelpers.GetAllAppearanceColors(who, shirtModel)));
             }
