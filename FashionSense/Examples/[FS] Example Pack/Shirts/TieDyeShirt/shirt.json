@@ -1,0 +1,200 @@
+{
+  "Name": "Color Bar Shirt",
+  "FrontShirt": {
+    "ColorMaskLayers": [
+      {
+        "Name": "Base",
+        "Values": [
+          [ 142, 142, 142 ],
+          [ 94, 94, 94 ],
+          [ 59, 59, 59 ]
+        ]
+      },
+      {
+        "Name": "Color #1",
+        "Values": [
+          [ 215, 215, 215 ]
+        ]
+      },
+      {
+        "Name": "Color #2",
+        "Values": [
+          [ 214, 214, 214 ]
+        ]
+      },
+      {
+        "Name": "Color #3",
+        "Values": [
+          [ 213, 213, 213 ]
+        ]
+      },
+      {
+        "Name": "Color #4",
+        "Values": [
+          [ 212, 212, 212 ]
+        ]
+      }
+    ],
+    "SleeveColors": [
+      [ 9, 9, 10 ],
+      [ 254, 254, 254 ],
+      [ 198, 198, 198 ]
+    ],
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "ShirtSize": {
+      "Width": 8,
+      "Length": 8
+    }
+  },
+  "RightShirt": {
+    "ColorMaskLayers": [
+      {
+        "Name": "Base",
+        "Values": [
+          [ 142, 142, 142 ],
+          [ 94, 94, 94 ],
+          [ 59, 59, 59 ]
+        ]
+      },
+      {
+        "Name": "Color #1",
+        "Values": [
+          [ 215, 215, 215 ]
+        ]
+      },
+      {
+        "Name": "Color #2",
+        "Values": [
+          [ 214, 214, 214 ]
+        ]
+      },
+      {
+        "Name": "Color #3",
+        "Values": [
+          [ 213, 213, 213 ]
+        ]
+      },
+      {
+        "Name": "Color #4",
+        "Values": [
+          [ 212, 212, 212 ]
+        ]
+      }
+    ],
+    "StartingPosition": {
+      "X": 0,
+      "Y": 8
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "ShirtSize": {
+      "Width": 8,
+      "Length": 8
+    }
+  },
+  "LeftShirt": {
+    "ColorMaskLayers": [
+      {
+        "Name": "Base",
+        "Values": [
+          [ 142, 142, 142 ],
+          [ 94, 94, 94 ],
+          [ 59, 59, 59 ]
+        ]
+      },
+      {
+        "Name": "Color #1",
+        "Values": [
+          [ 215, 215, 215 ]
+        ]
+      },
+      {
+        "Name": "Color #2",
+        "Values": [
+          [ 214, 214, 214 ]
+        ]
+      },
+      {
+        "Name": "Color #3",
+        "Values": [
+          [ 213, 213, 213 ]
+        ]
+      },
+      {
+        "Name": "Color #4",
+        "Values": [
+          [ 212, 212, 212 ]
+        ]
+      }
+    ],
+    "StartingPosition": {
+      "X": 0,
+      "Y": 16
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "ShirtSize": {
+      "Width": 8,
+      "Length": 8
+    }
+  },
+  "BackShirt": {
+    "ColorMaskLayers": [
+      {
+        "Name": "Base",
+        "Values": [
+          [ 142, 142, 142 ],
+          [ 94, 94, 94 ],
+          [ 59, 59, 59 ]
+        ]
+      },
+      {
+        "Name": "Color #1",
+        "Values": [
+          [ 215, 215, 215 ]
+        ]
+      },
+      {
+        "Name": "Color #2",
+        "Values": [
+          [ 214, 214, 214 ]
+        ]
+      },
+      {
+        "Name": "Color #3",
+        "Values": [
+          [ 213, 213, 213 ]
+        ]
+      },
+      {
+        "Name": "Color #4",
+        "Values": [
+          [ 212, 212, 212 ]
+        ]
+      }
+    ],
+    "StartingPosition": {
+      "X": 0,
+      "Y": 24
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "ShirtSize": {
+      "Width": 8,
+      "Length": 8
+    }
+  }
+}
