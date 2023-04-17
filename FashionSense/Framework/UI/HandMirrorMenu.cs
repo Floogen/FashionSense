@@ -369,12 +369,12 @@ namespace FashionSense.Framework.UI
 
         internal void Reset()
         {
-            currentAccessorySlot = 0;
             currentColorMaskLayerIndex = 0;
             switch (GetNameOfEnabledFilter())
             {
                 case HAIR_FILTER_BUTTON:
                     colorPicker.SetColor(Game1.player.hairstyleColor);
+                    colorPicker.SetColor(AppearanceHelpers.GetAppearanceColorByLayer(GetActiveModel(), Game1.player));
                     break;
                 case ACCESSORY_FILTER_BUTTON:
                     colorPicker.SetColor(FashionSense.accessoryManager.GetColorFromIndex(Game1.player, GetAccessoryIndex()));
@@ -628,6 +628,7 @@ namespace FashionSense.Framework.UI
             {
                 case HAIR_FILTER_BUTTON:
                     Game1.player.changeHairColor(color);
+                    AppearanceHelpers.SetAppearanceColorForLayer(GetActiveModel(), Game1.player, color, maskLayerIndex: currentColorMaskLayerIndex);
                     break;
                 case ACCESSORY_FILTER_BUTTON:
                     FashionSense.accessoryManager.SetColorForIndex(Game1.player, GetAccessoryIndex(), color, maskLayerIndex: currentColorMaskLayerIndex);
@@ -637,7 +638,6 @@ namespace FashionSense.Framework.UI
                     break;
                 case SHIRT_FILTER_BUTTON:
                     AppearanceHelpers.SetAppearanceColorForLayer(GetActiveModel(), Game1.player, color, maskLayerIndex: currentColorMaskLayerIndex);
-                    FashionSense.SetSpriteDirty();
                     break;
                 case PANTS_FILTER_BUTTON:
                     AppearanceHelpers.SetAppearanceColorForLayer(GetActiveModel(), Game1.player, color, maskLayerIndex: currentColorMaskLayerIndex);
@@ -732,13 +732,14 @@ namespace FashionSense.Framework.UI
 
         private void selectionClick(string name, int change)
         {
+            AppearanceModel appearanceModel = GetActiveModel();
             switch (name)
             {
                 case "Appearance":
                     {
                         UpdateAppearance(change);
 
-                        currentColorMaskLayerIndex = 0;
+                        Reset();
                         break;
                     }
                 case "Direction":
@@ -747,7 +748,12 @@ namespace FashionSense.Framework.UI
                     _displayFarmer.completelyStopAnimatingOrDoingAction();
                     Game1.playSound("pickUpItem");
 
-                    currentColorMaskLayerIndex = 0;
+                    appearanceModel = GetActiveModel();
+                    if (appearanceModel is not null && appearanceModel.ColorMaskLayers.ElementAtOrDefault(currentColorMaskLayerIndex) is null)
+                    {
+                        Reset();
+                    }
+                    FashionSense.SetSpriteDirty();
                     break;
                 case LIMIT_TO_ACCCESSORIES:
                     if (Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON) && Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON] == ACCESSORY_FILTER_BUTTON)
@@ -760,7 +766,6 @@ namespace FashionSense.Framework.UI
 
                     break;
                 case MASK_LAYERS:
-                    AppearanceModel appearanceModel = GetActiveModel();
                     if (appearanceModel is null)
                     {
                         break;
