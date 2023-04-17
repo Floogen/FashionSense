@@ -54,6 +54,11 @@ namespace FashionSense.Framework.Models.Appearances
             }
 
             var layer = ColorMaskLayers[layerIndexToCheck];
+            if (layer.IgnoreUserColorChoice is true)
+            {
+                return false;
+            }
+
             foreach (Color maskedColor in layer.Values.Select(c => new Color(c[0], c[1], c[2], c.Length > 3 ? c[3] : 255)))
             {
                 if (maskedColor == color)
