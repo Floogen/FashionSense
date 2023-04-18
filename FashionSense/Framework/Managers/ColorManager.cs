@@ -1,8 +1,4 @@
-﻿using FashionSense.Framework.Models.Appearances;
-using FashionSense.Framework.Models.Appearances.Accessory;
-using FashionSense.Framework.Models.General;
-using FashionSense.Framework.Utilities;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using System.Collections.Generic;
@@ -40,6 +36,17 @@ namespace FashionSense.Framework.Managers
 
             who.modData[colorKey] = colorValue.PackedValue.ToString();
             _farmerToColorIdToColorValue[who][colorKey] = colorValue;
+        }
+
+        public void SetColor(Farmer who, string colorKey, string rawColorValue)
+        {
+            Color actualColor = who.hairstyleColor.Value;
+            if (uint.TryParse(rawColorValue, out var parsedColorValue) is true)
+            {
+                actualColor = new Color() { PackedValue = parsedColorValue };
+            }
+
+            SetColor(who, colorKey, actualColor);
         }
     }
 }
