@@ -8,7 +8,6 @@ using FashionSense.Framework.Models.Appearances.Shirt;
 using FashionSense.Framework.Models.Appearances.Shoes;
 using FashionSense.Framework.Models.Appearances.Sleeves;
 using FashionSense.Framework.Patches.Core;
-using FashionSense.Framework.Patches.Renderer;
 using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Tools;
@@ -526,7 +525,7 @@ namespace FashionSense.Framework.Utilities
         {
             if (model is null || model.ColorMaskLayers.Count == 0)
             {
-                return new List<Color>() { DrawPatch.GetColorValue(who, model) };
+                return new List<Color>() { FashionSense.colorManager.GetColor(who, model.GetColorKey(appearanceIndex, 0)) };
             }
 
             List<Color> colors = new List<Color>();
@@ -544,7 +543,7 @@ namespace FashionSense.Framework.Utilities
 
         public static Color GetAppearanceColorByLayer(AppearanceModel model, Farmer who, int appearanceIndex = 0, int maskLayerIndex = 0)
         {
-            if (model is null || who.modData.ContainsKey(model.GetColorKey(appearanceIndex, maskLayerIndex)) is false || String.IsNullOrEmpty(who.modData[model.GetColorKey(appearanceIndex, maskLayerIndex)]))
+            if (model is null)
             {
                 return Color.White;
             }
