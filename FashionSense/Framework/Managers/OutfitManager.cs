@@ -162,6 +162,12 @@ namespace FashionSense.Framework.Managers
                 who.modData[ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR] = outfit.SleevesColor;
                 who.modData[ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR] = outfit.PantsColor;
                 who.modData[ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR] = outfit.ShoesColor;
+
+                FashionSense.SetCachedColor(ModDataKeys.UI_HAND_MIRROR_HAT_COLOR, AppearanceContentPack.Type.Hat, 0);
+                FashionSense.SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR, AppearanceContentPack.Type.Shirt, 0);
+                FashionSense.SetCachedColor(ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR, AppearanceContentPack.Type.Pants, 0);
+                FashionSense.SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR, AppearanceContentPack.Type.Sleeves, 0);
+                FashionSense.SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR, AppearanceContentPack.Type.Shoes, 0);
             }
             else
             {
@@ -169,7 +175,7 @@ namespace FashionSense.Framework.Managers
                 {
                     for (int x = 0; x < data.Value.Count; x++)
                     {
-                        who.modData[AppearanceModel.GetColorKey(data.Key, maskLayerIndex: x)] = data.Value[x].PackedValue.ToString();
+                        FashionSense.colorManager.SetColor(who, AppearanceModel.GetColorKey(data.Key, maskLayerIndex: x), data.Value[x]);
                     }
                 }
             }
