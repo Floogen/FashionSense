@@ -1,6 +1,7 @@
 ﻿using FashionSense.Framework.Models.Appearances;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using StardewModdingAPI;
 using StardewValley;
@@ -117,7 +118,7 @@ namespace FashionSense.Framework.Managers
 
         internal void SetColorForIndex(Farmer who, int index, Color color, int maskLayerIndex = 0)
         {
-            who.modData[GetKeyForAccessoryColor(index, maskLayerIndex)] = color.PackedValue.ToString();
+            FashionSense.colorManager.SetColor(who, GetKeyForAccessoryColor(index, maskLayerIndex), color);
 
             UpdateAccessoryCache(who);
         }
@@ -181,13 +182,7 @@ namespace FashionSense.Framework.Managers
 
         internal Color GetColorFromIndex(Farmer who, int index, int maskLayerIndex = 0)
         {
-            var colorKey = GetKeyForAccessoryColor(index, maskLayerIndex);
-            if (IsKeyValid(who, colorKey, checkForValue: true) && uint.TryParse(who.modData[colorKey], out var parsedColor))
-            {
-                return new Color(parsedColor);
-            }
-
-            return Color.White;
+            return FashionSense.colorManager.GetColor(who, GetKeyForAccessoryColor(index, maskLayerIndex));
         }
 
         internal string GetAccessoryIdByIndex(Farmer who, int index)

@@ -47,6 +47,7 @@ namespace FashionSense
         internal static AnimationManager animationManager;
         internal static ApiManager apiManager;
         internal static AssetManager assetManager;
+        internal static ColorManager colorManager;
         internal static LayerManager layerManager;
         internal static OutfitManager outfitManager;
         internal static TextureManager textureManager;
@@ -74,6 +75,7 @@ namespace FashionSense
             animationManager = new AnimationManager(monitor);
             apiManager = new ApiManager(monitor);
             assetManager = new AssetManager(modHelper);
+            colorManager = new ColorManager(monitor);
             layerManager = new LayerManager(monitor);
             outfitManager = new OutfitManager(monitor);
             textureManager = new TextureManager(monitor);

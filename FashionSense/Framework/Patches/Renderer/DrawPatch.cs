@@ -350,7 +350,7 @@ namespace FashionSense.Framework.Patches.Renderer
                     return Color.White;
             }
 
-            return new Color() { PackedValue = who.modData.ContainsKey(key) ? uint.Parse(who.modData[key]) : who.hairstyleColor.Value.PackedValue };
+            return FashionSense.colorManager.GetColor(who, key);
         }
 
         internal static List<AppearanceMetadata> GetCurrentlyEquippedModels(Farmer who, int facingDirection)
