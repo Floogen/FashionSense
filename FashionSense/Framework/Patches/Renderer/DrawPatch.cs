@@ -389,7 +389,7 @@ namespace FashionSense.Framework.Patches.Renderer
                             }
 
                             var colors = new List<Color>() { FashionSense.accessoryManager.GetColorFromIndex(who, index) };
-                            foreach (var color in AppearanceHelpers.GetAllAppearanceColors(who, accessoryModel))
+                            foreach (var color in AppearanceHelpers.GetAllAppearanceColors(who, accessoryModel, appearanceIndex: index))
                             {
                                 colors.Add(color);
                             }
