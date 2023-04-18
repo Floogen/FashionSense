@@ -388,8 +388,12 @@ namespace FashionSense.Framework.Patches.Renderer
                                 continue;
                             }
 
-                            // TODO: Update handling for accessory colors
-                            models.Add(new AppearanceMetadata(accessoryModel, new List<Color>() { FashionSense.accessoryManager.GetColorFromIndex(who, index) }));
+                            var colors = new List<Color>() { FashionSense.accessoryManager.GetColorFromIndex(who, index) };
+                            foreach (var color in AppearanceHelpers.GetAllAppearanceColors(who, accessoryModel))
+                            {
+                                colors.Add(color);
+                            }
+                            models.Add(new AppearanceMetadata(accessoryModel, colors));
                         }
                     }
                 }

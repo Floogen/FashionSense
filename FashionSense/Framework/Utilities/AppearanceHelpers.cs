@@ -532,9 +532,10 @@ namespace FashionSense.Framework.Utilities
             List<Color> colors = new List<Color>();
             for (int x = 0; x < model.ColorMaskLayers.Count; x++)
             {
-                if (who.modData.ContainsKey(model.GetColorKey(appearanceIndex, x)))
+                var colorKey = model.GetColorKey(appearanceIndex, x);
+                if (who.modData.ContainsKey(colorKey))
                 {
-                    colors.Add(new Color() { PackedValue = uint.Parse(who.modData[model.GetColorKey(appearanceIndex, x)]) });
+                    colors.Add(new Color() { PackedValue = uint.Parse(who.modData[colorKey]) });
                 }
             }
 
