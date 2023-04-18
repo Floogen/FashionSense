@@ -146,7 +146,7 @@ namespace FashionSense.Framework.Managers
         {
             if (maskLayerIndex > 0)
             {
-                return $"FashionSense.CustomAccessory.{index}.Color.{maskLayerIndex}.Mask";
+                return $"FashionSense.CustomAccessory.{maskLayerIndex}.Mask.{index}.Color";
             }
             return $"FashionSense.CustomAccessory.{index}.Color";
         }

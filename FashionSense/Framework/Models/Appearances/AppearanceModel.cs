@@ -245,7 +245,7 @@ namespace FashionSense.Framework.Models.Appearances
 
         internal static string GetColorKey(AppearanceContentPack.Type type, int appearanceIndex = 0, int maskLayerIndex = 0)
         {
-            return $"FashionSense.{type}.{appearanceIndex}.Mask.{maskLayerIndex}.Color";
+            return $"FashionSense.{(type is AppearanceContentPack.Type.Accessory ? "CustomAccessory" : type)}.{appearanceIndex}.Mask.{maskLayerIndex}.Color";
         }
 
         internal static int GetColorIndex(int[] colorArray, int position)
