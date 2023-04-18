@@ -795,11 +795,14 @@ namespace FashionSense.Framework.UI
             bool hasFoundNextLayer = false;
             while (hasFoundNextLayer is false)
             {
-                var colorMaskLayer = appearanceModel.ColorMaskLayers.ElementAtOrDefault(maskLayerIndex);
-                if (colorMaskLayer is not null && colorMaskLayer.IgnoreUserColorChoice is true)
+                if (appearanceModel is not null)
                 {
-                    maskLayerIndex += change;
-                    continue;
+                    var colorMaskLayer = appearanceModel.ColorMaskLayers.ElementAtOrDefault(maskLayerIndex);
+                    if (colorMaskLayer is not null && colorMaskLayer.IgnoreUserColorChoice is true)
+                    {
+                        maskLayerIndex += change;
+                        continue;
+                    }
                 }
 
                 hasFoundNextLayer = true;
