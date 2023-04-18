@@ -369,18 +369,18 @@ namespace FashionSense.Framework.UI
 
         internal void Reset()
         {
-            currentColorMaskLayerIndex = 0;
+            currentColorMaskLayerIndex = GetNextValidColorMaskLayer(GetActiveModel(), 0, 1);
             switch (GetNameOfEnabledFilter())
             {
                 case HAIR_FILTER_BUTTON:
                     colorPicker.SetColor(Game1.player.hairstyleColor);
-                    colorPicker.SetColor(AppearanceHelpers.GetAppearanceColorByLayer(GetActiveModel(), Game1.player));
+                    colorPicker.SetColor(AppearanceHelpers.GetAppearanceColorByLayer(GetActiveModel(), Game1.player, maskLayerIndex: currentColorMaskLayerIndex));
                     break;
                 case ACCESSORY_FILTER_BUTTON:
-                    colorPicker.SetColor(FashionSense.accessoryManager.GetColorFromIndex(Game1.player, GetAccessoryIndex()));
+                    colorPicker.SetColor(FashionSense.accessoryManager.GetColorFromIndex(Game1.player, GetAccessoryIndex(), maskLayerIndex: currentColorMaskLayerIndex));
                     break;
                 default:
-                    colorPicker.SetColor(AppearanceHelpers.GetAppearanceColorByLayer(GetActiveModel(), Game1.player));
+                    colorPicker.SetColor(AppearanceHelpers.GetAppearanceColorByLayer(GetActiveModel(), Game1.player, maskLayerIndex: currentColorMaskLayerIndex));
                     break;
             }
         }
@@ -771,7 +771,7 @@ namespace FashionSense.Framework.UI
                         break;
                     }
 
-                    int updatedColorMaskLayerIndex = currentColorMaskLayerIndex + change;
+                    int updatedColorMaskLayerIndex = GetNextValidColorMaskLayer(appearanceModel, currentColorMaskLayerIndex + change, change);
                     if (updatedColorMaskLayerIndex >= 0 && appearanceModel.ColorMaskLayers.Count > updatedColorMaskLayerIndex)
                     {
                         currentColorMaskLayerIndex = updatedColorMaskLayerIndex;
@@ -788,6 +788,24 @@ namespace FashionSense.Framework.UI
 
                     break;
             }
+        }
+
+        private int GetNextValidColorMaskLayer(AppearanceModel appearanceModel, int maskLayerIndex, int change)
+        {
+            bool hasFoundNextLayer = false;
+            while (hasFoundNextLayer is false)
+            {
+                var colorMaskLayer = appearanceModel.ColorMaskLayers.ElementAtOrDefault(maskLayerIndex);
+                if (colorMaskLayer is not null && colorMaskLayer.IgnoreUserColorChoice is true)
+                {
+                    maskLayerIndex += change;
+                    continue;
+                }
+
+                hasFoundNextLayer = true;
+            }
+
+            return maskLayerIndex;
         }
 
         public override void receiveLeftClick(int x, int y, bool playSound = true)
