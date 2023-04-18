@@ -1,7 +1,6 @@
 ﻿using FashionSense.Framework.Models.Appearances;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using StardewModdingAPI;
 using StardewValley;
@@ -35,7 +34,7 @@ namespace FashionSense.Framework.Managers
                 foreach (string accessoryId in accessoryIds)
                 {
                     var index = AddAccessory(who, accessoryId, skipCacheUpdate: true);
-                    who.modData[GetKeyForAccessoryColor(index)] = uint.Parse(colors[index]).ToString();
+                    FashionSense.colorManager.SetColor(who, GetKeyForAccessoryColor(index), colors[index]);
 
                     UpdateAccessoryCache(who);
                 }
