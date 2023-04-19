@@ -3,7 +3,7 @@
   "FrontShirt": {
     "ColorMaskLayers": [
       {
-        "Name": "Shirt",
+        "Name": "Shirt Color",
         "Values": [
           [ 129, 129, 129 ],
           [ 113, 113, 113 ],
@@ -13,7 +13,7 @@
         ]
       },
       {
-        "Name": "Overalls",
+        "Name": "Overalls Color",
         "Values": [
           [ 191, 191, 191 ],
           [ 169, 169, 169 ],
@@ -42,7 +42,7 @@
   "RightShirt": {
     "ColorMaskLayers": [
       {
-        "Name": "Shirt",
+        "Name": "Shirt Color",
         "Values": [
           [ 129, 129, 129 ],
           [ 113, 113, 113 ],
@@ -52,7 +52,7 @@
         ]
       },
       {
-        "Name": "Overalls",
+        "Name": "Overalls Color",
         "Values": [
           [ 191, 191, 191 ],
           [ 169, 169, 169 ],
@@ -76,7 +76,7 @@
   "LeftShirt": {
     "ColorMaskLayers": [
       {
-        "Name": "Shirt",
+        "Name": "Shirt Color",
         "Values": [
           [ 129, 129, 129 ],
           [ 113, 113, 113 ],
@@ -86,7 +86,7 @@
         ]
       },
       {
-        "Name": "Overalls",
+        "Name": "Overalls Color",
         "Values": [
           [ 191, 191, 191 ],
           [ 169, 169, 169 ],
@@ -110,7 +110,7 @@
   "BackShirt": {
     "ColorMaskLayers": [
       {
-        "Name": "Shirt",
+        "Name": "Shirt Color",
         "Values": [
           [ 129, 129, 129 ],
           [ 113, 113, 113 ],
@@ -120,7 +120,7 @@
         ]
       },
       {
-        "Name": "Overalls",
+        "Name": "Overalls Color",
         "Values": [
           [ 191, 191, 191 ],
           [ 169, 169, 169 ],
