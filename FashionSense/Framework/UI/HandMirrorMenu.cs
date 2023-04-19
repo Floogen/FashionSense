@@ -773,7 +773,7 @@ namespace FashionSense.Framework.UI
                         break;
                     }
 
-                    int updatedColorMaskLayerIndex = GetNextValidColorMaskLayer(appearanceModel, currentColorMaskLayerIndex + change, change);
+                    int updatedColorMaskLayerIndex = GetNextValidColorMaskLayer(appearanceModel, currentColorMaskLayerIndex, change);
                     if (updatedColorMaskLayerIndex >= 0 && appearanceModel.ColorMaskLayers.Count > updatedColorMaskLayerIndex)
                     {
                         currentColorMaskLayerIndex = updatedColorMaskLayerIndex;
@@ -795,6 +795,12 @@ namespace FashionSense.Framework.UI
         private int GetNextValidColorMaskLayer(AppearanceModel appearanceModel, int maskLayerIndex, int change)
         {
             bool hasFoundNextLayer = false;
+
+            if (appearanceModel is not null && appearanceModel.ColorMaskLayers.ElementAtOrDefault(maskLayerIndex + change) is not null)
+            {
+                maskLayerIndex += change;
+            }
+
             while (hasFoundNextLayer is false)
             {
                 if (appearanceModel is not null)
@@ -1458,6 +1464,8 @@ namespace FashionSense.Framework.UI
                 {
                     continue;
                 }
+                else if (leftSelectionButton.name == MASK_LAYERS && (GetNextValidColorMaskLayer(GetActiveModel(), currentColorMaskLayerIndex, -1) < 0 || currentColorMaskLayerIndex == GetNextValidColorMaskLayer(GetActiveModel(), currentColorMaskLayerIndex, -1)))
+                {
                 leftSelectionButton.draw(b);
             }
             foreach (ClickableTextureComponent rightSelectionButton in rightSelectionButtons)
