@@ -748,11 +748,7 @@ namespace FashionSense.Framework.UI
                     _displayFarmer.completelyStopAnimatingOrDoingAction();
                     Game1.playSound("pickUpItem");
 
-                    appearanceModel = GetActiveModel();
-                    if (appearanceModel is not null && appearanceModel.ColorMaskLayers.ElementAtOrDefault(currentColorMaskLayerIndex) is null)
-                    {
-                        Reset();
-                    }
+                    Reset();
                     FashionSense.SetSpriteDirty();
                     break;
                 case LIMIT_TO_ACCCESSORIES:
