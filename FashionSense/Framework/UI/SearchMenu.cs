@@ -301,6 +301,8 @@ namespace FashionSense.Framework.UI
 
                     FashionSense.ResetAnimationModDataFields(_displayFarmer, 0, AnimationModel.Type.Idle, _displayFarmer.facingDirection);
                     FashionSense.SetSpriteDirty();
+                    _callbackMenu.Reset();
+
                     base.exitThisMenu();
                     Game1.activeClickableMenu = _callbackMenu;
                     return;
