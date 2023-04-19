@@ -369,7 +369,11 @@ namespace FashionSense.Framework.UI
 
         internal void Reset()
         {
-            currentColorMaskLayerIndex = GetNextValidColorMaskLayer(GetActiveModel(), 0, 1);
+            currentColorMaskLayerIndex = GetNextValidColorMaskLayer(GetActiveModel(), -1, 1);
+            if (currentColorMaskLayerIndex < 0)
+            {
+                currentColorMaskLayerIndex = 0;
+            }
             switch (GetNameOfEnabledFilter())
             {
                 case HAIR_FILTER_BUTTON:
