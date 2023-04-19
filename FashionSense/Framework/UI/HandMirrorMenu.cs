@@ -889,6 +889,8 @@ namespace FashionSense.Framework.UI
                         c.scale -= 0.25f;
                         c.scale = Math.Max(2.75f, c.scale);
                     }
+
+                    Reset();
                 }
             }
 
