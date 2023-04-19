@@ -1441,6 +1441,7 @@ namespace FashionSense.Framework.UI
 
             // Get the custom hair object, if it exists
             AppearanceContentPack contentPack = GetActiveContentPack();
+            AppearanceModel appearanceModel = GetActiveModel();
 
             // General UI (title, background)
             b.Draw(Game1.fadeToBlackRect, Game1.graphics.GraphicsDevice.Viewport.Bounds, Color.Black * 0.75f);
@@ -1460,8 +1461,12 @@ namespace FashionSense.Framework.UI
                 {
                     continue;
                 }
-                else if (leftSelectionButton.name == MASK_LAYERS && (GetNextValidColorMaskLayer(GetActiveModel(), currentColorMaskLayerIndex, -1) < 0 || currentColorMaskLayerIndex == GetNextValidColorMaskLayer(GetActiveModel(), currentColorMaskLayerIndex, -1)))
+                else if (leftSelectionButton.name == MASK_LAYERS && (GetNextValidColorMaskLayer(appearanceModel, currentColorMaskLayerIndex, -1) < 0 || currentColorMaskLayerIndex == GetNextValidColorMaskLayer(appearanceModel, currentColorMaskLayerIndex, -1)))
                 {
+                    leftSelectionButton.draw(b, Color.Gray, 1f);
+                    continue;
+                }
+
                 leftSelectionButton.draw(b);
             }
             foreach (ClickableTextureComponent rightSelectionButton in rightSelectionButtons)
@@ -1470,6 +1475,12 @@ namespace FashionSense.Framework.UI
                 {
                     continue;
                 }
+                else if (rightSelectionButton.name == MASK_LAYERS && currentColorMaskLayerIndex == GetNextValidColorMaskLayer(appearanceModel, currentColorMaskLayerIndex, 1))
+                {
+                    rightSelectionButton.draw(b, Color.Gray, 1f);
+                    continue;
+                }
+
                 rightSelectionButton.draw(b);
             }
             foreach (ClickableTextureComponent filterButton in filterButtons)
