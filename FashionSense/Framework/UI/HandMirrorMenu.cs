@@ -392,7 +392,7 @@ namespace FashionSense.Framework.UI
             if (isDisabled)
             {
                 var separator = isCompact ? "\n" : " ";
-                labelName += $"{separator}{FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_disabled.generic")}";
+                return $"{labelName}{separator}{FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_disabled.generic")}";
             }
 
             if (GetActiveModel() is not null && GetActiveModel().ColorMaskLayers.Count > currentColorMaskLayerIndex && String.IsNullOrEmpty(GetActiveModel().ColorMaskLayers[currentColorMaskLayerIndex].Name) is false)
@@ -400,7 +400,7 @@ namespace FashionSense.Framework.UI
                 return $"{GetActiveModel().ColorMaskLayers[currentColorMaskLayerIndex].Name} {labelName}:";
             }
 
-            return $"{labelName}:";
+            return $"{FashionSense.modHelper.Translation.Get("ui.fashion_sense.mask_layer.base")} {labelName}:";
         }
 
         internal void SetFilter(string filterName, AppearanceContentPack appearancePack)
