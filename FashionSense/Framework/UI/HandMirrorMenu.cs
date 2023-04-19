@@ -762,6 +762,8 @@ namespace FashionSense.Framework.UI
                         accessorySlotLabel.name = (currentAccessorySlot + 1).ToString();
 
                         colorPicker.SetColor(FashionSense.accessoryManager.GetColorFromIndex(Game1.player, GetAccessoryIndex(), maskLayerIndex: currentColorMaskLayerIndex));
+
+                        Reset();
                     }
 
                     break;
