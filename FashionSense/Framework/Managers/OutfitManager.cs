@@ -168,6 +168,9 @@ namespace FashionSense.Framework.Managers
                 FashionSense.SetCachedColor(ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR, AppearanceContentPack.Type.Pants, 0);
                 FashionSense.SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR, AppearanceContentPack.Type.Sleeves, 0);
                 FashionSense.SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR, AppearanceContentPack.Type.Shoes, 0);
+
+                // Cache hair color, as previous versions (5.4 and below) did not utilize a ModData key for it
+                FashionSense.colorManager.SetColor(Game1.player, AppearanceModel.GetColorKey(AppearanceContentPack.Type.Hair, 0), outfit.HairColor);
             }
             else
             {

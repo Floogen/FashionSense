@@ -241,6 +241,9 @@ namespace FashionSense
             SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR, AppearanceContentPack.Type.Sleeves, 0);
             SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR, AppearanceContentPack.Type.Shoes, 0);
 
+            // Cache hair color, as previous versions (5.4 and below) did not utilize a ModData key for it
+            colorManager.SetColor(Game1.player, AppearanceModel.GetColorKey(AppearanceContentPack.Type.Hair, 0), Game1.player.hairstyleColor.Value);
+
             // Reset the name of the internal shoe override pack
             if (textureManager.GetSpecificAppearanceModel<ShoesContentPack>(ModDataKeys.INTERNAL_COLOR_OVERRIDE_SHOE_ID) is ShoesContentPack shoePack && shoePack is not null)
             {
