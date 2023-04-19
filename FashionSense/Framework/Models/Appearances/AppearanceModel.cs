@@ -33,7 +33,7 @@ namespace FashionSense.Framework.Models.Appearances
         public List<ColorMaskLayer> ColorMaskLayers { get; set; } = new List<ColorMaskLayer>();
         public List<int[]> ColorMasks
         {
-            set { ColorMaskLayers.Insert(0, new ColorMaskLayer() { Name = FashionSense.modHelper.Translation.Get("ui.fashion_sense.mask_layer.base"), Values = value }); }
+            set { ColorMaskLayers.Insert(0, new ColorMaskLayer() { Name = $"{FashionSense.modHelper.Translation.Get("ui.fashion_sense.mask_layer.base")} {FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_active.generic")}", Values = value }); }
         }
         public SkinToneModel SkinToneMasks { get; set; }
         public List<AppearanceSync> AppearanceSyncing { get; set; } = new List<AppearanceSync>();

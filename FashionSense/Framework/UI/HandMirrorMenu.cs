@@ -387,20 +387,18 @@ namespace FashionSense.Framework.UI
 
         internal string GetColorPickerLabel(bool isDisabled = false, bool isCompact = false, string enabledFilterName = null)
         {
-            string labelName = FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_active.generic");
-
+            var separator = isCompact ? "\n" : " ";
             if (isDisabled)
             {
-                var separator = isCompact ? "\n" : " ";
-                return $"{labelName}{separator}{FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_disabled.generic")}";
+                return $"{FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_active.generic")}{separator}{FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_disabled.generic")}";
             }
 
             if (GetActiveModel() is not null && GetActiveModel().ColorMaskLayers.Count > currentColorMaskLayerIndex && String.IsNullOrEmpty(GetActiveModel().ColorMaskLayers[currentColorMaskLayerIndex].Name) is false)
             {
-                return $"{GetActiveModel().ColorMaskLayers[currentColorMaskLayerIndex].Name} {labelName}:";
+                return $"{GetActiveModel().ColorMaskLayers[currentColorMaskLayerIndex].Name}:";
             }
 
-            return $"{FashionSense.modHelper.Translation.Get("ui.fashion_sense.mask_layer.base")} {labelName}:";
+            return $"{FashionSense.modHelper.Translation.Get("ui.fashion_sense.mask_layer.base")} {FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_active.generic")}:";
         }
 
         internal void SetFilter(string filterName, AppearanceContentPack appearancePack)
