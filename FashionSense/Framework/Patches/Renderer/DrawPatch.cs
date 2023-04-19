@@ -388,11 +388,23 @@ namespace FashionSense.Framework.Patches.Renderer
                                 continue;
                             }
 
-                            var colors = new List<Color>() { FashionSense.accessoryManager.GetColorFromIndex(who, index) };
-                            foreach (var color in AppearanceHelpers.GetAllAppearanceColors(who, accessoryModel, appearanceIndex: index))
+                            var colors = new List<Color>();
+                            if (accessoryModel.ColorMaskLayers.Count > 0)
                             {
-                                colors.Add(color);
+                                for (int x = 0; x < accessoryModel.ColorMaskLayers.Count; x++)
+                                {
+                                    var colorKey = accessoryModel.GetColorKey(index, x);
+                                    if (who.modData.ContainsKey(colorKey))
+                                    {
+                                        colors.Add(FashionSense.accessoryManager.GetColorFromIndex(who, index, x));
+                                    }
+                                }
                             }
+                            else
+                            {
+                                colors.Add(FashionSense.accessoryManager.GetColorFromIndex(who, index));
+                            }
+
                             models.Add(new AppearanceMetadata(accessoryModel, colors));
                         }
                     }
