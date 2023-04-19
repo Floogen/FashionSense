@@ -48,5 +48,18 @@ namespace FashionSense.Framework.Managers
 
             SetColor(who, colorKey, actualColor);
         }
+
+        public void CopyColors(Farmer sourceFarmer, Farmer destinationFarmer)
+        {
+            if (_farmerToColorIdToColorValue.ContainsKey(sourceFarmer) is false)
+            {
+                _farmerToColorIdToColorValue[sourceFarmer] = new Dictionary<string, Color>();
+            }
+
+            foreach (var keyToColor in _farmerToColorIdToColorValue[sourceFarmer])
+            {
+                SetColor(destinationFarmer, keyToColor.Key, keyToColor.Value);
+            }
+        }
     }
 }

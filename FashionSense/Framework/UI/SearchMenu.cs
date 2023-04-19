@@ -122,6 +122,7 @@ namespace FashionSense.Framework.UI
                         fakeFarmer.modData[key] = _displayFarmer.modData[key];
                     }
                     FashionSense.accessoryManager.CopyAccessories(_displayFarmer, fakeFarmer);
+                    FashionSense.colorManager.CopyColors(_displayFarmer, fakeFarmer);
 
                     fakeFarmers.Add(fakeFarmer);
                 }
