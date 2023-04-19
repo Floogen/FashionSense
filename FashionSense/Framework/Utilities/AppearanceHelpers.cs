@@ -523,7 +523,11 @@ namespace FashionSense.Framework.Utilities
 
         public static List<Color> GetAllAppearanceColors(Farmer who, AppearanceModel model, int appearanceIndex = 0)
         {
-            if (model is null || model.ColorMaskLayers.Count == 0)
+            if (model is null)
+            {
+                return new List<Color>() { who.hairstyleColor.Value };
+            }
+            else if (model.ColorMaskLayers.Count == 0)
             {
                 return new List<Color>() { FashionSense.colorManager.GetColor(who, model.GetColorKey(appearanceIndex, 0)) };
             }
