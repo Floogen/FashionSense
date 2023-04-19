@@ -16,7 +16,7 @@ namespace FashionSense.Framework.Managers
             _farmerToColorIdToColorValue = new Dictionary<Farmer, Dictionary<string, Color>>();
         }
 
-        public Color GetColor(Farmer who, string colorKey)
+        internal Color GetColor(Farmer who, string colorKey)
         {
             Color colorValue = who.hairstyleColor.Value;
             if (_farmerToColorIdToColorValue.ContainsKey(who) is true && _farmerToColorIdToColorValue[who].ContainsKey(colorKey) is true)
@@ -27,7 +27,7 @@ namespace FashionSense.Framework.Managers
             return colorValue;
         }
 
-        public void SetColor(Farmer who, string colorKey, Color colorValue)
+        internal void SetColor(Farmer who, string colorKey, Color colorValue)
         {
             if (_farmerToColorIdToColorValue.ContainsKey(who) is false)
             {
@@ -38,7 +38,7 @@ namespace FashionSense.Framework.Managers
             _farmerToColorIdToColorValue[who][colorKey] = colorValue;
         }
 
-        public void SetColor(Farmer who, string colorKey, string rawColorValue)
+        internal void SetColor(Farmer who, string colorKey, string rawColorValue)
         {
             Color actualColor = who.hairstyleColor.Value;
             if (uint.TryParse(rawColorValue, out var parsedColorValue) is true)
