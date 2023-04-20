@@ -284,7 +284,10 @@ namespace FashionSense.Framework.Managers
                 accessoryIds.Add(player.modData[ModDataKeys.CUSTOM_ACCESSORY_ID]);
                 player.modData[ModDataKeys.CUSTOM_ACCESSORY_ID] = null;
 
-                accessoryColors.Add(player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR]);
+                if (player.modData.TryGetValue(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR, out string colorValue))
+                {
+                    accessoryColors.Add(colorValue);
+                }
                 player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR] = null;
             }
             if (player.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID) && String.IsNullOrEmpty(player.modData[ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID]) is false)
@@ -292,7 +295,10 @@ namespace FashionSense.Framework.Managers
                 accessoryIds.Add(player.modData[ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID]);
                 player.modData[ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID] = null;
 
-                accessoryColors.Add(player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR]);
+                if (player.modData.TryGetValue(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR, out string colorValue))
+                {
+                    accessoryColors.Add(colorValue);
+                }
                 player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR] = null;
             }
             if (player.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID) && String.IsNullOrEmpty(player.modData[ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID]) is false)
@@ -300,7 +306,10 @@ namespace FashionSense.Framework.Managers
                 accessoryIds.Add(player.modData[ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID]);
                 player.modData[ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID] = null;
 
-                accessoryColors.Add(player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR]);
+                if (player.modData.TryGetValue(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR, out string colorValue))
+                {
+                    accessoryColors.Add(colorValue);
+                }
                 player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR] = null;
             }
 
