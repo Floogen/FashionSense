@@ -2,11 +2,33 @@
   "Name": "Priestess",
   "Format": "5.3.0",
   "FrontAccessory": {
-    "DisableGrayscale": true,
     "DrawOrderOverride": {
       "Preposition": "Before",
       "AppearanceType": "Player"
     },
+    "ColorMaskLayers": [
+      {
+        "Name": "Ring (non-colorable)",
+        "IgnoreUserColorChoice": true,
+        "Values": [
+          [ 122, 51, 0 ],
+          [ 177, 86, 3 ],
+          [ 226, 178, 18 ],
+          [ 255, 255, 20 ],
+          [ 255, 249, 242 ]
+        ]
+      },
+      {
+        "Name": "Gem",
+        "Values": [
+          [ 46, 46, 46 ],
+          [ 88, 88, 88 ],
+          [ 111, 111, 111 ],
+          [ 135, 135, 135 ],
+          [ 159, 159, 159 ]
+        ]
+      }
+    ],
     "StartingPosition": {
       "X": 0,
       "Y": 0
@@ -63,11 +85,33 @@
     ]
   },
   "BackAccessory": {
-    "DisableGrayscale": true,
     "DrawOrderOverride": {
       "Preposition": "Before",
       "AppearanceType": "Hair"
     },
+    "ColorMaskLayers": [
+      {
+        "Name": "Ring (non-colorable)",
+        "IgnoreUserColorChoice": true,
+        "Values": [
+          [ 122, 51, 0 ],
+          [ 177, 86, 3 ],
+          [ 226, 178, 18 ],
+          [ 255, 255, 20 ],
+          [ 255, 249, 242 ]
+        ]
+      },
+      {
+        "Name": "Gem",
+        "Values": [
+          [ 46, 46, 46 ],
+          [ 88, 88, 88 ],
+          [ 111, 111, 111 ],
+          [ 135, 135, 135 ],
+          [ 159, 159, 159 ]
+        ]
+      }
+    ],
     "StartingPosition": {
       "X": 0,
       "Y": 32

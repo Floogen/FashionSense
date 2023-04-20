@@ -34,7 +34,7 @@ namespace FashionSense.Framework.Managers
                 foreach (string accessoryId in accessoryIds)
                 {
                     var index = AddAccessory(who, accessoryId, skipCacheUpdate: true);
-                    who.modData[GetKeyForAccessoryColor(index)] = uint.Parse(colors[index]).ToString();
+                    FashionSense.colorManager.SetColor(who, GetKeyForAccessoryColor(index), colors[index]);
 
                     UpdateAccessoryCache(who);
                 }
@@ -115,9 +115,9 @@ namespace FashionSense.Framework.Managers
             UpdateAccessoryCache(who);
         }
 
-        internal void SetColorForIndex(Farmer who, int index, Color color)
+        internal void SetColorForIndex(Farmer who, int index, Color color, int maskLayerIndex = 0)
         {
-            who.modData[GetKeyForAccessoryColor(index)] = color.PackedValue.ToString();
+            FashionSense.colorManager.SetColor(who, GetKeyForAccessoryColor(index, maskLayerIndex), color);
 
             UpdateAccessoryCache(who);
         }
@@ -141,8 +141,12 @@ namespace FashionSense.Framework.Managers
             return $"FashionSense.CustomAccessory.{index}.Id";
         }
 
-        internal string GetKeyForAccessoryColor(int index)
+        internal string GetKeyForAccessoryColor(int index, int maskLayerIndex = 0)
         {
+            if (maskLayerIndex > 0)
+            {
+                return $"FashionSense.CustomAccessory.{index}.Color.{maskLayerIndex}.Mask";
+            }
             return $"FashionSense.CustomAccessory.{index}.Color";
         }
 
@@ -175,15 +179,9 @@ namespace FashionSense.Framework.Managers
             return true;
         }
 
-        internal Color GetColorFromIndex(Farmer who, int index)
+        internal Color GetColorFromIndex(Farmer who, int index, int maskLayerIndex = 0)
         {
-            var colorKey = GetKeyForAccessoryColor(index);
-            if (IsKeyValid(who, colorKey, checkForValue: true) && uint.TryParse(who.modData[colorKey], out var parsedColor))
-            {
-                return new Color(parsedColor);
-            }
-
-            return Color.White;
+            return FashionSense.colorManager.GetColor(who, GetKeyForAccessoryColor(index, maskLayerIndex));
         }
 
         internal string GetAccessoryIdByIndex(Farmer who, int index)
@@ -286,7 +284,10 @@ namespace FashionSense.Framework.Managers
                 accessoryIds.Add(player.modData[ModDataKeys.CUSTOM_ACCESSORY_ID]);
                 player.modData[ModDataKeys.CUSTOM_ACCESSORY_ID] = null;
 
-                accessoryColors.Add(player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR]);
+                if (player.modData.TryGetValue(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR, out string colorValue))
+                {
+                    accessoryColors.Add(colorValue);
+                }
                 player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR] = null;
             }
             if (player.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID) && String.IsNullOrEmpty(player.modData[ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID]) is false)
@@ -294,7 +295,10 @@ namespace FashionSense.Framework.Managers
                 accessoryIds.Add(player.modData[ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID]);
                 player.modData[ModDataKeys.CUSTOM_ACCESSORY_SECONDARY_ID] = null;
 
-                accessoryColors.Add(player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR]);
+                if (player.modData.TryGetValue(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR, out string colorValue))
+                {
+                    accessoryColors.Add(colorValue);
+                }
                 player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR] = null;
             }
             if (player.modData.ContainsKey(ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID) && String.IsNullOrEmpty(player.modData[ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID]) is false)
@@ -302,7 +306,10 @@ namespace FashionSense.Framework.Managers
                 accessoryIds.Add(player.modData[ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID]);
                 player.modData[ModDataKeys.CUSTOM_ACCESSORY_TERTIARY_ID] = null;
 
-                accessoryColors.Add(player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR]);
+                if (player.modData.TryGetValue(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR, out string colorValue))
+                {
+                    accessoryColors.Add(colorValue);
+                }
                 player.modData[ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR] = null;
             }
 

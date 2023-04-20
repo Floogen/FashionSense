@@ -1,0 +1,144 @@
+{
+  "Name": "Multiple Color Layers Overalls",
+  "FrontShirt": {
+    "ColorMaskLayers": [
+      {
+        "Name": "Shirt Color",
+        "Values": [
+          [ 129, 129, 129 ],
+          [ 113, 113, 113 ],
+          [ 99, 99, 99 ],
+          [ 70, 70, 70 ],
+          [ 67, 67, 67 ]
+        ]
+      },
+      {
+        "Name": "Overalls Color",
+        "Values": [
+          [ 191, 191, 191 ],
+          [ 169, 169, 169 ],
+          [ 71, 71, 71 ]
+        ]
+      }
+    ],
+    "SleeveColors": [
+      [ 9, 9, 10 ],
+      [ 254, 254, 254 ],
+      [ 198, 198, 198 ]
+    ],
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "ShirtSize": {
+      "Width": 8,
+      "Length": 8
+    }
+  },
+  "RightShirt": {
+    "ColorMaskLayers": [
+      {
+        "Name": "Shirt Color",
+        "Values": [
+          [ 129, 129, 129 ],
+          [ 113, 113, 113 ],
+          [ 99, 99, 99 ],
+          [ 70, 70, 70 ],
+          [ 67, 67, 67 ]
+        ]
+      },
+      {
+        "Name": "Overalls Color",
+        "Values": [
+          [ 191, 191, 191 ],
+          [ 169, 169, 169 ],
+          [ 71, 71, 71 ]
+        ]
+      }
+    ],
+    "StartingPosition": {
+      "X": 0,
+      "Y": 8
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "ShirtSize": {
+      "Width": 8,
+      "Length": 8
+    }
+  },
+  "LeftShirt": {
+    "ColorMaskLayers": [
+      {
+        "Name": "Shirt Color",
+        "Values": [
+          [ 129, 129, 129 ],
+          [ 113, 113, 113 ],
+          [ 99, 99, 99 ],
+          [ 70, 70, 70 ],
+          [ 67, 67, 67 ]
+        ]
+      },
+      {
+        "Name": "Overalls Color",
+        "Values": [
+          [ 191, 191, 191 ],
+          [ 169, 169, 169 ],
+          [ 71, 71, 71 ]
+        ]
+      }
+    ],
+    "StartingPosition": {
+      "X": 0,
+      "Y": 16
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "ShirtSize": {
+      "Width": 8,
+      "Length": 8
+    }
+  },
+  "BackShirt": {
+    "ColorMaskLayers": [
+      {
+        "Name": "Shirt Color",
+        "Values": [
+          [ 129, 129, 129 ],
+          [ 113, 113, 113 ],
+          [ 99, 99, 99 ],
+          [ 70, 70, 70 ],
+          [ 67, 67, 67 ]
+        ]
+      },
+      {
+        "Name": "Overalls Color",
+        "Values": [
+          [ 191, 191, 191 ],
+          [ 169, 169, 169 ],
+          [ 71, 71, 71 ]
+        ]
+      }
+    ],
+    "StartingPosition": {
+      "X": 0,
+      "Y": 24
+    },
+    "BodyPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "ShirtSize": {
+      "Width": 8,
+      "Length": 8
+    }
+  }
+}

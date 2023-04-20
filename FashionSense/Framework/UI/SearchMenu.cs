@@ -122,6 +122,7 @@ namespace FashionSense.Framework.UI
                         fakeFarmer.modData[key] = _displayFarmer.modData[key];
                     }
                     FashionSense.accessoryManager.CopyAccessories(_displayFarmer, fakeFarmer);
+                    FashionSense.colorManager.CopyColors(_displayFarmer, fakeFarmer);
 
                     fakeFarmers.Add(fakeFarmer);
                 }
@@ -301,6 +302,8 @@ namespace FashionSense.Framework.UI
 
                     FashionSense.ResetAnimationModDataFields(_displayFarmer, 0, AnimationModel.Type.Idle, _displayFarmer.facingDirection);
                     FashionSense.SetSpriteDirty();
+                    _callbackMenu.Reset();
+
                     base.exitThisMenu();
                     Game1.activeClickableMenu = _callbackMenu;
                     return;

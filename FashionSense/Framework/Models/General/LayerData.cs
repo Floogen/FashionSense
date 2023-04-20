@@ -1,5 +1,6 @@
 ﻿using FashionSense.Framework.Models.Appearances;
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 
 namespace FashionSense.Framework.Models.General
 {
@@ -7,7 +8,7 @@ namespace FashionSense.Framework.Models.General
     {
         public AppearanceContentPack.Type AppearanceType { get; set; }
         public AppearanceModel AppearanceModel { get; set; }
-        public Color Color { get; set; }
+        public List<Color> Colors { get; set; }
         public bool IsVanilla { get; set; }
         public bool IsHidden { get; set; }
 
