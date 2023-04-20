@@ -126,9 +126,9 @@ namespace FashionSense.Framework.Patches.Renderer
                     shirtColor = Utility.GetPrismaticColor(speedMultiplier: shirtModel.PrismaticAnimationSpeedMultiplier);
                 }
 
-                SwapColorReversePatch(__instance, texture_name, pixels, 256, shirtModel.IsMaskedColor(shirtModel.GetSleeveColor(0)) ? Utility.MultiplyColor(shirtColor, shirtModel.GetSleeveColor(0)) : shirtModel.GetSleeveColor(0));
-                SwapColorReversePatch(__instance, texture_name, pixels, 257, shirtModel.IsMaskedColor(shirtModel.GetSleeveColor(1)) ? Utility.MultiplyColor(shirtColor, shirtModel.GetSleeveColor(1)) : shirtModel.GetSleeveColor(1));
-                SwapColorReversePatch(__instance, texture_name, pixels, 258, shirtModel.IsMaskedColor(shirtModel.GetSleeveColor(2)) ? Utility.MultiplyColor(shirtColor, shirtModel.GetSleeveColor(2)) : shirtModel.GetSleeveColor(2));
+                SwapColorReversePatch(__instance, texture_name, pixels, 256, shirtModel.IsMaskedColor(shirtModel.GetSleeveColor(0), true) ? Utility.MultiplyColor(shirtColor, shirtModel.GetSleeveColor(0)) : shirtModel.GetSleeveColor(0));
+                SwapColorReversePatch(__instance, texture_name, pixels, 257, shirtModel.IsMaskedColor(shirtModel.GetSleeveColor(1), true) ? Utility.MultiplyColor(shirtColor, shirtModel.GetSleeveColor(1)) : shirtModel.GetSleeveColor(1));
+                SwapColorReversePatch(__instance, texture_name, pixels, 258, shirtModel.IsMaskedColor(shirtModel.GetSleeveColor(2), true) ? Utility.MultiplyColor(shirtColor, shirtModel.GetSleeveColor(2)) : shirtModel.GetSleeveColor(2));
             }
 
             return false;
@@ -320,7 +320,7 @@ namespace FashionSense.Framework.Patches.Renderer
             return FashionSense.layerManager.SortModelsForDrawing(who, facingDirection, metadata);
         }
 
-        private static Color GetColorValue(Farmer who, AppearanceModel model)
+        internal static Color? GetOutdatedColorValue(Farmer who, AppearanceModel model, int appearanceIndex = 0)
         {
             string key = null;
             switch (model)
@@ -335,22 +335,24 @@ namespace FashionSense.Framework.Patches.Renderer
                     key = ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR;
                     break;
                 case AccessoryModel:
-                    // Purposely skipping logic check as Fashion Sense utilizes
-                    return Color.White;
+                    return FashionSense.accessoryManager.GetColorFromIndex(who, appearanceIndex);
                 case HairModel:
-                    // Purposely skipping logic check as Fashion Sense doesn't utilize ModData key for hair
-                    return who.hairstyleColor.Value;
+                    // Purposely returning null as previous version (5.4 and below) did not utilize a ModData key for it
+                    return null;
                 case HatModel:
                     key = ModDataKeys.UI_HAND_MIRROR_HAT_COLOR;
                     break;
                 case ShoesModel:
                     key = ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR;
                     break;
-                default:
-                    return Color.White;
             }
 
-            return new Color() { PackedValue = who.modData.ContainsKey(key) ? uint.Parse(who.modData[key]) : who.hairstyleColor.Value.PackedValue };
+            if (who.modData.ContainsKey(key) && String.IsNullOrEmpty(who.modData[key]) is false && uint.TryParse(who.modData[key], out var colorPackedValue))
+            {
+                return new Color() { PackedValue = colorPackedValue };
+            }
+
+            return null;
         }
 
         internal static List<AppearanceMetadata> GetCurrentlyEquippedModels(Farmer who, int facingDirection)
@@ -362,14 +364,14 @@ namespace FashionSense.Framework.Patches.Renderer
             if (who.modData.ContainsKey(ModDataKeys.CUSTOM_PANTS_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<PantsContentPack>(who.modData[ModDataKeys.CUSTOM_PANTS_ID]) is PantsContentPack pPack && pPack != null)
             {
                 var pantModel = pPack.GetPantsFromFacingDirection(facingDirection);
-                models.Add(new AppearanceMetadata(pantModel, GetColorValue(who, pantModel)));
+                models.Add(new AppearanceMetadata(pantModel, AppearanceHelpers.GetAllAppearanceColors(who, pantModel)));
             }
 
             // Hair pack
             if (who.modData.ContainsKey(ModDataKeys.CUSTOM_HAIR_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<HairContentPack>(who.modData[ModDataKeys.CUSTOM_HAIR_ID]) is HairContentPack hPack && hPack != null)
             {
                 var hairModel = hPack.GetHairFromFacingDirection(facingDirection);
-                models.Add(new AppearanceMetadata(hairModel, GetColorValue(who, hairModel)));
+                models.Add(new AppearanceMetadata(hairModel, AppearanceHelpers.GetAllAppearanceColors(who, hairModel)));
             }
 
             // Accessory packs
@@ -388,7 +390,20 @@ namespace FashionSense.Framework.Patches.Renderer
                                 continue;
                             }
 
-                            models.Add(new AppearanceMetadata(accessoryModel, FashionSense.accessoryManager.GetColorFromIndex(who, index)));
+                            var colors = new List<Color>();
+                            if (accessoryModel.ColorMaskLayers.Count > 0)
+                            {
+                                for (int x = 0; x < accessoryModel.ColorMaskLayers.Count; x++)
+                                {
+                                    colors.Add(FashionSense.accessoryManager.GetColorFromIndex(who, index, x));
+                                }
+                            }
+                            else
+                            {
+                                colors.Add(FashionSense.accessoryManager.GetColorFromIndex(who, index));
+                            }
+
+                            models.Add(new AppearanceMetadata(accessoryModel, colors));
                         }
                     }
                 }
@@ -402,28 +417,28 @@ namespace FashionSense.Framework.Patches.Renderer
             if (who.modData.ContainsKey(ModDataKeys.CUSTOM_HAT_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<HatContentPack>(who.modData[ModDataKeys.CUSTOM_HAT_ID]) is HatContentPack tPack && tPack != null)
             {
                 var hatModel = tPack.GetHatFromFacingDirection(facingDirection);
-                models.Add(new AppearanceMetadata(hatModel, GetColorValue(who, hatModel)));
+                models.Add(new AppearanceMetadata(hatModel, AppearanceHelpers.GetAllAppearanceColors(who, hatModel)));
             }
 
             // Shirt pack
             if (who.modData.ContainsKey(ModDataKeys.CUSTOM_SHIRT_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<ShirtContentPack>(who.modData[ModDataKeys.CUSTOM_SHIRT_ID]) is ShirtContentPack sPack && sPack != null)
             {
                 var shirtModel = sPack.GetShirtFromFacingDirection(facingDirection);
-                models.Add(new AppearanceMetadata(shirtModel, GetColorValue(who, shirtModel)));
+                models.Add(new AppearanceMetadata(shirtModel, AppearanceHelpers.GetAllAppearanceColors(who, shirtModel)));
             }
 
             // Sleeves pack
             if (who.modData.ContainsKey(ModDataKeys.CUSTOM_SLEEVES_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<SleevesContentPack>(who.modData[ModDataKeys.CUSTOM_SLEEVES_ID]) is SleevesContentPack slPack && slPack != null)
             {
                 var slModel = slPack.GetSleevesFromFacingDirection(facingDirection);
-                models.Add(new AppearanceMetadata(slModel, GetColorValue(who, slModel)));
+                models.Add(new AppearanceMetadata(slModel, AppearanceHelpers.GetAllAppearanceColors(who, slModel)));
             }
 
             // Shoes pack
             if (who.modData.ContainsKey(ModDataKeys.CUSTOM_SHOES_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<ShoesContentPack>(who.modData[ModDataKeys.CUSTOM_SHOES_ID]) is ShoesContentPack shPack && shPack != null)
             {
                 var shModel = shPack.GetShoesFromFacingDirection(facingDirection);
-                models.Add(new AppearanceMetadata(shModel, GetColorValue(who, shModel)));
+                models.Add(new AppearanceMetadata(shModel, AppearanceHelpers.GetAllAppearanceColors(who, shModel)));
             }
 
             return models.Where(m => m is not null && m.Model is not null && m.Model.Pack is not null).ToList();

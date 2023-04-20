@@ -22,7 +22,7 @@ namespace FashionSense.Framework.UI.Components
         public SimpleColorPicker(int x, int y)
         {
             hueSlider = new SimpleSlider(new Rectangle(x, y + 5, SliderBar.defaultWidth, 10), 0, 360) { getDrawColor = ((float val) => GetColorForValues(val, 100f)) };
-            saturationSlider = new SimpleSlider(new Rectangle(x, y + 25, SliderBar.defaultWidth, 10), 0, 75) { getDrawColor = ((float val) => GetColorForValues(hueSlider.GetValue(), val)) };
+            saturationSlider = new SimpleSlider(new Rectangle(x, y + 25, SliderBar.defaultWidth, 10), 0, 100) { getDrawColor = ((float val) => GetColorForValues(hueSlider.GetValue(), val)) };
             lightnessSlider = new SimpleSlider(new Rectangle(x, y + 45, SliderBar.defaultWidth, 10), MIN_LIGHTNESS, MAX_LIGHTNESS) { getDrawColor = ((float val) => GetColorForValues(hueSlider.GetValue(), saturationSlider.GetValue(), val)) };
 
             bounds = new Rectangle(x, y, SliderBar.defaultWidth, 60);

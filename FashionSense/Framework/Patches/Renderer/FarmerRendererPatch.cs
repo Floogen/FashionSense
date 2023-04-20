@@ -8,6 +8,7 @@ using Netcode;
 using StardewModdingAPI;
 using StardewValley;
 using System;
+using System.Collections.Generic;
 
 namespace FashionSense.Framework.Patches.Renderer
 {
@@ -119,7 +120,7 @@ namespace FashionSense.Framework.Patches.Renderer
 
             if (hairModel.HasColorMask())
             {
-                DrawManager.DrawColorMask(b, hairPack, hairModel, FarmerRendererPatch.AreColorMasksPendingRefresh, position + new Vector2(0f, feature_y_offset * 4) * scale / 4f, sourceRect, hairColor, 0f, new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), scale, layerDepth + hair_draw_layer + 0.01E-05f);
+                DrawManager.DrawColorMask(b, hairPack, hairModel, FarmerRendererPatch.AreColorMasksPendingRefresh, position + new Vector2(0f, feature_y_offset * 4) * scale / 4f, sourceRect, hairColor, new List<Color>(), 0f, new Vector2(hairModel.HeadPosition.X, hairModel.HeadPosition.Y), scale, layerDepth + hair_draw_layer + 0.01E-05f);
             }
             if (hairModel.HasSkinToneMask())
             {

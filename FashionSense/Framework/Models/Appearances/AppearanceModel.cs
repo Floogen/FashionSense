@@ -30,7 +30,11 @@ namespace FashionSense.Framework.Models.Appearances
         public bool IsPrismatic { get; set; }
         public float PrismaticAnimationSpeedMultiplier { get; set; } = 1f;
         public float Scale { get; set; } = 4f;
-        public List<int[]> ColorMasks { get; set; } = new List<int[]>();
+        public List<ColorMaskLayer> ColorMaskLayers { get; set; } = new List<ColorMaskLayer>();
+        public List<int[]> ColorMasks
+        {
+            set { ColorMaskLayers.Insert(0, new ColorMaskLayer() { Name = $"{FashionSense.modHelper.Translation.Get("ui.fashion_sense.mask_layer.base")} {FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_active.generic")}", Values = value }); }
+        }
         public SkinToneModel SkinToneMasks { get; set; }
         public List<AppearanceSync> AppearanceSyncing { get; set; } = new List<AppearanceSync>();
         public List<AnimationModel> UniformAnimation { get; set; } = new List<AnimationModel>();
@@ -42,14 +46,20 @@ namespace FashionSense.Framework.Models.Appearances
             return DisableGrayscale || IsPrismatic;
         }
 
-        internal bool IsMaskedColor(Color color)
+        internal bool IsMaskedColor(Color color, int layerIndexToCheck)
         {
-            if (!HasColorMask())
+            if (!HasColorMask() || ColorMaskLayers.Count <= layerIndexToCheck)
             {
                 return false;
             }
 
-            foreach (Color maskedColor in ColorMasks.Select(c => new Color(c[0], c[1], c[2], c.Length > 3 ? c[3] : 255)))
+            var layer = ColorMaskLayers[layerIndexToCheck];
+            if (layer.IgnoreUserColorChoice is true)
+            {
+                return false;
+            }
+
+            foreach (Color maskedColor in layer.Values.Select(c => new Color(c[0], c[1], c[2], c.Length > 3 ? c[3] : 255)))
             {
                 if (maskedColor == color)
                 {
@@ -64,6 +74,42 @@ namespace FashionSense.Framework.Models.Appearances
                     {
                         return true;
                     }
+                }
+            }
+
+            return false;
+        }
+
+        internal bool IsMaskedColor(Color color, bool checkFirstLayerOnly = false)
+        {
+            if (!HasColorMask())
+            {
+                return false;
+            }
+
+            foreach (var layer in ColorMaskLayers)
+            {
+                foreach (Color maskedColor in layer.Values.Select(c => new Color(c[0], c[1], c[2], c.Length > 3 ? c[3] : 255)))
+                {
+                    if (maskedColor == color)
+                    {
+                        return true;
+                    }
+
+                    if (maskedColor.A is not (byte.MinValue or byte.MaxValue))
+                    {
+                        // Premultiply the color for the mask, as SMAPI premultiplies the alpha
+                        Color adjustedColor = new Color(maskedColor.R * maskedColor.A / 255, maskedColor.G * maskedColor.A / 255, maskedColor.B * maskedColor.A / 255, maskedColor.A);
+                        if (adjustedColor == color)
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                if (checkFirstLayerOnly is true)
+                {
+                    break;
                 }
             }
 
@@ -95,7 +141,7 @@ namespace FashionSense.Framework.Models.Appearances
 
         internal bool HasColorMask()
         {
-            return DisableGrayscale is false && ColorMasks.Count > 0;
+            return DisableGrayscale is false && ColorMaskLayers.Count > 0;
         }
 
         internal bool HasSkinToneMask()
@@ -180,6 +226,26 @@ namespace FashionSense.Framework.Models.Appearances
             }
 
             return packType;
+        }
+
+        internal Color? GetColorMaskByIndex(int layerIndex, int maskIndex)
+        {
+            if (ColorMaskLayers.Count > layerIndex && ColorMaskLayers[layerIndex].Values.Count > maskIndex)
+            {
+                return GetColor(ColorMaskLayers[layerIndex].Values[maskIndex]);
+            }
+
+            return null;
+        }
+
+        internal string GetColorKey(int appearanceIndex = 0, int maskLayerIndex = 0)
+        {
+            return AppearanceModel.GetColorKey(GetPackType(), appearanceIndex, maskLayerIndex);
+        }
+
+        internal static string GetColorKey(AppearanceContentPack.Type type, int appearanceIndex = 0, int maskLayerIndex = 0)
+        {
+            return $"FashionSense.{(type is AppearanceContentPack.Type.Accessory ? "CustomAccessory" : type)}.{appearanceIndex}.Color.{maskLayerIndex}.Mask";
         }
 
         internal static int GetColorIndex(int[] colorArray, int position)

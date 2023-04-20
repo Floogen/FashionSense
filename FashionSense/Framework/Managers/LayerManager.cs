@@ -49,25 +49,25 @@ namespace FashionSense.Framework.Managers
                 switch (data.Model)
                 {
                     case PantsModel pantsModel:
-                        AddPants(who, pantsModel, data.Color, ref rawLayerData);
+                        AddPants(who, pantsModel, data.Colors, ref rawLayerData);
                         break;
                     case ShoesModel shoesModel:
-                        AddShoes(who, shoesModel, data.Color, ref rawLayerData);
+                        AddShoes(who, shoesModel, data.Colors, ref rawLayerData);
                         break;
                     case ShirtModel shirtModel:
-                        AddShirt(who, shirtModel, data.Color, ref rawLayerData);
+                        AddShirt(who, shirtModel, data.Colors, ref rawLayerData);
                         break;
                     case SleevesModel sleevesModel:
-                        AddSleeves(who, sleevesModel, data.Color, ref rawLayerData);
+                        AddSleeves(who, sleevesModel, data.Colors, ref rawLayerData);
                         break;
                     case AccessoryModel accessoryModel:
-                        AddAccessory(who, accessoryModel, data.Color, ref rawLayerData);
+                        AddAccessory(who, accessoryModel, data.Colors, ref rawLayerData);
                         break;
                     case HairModel hairModel:
-                        AddHair(who, hairModel, data.Color, ref rawLayerData);
+                        AddHair(who, hairModel, data.Colors, ref rawLayerData);
                         break;
                     case HatModel hatModel:
-                        AddHat(who, hatModel, data.Color, ref rawLayerData);
+                        AddHat(who, hatModel, data.Colors, ref rawLayerData);
                         break;
                 }
             }
@@ -189,86 +189,86 @@ namespace FashionSense.Framework.Managers
         }
 
         #region Add methods for rawLayerData
-        private void AddPants(Farmer who, PantsModel pantsModel, Color color, ref List<LayerData> rawLayerData)
+        private void AddPants(Farmer who, PantsModel pantsModel, List<Color> colors, ref List<LayerData> rawLayerData)
         {
             var layerData = new LayerData(AppearanceContentPack.Type.Pants, pantsModel);
             if (AppearanceHelpers.ShouldHideWhileSwimmingOrWearingBathingSuit(who, pantsModel))
             {
                 layerData.IsHidden = true;
             }
-            layerData.Color = color;
+            layerData.Colors = colors;
 
             rawLayerData.Add(layerData);
         }
 
-        private void AddShoes(Farmer who, ShoesModel shoesModel, Color color, ref List<LayerData> rawLayerData)
+        private void AddShoes(Farmer who, ShoesModel shoesModel, List<Color> colors, ref List<LayerData> rawLayerData)
         {
             var layerData = new LayerData(AppearanceContentPack.Type.Shoes, shoesModel);
             if (AppearanceHelpers.ShouldHideWhileSwimmingOrWearingBathingSuit(who, shoesModel) || AppearanceHelpers.ShouldHideLegs(who, _facingDirection))
             {
                 layerData.IsHidden = true;
             }
-            layerData.Color = color;
+            layerData.Colors = colors;
 
             rawLayerData.Add(layerData);
         }
 
-        private void AddShirt(Farmer who, ShirtModel shirtModel, Color color, ref List<LayerData> rawLayerData)
+        private void AddShirt(Farmer who, ShirtModel shirtModel, List<Color> colors, ref List<LayerData> rawLayerData)
         {
             var layerData = new LayerData(AppearanceContentPack.Type.Shirt, shirtModel);
             if (AppearanceHelpers.ShouldHideWhileSwimmingOrWearingBathingSuit(who, shirtModel))
             {
                 layerData.IsHidden = true;
             }
-            layerData.Color = color;
+            layerData.Colors = colors;
 
             rawLayerData.Add(layerData);
         }
 
-        private void AddAccessory(Farmer who, AccessoryModel accessoryModel, Color color, ref List<LayerData> rawLayerData)
+        private void AddAccessory(Farmer who, AccessoryModel accessoryModel, List<Color> colors, ref List<LayerData> rawLayerData)
         {
             var layerData = new LayerData(AppearanceContentPack.Type.Accessory, accessoryModel);
             if (AppearanceHelpers.ShouldHideWhileSwimmingOrWearingBathingSuit(who, accessoryModel))
             {
                 layerData.IsHidden = true;
             }
-            layerData.Color = color;
+            layerData.Colors = colors;
 
             rawLayerData.Add(layerData);
         }
 
-        private void AddHair(Farmer who, HairModel hairModel, Color color, ref List<LayerData> rawLayerData)
+        private void AddHair(Farmer who, HairModel hairModel, List<Color> colors, ref List<LayerData> rawLayerData)
         {
             var layerData = new LayerData(AppearanceContentPack.Type.Hair, hairModel);
             if (AppearanceHelpers.ShouldHideWhileSwimmingOrWearingBathingSuit(who, hairModel) || AppearanceHelpers.IsHatHidingHair(_metadata))
             {
                 layerData.IsHidden = true;
             }
-            layerData.Color = color;
+            layerData.Colors = colors;
 
             rawLayerData.Add(layerData);
         }
 
-        private void AddSleeves(Farmer who, SleevesModel sleevesModel, Color color, ref List<LayerData> rawLayerData)
+        private void AddSleeves(Farmer who, SleevesModel sleevesModel, List<Color> colors, ref List<LayerData> rawLayerData)
         {
             var layerData = new LayerData(AppearanceContentPack.Type.Sleeves, sleevesModel);
             if (AppearanceHelpers.ShouldHideWhileSwimmingOrWearingBathingSuit(who, sleevesModel) || AppearanceHelpers.AreSleevesForcedHidden(_metadata))
             {
                 layerData.IsHidden = true;
             }
-            layerData.Color = color;
+            layerData.Colors = colors;
 
             rawLayerData.Add(layerData);
         }
 
-        private void AddHat(Farmer who, HatModel hatModel, Color color, ref List<LayerData> rawLayerData)
+        private void AddHat(Farmer who, HatModel hatModel, List<Color> colors, ref List<LayerData> rawLayerData)
         {
             var layerData = new LayerData(AppearanceContentPack.Type.Hat, hatModel);
             if (AppearanceHelpers.ShouldHideWhileSwimmingOrWearingBathingSuit(who, hatModel))
             {
                 layerData.IsHidden = true;
             }
-            layerData.Color = color;
+            layerData.Colors = colors;
 
             rawLayerData.Add(layerData);
         }

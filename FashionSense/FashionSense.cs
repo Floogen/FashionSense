@@ -47,6 +47,7 @@ namespace FashionSense
         internal static AnimationManager animationManager;
         internal static ApiManager apiManager;
         internal static AssetManager assetManager;
+        internal static ColorManager colorManager;
         internal static LayerManager layerManager;
         internal static OutfitManager outfitManager;
         internal static TextureManager textureManager;
@@ -74,6 +75,7 @@ namespace FashionSense
             animationManager = new AnimationManager(monitor);
             apiManager = new ApiManager(monitor);
             assetManager = new AssetManager(modHelper);
+            colorManager = new ColorManager(monitor);
             layerManager = new LayerManager(monitor);
             outfitManager = new OutfitManager(monitor);
             textureManager = new TextureManager(monitor);
@@ -230,14 +232,17 @@ namespace FashionSense
             Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON] = String.Empty;
 
             // Set the cached colors, if needed
-            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR);
-            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR);
-            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR);
-            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_HAT_COLOR);
-            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR);
-            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR);
-            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR);
-            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR);
+            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR, AppearanceContentPack.Type.Accessory, 0);
+            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR, AppearanceContentPack.Type.Accessory, 1);
+            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR, AppearanceContentPack.Type.Accessory, 2);
+            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_HAT_COLOR, AppearanceContentPack.Type.Hat, 0);
+            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR, AppearanceContentPack.Type.Shirt, 0);
+            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR, AppearanceContentPack.Type.Pants, 0);
+            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR, AppearanceContentPack.Type.Sleeves, 0);
+            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR, AppearanceContentPack.Type.Shoes, 0);
+
+            // Cache hair color, as previous versions (5.4 and below) did not utilize a ModData key for it
+            colorManager.SetColor(Game1.player, AppearanceModel.GetColorKey(AppearanceContentPack.Type.Hair, 0), Game1.player.hairstyleColor.Value);
 
             // Reset the name of the internal shoe override pack
             if (textureManager.GetSpecificAppearanceModel<ShoesContentPack>(ModDataKeys.INTERNAL_COLOR_OVERRIDE_SHOE_ID) is ShoesContentPack shoePack && shoePack is not null)
@@ -298,14 +303,6 @@ namespace FashionSense
                 {
                     animationData.ElapsedDuration = (elapsedDuration + Game1.currentGameTime.ElapsedGameTime.Milliseconds);
                 }
-            }
-        }
-
-        private void SetCachedColor(string colorKey)
-        {
-            if (!Game1.player.modData.ContainsKey(colorKey))
-            {
-                Game1.player.modData[colorKey] = Game1.player.hairstyleColor.Value.PackedValue.ToString();
             }
         }
 
@@ -1201,6 +1198,22 @@ namespace FashionSense
             {
                 Monitor.Log($"Error loading shoes from content pack {contentPack.Manifest.Name}: {ex}", LogLevel.Error);
             }
+        }
+
+        internal static void SetCachedColor(string oldColorKey, AppearanceContentPack.Type type, int appearanceIndex)
+        {
+            var actualColorKey = AppearanceModel.GetColorKey(type, appearanceIndex);
+            if (Game1.player.modData.ContainsKey(oldColorKey))
+            {
+                Game1.player.modData[actualColorKey] = Game1.player.modData[oldColorKey];
+                Game1.player.modData.Remove(oldColorKey);
+            }
+            else if (Game1.player.modData.ContainsKey(actualColorKey) is false)
+            {
+                Game1.player.modData[actualColorKey] = Game1.player.hairstyleColor.Value.PackedValue.ToString();
+            }
+
+            colorManager.SetColor(Game1.player, actualColorKey, Game1.player.modData[actualColorKey]);
         }
 
         internal static void SetSpriteDirty()

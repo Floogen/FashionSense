@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 using System;
+using System.Collections.Generic;
 
 namespace FashionSense.Framework.Models.Appearances
 {
@@ -34,7 +35,7 @@ namespace FashionSense.Framework.Models.Appearances
         internal Texture2D Texture { get { return _texture; } set { _cachedTexture = value; ResetTexture(); } }
         private Texture2D _texture;
         private Texture2D _cachedTexture;
-        internal Texture2D ColorMaskTexture { get; set; }
+        internal List<Texture2D> ColorMaskTextures { get; set; }
         internal Texture2D SkinMaskTexture { get; set; }
         internal Texture2D CollectiveMaskTexture { get; set; }
         internal bool IsTextureDirty { get; set; }

@@ -1,22 +1,19 @@
-# Fashion Sense
- Framework which adds hair animation and more into Stardew Valley.
- 
-## Requirements
-Fashion Sense only requires [SMAPI](https://smapi.io/).
+# Fashion Sense 💇‍♀️🎩
+A modding framework for Stardew Valley that allows for bigger accessories, hairstyles, hats, shirts, sleeves, pants and shoes. Also includes animation support, custom outfits and more!
 
-&nbsp;
-## Creating a Content Pack
-See [the wiki](https://github.com/Floogen/FashionSense/wiki) for detailed instructions on how to create content pack for Fashion Sense.
+## 🛠 Requirements
+To use Fashion Sense, you'll need the following:
+- [SMAPI](https://smapi.io/) - Stardew Valley modding API.
 
-&nbsp;
-## Example Content Packs
-Some example fashion sense appearances are included in this repository, which can be [found here](https://github.com/Floogen/FashionSense/tree/development/FashionSense/Examples/%5BFS%5D%20Example%20Pack).
+## 🎨 Creating a Content Pack
+Want to create your own content pack for Fashion Sense? Check out [the wiki](https://github.com/Floogen/FashionSense/wiki) for detailed instructions and guidelines.
 
-&nbsp;
-# Credits
-## Translations
-Translations have been generously provided by the following users:
+## 📦 Example Content Pack
+See the [example content pack](https://github.com/Floogen/FashionSense/tree/development/FashionSense/Examples/%5BFS%5D%20Example%20Pack) to help you get started.
 
-* **Thai** - ellipszist
-* **Turkish** - KediDili
-* **Ukrainian** - ChulkyBow
+## 🌐 Translations
+A huge thank you to our amazing community members who provided translations for Fashion Sense:
+
+- **Thai** - ellipszist 🇹🇭
+- **Turkish** - KediDili 🇹🇷
+- **Ukrainian** - ChulkyBow 🇺🇦
