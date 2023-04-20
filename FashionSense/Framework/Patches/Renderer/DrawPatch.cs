@@ -337,8 +337,8 @@ namespace FashionSense.Framework.Patches.Renderer
                 case AccessoryModel:
                     return FashionSense.accessoryManager.GetColorFromIndex(who, appearanceIndex);
                 case HairModel:
-                    // Purposely returning hairstyleColor as previous version (5.4 and below) did not utilize a ModData key for it
-                    return who.hairstyleColor.Value;
+                    // Purposely returning null as previous version (5.4 and below) did not utilize a ModData key for it
+                    return null;
                 case HatModel:
                     key = ModDataKeys.UI_HAND_MIRROR_HAT_COLOR;
                     break;
