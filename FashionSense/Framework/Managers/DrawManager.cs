@@ -519,14 +519,15 @@ namespace FashionSense.Framework.Managers
             var modelPack = model.Pack;
 
             // Adjust color if needed
-            var modelColor = layer.Colors.Count == 0 ? Color.White : layer.Colors[0];
+            Color? colorOverride = null;
+            Color modelColor = layer.Colors.Count == 0 ? Color.White : layer.Colors[0];
             if (model.DisableGrayscale)
             {
-                modelColor = Color.White;
+                colorOverride = Color.White;
             }
             else if (model.IsPrismatic)
             {
-                modelColor = Utility.GetPrismaticColor(speedMultiplier: model.PrismaticAnimationSpeedMultiplier);
+                colorOverride = Utility.GetPrismaticColor(speedMultiplier: model.PrismaticAnimationSpeedMultiplier);
             }
 
             // Get any positional offset
@@ -543,7 +544,7 @@ namespace FashionSense.Framework.Managers
 
             if (model.HasColorMask())
             {
-                DrawColorMask(_spriteBatch, modelPack, model, _areColorMasksPendingRefresh, GetScaledPosition(_position, model, _isDrawingForUI) + _origin + _positionOffset + featureOffset, GetSourceRectangle(model, _appearanceTypeToAnimationModels), modelColor, layer.Colors, _rotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), model.Scale * _scale, IncrementAndGetLayerDepth());
+                DrawColorMask(_spriteBatch, modelPack, model, _areColorMasksPendingRefresh, GetScaledPosition(_position, model, _isDrawingForUI) + _origin + _positionOffset + featureOffset, GetSourceRectangle(model, _appearanceTypeToAnimationModels), colorOverride, layer.Colors, _rotation, _origin + new Vector2(positionOffset.X, positionOffset.Y), model.Scale * _scale, IncrementAndGetLayerDepth());
             }
             if (model.HasSkinToneMask())
             {
@@ -726,7 +727,7 @@ namespace FashionSense.Framework.Managers
             }
         }
 
-        internal static void DrawColorMask(SpriteBatch b, AppearanceContentPack appearancePack, AppearanceModel appearanceModel, bool areColorMasksPendingRefresh, Vector2 position, Rectangle sourceRect, Color defaultColor, List<Color> colors, float rotation, Vector2 origin, float scale, float layerDepth)
+        internal static void DrawColorMask(SpriteBatch b, AppearanceContentPack appearancePack, AppearanceModel appearanceModel, bool areColorMasksPendingRefresh, Vector2 position, Rectangle sourceRect, Color? colorOverride, List<Color> colors, float rotation, Vector2 origin, float scale, float layerDepth)
         {
             if (appearancePack.ColorMaskTextures is null || areColorMasksPendingRefresh)
             {
@@ -753,8 +754,12 @@ namespace FashionSense.Framework.Managers
 
             for (int t = 0; t < appearancePack.ColorMaskTextures.Count; t++)
             {
-                var colorToUse = defaultColor;
-                if (colors.Count > t)
+                var colorToUse = Color.White;
+                if (colorOverride is not null)
+                {
+                    colorToUse = colorOverride.Value;
+                }
+                else if (colors.Count > t)
                 {
                     colorToUse = colors[t];
                 }
