@@ -8,6 +8,7 @@ using FashionSense.Framework.Models.Appearances.Shirt;
 using FashionSense.Framework.Models.Appearances.Shoes;
 using FashionSense.Framework.Models.Appearances.Sleeves;
 using FashionSense.Framework.Patches.Core;
+using FashionSense.Framework.Patches.Renderer;
 using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Tools;
@@ -526,6 +527,10 @@ namespace FashionSense.Framework.Utilities
             if (model is null)
             {
                 return new List<Color>() { who.hairstyleColor.Value };
+            }
+            else if (DrawPatch.GetOutdatedColorValue(who, model, appearanceIndex) is not null)
+            {
+                return new List<Color>() { DrawPatch.GetOutdatedColorValue(who, model, appearanceIndex).Value };
             }
             else if (model.ColorMaskLayers.Count == 0)
             {

@@ -320,7 +320,7 @@ namespace FashionSense.Framework.Patches.Renderer
             return FashionSense.layerManager.SortModelsForDrawing(who, facingDirection, metadata);
         }
 
-        internal static Color GetColorValue(Farmer who, AppearanceModel model)
+        internal static Color? GetOutdatedColorValue(Farmer who, AppearanceModel model, int appearanceIndex = 0)
         {
             string key = null;
             switch (model)
@@ -335,10 +335,9 @@ namespace FashionSense.Framework.Patches.Renderer
                     key = ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR;
                     break;
                 case AccessoryModel:
-                    // Purposely skipping logic check as accessories have their own color logic
-                    return Color.White;
+                    return FashionSense.accessoryManager.GetColorFromIndex(who, appearanceIndex);
                 case HairModel:
-                    // Purposely skipping logic check as Fashion Sense doesn't utilize ModData key for hair
+                    // Purposely returning hairstyleColor as previous version (5.4 and below) did not utilize a ModData key for it
                     return who.hairstyleColor.Value;
                 case HatModel:
                     key = ModDataKeys.UI_HAND_MIRROR_HAT_COLOR;
@@ -346,11 +345,14 @@ namespace FashionSense.Framework.Patches.Renderer
                 case ShoesModel:
                     key = ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR;
                     break;
-                default:
-                    return Color.White;
             }
 
-            return FashionSense.colorManager.GetColor(who, key);
+            if (who.modData.ContainsKey(key) && String.IsNullOrEmpty(who.modData[key]) is false && uint.TryParse(who.modData[key], out var colorPackedValue))
+            {
+                return new Color() { PackedValue = colorPackedValue };
+            }
+
+            return null;
         }
 
         internal static List<AppearanceMetadata> GetCurrentlyEquippedModels(Farmer who, int facingDirection)
@@ -393,11 +395,7 @@ namespace FashionSense.Framework.Patches.Renderer
                             {
                                 for (int x = 0; x < accessoryModel.ColorMaskLayers.Count; x++)
                                 {
-                                    var colorKey = accessoryModel.GetColorKey(index, x);
-                                    if (who.modData.ContainsKey(colorKey))
-                                    {
-                                        colors.Add(FashionSense.accessoryManager.GetColorFromIndex(who, index, x));
-                                    }
+                                    colors.Add(FashionSense.accessoryManager.GetColorFromIndex(who, index, x));
                                 }
                             }
                             else

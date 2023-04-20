@@ -23,6 +23,11 @@ namespace FashionSense.Framework.Managers
             {
                 colorValue = _farmerToColorIdToColorValue[who][colorKey];
             }
+            else if (who.modData.ContainsKey(colorKey))
+            {
+                SetColor(who, colorKey, who.modData[colorKey]);
+                return GetColor(who, colorKey);
+            }
 
             return colorValue;
         }
