@@ -47,6 +47,7 @@
   "ui.fashion_sense.clear_button": "Clears the currently selected Fashion Sense item.",
   "ui.fashion_sense.random_button": "Randomly selects a Fashion Sense item.",
   "ui.fashion_sense.exit_button": "Exits the menu.",
+  "ui.fashion_sense.color_active.shoes": "Shoe Color",
   "ui.fashion_sense.color_active.generic": "Color",
   "ui.fashion_sense.color_disabled.generic": "(Ignored)",
   "ui.fashion_sense.color_info.hair": "Color overlays will not affect this hairstyle.",
