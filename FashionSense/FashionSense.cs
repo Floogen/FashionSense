@@ -1216,7 +1216,7 @@ namespace FashionSense
             colorManager.SetColor(Game1.player, actualColorKey, Game1.player.modData[actualColorKey]);
         }
 
-        internal static void SetSpriteDirty()
+        internal static void SetSpriteDirty(bool skipColorMaskRefresh = false)
         {
             var spriteDirty = modHelper.Reflection.GetField<bool>(Game1.player.FarmerRenderer, "_spriteDirty");
             spriteDirty.SetValue(true);
@@ -1225,7 +1225,10 @@ namespace FashionSense
             var shoeDirty = modHelper.Reflection.GetField<bool>(Game1.player.FarmerRenderer, "_shoesDirty");
             shoeDirty.SetValue(true);
 
-            FarmerRendererPatch.AreColorMasksPendingRefresh = true;
+            if (skipColorMaskRefresh is false)
+            {
+                FarmerRendererPatch.AreColorMasksPendingRefresh = true;
+            }
         }
 
         internal static bool ResetTextureIfNecessary(string appearanceId)
