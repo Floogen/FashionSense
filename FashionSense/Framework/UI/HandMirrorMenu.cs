@@ -561,11 +561,13 @@ namespace FashionSense.Framework.UI
                     contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<PantsContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_PANTS_ID]);
                     break;
                 case SLEEVES_FILTER_BUTTON:
-                    contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<SleevesContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_SLEEVES_ID]);
                     if (GetCurrentFeatureSlotKey() == ModDataKeys.CUSTOM_SHOES_ID)
                     {
                         contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<ShoesContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_SHOES_ID]);
-                        break;
+                    }
+                    else
+                    {
+                        contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<SleevesContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_SLEEVES_ID]);
                     }
                     break;
             }
@@ -646,6 +648,10 @@ namespace FashionSense.Framework.UI
                     break;
                 case SLEEVES_FILTER_BUTTON:
                     AppearanceHelpers.SetAppearanceColorForLayer(GetActiveModel(), Game1.player, color, maskLayerIndex: currentColorMaskLayerIndex);
+                    if (GetCurrentFeatureSlotKey() == ModDataKeys.CUSTOM_SHOES_ID && Game1.player.modData.ContainsKey(ModDataKeys.CUSTOM_SHOES_ID) && Game1.player.modData[ModDataKeys.CUSTOM_SHOES_ID] == ModDataKeys.INTERNAL_COLOR_OVERRIDE_SHOE_ID)
+                    {
+                        FashionSense.SetSpriteDirty(skipColorMaskRefresh: true);
+                    }
                     break;
             }
         }
@@ -1227,7 +1233,14 @@ namespace FashionSense.Framework.UI
                         contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<PantsContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_PANTS_ID]);
                         break;
                     case SLEEVES_FILTER_BUTTON:
-                        contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<SleevesContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_SLEEVES_ID]);
+                        if (GetCurrentFeatureSlotKey() == ModDataKeys.CUSTOM_SHOES_ID)
+                        {
+                            contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<ShoesContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_SHOES_ID]);
+                        }
+                        else
+                        {
+                            contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<SleevesContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_SLEEVES_ID]);
+                        }
                         break;
                 }
 
@@ -1258,7 +1271,14 @@ namespace FashionSense.Framework.UI
                         contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<PantsContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_PANTS_ID]);
                         break;
                     case SLEEVES_FILTER_BUTTON:
-                        contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<SleevesContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_SLEEVES_ID]);
+                        if (GetCurrentFeatureSlotKey() == ModDataKeys.CUSTOM_SHOES_ID)
+                        {
+                            contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<ShoesContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_SHOES_ID]);
+                        }
+                        else
+                        {
+                            contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<SleevesContentPack>(Game1.player.modData[ModDataKeys.CUSTOM_SLEEVES_ID]);
+                        }
                         break;
                 }
 

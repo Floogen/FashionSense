@@ -78,11 +78,13 @@ namespace FashionSense.Framework.UI
                     appearancePacks = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is PantsContentPack).ToList();
                     break;
                 case HandMirrorMenu.SLEEVES_FILTER_BUTTON:
-                    appearancePacks = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is SleevesContentPack).ToList();
-
                     if (callbackMenu.GetCurrentFeatureSlotKey() == ModDataKeys.CUSTOM_SHOES_ID)
                     {
                         appearancePacks = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is ShoesContentPack).ToList();
+                    }
+                    else
+                    {
+                        appearancePacks = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is SleevesContentPack).ToList();
                     }
                     break;
             }

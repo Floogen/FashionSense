@@ -58,7 +58,8 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
             }
 
-            if (!who.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR) || !who.modData.ContainsKey(ModDataKeys.CUSTOM_SHOES_ID) || who.modData[ModDataKeys.CUSTOM_SHOES_ID] is null || who.modData[ModDataKeys.CUSTOM_SHOES_ID] == "None")
+            var shoeColorKey = AppearanceModel.GetColorKey(AppearanceContentPack.Type.Shoes);
+            if (!who.modData.ContainsKey(shoeColorKey) || !who.modData.ContainsKey(ModDataKeys.CUSTOM_SHOES_ID) || who.modData[ModDataKeys.CUSTOM_SHOES_ID] is null || who.modData[ModDataKeys.CUSTOM_SHOES_ID] == "None")
             {
                 return true;
             }
@@ -67,10 +68,10 @@ namespace FashionSense.Framework.Patches.Renderer
                 return true;
             }
 
-            if (!uint.TryParse(Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR], out uint shoeColorValue))
+            if (!uint.TryParse(Game1.player.modData[shoeColorKey], out uint shoeColorValue))
             {
                 shoeColorValue = Game1.player.hairstyleColor.Value.PackedValue;
-                Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR] = shoeColorValue.ToString();
+                Game1.player.modData[shoeColorKey] = shoeColorValue.ToString();
             }
 
             var shoeColor = new Color() { PackedValue = shoeColorValue };
