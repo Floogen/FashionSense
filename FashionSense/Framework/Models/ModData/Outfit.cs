@@ -86,6 +86,12 @@ namespace FashionSense.Framework.Models
 
                 AppearanceToMaskColors[metadata.Model.Pack.PackType] = metadata.Colors;
             }
+
+            // Add manual handling for the "Override Shoe Color" artificial ShoePack
+            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_SHOES_ID) && who.modData[ModDataKeys.CUSTOM_SHOES_ID] == ModDataKeys.INTERNAL_COLOR_OVERRIDE_SHOE_ID)
+            {
+                AppearanceToMaskColors[AppearanceContentPack.Type.Shoes] = new List<Color>() { FashionSense.colorManager.GetColor(who, AppearanceModel.GetColorKey(AppearanceContentPack.Type.Shoes)) };
+            }
         }
     }
 }
