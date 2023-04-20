@@ -1,5 +1,5 @@
 # Fashion Sense 💇‍♀️🎩
-A modding framework for Stardew Valley that adds hair animations, new styles, and more!
+A modding framework for Stardew Valley that allows for bigger accessories, hairstyles, hats, shirts, sleeves, pants and shoes. Also includes animation support, custom outfits and more!
 
 ## 🛠 Requirements
 To use Fashion Sense, you'll need the following:
@@ -8,8 +8,8 @@ To use Fashion Sense, you'll need the following:
 ## 🎨 Creating a Content Pack
 Want to create your own content pack for Fashion Sense? Check out [the wiki](https://github.com/Floogen/FashionSense/wiki) for detailed instructions and guidelines.
 
-## 📦 Example Content Packs
-We've included some example content packs in this repository to help you get started. You can find them [here](https://github.com/Floogen/FashionSense/tree/development/FashionSense/Examples/%5BFS%5D%20Example%20Pack).
+## 📦 Example Content Pack
+See the [example content pack](https://github.com/Floogen/FashionSense/tree/development/FashionSense/Examples/%5BFS%5D%20Example%20Pack) to help you get started.
 
 ## 🌐 Translations
 A huge thank you to our amazing community members who provided translations for Fashion Sense:
