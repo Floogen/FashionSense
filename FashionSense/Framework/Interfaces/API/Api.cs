@@ -3,12 +3,14 @@ using FashionSense.Framework.Models;
 using FashionSense.Framework.Models.Appearances;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using static FashionSense.Framework.Interfaces.API.IApi;
+using static StardewValley.FarmerSprite;
 
 namespace FashionSense.Framework.Interfaces.API
 {
@@ -90,6 +92,28 @@ namespace FashionSense.Framework.Interfaces.API
         KeyValuePair<bool, string> GetCurrentOutfitId();
         KeyValuePair<bool, string> SetCurrentOutfitId(string outfitId, IManifest callerManifest);
 
+        public interface IDrawTool
+        {
+            public Farmer Farmer { get; init; }
+            public SpriteBatch SpriteBatch { get; init; }
+            public FarmerRenderer FarmerRenderer { get; init; }
+            public Texture2D BaseTexture { get; init; }
+            public Rectangle FarmerSourceRectangle { get; init; }
+            public AnimationFrame AnimationFrame { get; init; }
+            public bool IsDrawingForUI { get; init; }
+            public Color OverrideColor { get; init; }
+            public Vector2 Position { get; init; }
+            public Vector2 Origin { get; init; }
+            public Vector2 PositionOffset { get; init; }
+            public int FacingDirection { get; init; }
+            public int CurrentFrame { get; init; }
+            public float Scale { get; init; }
+            public float Rotation { get; init; }
+            public float LayerDepthSnapshot { get; set; }
+        }
+        KeyValuePair<bool, string> RegisterAppearanceDrawOverride(Type appearanceType, IManifest callerManifest, Func<IDrawTool, bool> appearanceDrawOverride);
+        KeyValuePair<bool, string> UnregisterAppearanceDrawOverride(Type appearanceType, IManifest callerManifest);
+
         /*
          * Example usages (using the Fashion Sense example pack)
          * 
@@ -158,12 +182,36 @@ namespace FashionSense.Framework.Interfaces.API
         private IMonitor _monitor;
         private readonly TextureManager _textureManager;
         private readonly AccessoryManager _accessoryManager;
+        private Dictionary<IApi.Type, Dictionary<IManifest, Func<IDrawTool, bool>>> appearanceTypeToDrawOverrides;
 
         internal Api(IMonitor monitor, TextureManager textureManager, AccessoryManager accessoryManager)
         {
             _monitor = monitor;
             _textureManager = textureManager;
             _accessoryManager = accessoryManager;
+            appearanceTypeToDrawOverrides = new Dictionary<IApi.Type, Dictionary<IManifest, Func<IDrawTool, bool>>>();
+        }
+
+        internal bool HandleDrawOverride(IApi.Type appearanceType, IDrawTool drawTool)
+        {
+            if (appearanceTypeToDrawOverrides.ContainsKey(appearanceType) is false)
+            {
+                return false;
+            }
+
+            foreach (var keyPair in appearanceTypeToDrawOverrides[appearanceType])
+            {
+                var manifest = keyPair.Key;
+                var appearanceDrawOverrideMethod = keyPair.Value;
+
+                if (appearanceDrawOverrideMethod(drawTool) is true)
+                {
+                    _monitor.LogOnce($"Draw logic for appearance type {appearanceType} was overriden by {manifest.UniqueID}", LogLevel.Trace);
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private string GetAppearanceModDataKey(IApi.Type appearanceType)
@@ -638,6 +686,30 @@ namespace FashionSense.Framework.Interfaces.API
             FashionSense.outfitManager.SetOutfit(Game1.player, outfit);
 
             return GenerateResponsePair(true, $"Player's outfit has been set to {outfitId}.");
+        }
+
+        public KeyValuePair<bool, string> RegisterAppearanceDrawOverride(IApi.Type appearanceType, IManifest callerManifest, Func<IDrawTool, bool> appearanceDrawOverride)
+        {
+            if (appearanceTypeToDrawOverrides.ContainsKey(appearanceType) is false)
+            {
+                appearanceTypeToDrawOverrides[appearanceType] = new Dictionary<IManifest, Func<IDrawTool, bool>>();
+            }
+
+            appearanceTypeToDrawOverrides[appearanceType][callerManifest] = appearanceDrawOverride;
+
+            _monitor.Log($"The mod {callerManifest.Name} registered a draw override for the appearance type {appearanceType}.", LogLevel.Info);
+            return GenerateResponsePair(true, $"Registered the draw override for the appearance type {appearanceType}.");
+        }
+
+        public KeyValuePair<bool, string> UnregisterAppearanceDrawOverride(IApi.Type appearanceType, IManifest callerManifest)
+        {
+            if (appearanceTypeToDrawOverrides.ContainsKey(appearanceType) is false || appearanceTypeToDrawOverrides[appearanceType].ContainsKey(callerManifest) is false)
+            {
+                return GenerateResponsePair(false, $"There were no registered draw overrides under {callerManifest.Name} for the appearance type {appearanceType}.");
+            }
+            appearanceTypeToDrawOverrides[appearanceType].Remove(callerManifest);
+
+            return GenerateResponsePair(true, $"Unregistered the draw override for the appearance type {appearanceType}.");
         }
     }
 }

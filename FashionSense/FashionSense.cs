@@ -53,6 +53,7 @@ namespace FashionSense
         internal static TextureManager textureManager;
 
         // Utilities
+        internal static Api internalApi;
         internal static ConditionData conditionData;
         internal static Dictionary<string, ConditionGroup> conditionGroups;
 
@@ -79,6 +80,9 @@ namespace FashionSense
             layerManager = new LayerManager(monitor);
             outfitManager = new OutfitManager(monitor);
             textureManager = new TextureManager(monitor);
+
+            // Load internal API
+            internalApi = new Api(Monitor, textureManager, accessoryManager);
 
             // Setup our utilities
             conditionData = new ConditionData();
@@ -285,7 +289,7 @@ namespace FashionSense
 
         public override object GetApi()
         {
-            return new Api(Monitor, textureManager, accessoryManager);
+            return internalApi;
         }
 
         private void ReloadFashionSense(string command, string[] args)
