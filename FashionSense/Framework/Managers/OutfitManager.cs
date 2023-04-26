@@ -1,4 +1,5 @@
-﻿using FashionSense.Framework.Models;
+﻿using FashionSense.Framework.Interfaces.API;
+using FashionSense.Framework.Models;
 using FashionSense.Framework.Models.Appearances;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
@@ -163,18 +164,18 @@ namespace FashionSense.Framework.Managers
                 who.modData[ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR] = outfit.PantsColor;
                 who.modData[ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR] = outfit.ShoesColor;
 
-                FashionSense.SetCachedColor(ModDataKeys.UI_HAND_MIRROR_HAT_COLOR, AppearanceContentPack.Type.Hat, 0);
-                FashionSense.SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR, AppearanceContentPack.Type.Shirt, 0);
-                FashionSense.SetCachedColor(ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR, AppearanceContentPack.Type.Pants, 0);
-                FashionSense.SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR, AppearanceContentPack.Type.Sleeves, 0);
-                FashionSense.SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR, AppearanceContentPack.Type.Shoes, 0);
+                FashionSense.SetCachedColor(ModDataKeys.UI_HAND_MIRROR_HAT_COLOR, IApi.Type.Hat, 0);
+                FashionSense.SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR, IApi.Type.Shirt, 0);
+                FashionSense.SetCachedColor(ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR, IApi.Type.Pants, 0);
+                FashionSense.SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR, IApi.Type.Sleeves, 0);
+                FashionSense.SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR, IApi.Type.Shoes, 0);
 
                 // Cache hair color, as previous versions (5.4 and below) did not utilize a ModData key for it
-                FashionSense.colorManager.SetColor(Game1.player, AppearanceModel.GetColorKey(AppearanceContentPack.Type.Hair, 0), outfit.HairColor);
+                FashionSense.colorManager.SetColor(Game1.player, AppearanceModel.GetColorKey(IApi.Type.Hair, 0), outfit.HairColor);
             }
             else
             {
-                foreach (var data in outfit.AppearanceToMaskColors.Where(d => d.Key is not AppearanceContentPack.Type.Accessory))
+                foreach (var data in outfit.AppearanceToMaskColors.Where(d => d.Key is not IApi.Type.Accessory))
                 {
                     for (int x = 0; x < data.Value.Count; x++)
                     {

@@ -1,4 +1,5 @@
-﻿using FashionSense.Framework.Models.Appearances;
+﻿using FashionSense.Framework.Interfaces.API;
+using FashionSense.Framework.Models.Appearances;
 using FashionSense.Framework.Models.Appearances.Accessory;
 using FashionSense.Framework.Models.General;
 using FashionSense.Framework.Utilities;
@@ -67,34 +68,34 @@ namespace FashionSense.Framework.Managers
             return _farmerToAppearanceIdToAppearanceAnimationData[who][appearanceId];
         }
 
-        public AnimationData GetSpecificAnimationData(Farmer who, AppearanceContentPack.Type Type)
+        public AnimationData GetSpecificAnimationData(Farmer who, IApi.Type Type)
         {
             string appearanceId;
             switch (Type)
             {
-                case AppearanceContentPack.Type.Pants:
+                case IApi.Type.Pants:
                     appearanceId = ModDataKeys.CUSTOM_PANTS_ID;
                     break;
-                case AppearanceContentPack.Type.Sleeves:
+                case IApi.Type.Sleeves:
                     appearanceId = ModDataKeys.CUSTOM_SLEEVES_ID;
                     break;
-                case AppearanceContentPack.Type.Shirt:
+                case IApi.Type.Shirt:
                     appearanceId = ModDataKeys.CUSTOM_SHIRT_ID;
                     break;
-                case AppearanceContentPack.Type.Hair:
+                case IApi.Type.Hair:
                     appearanceId = ModDataKeys.CUSTOM_HAIR_ID;
                     break;
-                case AppearanceContentPack.Type.Hat:
+                case IApi.Type.Hat:
                     appearanceId = ModDataKeys.CUSTOM_HAT_ID;
                     break;
-                case AppearanceContentPack.Type.Shoes:
+                case IApi.Type.Shoes:
                     appearanceId = ModDataKeys.CUSTOM_SHOES_ID;
                     break;
                 // Purposely returning null for accessories, as they require the full appearanceId to be passed over
                 default:
-                case AppearanceContentPack.Type.Accessory:
-                case AppearanceContentPack.Type.AccessorySecondary:
-                case AppearanceContentPack.Type.AccessoryTertiary:
+                case IApi.Type.Accessory:
+                case IApi.Type.AccessorySecondary:
+                case IApi.Type.AccessoryTertiary:
                     return null;
             }
 

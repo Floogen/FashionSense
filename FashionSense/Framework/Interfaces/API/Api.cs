@@ -27,7 +27,8 @@ namespace FashionSense.Framework.Interfaces.API
             Shirt,
             Pants,
             Sleeves,
-            Shoes
+            Shoes,
+            Player
         }
 
         public record RawTextureData(int Width, int Height, Color[] Data) : IRawTextureData;

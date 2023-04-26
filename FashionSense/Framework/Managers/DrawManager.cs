@@ -1,4 +1,5 @@
-﻿using FashionSense.Framework.Models.Appearances;
+﻿using FashionSense.Framework.Interfaces.API;
+using FashionSense.Framework.Models.Appearances;
 using FashionSense.Framework.Models.Appearances.Accessory;
 using FashionSense.Framework.Models.Appearances.Generic;
 using FashionSense.Framework.Models.Appearances.Hair;
@@ -99,28 +100,28 @@ namespace FashionSense.Framework.Managers
         {
             switch (layer.AppearanceType)
             {
-                case AppearanceContentPack.Type.Player:
+                case IApi.Type.Player:
                     DrawPlayerVanilla(who);
                     break;
-                case AppearanceContentPack.Type.Pants:
+                case IApi.Type.Pants:
                     DrawPantsVanilla(who);
                     break;
-                case AppearanceContentPack.Type.Sleeves:
+                case IApi.Type.Sleeves:
                     DrawSleevesVanilla(who);
                     break;
-                case AppearanceContentPack.Type.Shirt:
+                case IApi.Type.Shirt:
                     DrawShirtVanilla(who);
                     break;
-                case AppearanceContentPack.Type.Accessory:
+                case IApi.Type.Accessory:
                     DrawAccessoryVanilla(who);
                     break;
-                case AppearanceContentPack.Type.Hair:
+                case IApi.Type.Hair:
                     DrawHairVanilla(who);
                     break;
-                case AppearanceContentPack.Type.Hat:
+                case IApi.Type.Hat:
                     DrawHatVanilla(who);
                     break;
-                case AppearanceContentPack.Type.Shoes:
+                case IApi.Type.Shoes:
                     // Purposely leaving blank, as vanilla shoes are handled in DrawPatch
                     break;
             }
@@ -130,15 +131,15 @@ namespace FashionSense.Framework.Managers
         {
             switch (layer.AppearanceType)
             {
-                case AppearanceContentPack.Type.Pants:
-                case AppearanceContentPack.Type.Shirt:
-                case AppearanceContentPack.Type.Accessory:
-                case AppearanceContentPack.Type.Hair:
-                case AppearanceContentPack.Type.Hat:
-                case AppearanceContentPack.Type.Shoes:
+                case IApi.Type.Pants:
+                case IApi.Type.Shirt:
+                case IApi.Type.Accessory:
+                case IApi.Type.Hair:
+                case IApi.Type.Hat:
+                case IApi.Type.Shoes:
                     DrawAppearance(who, layer);
                     break;
-                case AppearanceContentPack.Type.Sleeves:
+                case IApi.Type.Sleeves:
                     DrawSleevesCustom(who, layer);
                     break;
             }
@@ -965,12 +966,12 @@ namespace FashionSense.Framework.Managers
             }
 
             var type = model.GetPackType();
-            if (type is AppearanceContentPack.Type.Hat)
+            if (type is IApi.Type.Hat)
             {
                 return new Vector2(-8 + ((!flip) ? 1 : (-1)) * FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, -16 + FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + 4 + (int)renderer.heightOffset.Value);
             }
 
-            if (type is AppearanceContentPack.Type.Shirt)
+            if (type is IApi.Type.Shirt)
             {
                 switch (facingDirection)
                 {
@@ -984,7 +985,7 @@ namespace FashionSense.Framework.Managers
                         return new Vector2(16 - FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, 56 + FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + (int)renderer.heightOffset.Value);
                 }
             }
-            else if (type is not AppearanceContentPack.Type.Sleeves)
+            else if (type is not IApi.Type.Sleeves)
             {
                 switch (facingDirection)
                 {
@@ -1003,7 +1004,7 @@ namespace FashionSense.Framework.Managers
                 }
             }
 
-            if (type is AppearanceContentPack.Type.Accessory or AppearanceContentPack.Type.AccessorySecondary or AppearanceContentPack.Type.AccessoryTertiary)
+            if (type is IApi.Type.Accessory or IApi.Type.AccessorySecondary or IApi.Type.AccessoryTertiary)
             {
                 switch (facingDirection)
                 {

@@ -1,4 +1,5 @@
-﻿using FashionSense.Framework.Managers;
+﻿using FashionSense.Framework.Interfaces.API;
+using FashionSense.Framework.Managers;
 using FashionSense.Framework.Models.Appearances;
 using FashionSense.Framework.Models.Appearances.Accessory;
 using FashionSense.Framework.Models.Appearances.Hair;
@@ -58,7 +59,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 }
             }
 
-            var shoeColorKey = AppearanceModel.GetColorKey(AppearanceContentPack.Type.Shoes);
+            var shoeColorKey = AppearanceModel.GetColorKey(IApi.Type.Shoes);
             if (!who.modData.ContainsKey(shoeColorKey) || !who.modData.ContainsKey(ModDataKeys.CUSTOM_SHOES_ID) || who.modData[ModDataKeys.CUSTOM_SHOES_ID] is null || who.modData[ModDataKeys.CUSTOM_SHOES_ID] == "None")
             {
                 return true;

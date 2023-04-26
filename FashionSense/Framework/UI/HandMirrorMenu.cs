@@ -1,4 +1,5 @@
-﻿using FashionSense.Framework.Models.Appearances;
+﻿using FashionSense.Framework.Interfaces.API;
+using FashionSense.Framework.Models.Appearances;
 using FashionSense.Framework.Models.Appearances.Accessory;
 using FashionSense.Framework.Models.Appearances.Hair;
 using FashionSense.Framework.Models.Appearances.Hat;
@@ -1688,7 +1689,7 @@ namespace FashionSense.Framework.UI
                         {
                             name = GetColorPickerLabel(true, enabledFilterName: GetNameOfEnabledFilter());
                         }
-                        else if (contentPack is not null && contentPack.PackType == AppearanceContentPack.Type.Shoes)
+                        else if (contentPack is not null && contentPack.PackType == IApi.Type.Shoes)
                         {
                             name = FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_active.shoes");
                         }

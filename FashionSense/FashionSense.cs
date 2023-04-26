@@ -232,17 +232,17 @@ namespace FashionSense
             Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON] = String.Empty;
 
             // Set the cached colors, if needed
-            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR, AppearanceContentPack.Type.Accessory, 0);
-            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR, AppearanceContentPack.Type.Accessory, 1);
-            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR, AppearanceContentPack.Type.Accessory, 2);
-            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_HAT_COLOR, AppearanceContentPack.Type.Hat, 0);
-            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR, AppearanceContentPack.Type.Shirt, 0);
-            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR, AppearanceContentPack.Type.Pants, 0);
-            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR, AppearanceContentPack.Type.Sleeves, 0);
-            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR, AppearanceContentPack.Type.Shoes, 0);
+            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_COLOR, IApi.Type.Accessory, 0);
+            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_SECONDARY_COLOR, IApi.Type.Accessory, 1);
+            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_ACCESSORY_TERTIARY_COLOR, IApi.Type.Accessory, 2);
+            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_HAT_COLOR, IApi.Type.Hat, 0);
+            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR, IApi.Type.Shirt, 0);
+            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_PANTS_COLOR, IApi.Type.Pants, 0);
+            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SLEEVES_COLOR, IApi.Type.Sleeves, 0);
+            SetCachedColor(ModDataKeys.UI_HAND_MIRROR_SHOES_COLOR, IApi.Type.Shoes, 0);
 
             // Cache hair color, as previous versions (5.4 and below) did not utilize a ModData key for it
-            colorManager.SetColor(Game1.player, AppearanceModel.GetColorKey(AppearanceContentPack.Type.Hair, 0), Game1.player.hairstyleColor.Value);
+            colorManager.SetColor(Game1.player, AppearanceModel.GetColorKey(IApi.Type.Hair, 0), Game1.player.hairstyleColor.Value);
 
             // Reset the name of the internal shoe override pack
             if (textureManager.GetSpecificAppearanceModel<ShoesContentPack>(ModDataKeys.INTERNAL_COLOR_OVERRIDE_SHOE_ID) is ShoesContentPack shoePack && shoePack is not null)
@@ -355,7 +355,7 @@ namespace FashionSense
                     Author = "PeacefulEnd",
                     Owner = "PeacefulEnd",
                     Name = modHelper.Translation.Get("ui.fashion_sense.color_override.shoes"),
-                    PackType = AppearanceContentPack.Type.Shoes,
+                    PackType = IApi.Type.Shoes,
                     PackName = modHelper.Translation.Get("ui.fashion_sense.color_override.shoes"),
                     Id = ModDataKeys.INTERNAL_COLOR_OVERRIDE_SHOE_ID,
                     FrontShoes = new ShoesModel(),
@@ -432,7 +432,7 @@ namespace FashionSense
                     }
 
                     // Set the model type
-                    appearanceModel.PackType = AppearanceContentPack.Type.Hair;
+                    appearanceModel.PackType = IApi.Type.Hair;
 
                     // Set the PackName and Id
                     appearanceModel.PackName = contentPack.Manifest.Name;
@@ -548,7 +548,7 @@ namespace FashionSense
                     }
 
                     // Set the model type
-                    appearanceModel.PackType = AppearanceContentPack.Type.Accessory;
+                    appearanceModel.PackType = IApi.Type.Accessory;
 
                     // Set the PackName and Id
                     appearanceModel.PackName = contentPack.Manifest.Name;
@@ -664,7 +664,7 @@ namespace FashionSense
                     }
 
                     // Set the model type
-                    appearanceModel.PackType = AppearanceContentPack.Type.Hat;
+                    appearanceModel.PackType = IApi.Type.Hat;
 
                     // Set the PackName and Id
                     appearanceModel.PackName = contentPack.Manifest.Name;
@@ -780,7 +780,7 @@ namespace FashionSense
                     }
 
                     // Set the model type
-                    appearanceModel.PackType = AppearanceContentPack.Type.Shirt;
+                    appearanceModel.PackType = IApi.Type.Shirt;
 
                     // Set the PackName and Id
                     appearanceModel.PackName = contentPack.Manifest.Name;
@@ -897,7 +897,7 @@ namespace FashionSense
                     }
 
                     // Set the model type
-                    appearanceModel.PackType = AppearanceContentPack.Type.Pants;
+                    appearanceModel.PackType = IApi.Type.Pants;
 
                     // Set the PackName and Id
                     appearanceModel.PackName = contentPack.Manifest.Name;
@@ -1014,7 +1014,7 @@ namespace FashionSense
                     }
 
                     // Set the model type
-                    appearanceModel.PackType = AppearanceContentPack.Type.Sleeves;
+                    appearanceModel.PackType = IApi.Type.Sleeves;
 
                     // Set the PackName and Id
                     appearanceModel.PackName = contentPack.Manifest.Name;
@@ -1131,7 +1131,7 @@ namespace FashionSense
                     }
 
                     // Set the model type
-                    appearanceModel.PackType = AppearanceContentPack.Type.Shoes;
+                    appearanceModel.PackType = IApi.Type.Shoes;
 
                     // Set the PackName and Id
                     appearanceModel.PackName = contentPack.Manifest.Name;
@@ -1200,7 +1200,7 @@ namespace FashionSense
             }
         }
 
-        internal static void SetCachedColor(string oldColorKey, AppearanceContentPack.Type type, int appearanceIndex)
+        internal static void SetCachedColor(string oldColorKey, IApi.Type type, int appearanceIndex)
         {
             var actualColorKey = AppearanceModel.GetColorKey(type, appearanceIndex);
             if (Game1.player.modData.ContainsKey(oldColorKey))
@@ -1264,7 +1264,7 @@ namespace FashionSense
                 // Resetting facing direction, though only if model is null
                 who.modData[ModDataKeys.ANIMATION_FACING_DIRECTION] = facingDirection.ToString();
             }
-            else if (model.Pack.PackType is not AppearanceContentPack.Type.Accessory && animationManager.GetSpecificAnimationData(who, model.Pack.PackType) is AnimationData animationData)
+            else if (model.Pack.PackType is not IApi.Type.Accessory && animationManager.GetSpecificAnimationData(who, model.Pack.PackType) is AnimationData animationData)
             {
                 animationData?.Reset(duration, who.FarmerSprite.CurrentFrame, ignoreAnimationType is true ? animationData.Type : animationType);
             }
