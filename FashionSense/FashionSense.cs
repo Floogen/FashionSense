@@ -1233,6 +1233,8 @@ namespace FashionSense
             {
                 FarmerRendererPatch.AreColorMasksPendingRefresh = true;
             }
+
+            internalApi.OnSetSpriteDirtyTriggered(new EventArgs());
         }
 
         internal static bool ResetTextureIfNecessary(string appearanceId)

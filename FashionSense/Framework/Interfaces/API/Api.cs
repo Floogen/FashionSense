@@ -115,6 +115,9 @@ namespace FashionSense.Framework.Interfaces.API
         KeyValuePair<bool, string> RegisterAppearanceDrawOverride(Type appearanceType, IManifest callerManifest, Func<IDrawTool, bool> appearanceDrawOverride);
         KeyValuePair<bool, string> UnregisterAppearanceDrawOverride(Type appearanceType, IManifest callerManifest);
 
+        // Events
+        event EventHandler SetSpriteDirtyTriggered;
+
         /*
          * Example usages (using the Fashion Sense example pack)
          * 
@@ -185,6 +188,9 @@ namespace FashionSense.Framework.Interfaces.API
         private readonly AccessoryManager _accessoryManager;
         private Dictionary<IApi.Type, Dictionary<IManifest, Func<IDrawTool, bool>>> appearanceTypeToDrawOverrides;
 
+        // Events
+        public event EventHandler SetSpriteDirtyTriggered;
+
         internal Api(IMonitor monitor, TextureManager textureManager, AccessoryManager accessoryManager)
         {
             _monitor = monitor;
@@ -213,6 +219,15 @@ namespace FashionSense.Framework.Interfaces.API
             }
 
             return false;
+        }
+
+        internal void OnSetSpriteDirtyTriggered(EventArgs e)
+        {
+            EventHandler handler = SetSpriteDirtyTriggered;
+            if (handler is not null)
+            {
+                handler(this, e);
+            }
         }
 
         private string GetAppearanceModDataKey(IApi.Type appearanceType)
