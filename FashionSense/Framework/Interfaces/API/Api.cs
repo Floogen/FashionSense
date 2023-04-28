@@ -102,6 +102,7 @@ namespace FashionSense.Framework.Interfaces.API
             public AnimationFrame AnimationFrame { get; init; }
             public bool IsDrawingForUI { get; init; }
             public Color OverrideColor { get; init; }
+            public Color AppearanceColor { get; set; }
             public Vector2 Position { get; init; }
             public Vector2 Origin { get; init; }
             public Vector2 PositionOffset { get; init; }

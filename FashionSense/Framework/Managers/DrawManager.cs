@@ -35,7 +35,7 @@ namespace FashionSense.Framework.Managers
         private Vector2 _rotationAdjustment { get; set; } // Purposely using get / set as certain vanilla draw methods modify this value
 
         internal float LayerDepth { get; set; }
-        internal IDrawTool DrawTool { get; }
+        internal DrawTool DrawTool { get; }
 
         public DrawManager(SpriteBatch spriteBatch, Farmer who, FarmerRenderer farmerRenderer, SkinToneModel skinToneModel, Texture2D baseTexture, Rectangle farmerSourceRectangle, Rectangle shirtSourceRectangle, Rectangle dyedShirtSourceRectangle, Rectangle accessorySourceRectangle, Rectangle hatSourceRectangle, Dictionary<AppearanceModel, AnimationModel> appearanceTypeToAnimationModels, AnimationFrame animationFrame, Color overrideColor, Vector2 position, Vector2 origin, Vector2 positionOffset, Vector2 rotationAdjustment, int facingDirection, int currentFrame, float scale, float rotation, bool areColorMasksPendingRefresh, bool isDrawingForUI, bool hideSleeves)
         {
@@ -72,17 +72,19 @@ namespace FashionSense.Framework.Managers
         {
             foreach (var layer in layers)
             {
+                // Set current model color
+                DrawTool.SetAppearanceColor(layer);
+
+                // Snapshot the current layer depth
                 DrawTool.LayerDepthSnapshot = IncrementAndGetLayerDepth();
-                if (FashionSense.internalApi.HandleDrawOverride(layer.AppearanceType, DrawTool))
+
+                // Check if the appearance draw is overriden or skip if the layer is hidden
+                if (FashionSense.internalApi.HandleDrawOverride(layer.AppearanceType, DrawTool) || layer.IsHidden)
                 {
                     continue;
                 }
 
-                if (layer.IsHidden)
-                {
-                    continue;
-                }
-
+                // Handle draw logic
                 if (layer.IsVanilla)
                 {
                     DrawVanillaLayer(who, layer);
@@ -552,17 +554,6 @@ namespace FashionSense.Framework.Managers
             var sleevesModel = layer.AppearanceModel as SleevesModel;
             var sleevesModelPack = sleevesModel.Pack as SleevesContentPack;
 
-            // Adjust color if needed
-            var modelColor = layer.Colors.Count == 0 ? Color.White : layer.Colors[0];
-            if (sleevesModel.DisableGrayscale)
-            {
-                modelColor = Color.White;
-            }
-            else if (sleevesModel.IsPrismatic)
-            {
-                modelColor = Utility.GetPrismaticColor(speedMultiplier: sleevesModel.PrismaticAnimationSpeedMultiplier);
-            }
-
             // Get any positional offset
             Position positionOffset = GetPositionOffset(sleevesModel);
 
@@ -570,12 +561,12 @@ namespace FashionSense.Framework.Managers
             var featureOffset = GetFeatureOffset(DrawTool.FacingDirection, DrawTool.CurrentFrame, DrawTool.Scale, DrawTool.FarmerRenderer, sleevesModel, who);
             featureOffset.Y -= who.IsMale ? 4 : 0; // Manually adjusting for male sleeves
 
-            DrawSleevesCustom(who, sleevesModel, sleevesModelPack, modelColor, positionOffset, featureOffset, GetSourceRectangle(sleevesModel, _appearanceTypeToAnimationModels));
+            DrawSleevesCustom(who, sleevesModel, sleevesModelPack, DrawTool.AppearanceColor, positionOffset, featureOffset, GetSourceRectangle(sleevesModel, _appearanceTypeToAnimationModels));
             if (_appearanceTypeToAnimationModels.TryGetValue(sleevesModel, out var animationModel) is true && animationModel is not null)
             {
                 foreach (var subFrame in animationModel.SubFrames.Where(s => s.Handling is SubFrame.Type.Normal))
                 {
-                    DrawSleevesCustom(who, sleevesModel, sleevesModelPack, modelColor, positionOffset, featureOffset, GetSourceRectangle(sleevesModel, _appearanceTypeToAnimationModels, subFrame));
+                    DrawSleevesCustom(who, sleevesModel, sleevesModelPack, DrawTool.AppearanceColor, positionOffset, featureOffset, GetSourceRectangle(sleevesModel, _appearanceTypeToAnimationModels, subFrame));
                 }
 
                 var slingshotFrontArmFrame = animationModel.SubFrames.FirstOrDefault(s => s.Handling is SubFrame.Type.SlingshotBackArm);
@@ -583,7 +574,7 @@ namespace FashionSense.Framework.Managers
 
                 if (slingshotFrontArmFrame is not null || slingshotBackArmFrame is not null)
                 {
-                    DrawSlingshotCustom(who, sleevesModel, sleevesModelPack, _areColorMasksPendingRefresh, positionOffset, featureOffset, modelColor, GetSourceRectangle(sleevesModel, _appearanceTypeToAnimationModels, slingshotBackArmFrame), GetSourceRectangle(sleevesModel, _appearanceTypeToAnimationModels, slingshotFrontArmFrame));
+                    DrawSlingshotCustom(who, sleevesModel, sleevesModelPack, _areColorMasksPendingRefresh, positionOffset, featureOffset, DrawTool.AppearanceColor, GetSourceRectangle(sleevesModel, _appearanceTypeToAnimationModels, slingshotBackArmFrame), GetSourceRectangle(sleevesModel, _appearanceTypeToAnimationModels, slingshotFrontArmFrame));
                 }
             }
         }
