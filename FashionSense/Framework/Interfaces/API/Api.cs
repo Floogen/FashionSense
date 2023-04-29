@@ -81,6 +81,7 @@ namespace FashionSense.Framework.Interfaces.API
         KeyValuePair<bool, string> ClearShoesAppearance(IManifest callerManifest);
 
         KeyValuePair<bool, string> GetCurrentAppearanceId(Type appearanceType, Farmer target = null);
+        KeyValuePair<bool, Color> GetAppearanceColor(Type appearanceType, Farmer target = null);
         KeyValuePair<bool, IRawTextureData> GetAppearanceTexture(Type appearanceType, string targetPackId, string targetAppearanceName, bool getOriginalTexture = false);
         KeyValuePair<bool, IRawTextureData> GetAppearanceTexture(string appearanceId, bool getOriginalTexture = false);
         KeyValuePair<bool, string> SetAppearanceTexture(Type appearanceType, string targetPackId, string targetAppearanceName, IRawTextureData textureData, IManifest callerManifest, bool shouldOverridePersist = false);
@@ -576,13 +577,41 @@ namespace FashionSense.Framework.Interfaces.API
                 return GenerateResponsePair(false, $"The player has not worn a Fashion Sense appearance of the type {appearanceType} | {modDataKey}");
             }
 
-            var appearancePack = _textureManager.GetSpecificAppearanceModel<AppearanceContentPack>(Game1.player.modData[modDataKey]);
+            var appearancePack = _textureManager.GetSpecificAppearanceModel<AppearanceContentPack>(target.modData[modDataKey]);
             if (appearancePack is null)
             {
-                return GenerateResponsePair(false, $"Invalid or deleted appearance pack is currently saved for the type {appearanceType} | {Game1.player.modData[modDataKey]}");
+                return GenerateResponsePair(false, $"Invalid or deleted appearance pack is currently saved for the type {appearanceType} | {target.modData[modDataKey]}");
             }
 
             return GenerateResponsePair(true, appearancePack.Id);
+        }
+
+        public KeyValuePair<bool, Color> GetAppearanceColor(IApi.Type appearanceType, Farmer target = null)
+        {
+            if (target is null)
+            {
+                target = Game1.player;
+            }
+
+            string modDataKey = GetAppearanceModDataKey(appearanceType);
+
+            if (String.IsNullOrEmpty(modDataKey))
+            {
+                return new KeyValuePair<bool, Color>(false, Color.White);
+            }
+
+            if (target.modData.ContainsKey(modDataKey) is false)
+            {
+                return new KeyValuePair<bool, Color>(false, Color.White);
+            }
+
+            var appearancePack = _textureManager.GetSpecificAppearanceModel<AppearanceContentPack>(target.modData[modDataKey]);
+            if (appearancePack is null)
+            {
+                return new KeyValuePair<bool, Color>(false, Color.White);
+            }
+
+            return new KeyValuePair<bool, Color>(true, FashionSense.colorManager.GetColor(target, AppearanceModel.GetColorKey(appearanceType)));
         }
 
         public KeyValuePair<bool, IRawTextureData> GetAppearanceTexture(IApi.Type appearanceType, string targetPackId, string targetAppearanceName, bool getOriginalTexture = false)
