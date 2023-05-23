@@ -17,7 +17,6 @@ using StardewValley.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static FashionSense.Framework.Interfaces.API.IApi;
 using static StardewValley.FarmerSprite;
 
 namespace FashionSense.Framework.Managers
