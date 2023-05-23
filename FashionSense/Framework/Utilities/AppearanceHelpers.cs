@@ -1,4 +1,5 @@
-﻿using FashionSense.Framework.Models.Appearances;
+﻿using FashionSense.Framework.Interfaces.API;
+using FashionSense.Framework.Models.Appearances;
 using FashionSense.Framework.Models.Appearances.Accessory;
 using FashionSense.Framework.Models.Appearances.Generic;
 using FashionSense.Framework.Models.Appearances.Hair;
@@ -320,7 +321,7 @@ namespace FashionSense.Framework.Utilities
             return iterator;
         }
 
-        public static bool HasModelOfType(List<AppearanceModel> models, AppearanceContentPack.Type appearanceType)
+        public static bool HasModelOfType(List<AppearanceModel> models, IApi.Type appearanceType)
         {
             foreach (var model in models)
             {
@@ -925,12 +926,12 @@ namespace FashionSense.Framework.Utilities
             }
 
             var type = model.GetPackType();
-            if (type is AppearanceContentPack.Type.Hat)
+            if (type is IApi.Type.Hat)
             {
                 return new Vector2(-8 + ((!flip) ? 1 : (-1)) * FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, -16 + FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + 4 + (int)renderer.heightOffset);
             }
 
-            if (type is AppearanceContentPack.Type.Shirt)
+            if (type is IApi.Type.Shirt)
             {
                 switch (facingDirection)
                 {
@@ -944,7 +945,7 @@ namespace FashionSense.Framework.Utilities
                         return new Vector2(16 - FarmerRenderer.featureXOffsetPerFrame[currentFrame] * 4, 56 + FarmerRenderer.featureYOffsetPerFrame[currentFrame] * 4 + (int)renderer.heightOffset);
                 }
             }
-            else if (type is not AppearanceContentPack.Type.Sleeves)
+            else if (type is not IApi.Type.Sleeves)
             {
                 switch (facingDirection)
                 {
@@ -963,7 +964,7 @@ namespace FashionSense.Framework.Utilities
                 }
             }
 
-            if (type is AppearanceContentPack.Type.Accessory or AppearanceContentPack.Type.AccessorySecondary or AppearanceContentPack.Type.AccessoryTertiary)
+            if (type is IApi.Type.Accessory or IApi.Type.AccessorySecondary or IApi.Type.AccessoryTertiary)
             {
                 switch (facingDirection)
                 {

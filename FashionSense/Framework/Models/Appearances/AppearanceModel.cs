@@ -1,4 +1,5 @@
-﻿using FashionSense.Framework.Models.Appearances.Accessory;
+﻿using FashionSense.Framework.Interfaces.API;
+using FashionSense.Framework.Models.Appearances.Accessory;
 using FashionSense.Framework.Models.Appearances.Generic;
 using FashionSense.Framework.Models.Appearances.Hair;
 using FashionSense.Framework.Models.Appearances.Hat;
@@ -189,39 +190,39 @@ namespace FashionSense.Framework.Models.Appearances
             return GetAnimationData(MovementAnimation, frame);
         }
 
-        internal AppearanceContentPack.Type GetPackType()
+        internal IApi.Type GetPackType()
         {
-            var packType = AppearanceContentPack.Type.Unknown;
+            var packType = IApi.Type.Unknown;
             switch (this)
             {
                 case AccessoryModel accessoryModel:
-                    packType = AppearanceContentPack.Type.Accessory;
+                    packType = IApi.Type.Accessory;
                     if (accessoryModel.Priority == AccessoryModel.Type.Secondary)
                     {
-                        packType = AppearanceContentPack.Type.AccessorySecondary;
+                        packType = IApi.Type.AccessorySecondary;
                     }
                     else if (accessoryModel.Priority == AccessoryModel.Type.Tertiary)
                     {
-                        packType = AppearanceContentPack.Type.AccessoryTertiary;
+                        packType = IApi.Type.AccessoryTertiary;
                     }
                     break;
                 case HatModel hatModel:
-                    packType = AppearanceContentPack.Type.Hat;
+                    packType = IApi.Type.Hat;
                     break;
                 case ShirtModel shirtModel:
-                    packType = AppearanceContentPack.Type.Shirt;
+                    packType = IApi.Type.Shirt;
                     break;
                 case PantsModel pantsModel:
-                    packType = AppearanceContentPack.Type.Pants;
+                    packType = IApi.Type.Pants;
                     break;
                 case SleevesModel sleevesModel:
-                    packType = AppearanceContentPack.Type.Sleeves;
+                    packType = IApi.Type.Sleeves;
                     break;
                 case ShoesModel shoesModel:
-                    packType = AppearanceContentPack.Type.Shoes;
+                    packType = IApi.Type.Shoes;
                     break;
                 case HairModel hairModel:
-                    packType = AppearanceContentPack.Type.Hair;
+                    packType = IApi.Type.Hair;
                     break;
             }
 
@@ -243,9 +244,9 @@ namespace FashionSense.Framework.Models.Appearances
             return AppearanceModel.GetColorKey(GetPackType(), appearanceIndex, maskLayerIndex);
         }
 
-        internal static string GetColorKey(AppearanceContentPack.Type type, int appearanceIndex = 0, int maskLayerIndex = 0)
+        internal static string GetColorKey(IApi.Type type, int appearanceIndex = 0, int maskLayerIndex = 0)
         {
-            return $"FashionSense.{(type is AppearanceContentPack.Type.Accessory ? "CustomAccessory" : type)}.{appearanceIndex}.Color.{maskLayerIndex}.Mask";
+            return $"FashionSense.{(type is IApi.Type.Accessory ? "CustomAccessory" : type)}.{appearanceIndex}.Color.{maskLayerIndex}.Mask";
         }
 
         internal static int GetColorIndex(int[] colorArray, int position)
