@@ -118,7 +118,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
             else
             {
-                var shirtColor = new Color() { PackedValue = who.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR) ? uint.Parse(who.modData[ModDataKeys.UI_HAND_MIRROR_SHIRT_COLOR]) : who.hairstyleColor.Value.PackedValue };
+                var shirtColor = FashionSense.colorManager.GetColor(who, AppearanceModel.GetColorKey(IApi.Type.Shirt));
                 if (shirtModel.DisableGrayscale)
                 {
                     shirtColor = Color.White;

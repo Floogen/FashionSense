@@ -643,6 +643,7 @@ namespace FashionSense.Framework.UI
                     break;
                 case SHIRT_FILTER_BUTTON:
                     AppearanceHelpers.SetAppearanceColorForLayer(GetActiveModel(), Game1.player, color, maskLayerIndex: currentColorMaskLayerIndex);
+                    FashionSense.SetSpriteDirty(skipColorMaskRefresh: true);
                     break;
                 case PANTS_FILTER_BUTTON:
                     AppearanceHelpers.SetAppearanceColorForLayer(GetActiveModel(), Game1.player, color, maskLayerIndex: currentColorMaskLayerIndex);
