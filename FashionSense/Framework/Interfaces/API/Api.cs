@@ -115,6 +115,7 @@ namespace FashionSense.Framework.Interfaces.API
         }
         KeyValuePair<bool, string> RegisterAppearanceDrawOverride(Type appearanceType, IManifest callerManifest, Func<IDrawTool, bool> appearanceDrawOverride);
         KeyValuePair<bool, string> UnregisterAppearanceDrawOverride(Type appearanceType, IManifest callerManifest);
+        KeyValuePair<bool, string> IsDrawOverrideActive(Type appearanceType, IManifest callerManifest);
 
         // Events
         event EventHandler SetSpriteDirtyTriggered;
@@ -755,6 +756,16 @@ namespace FashionSense.Framework.Interfaces.API
             appearanceTypeToDrawOverrides[appearanceType].Remove(callerManifest);
 
             return GenerateResponsePair(true, $"Unregistered the draw override for the appearance type {appearanceType}.");
+        }
+
+        public KeyValuePair<bool, string> IsDrawOverrideActive(IApi.Type appearanceType, IManifest callerManifest)
+        {
+            if (appearanceTypeToDrawOverrides.ContainsKey(appearanceType) is false || appearanceTypeToDrawOverrides[appearanceType].ContainsKey(callerManifest) is false)
+            {
+                return GenerateResponsePair(false, $"There were no registered draw overrides under {callerManifest.Name} for the appearance type {appearanceType}.");
+            }
+
+            return GetCurrentAppearanceId(appearanceType);
         }
     }
 }
