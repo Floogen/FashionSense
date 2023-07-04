@@ -93,6 +93,8 @@ namespace FashionSense.Framework.Interfaces.API
         KeyValuePair<bool, string> GetCurrentOutfitId();
         KeyValuePair<bool, string> SetCurrentOutfitId(string outfitId, IManifest callerManifest);
 
+        KeyValuePair<bool, string> SetAppearanceLockState(Type appearanceType, string targetPackId, string targetAppearanceName, bool isLocked, IManifest callerManifest);
+
         public interface IDrawTool
         {
             public Farmer Farmer { get; init; }
@@ -732,6 +734,21 @@ namespace FashionSense.Framework.Interfaces.API
             FashionSense.outfitManager.SetOutfit(Game1.player, outfit);
 
             return GenerateResponsePair(true, $"Player's outfit has been set to {outfitId}.");
+        }
+
+        public KeyValuePair<bool, string> SetAppearanceLockState(IApi.Type appearanceType, string targetPackId, string targetAppearanceName, bool isLocked, IManifest callerManifest)
+        {
+            var appearanceId = GetAppearanceId(targetPackId, appearanceType, targetAppearanceName);
+
+            var appearancePack = _textureManager.GetSpecificAppearanceModel<AppearanceContentPack>(appearanceId);
+            if (appearancePack is null)
+            {
+                return GenerateResponsePair(false, $"Invalid or deleted appearance pack is currently saved for {appearanceId}!");
+            }
+            appearancePack.IsLocked = isLocked;
+
+            _monitor.Log($"The mod {callerManifest.Name} set IsLocked to {isLocked} for the appearance {appearanceId}.", LogLevel.Trace);
+            return GenerateResponsePair(true, $"Set IsLocked to {isLocked} for the appearance {appearanceId}.");
         }
 
         public KeyValuePair<bool, string> RegisterAppearanceDrawOverride(IApi.Type appearanceType, IManifest callerManifest, Func<IDrawTool, bool> appearanceDrawOverride)
