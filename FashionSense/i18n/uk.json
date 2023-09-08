@@ -29,6 +29,7 @@
   "ui.fashion_sense.outfit_info.rename": "Переназвати це вбрання.",
   "ui.fashion_sense.outfit_info.delete": "Видалити це вбрання.",
   "ui.fashion_sense.warning.name": "Назва вбрання порожня або вже існує.",
+  "ui.fashion_sense.mask_layer.base": "Основа",
 
   // UI - Etc
   "ui.fashion_sense.start_with_hand_mirror": "Почати з люстерком",

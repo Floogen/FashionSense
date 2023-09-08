@@ -1,0 +1,60 @@
+{
+  // Tools
+  "tools.name.hand_mirror": "Ручное зеркало",
+  "tools.description.hand_mirror": "Позволяет изменить вашу внешность на более яркую.",
+
+  // Messages
+  "messages.warning.no_content_packs": "У вас не установлены контент-пакеты Fashion Sense!",
+  
+  // Letters
+  "letters.hand_mirror": "Я услышала, что в долину переезжает кто-то новенький, и решила прислать подарок на новоселье.^ ^К письму я приложила своё старое ручное зеркало, которое должно помочь с чувством стиля.^ ^Если когда-нибудь потеряешь его, то можешь купить такой же в магазине Пьера.  ^   -Хэйли %item tool HandMirror %%",
+
+  // UI - Titles
+  "ui.fashion_sense.title.search": "Выберите пакет Fashion Sense",
+  "ui.fashion_sense.title.hair": "Причёски",
+  "ui.fashion_sense.title.accessory": "Аксессуары",
+  "ui.fashion_sense.title.hat": "Шляпы",
+  "ui.fashion_sense.title.shirt": "Топы",
+  "ui.fashion_sense.title.pants": "Штаны",
+  "ui.fashion_sense.title.sleeves": "Рукава",
+  "ui.fashion_sense.title.sleevesAndShoes": "Рукава и Обувь",
+  "ui.fashion_sense.title.shoes": "Обувь",
+  "ui.fashion_sense.title.mask_layer": "Слой",
+
+  // UI - Outfits
+  "ui.fashion_sense.title.outfits": "Наряд",
+  "ui.fashion_sense.title.outfit_naming": "Имя наряда",
+  "ui.fashion_sense.create_outfit_button": "Создать наряд",
+  "ui.fashion_sense.create_outfit_hover": "Создаёт новый наряд на основе вашей текущей одежды.",
+  "ui.fashion_sense.outfit_info.save": "Сохраняет вашу текущую одежду в этом наряде.",
+  "ui.fashion_sense.outfit_info.rename": "Переименовать этот наряд.",
+  "ui.fashion_sense.outfit_info.delete": "Удалить этот наряд.",
+  "ui.fashion_sense.outfit_info.share.active": "В настоящее время этот наряд переносится вместе с другими файлами сохранения.",
+  "ui.fashion_sense.outfit_info.share.inactive": "Не переносить этот наряд с другими файлами сохранения.",
+  "ui.fashion_sense.outfit_info.shared": "Перенести",
+  "ui.fashion_sense.warning.name": "Имя наряда пустое или уже существует.",
+  "ui.fashion_sense.mask_layer.base": "Основа",
+
+  // UI - Etc
+  "ui.fashion_sense.start_with_hand_mirror": "Начать с зеркалом",
+  "ui.fashion_sense.start_with_hand_mirror.description": "Вы начнёте новую игру с Ручным зеркалом в качестве подарка от жителя.",
+  "ui.fashion_sense.color_override.shoes": "Смена цвета обуви",
+  "ui.fashion_sense.search_button": "Поиск определенного пакета Fashion Sense.",
+  "ui.fashion_sense.outfit_button": "Получить доступ к нарядам Fashion Sense.",
+  "ui.fashion_sense.color_copy_button": "Копировать текущий цвет.",
+  "ui.fashion_sense.color_paste_button": "Вставить сохранённый цвет.",
+  "ui.fashion_sense.color_paste_button_empty": "Вставить сохранённый цвет (пусто).",
+  "ui.fashion_sense.clear_button": "Убрать текущий выбранный предмет Fashion Sense.",
+  "ui.fashion_sense.random_button": "Рандомно выбрать предмет Fashion Sense.",
+  "ui.fashion_sense.exit_button": "Выйти из меню.",
+  "ui.fashion_sense.color_active.shoes": "Цвет обуви",
+  "ui.fashion_sense.color_active.generic": "цвет",
+  "ui.fashion_sense.color_disabled.generic": "(Игнор.)",
+  "ui.fashion_sense.color_info.hair": "Наложение цвета не сработает на этой причёске.",
+  "ui.fashion_sense.color_info.hat": "Наложение цвета не сработает на этой шляпе.",
+  "ui.fashion_sense.color_info.shirt": "Наложение цвета не сработает на этом топе.",
+  "ui.fashion_sense.color_info.pants": "Наложение цвета не сработает на этих штанах.",
+  "ui.fashion_sense.color_info.accessory": "Наложение цвета не сработает на этом аксессуаре.",
+  "ui.fashion_sense.color_info.sleeves": "Наложение цвета не сработает на этих рукавах.",
+  "ui.fashion_sense.color_info.shoes": "Наложение цвета не сработает на этой обуви."
+}
