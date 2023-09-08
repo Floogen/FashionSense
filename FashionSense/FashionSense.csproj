@@ -65,6 +65,9 @@
 		<None Update="i18n\default.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="i18n\ru.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="i18n\th.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
