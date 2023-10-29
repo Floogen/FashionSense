@@ -118,7 +118,7 @@ namespace FashionSense.Framework.UI
                     });
 
                     var fakeFarmer = _displayFarmer.CreateFakeEventFarmer();
-                    fakeFarmer.faceDirection(who.facingDirection);
+                    fakeFarmer.faceDirection(who.FacingDirection);
                     foreach (var key in _displayFarmer.modData.Keys)
                     {
                         fakeFarmer.modData[key] = _displayFarmer.modData[key];
@@ -194,7 +194,7 @@ namespace FashionSense.Framework.UI
                             break;
                         case HandMirrorMenu.ACCESSORY_FILTER_BUTTON:
                             FashionSense.accessoryManager.AddAccessory(fakeFarmers[i], targetPack.Id, _callbackMenu.GetAccessoryIndex(), preserveColor: true);
-                            FashionSense.ResetAnimationModDataFields(fakeFarmers[i], 0, AnimationModel.Type.Idle, fakeFarmers[i].facingDirection);
+                            FashionSense.ResetAnimationModDataFields(fakeFarmers[i], 0, AnimationModel.Type.Idle, fakeFarmers[i].FacingDirection);
                             FashionSense.SetSpriteDirty();
                             continue;
                         case HandMirrorMenu.HAT_FILTER_BUTTON:
@@ -216,7 +216,7 @@ namespace FashionSense.Framework.UI
                     }
 
                     fakeFarmers[i].modData[modDataKey] = targetPack.Id;
-                    FashionSense.ResetAnimationModDataFields(fakeFarmers[i], 0, AnimationModel.Type.Idle, fakeFarmers[i].facingDirection);
+                    FashionSense.ResetAnimationModDataFields(fakeFarmers[i], 0, AnimationModel.Type.Idle, fakeFarmers[i].FacingDirection);
                     FashionSense.SetSpriteDirty();
                 }
             }
@@ -302,7 +302,7 @@ namespace FashionSense.Framework.UI
                     }
                     FashionSense.accessoryManager.CopyAccessories(fakeFarmers[i], _displayFarmer);
 
-                    FashionSense.ResetAnimationModDataFields(_displayFarmer, 0, AnimationModel.Type.Idle, _displayFarmer.facingDirection);
+                    FashionSense.ResetAnimationModDataFields(_displayFarmer, 0, AnimationModel.Type.Idle, _displayFarmer.FacingDirection);
                     FashionSense.SetSpriteDirty();
                     _callbackMenu.Reset();
 

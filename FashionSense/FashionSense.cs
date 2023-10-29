@@ -101,7 +101,7 @@ namespace FashionSense
 
                 // Apply tool related patches
                 new ToolPatch(monitor, modHelper).Apply(harmony);
-                new SeedShopPatch(monitor, modHelper).Apply(harmony);
+                new ShopBuilderPatch(monitor, modHelper).Apply(harmony);
                 new GameLocationPatch(monitor, modHelper).Apply(harmony);
 
                 // Apply UI related patches
@@ -128,7 +128,7 @@ namespace FashionSense
             helper.ConsoleCommands.Add("fs_display_movement", "Displays debug info related to player movement. Use again to disable. \n\nUsage: fs_display_movement", delegate { _displayMovementData = !_displayMovementData; });
             helper.ConsoleCommands.Add("fs_reload", "Reloads all Fashion Sense content packs. Can specify a manifest unique ID to only reload that pack.\n\nUsage: fs_reload [manifest_unique_id]", ReloadFashionSense);
             helper.ConsoleCommands.Add("fs_reload_continuous", "Debug usage only: reloads all Fashion Sense content packs every 2 seconds. Use the command again to stop the continuous reloading.\n\nUsage: fs_reload_continuous", delegate { _continuousReloading = !_continuousReloading; });
-            helper.ConsoleCommands.Add("fs_add_mirror", "Gives you a Hand Mirror tool.\n\nUsage: fs_add_mirror", delegate { Game1.player.addItemToInventory(SeedShopPatch.GetHandMirrorTool()); });
+            helper.ConsoleCommands.Add("fs_add_mirror", "Gives you a Hand Mirror tool.\n\nUsage: fs_add_mirror", delegate { Game1.player.addItemToInventory(ShopBuilderPatch.GetHandMirrorTool()); });
             helper.ConsoleCommands.Add("fs_freeze_self", "Locks yourself in place, which is useful for showcasing custom appearances. Use the command again to unfreeze yourself.\n\nUsage: fs_freeze_self", delegate { _ = _cachedPlayerPosition is null ? _cachedPlayerPosition = Game1.player.Position : _cachedPlayerPosition = null; });
 
             helper.Events.Content.AssetRequested += OnAssetRequested;

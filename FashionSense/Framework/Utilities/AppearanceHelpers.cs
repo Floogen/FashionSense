@@ -404,11 +404,11 @@ namespace FashionSense.Framework.Utilities
             // Handle updating the position and other values of the light
             if (!Game1.currentLocation.sharedLights.ContainsKey(animationData.LightId.Value))
             {
-                Game1.currentLocation.sharedLights[animationData.LightId.Value] = new LightSource(lightModel.GetTextureSource(), who.position - new Vector2(lightModel.Position.X, lightModel.Position.Y), lightModel.GetRadius(recalculateLight), lightModel.GetColor(), LightSource.LightContext.None);
+                Game1.currentLocation.sharedLights[animationData.LightId.Value] = new LightSource(lightModel.GetTextureSource(), who.Position - new Vector2(lightModel.Position.X, lightModel.Position.Y), lightModel.GetRadius(recalculateLight), lightModel.GetColor(), LightSource.LightContext.None);
             }
             else
             {
-                Game1.currentLocation.sharedLights[animationData.LightId.Value].position.Value = who.position - new Vector2(lightModel.Position.X, lightModel.Position.Y);
+                Game1.currentLocation.sharedLights[animationData.LightId.Value].position.Value = who.Position - new Vector2(lightModel.Position.X, lightModel.Position.Y);
                 Game1.currentLocation.sharedLights[animationData.LightId.Value].radius.Value = lightModel.GetRadius(recalculateLight);
                 Game1.currentLocation.sharedLights[animationData.LightId.Value].color.Value = lightModel.GetColor();
             }
@@ -998,7 +998,7 @@ namespace FashionSense.Framework.Utilities
             // Perform initial vanilla logic
             Color[] shirtData = new Color[FarmerRenderer.shirtsTexture.Bounds.Width * FarmerRenderer.shirtsTexture.Bounds.Height];
             FarmerRenderer.shirtsTexture.GetData(shirtData);
-            int index = renderer.ClampShirt(who.GetShirtIndex()) * 8 / 128 * 32 * FarmerRenderer.shirtsTexture.Bounds.Width + renderer.ClampShirt(who.GetShirtIndex()) * 8 % 128 + FarmerRenderer.shirtsTexture.Width * 4;
+            int index = who.GetShirtIndex() * 8 / 128 * 32 * FarmerRenderer.shirtsTexture.Bounds.Width + who.GetShirtIndex() * 8 % 128 + FarmerRenderer.shirtsTexture.Width * 4;
             int dye_index = index + 128;
             Color shirtSleeveColor = Color.White;
 
