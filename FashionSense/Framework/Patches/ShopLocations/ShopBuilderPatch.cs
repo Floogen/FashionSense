@@ -35,7 +35,10 @@ namespace FashionSense.Framework.Patches.ShopLocations
 
         private static void GetShopStockPostfix(string shopId, ShopData shop, ref Dictionary<ISalable, ItemStockInformation> __result)
         {
-            __result.Add(GetHandMirrorTool(), new ItemStockInformation(1500, 1));
+            if (shopId == "SeedShop")
+            {
+                __result.Add(GetHandMirrorTool(), new ItemStockInformation(1500, 1));
+            }
         }
     }
 }
