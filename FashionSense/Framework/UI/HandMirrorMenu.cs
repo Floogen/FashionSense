@@ -467,22 +467,22 @@ namespace FashionSense.Framework.UI
             switch (filterName)
             {
                 case HAIR_FILTER_BUTTON:
-                    appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is HairContentPack).ToList();
+                    appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is HairContentPack).OrderBy(m => m.Name).ToList();
                     break;
                 case ACCESSORY_FILTER_BUTTON:
-                    appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is AccessoryContentPack).ToList();
+                    appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is AccessoryContentPack).OrderBy(m => m.Name).ToList();
                     break;
                 case HAT_FILTER_BUTTON:
-                    appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is HatContentPack).ToList();
+                    appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is HatContentPack).OrderBy(m => m.Name).ToList();
                     break;
                 case SHIRT_FILTER_BUTTON:
-                    appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is ShirtContentPack).ToList();
+                    appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is ShirtContentPack).OrderBy(m => m.Name).ToList();
                     break;
                 case PANTS_FILTER_BUTTON:
-                    appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is PantsContentPack).ToList();
+                    appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is PantsContentPack).OrderBy(m => m.Name).ToList();
                     break;
                 case SLEEVES_FILTER_BUTTON:
-                    appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is SleevesContentPack).ToList();
+                    appearanceModels = FashionSense.textureManager.GetAllAppearanceModels().Where(m => m is SleevesContentPack).OrderBy(m => m.Name).ToList();
                     break;
             }
 
