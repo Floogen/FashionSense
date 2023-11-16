@@ -307,7 +307,7 @@ namespace FashionSense.Framework.Managers
 
         private void DrawSlingshotVanilla(Farmer who)
         {
-            DrawTool.SpriteBatch.Draw(DrawTool.BaseTexture, DrawTool.Position + DrawTool.Origin + DrawTool.PositionOffset + who.armOffset, new Rectangle(DrawTool.FarmerSourceRectangle.X + (DrawTool.AnimationFrame.secondaryArm ? 192 : 96), DrawTool.FarmerSourceRectangle.Y, DrawTool.FarmerSourceRectangle.Width, DrawTool.FarmerSourceRectangle.Height), DrawTool.OverrideColor, DrawTool.Rotation, DrawTool.Origin, 4f * DrawTool.Scale, DrawTool.AnimationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
+            DrawTool.SpriteBatch.Draw(DrawTool.BaseTexture, DrawTool.Position + DrawTool.Origin + DrawTool.PositionOffset + who.armOffset, new Rectangle(DrawTool.FarmerSourceRectangle.X + DrawTool.AnimationFrame.armOffset * 16, DrawTool.FarmerSourceRectangle.Y, DrawTool.FarmerSourceRectangle.Width, DrawTool.FarmerSourceRectangle.Height), DrawTool.OverrideColor, DrawTool.Rotation, DrawTool.Origin, 4f * DrawTool.Scale, DrawTool.AnimationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
 
             // Handle drawing slingshot
             if (who.usingSlingshot is false || who.CurrentTool is not Slingshot)
@@ -613,7 +613,7 @@ namespace FashionSense.Framework.Managers
 
         private void DrawSlingshotCustom(Farmer who, SleevesModel sleevesModel, SleevesContentPack sleevesContentPack, bool areColorMasksPendingRefresh, Position positionOffset, Vector2 featureOffset, Color modelColor, Rectangle frontArmSourceRectangle, Rectangle backArmSourceRectangle)
         {
-            DrawTool.SpriteBatch.Draw(DrawTool.BaseTexture, DrawTool.Position + DrawTool.Origin + DrawTool.PositionOffset + who.armOffset, new Rectangle(DrawTool.FarmerSourceRectangle.X + (DrawTool.AnimationFrame.secondaryArm ? 192 : 96), DrawTool.FarmerSourceRectangle.Y, DrawTool.FarmerSourceRectangle.Width, DrawTool.FarmerSourceRectangle.Height), DrawTool.OverrideColor, DrawTool.Rotation, DrawTool.Origin, 4f * DrawTool.Scale, DrawTool.AnimationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
+            DrawTool.SpriteBatch.Draw(DrawTool.BaseTexture, DrawTool.Position + DrawTool.Origin + DrawTool.PositionOffset + who.armOffset, new Rectangle(DrawTool.FarmerSourceRectangle.X + DrawTool.AnimationFrame.armOffset * 16, DrawTool.FarmerSourceRectangle.Y, DrawTool.FarmerSourceRectangle.Width, DrawTool.FarmerSourceRectangle.Height), DrawTool.OverrideColor, DrawTool.Rotation, DrawTool.Origin, 4f * DrawTool.Scale, DrawTool.AnimationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
 
             // Handle drawing slingshot
             if (who.usingSlingshot is false || who.CurrentTool is not Slingshot)
