@@ -441,6 +441,19 @@ namespace FashionSense.Framework.Utilities
             return false;
         }
 
+        internal static bool IsPlayerBaseForcedHidden(List<AppearanceMetadata> metadata)
+        {
+            foreach (var data in metadata.Where(d => d.Model is not null))
+            {
+                if (data.Model.HidePlayerBase)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         internal static bool IsHatHidingHair(List<AppearanceMetadata> metadata)
         {
             foreach (var data in metadata.Where(d => d.Model is not null && d.Model is HatModel))

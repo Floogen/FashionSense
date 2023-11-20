@@ -31,12 +31,13 @@ namespace FashionSense.Framework.Managers
         private Dictionary<AppearanceModel, AnimationModel> _appearanceTypeToAnimationModels { get; }
         private bool _areColorMasksPendingRefresh { get; }
         private bool _hideSleeves { get; }
+        private bool _hidePlayerBase { get; }
         private Vector2 _rotationAdjustment { get; set; } // Purposely using get / set as certain vanilla draw methods modify this value
 
         internal float LayerDepth { get; set; }
         internal DrawTool DrawTool { get; }
 
-        public DrawManager(SpriteBatch spriteBatch, Farmer who, FarmerRenderer farmerRenderer, SkinToneModel skinToneModel, Texture2D baseTexture, Rectangle farmerSourceRectangle, Rectangle shirtSourceRectangle, Rectangle dyedShirtSourceRectangle, Rectangle accessorySourceRectangle, Rectangle hatSourceRectangle, Dictionary<AppearanceModel, AnimationModel> appearanceTypeToAnimationModels, AnimationFrame animationFrame, Color overrideColor, Vector2 position, Vector2 origin, Vector2 positionOffset, Vector2 rotationAdjustment, int facingDirection, int currentFrame, float scale, float rotation, bool areColorMasksPendingRefresh, bool isDrawingForUI, bool hideSleeves)
+        public DrawManager(SpriteBatch spriteBatch, Farmer who, FarmerRenderer farmerRenderer, SkinToneModel skinToneModel, Texture2D baseTexture, Rectangle farmerSourceRectangle, Rectangle shirtSourceRectangle, Rectangle dyedShirtSourceRectangle, Rectangle accessorySourceRectangle, Rectangle hatSourceRectangle, Dictionary<AppearanceModel, AnimationModel> appearanceTypeToAnimationModels, AnimationFrame animationFrame, Color overrideColor, Vector2 position, Vector2 origin, Vector2 positionOffset, Vector2 rotationAdjustment, int facingDirection, int currentFrame, float scale, float rotation, bool areColorMasksPendingRefresh, bool isDrawingForUI, bool hideSleeves, bool hidePlayerBase)
         {
             DrawTool = new DrawTool()
             {
@@ -64,7 +65,9 @@ namespace FashionSense.Framework.Managers
             _hatSourceRectangle = hatSourceRectangle;
             _appearanceTypeToAnimationModels = appearanceTypeToAnimationModels;
             _areColorMasksPendingRefresh = areColorMasksPendingRefresh;
+
             _hideSleeves = hideSleeves;
+            _hidePlayerBase = hidePlayerBase;
         }
 
         public void DrawLayers(Farmer who, List<LayerData> layers)
@@ -147,6 +150,12 @@ namespace FashionSense.Framework.Managers
         #region Vanilla draw methods
         private void DrawPlayerVanilla(Farmer who)
         {
+            // Check if player draw should be skipped
+            if (_hidePlayerBase)
+            {
+                return;
+            }
+
             // Check if the player's legs need to be hidden
             var adjustedBaseRectangle = DrawTool.FarmerSourceRectangle;
             if (AppearanceHelpers.ShouldHideLegs(who, DrawTool.FacingDirection) && !(bool)who.swimming)
