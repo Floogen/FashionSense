@@ -123,7 +123,7 @@ namespace FashionSense.Framework.UI
                 rightNeighborID = 612,
                 downNeighborID = -99998
             });
-            labels.Add(descriptionLabel = new ClickableComponent(new Rectangle(_portraitBox.Right - 84, _portraitBox.Y + yOffset + 32, 1, 1), FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.hair")));
+            labels.Add(descriptionLabel = new ClickableComponent(new Rectangle(_portraitBox.Right - 164, _portraitBox.Y + yOffset + 32, 164, 32), FashionSense.modHelper.Translation.Get("ui.fashion_sense.title.hair")));
             rightSelectionButtons.Add(new ClickableTextureComponent("Appearance", new Rectangle(_portraitBox.Right, _portraitBox.Y + yOffset + 16, 48, 48), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 33), 1f)
             {
                 myID = 612,
@@ -1212,6 +1212,11 @@ namespace FashionSense.Framework.UI
                             break;
                     }
                 }
+                else if (label == descriptionLabel && descriptionLabel.containsPoint(x, y) && GetActiveModel() is AppearanceModel model && model is not null && model.HidePlayerBase is true)
+                {
+                    hoverText = "This appearance is hiding the player's base sprite";
+                    break;
+                }
             }
 
             if (contentPackLabel.containsPoint(x, y))
@@ -1513,14 +1518,7 @@ namespace FashionSense.Framework.UI
             }
 
             // Draw option button for supported appearance types (currently only accessories)
-            if (GetNameOfEnabledFilter() == ACCESSORY_FILTER_BUTTON)
-            {
-                foreach (ClickableTextureComponent optionButton in optionButtons)
-                {
-                    //optionButton.draw(b, optionButton.hoverText == "enabled" ? Color.White : Color.Gray, 1f);
-                }
-            }
-            else if (GetNameOfEnabledFilter() == SLEEVES_FILTER_BUTTON)
+            if (GetNameOfEnabledFilter() == SLEEVES_FILTER_BUTTON)
             {
                 foreach (ClickableTextureComponent featureButton in featureButtons)
                 {
@@ -1569,6 +1567,7 @@ namespace FashionSense.Framework.UI
             outfitButton.draw(b);
             colorCopyButton.draw(b);
             colorPasteButton.draw(b);
+
             if (_cachedColor is not null)
             {
                 b.Draw(Game1.mouseCursors2, new Vector2(colorPasteButton.bounds.X, colorPasteButton.bounds.Y), new Rectangle(99, 146, 5, 5), _cachedColor.Value, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0f);
@@ -1621,7 +1620,13 @@ namespace FashionSense.Framework.UI
                             break;
                     }
 
-                    offset = 21f - Game1.smallFont.MeasureString(c.name).X / 2f;
+                    var activeModel = GetActiveModel();
+                    if (activeModel is not null && activeModel.HidePlayerBase is true)
+                    {
+                        color = Game1.eveningColor;
+                    }
+
+                    offset = descriptionLabel.bounds.Width - 64f - Game1.smallFont.MeasureString(c.name).X / 2f;
                     if (!c.name.Contains("Color"))
                     {
                         appearanceLabel.name = "None";
