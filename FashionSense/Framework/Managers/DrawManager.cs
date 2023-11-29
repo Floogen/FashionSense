@@ -569,12 +569,12 @@ namespace FashionSense.Framework.Managers
             var featureOffset = GetFeatureOffset(DrawTool.FacingDirection, DrawTool.CurrentFrame, DrawTool.Scale, DrawTool.FarmerRenderer, sleevesModel, who);
             featureOffset.Y -= who.IsMale ? 4 : 0; // Manually adjusting for male sleeves
 
-            DrawSleevesCustom(who, sleevesModel, sleevesModelPack, DrawTool.AppearanceColor, positionOffset, featureOffset, GetSourceRectangle(sleevesModel, _appearanceTypeToAnimationModels));
+            DrawSleevesCustom(who, layer, sleevesModel, sleevesModelPack, DrawTool.AppearanceColor, positionOffset, featureOffset, GetSourceRectangle(sleevesModel, _appearanceTypeToAnimationModels));
             if (_appearanceTypeToAnimationModels.TryGetValue(sleevesModel, out var animationModel) is true && animationModel is not null)
             {
                 foreach (var subFrame in animationModel.SubFrames.Where(s => s.Handling is SubFrame.Type.Normal))
                 {
-                    DrawSleevesCustom(who, sleevesModel, sleevesModelPack, DrawTool.AppearanceColor, positionOffset, featureOffset, GetSourceRectangle(sleevesModel, _appearanceTypeToAnimationModels, subFrame));
+                    DrawSleevesCustom(who, layer, sleevesModel, sleevesModelPack, DrawTool.AppearanceColor, positionOffset, featureOffset, GetSourceRectangle(sleevesModel, _appearanceTypeToAnimationModels, subFrame));
                 }
 
                 var slingshotFrontArmFrame = animationModel.SubFrames.FirstOrDefault(s => s.Handling is SubFrame.Type.SlingshotBackArm);
@@ -582,12 +582,12 @@ namespace FashionSense.Framework.Managers
 
                 if (slingshotFrontArmFrame is not null || slingshotBackArmFrame is not null)
                 {
-                    DrawSlingshotCustom(who, sleevesModel, sleevesModelPack, _areColorMasksPendingRefresh, positionOffset, featureOffset, DrawTool.AppearanceColor, GetSourceRectangle(sleevesModel, _appearanceTypeToAnimationModels, slingshotBackArmFrame), GetSourceRectangle(sleevesModel, _appearanceTypeToAnimationModels, slingshotFrontArmFrame));
+                    DrawSlingshotCustom(who, layer, sleevesModel, sleevesModelPack, _areColorMasksPendingRefresh, positionOffset, featureOffset, DrawTool.AppearanceColor, GetSourceRectangle(sleevesModel, _appearanceTypeToAnimationModels, slingshotBackArmFrame), GetSourceRectangle(sleevesModel, _appearanceTypeToAnimationModels, slingshotFrontArmFrame));
                 }
             }
         }
 
-        private void DrawSleevesCustom(Farmer who, SleevesModel sleevesModel, SleevesContentPack sleevesModelPack, Color modelColor, Position positionOffset, Vector2 featureOffset, Rectangle customSleevesSourceRect)
+        private void DrawSleevesCustom(Farmer who, LayerData layer, SleevesModel sleevesModel, SleevesContentPack sleevesModelPack, Color modelColor, Position positionOffset, Vector2 featureOffset, Rectangle customSleevesSourceRect)
         {
             DrawTool.SpriteBatch.Draw(sleevesModelPack.Texture, GetScaledPosition(DrawTool.Position + who.armOffset, sleevesModel, DrawTool.IsDrawingForUI) + DrawTool.Origin + DrawTool.PositionOffset + featureOffset, customSleevesSourceRect, sleevesModel.HasColorMask() ? Color.White : modelColor, DrawTool.Rotation, DrawTool.Origin + new Vector2(positionOffset.X, positionOffset.Y), sleevesModel.Scale * DrawTool.Scale, sleevesModel.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
 
@@ -611,7 +611,7 @@ namespace FashionSense.Framework.Managers
             }
             else
             {
-                DrawColorMask(DrawTool.SpriteBatch, sleevesModelPack, sleevesModel, _areColorMasksPendingRefresh, GetScaledPosition(DrawTool.Position + who.armOffset, sleevesModel, DrawTool.IsDrawingForUI) + DrawTool.Origin + DrawTool.PositionOffset + featureOffset, customSleevesSourceRect, modelColor, new List<Color>(), DrawTool.Rotation, DrawTool.Origin + new Vector2(positionOffset.X, positionOffset.Y), sleevesModel.Scale * DrawTool.Scale, IncrementAndGetLayerDepth());
+                DrawColorMask(DrawTool.SpriteBatch, sleevesModelPack, sleevesModel, _areColorMasksPendingRefresh, GetScaledPosition(DrawTool.Position + who.armOffset, sleevesModel, DrawTool.IsDrawingForUI) + DrawTool.Origin + DrawTool.PositionOffset + featureOffset, customSleevesSourceRect, null, layer.Colors, DrawTool.Rotation, DrawTool.Origin + new Vector2(sleevesModel.BodyPosition.X, sleevesModel.BodyPosition.Y), sleevesModel.Scale * DrawTool.Scale, IncrementAndGetLayerDepth());
             }
 
             if (sleevesModel.HasSkinToneMask())
@@ -620,7 +620,7 @@ namespace FashionSense.Framework.Managers
             }
         }
 
-        private void DrawSlingshotCustom(Farmer who, SleevesModel sleevesModel, SleevesContentPack sleevesContentPack, bool areColorMasksPendingRefresh, Position positionOffset, Vector2 featureOffset, Color modelColor, Rectangle frontArmSourceRectangle, Rectangle backArmSourceRectangle)
+        private void DrawSlingshotCustom(Farmer who, LayerData layer, SleevesModel sleevesModel, SleevesContentPack sleevesContentPack, bool areColorMasksPendingRefresh, Position positionOffset, Vector2 featureOffset, Color modelColor, Rectangle frontArmSourceRectangle, Rectangle backArmSourceRectangle)
         {
             DrawTool.SpriteBatch.Draw(DrawTool.BaseTexture, DrawTool.Position + DrawTool.Origin + DrawTool.PositionOffset + who.armOffset, new Rectangle(DrawTool.FarmerSourceRectangle.X + DrawTool.AnimationFrame.armOffset * 16, DrawTool.FarmerSourceRectangle.Y, DrawTool.FarmerSourceRectangle.Width, DrawTool.FarmerSourceRectangle.Height), DrawTool.OverrideColor, DrawTool.Rotation, DrawTool.Origin, 4f * DrawTool.Scale, DrawTool.AnimationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
 
