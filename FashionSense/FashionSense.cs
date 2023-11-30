@@ -63,9 +63,11 @@ namespace FashionSense
         internal const int MAX_TRACKED_MILLISECONDS = 3600000;
 
         // Debugging flags
+        private bool _displayFarmerFrames = false;
         private bool _displayMovementData = false;
         private bool _continuousReloading = false;
         private Vector2? _cachedPlayerPosition;
+        private int _lastPlayerFrame = 0;
 
         public override void Entry(IModHelper helper)
         {
@@ -126,6 +128,7 @@ namespace FashionSense
 
             // Add in our debug commands
             helper.ConsoleCommands.Add("fs_display_movement", "Displays debug info related to player movement. Use again to disable. \n\nUsage: fs_display_movement", delegate { _displayMovementData = !_displayMovementData; });
+            helper.ConsoleCommands.Add("fs_display_player_frames", "Displays debug info related to player's frames (FarmerSprite.CurrentFrame). Use again to disable. \n\nUsage: fs_display_player_frames", delegate { _displayFarmerFrames = !_displayFarmerFrames; });
             helper.ConsoleCommands.Add("fs_reload", "Reloads all Fashion Sense content packs. Can specify a manifest unique ID to only reload that pack.\n\nUsage: fs_reload [manifest_unique_id]", ReloadFashionSense);
             helper.ConsoleCommands.Add("fs_reload_continuous", "Debug usage only: reloads all Fashion Sense content packs every 2 seconds. Use the command again to stop the continuous reloading.\n\nUsage: fs_reload_continuous", delegate { _continuousReloading = !_continuousReloading; });
             helper.ConsoleCommands.Add("fs_add_mirror", "Gives you a Hand Mirror tool.\n\nUsage: fs_add_mirror", delegate { Game1.player.addItemToInventory(ShopBuilderPatch.GetHandMirrorTool()); });
@@ -162,6 +165,12 @@ namespace FashionSense
             if (_displayMovementData)
             {
                 conditionData.OnRendered(sender, e);
+            }
+
+            if (_displayFarmerFrames && Game1.player is not null && Game1.player.FarmerSprite.CurrentFrame != _lastPlayerFrame)
+            {
+                _lastPlayerFrame = Game1.player.FarmerSprite.CurrentFrame;
+                Monitor.Log($"Farmer Frame: {_lastPlayerFrame}", LogLevel.Debug);
             }
         }
 
