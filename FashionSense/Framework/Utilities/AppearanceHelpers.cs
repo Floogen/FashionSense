@@ -807,6 +807,10 @@ namespace FashionSense.Framework.Utilities
                 {
                     passedCheck = condition.IsValid(Game1.random.NextDouble());
                 }
+                else if (condition.Name is Condition.Type.GameStateQuery)
+                {
+                    passedCheck = GameStateQuery.CheckConditions(condition.GetParsedValue<string>());
+                }
 
                 // If the condition is independent and is true, then skip rest of evaluations
                 if (condition.Independent && passedCheck)
