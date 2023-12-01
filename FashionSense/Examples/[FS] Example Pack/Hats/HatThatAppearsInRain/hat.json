@@ -1,0 +1,153 @@
+{
+  // See the wiki for all hat properties: https://github.com/Floogen/FashionSense/wiki/Hat-Model-Properties
+
+  "Name": "Hat That Appears In Rain",
+  "FrontHat": {
+    "DisableGrayscale": true,
+    "StartingPosition": {
+      "X": 0,
+      "Y": 0
+    },
+    "HeadPosition": {
+      "X": -2,
+      "Y": 0
+    },
+    "HatSize": {
+      "Width": 16,
+      "Length": 16
+    },
+    "UniformAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 100,
+        "Conditions": [
+          {
+            "Name": "GameStateQuery",
+            "Value": "!WEATHER Here Rain, !WEATHER Here Storm, !WEATHER Here Snow"
+          }
+        ]
+      },
+      {
+        "Frame": 1,
+        "Duration": 100,
+        "Conditions": [
+          {
+            "Name": "GameStateQuery",
+            "Value": "WEATHER Here Rain, WEATHER Here Storm, WEATHER Here Snow"
+          }
+        ]
+      }
+    ]
+  },
+  "RightHat": {
+    "DisableGrayscale": true,
+    "StartingPosition": {
+      "X": 0,
+      "Y": 16
+    },
+    "HeadPosition": {
+      "X": -2,
+      "Y": 0
+    },
+    "HatSize": {
+      "Width": 16,
+      "Length": 16
+    },
+    "UniformAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 100,
+        "Conditions": [
+          {
+            "Name": "GameStateQuery",
+            "Value": "!WEATHER Here Rain, !WEATHER Here Storm, !WEATHER Here Snow"
+          }
+        ]
+      },
+      {
+        "Frame": 1,
+        "Duration": 100,
+        "Conditions": [
+          {
+            "Name": "GameStateQuery",
+            "Value": "WEATHER Here Rain, WEATHER Here Storm, WEATHER Here Snow"
+          }
+        ]
+      }
+    ]
+  },
+  "LeftHat": {
+    "DisableGrayscale": true,
+    "StartingPosition": {
+      "X": 0,
+      "Y": 32
+    },
+    "HeadPosition": {
+      "X": -2,
+      "Y": 0
+    },
+    "HatSize": {
+      "Width": 16,
+      "Length": 16
+    },
+    "UniformAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 100,
+        "Conditions": [
+          {
+            "Name": "GameStateQuery",
+            "Value": "!WEATHER Here Rain, !WEATHER Here Storm, !WEATHER Here Snow"
+          }
+        ]
+      },
+      {
+        "Frame": 1,
+        "Duration": 100,
+        "Conditions": [
+          {
+            "Name": "GameStateQuery",
+            "Value": "WEATHER Here Rain, WEATHER Here Storm, WEATHER Here Snow"
+          }
+        ]
+      }
+    ]
+  },
+  "BackHat": {
+    "DisableGrayscale": true,
+    "StartingPosition": {
+      "X": 0,
+      "Y": 48
+    },
+    "HeadPosition": {
+      "X": -2,
+      "Y": 0
+    },
+    "HatSize": {
+      "Width": 16,
+      "Length": 16
+    },
+    "UniformAnimation": [
+      {
+        "Frame": 0,
+        "Duration": 100,
+        "Conditions": [
+          {
+            "Name": "GameStateQuery",
+            "Value": "!WEATHER Here Rain, !WEATHER Here Storm, !WEATHER Here Snow"
+          }
+        ]
+      },
+      {
+        "Frame": 1,
+        "Duration": 100,
+        "Conditions": [
+          {
+            "Name": "GameStateQuery",
+            "Value": "WEATHER Here Rain, WEATHER Here Storm, WEATHER Here Snow"
+          }
+        ]
+      }
+    ]
+  }
+}
