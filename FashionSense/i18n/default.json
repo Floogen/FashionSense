@@ -45,7 +45,7 @@
   "ui.fashion_sense.color_copy_button": "Copy the current color.",
   "ui.fashion_sense.color_paste_button": "Paste the saved color.",
   "ui.fashion_sense.color_paste_button_empty": "Paste the saved color (empty).",
-  "ui.fashion_sense.clear_button": "Clears the currently selected Fashion Sense item.",
+  "ui.fashion_sense.clear_button": "Clears the currently selected Fashion Sense item.\nHold shift when clicking to clear all appearances.",
   "ui.fashion_sense.random_button": "Randomly selects a Fashion Sense item.",
   "ui.fashion_sense.exit_button": "Exits the menu.",
   "ui.fashion_sense.color_active.shoes": "Shoe Color",

@@ -980,31 +980,39 @@ namespace FashionSense.Framework.UI
 
             if (clearButton.containsPoint(x, y))
             {
-                string modDataKey = String.Empty;
-                switch (GetNameOfEnabledFilter())
+                if (Game1.GetKeyboardState().IsKeyDown(Keys.LeftShift) || Game1.GetKeyboardState().IsKeyDown(Keys.RightShift))
                 {
-                    case HAIR_FILTER_BUTTON:
-                        modDataKey = ModDataKeys.CUSTOM_HAIR_ID;
-                        break;
-                    case ACCESSORY_FILTER_BUTTON:
-                        FashionSense.accessoryManager.RemoveAccessory(Game1.player, currentAccessorySlot);
-                        FashionSense.SetSpriteDirty();
-                        return;
-                    case HAT_FILTER_BUTTON:
-                        modDataKey = ModDataKeys.CUSTOM_HAT_ID;
-                        break;
-                    case SHIRT_FILTER_BUTTON:
-                        modDataKey = ModDataKeys.CUSTOM_SHIRT_ID;
-                        break;
-                    case PANTS_FILTER_BUTTON:
-                        modDataKey = ModDataKeys.CUSTOM_PANTS_ID;
-                        break;
-                    case SLEEVES_FILTER_BUTTON:
-                        modDataKey = GetCurrentFeatureSlotKey();
-                        break;
+                    FashionSense.outfitManager.ClearOutfit(Game1.player);
+                }
+                else
+                {
+                    string modDataKey = String.Empty;
+                    switch (GetNameOfEnabledFilter())
+                    {
+                        case HAIR_FILTER_BUTTON:
+                            modDataKey = ModDataKeys.CUSTOM_HAIR_ID;
+                            break;
+                        case ACCESSORY_FILTER_BUTTON:
+                            FashionSense.accessoryManager.RemoveAccessory(Game1.player, currentAccessorySlot);
+                            FashionSense.SetSpriteDirty();
+                            return;
+                        case HAT_FILTER_BUTTON:
+                            modDataKey = ModDataKeys.CUSTOM_HAT_ID;
+                            break;
+                        case SHIRT_FILTER_BUTTON:
+                            modDataKey = ModDataKeys.CUSTOM_SHIRT_ID;
+                            break;
+                        case PANTS_FILTER_BUTTON:
+                            modDataKey = ModDataKeys.CUSTOM_PANTS_ID;
+                            break;
+                        case SLEEVES_FILTER_BUTTON:
+                            modDataKey = GetCurrentFeatureSlotKey();
+                            break;
+                    }
+
+                    Game1.player.modData[modDataKey] = "None";
                 }
 
-                Game1.player.modData[modDataKey] = "None";
                 FashionSense.SetSpriteDirty();
             }
 

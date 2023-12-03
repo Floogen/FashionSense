@@ -145,6 +145,18 @@ namespace FashionSense.Framework.Managers
             UpdateSharedOutfits(who);
         }
 
+        public void ClearOutfit(Farmer who)
+        {
+            who.modData[ModDataKeys.CUSTOM_HAIR_ID] = "None";
+            who.modData[ModDataKeys.CUSTOM_HAT_ID] = "None";
+            who.modData[ModDataKeys.CUSTOM_SHIRT_ID] = "None";
+            who.modData[ModDataKeys.CUSTOM_SLEEVES_ID] = "None";
+            who.modData[ModDataKeys.CUSTOM_PANTS_ID] = "None";
+            who.modData[ModDataKeys.CUSTOM_SHOES_ID] = "None";
+
+            FashionSense.accessoryManager.ClearAccessories(who);
+        }
+
         public void SetOutfit(Farmer who, Outfit outfit)
         {
             who.modData[ModDataKeys.CUSTOM_HAIR_ID] = String.IsNullOrEmpty(outfit.HairId) ? "None" : outfit.HairId;
