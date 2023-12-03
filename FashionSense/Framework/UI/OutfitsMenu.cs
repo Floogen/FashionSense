@@ -6,9 +6,11 @@ using Newtonsoft.Json;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Menus;
+using StardewValley.Minigames;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using TextCopy;
 
 namespace FashionSense.Framework.UI
@@ -17,11 +19,14 @@ namespace FashionSense.Framework.UI
     {
         private int _currentPage;
         private string _hoverText = "";
+        private string _bottomBannerMessage = "";
+        private double _bottomBannerTimeRemainingInMilliseconds = 0;
         private const int OUTFITS_PER_PAGE = 6;
         private const string CREATE_OUTFIT_NAME = "PeacefulEnd.Create.Outfit.Button";
 
         public ClickableTextureComponent backButton;
         public ClickableTextureComponent forwardButton;
+        public ClickableComponent importButton;
         public List<ClickableComponent> outfitButtons = new List<ClickableComponent>();
         public List<ClickableTextureComponent> shareButtons = new List<ClickableTextureComponent>();
         public List<ClickableTextureComponent> exportButtons = new List<ClickableTextureComponent>();
@@ -130,6 +135,11 @@ namespace FashionSense.Framework.UI
             {
                 myID = 101
             };
+            importButton = new ClickableComponent(new Rectangle(base.xPositionOnScreen + 4, base.yPositionOnScreen - 48, (int)Game1.dialogueFont.MeasureString(FashionSense.modHelper.Translation.Get("ui.fashion_sense.buttons.import")).X + 64, 52), FashionSense.modHelper.Translation.Get("ui.fashion_sense.buttons.import"))
+            {
+                myID = 100,
+                rightNeighborID = -7777
+            };
 
             // Handle GamePad integration
             if (Game1.options.snappyMenus && Game1.options.gamepadControls)
@@ -174,6 +184,32 @@ namespace FashionSense.Framework.UI
             _currentPage = Math.Min(Math.Max(_currentPage, 0), _pages.Count - 1);
         }
 
+        private void CreateBottomBannerMesage(string message)
+        {
+            _bottomBannerMessage = message;
+            _bottomBannerTimeRemainingInMilliseconds = 3500;
+        }
+
+        private void DrawButton(SpriteBatch b, ClickableComponent button)
+        {
+            IClickableMenu.drawTextureBox(b, Game1.mouseCursors, new Rectangle(432, 439, 9, 9), button.bounds.X, button.bounds.Y, button.bounds.Width, button.bounds.Height, Color.White, 4f, drawShadow: false, 1f);
+            Vector2 string_center = Game1.dialogueFont.MeasureString(button.name) / 2f;
+            string_center.X = (int)(string_center.X / 4f) * 4;
+            string_center.Y = (int)(string_center.Y / 4f) * 4;
+            Utility.drawTextWithShadow(b, button.name, Game1.dialogueFont, new Vector2(button.bounds.Center.X, button.bounds.Center.Y) - string_center, Game1.textColor, 1f, 1f + 1E-06f, -1, -1, 0);
+        }
+
+        private string GetUniqueOutfitName(string outfitName)
+        {
+            var outfits = FashionSense.outfitManager.GetOutfits(Game1.player);
+            if (outfits.Any(o => o.Name == outfitName))
+            {
+                return GetUniqueOutfitName(outfitName + " (Copy)");
+            }
+
+            return outfitName;
+        }
+
         public override void receiveScrollWheelAction(int direction)
         {
             base.receiveScrollWheelAction(direction);
@@ -211,6 +247,34 @@ namespace FashionSense.Framework.UI
         {
             if (Game1.activeClickableMenu == null)
             {
+                return;
+            }
+
+            if (importButton.containsPoint(x, y))
+            {
+                string clipboardText = ClipboardService.GetText();
+                if (string.IsNullOrEmpty(clipboardText))
+                {
+                    CreateBottomBannerMesage("No text found in clipboard!");
+                    return;
+                }
+
+                try
+                {
+                    var outfit = JsonConvert.DeserializeObject<Outfit>(clipboardText);
+                    outfit.Name = GetUniqueOutfitName(outfit.Name);
+
+                    FashionSense.outfitManager.AddOutfit(Game1.player, outfit);
+                    PaginatePacks();
+
+                    CreateBottomBannerMesage($"Imported the outfit \"{outfit.Name}\" by {outfit.Author}");
+                }
+                catch (Exception ex)
+                {
+                    CreateBottomBannerMesage("Failed to parse clipboard text!");
+                    FashionSense.monitor.Log($"Failed to parse clipboard text into a Fashion Sense outfit: {ex}", StardewModdingAPI.LogLevel.Trace);
+                }
+
                 return;
             }
 
@@ -266,7 +330,7 @@ namespace FashionSense.Framework.UI
                                 }
 
                                 ClipboardService.SetText(outfit.Export());
-                                Game1.addHUDMessage(new HUDMessage(FashionSense.modHelper.Translation.Get("ui.fashion_sense.exported_outfit")) { noIcon = true });
+                                CreateBottomBannerMesage(FashionSense.modHelper.Translation.Get("ui.fashion_sense.exported_outfit"));
 
                                 return;
                             }
@@ -316,6 +380,12 @@ namespace FashionSense.Framework.UI
         public override void performHoverAction(int x, int y)
         {
             _hoverText = String.Empty;
+
+            if (importButton.containsPoint(x, y))
+            {
+                _hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.buttons.import.description");
+                return;
+            }
 
             for (int i = 0; i < outfitButtons.Count; i++)
             {
@@ -409,6 +479,16 @@ namespace FashionSense.Framework.UI
             this.currentlySnappedComponent.snapMouseCursorToCenter();
         }
 
+        public override void update(GameTime time)
+        {
+            base.update(time);
+
+            if (_bottomBannerTimeRemainingInMilliseconds > 0)
+            {
+                _bottomBannerTimeRemainingInMilliseconds -= time.ElapsedGameTime.TotalMilliseconds;
+            }
+        }
+
         public override void draw(SpriteBatch b)
         {
             if (Game1.dialogueUp || Game1.IsFading())
@@ -472,12 +552,27 @@ namespace FashionSense.Framework.UI
                 this.backButton.draw(b);
             }
 
+            // Draw import / presets buttons
+            DrawButton(b, this.importButton);
+
             // Draw hover text
             if (!_hoverText.Equals(""))
             {
                 b.End();
                 b.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
                 IClickableMenu.drawHoverText(b, _hoverText, Game1.smallFont);
+            }
+
+            if (string.IsNullOrEmpty(_bottomBannerMessage) is false)
+            {
+                if (_bottomBannerTimeRemainingInMilliseconds > 0)
+                {
+                    SpriteText.drawStringWithScrollCenteredAt(b, _bottomBannerMessage, base.xPositionOnScreen + base.width / 2, base.yPositionOnScreen + base.height + 8, alpha: (float)(_bottomBannerTimeRemainingInMilliseconds > 1000 ? 1f : _bottomBannerTimeRemainingInMilliseconds / 1000));
+                }
+                else
+                {
+                    _bottomBannerMessage = null;
+                }
             }
 
             Game1.mouseCursorTransparency = 1f;

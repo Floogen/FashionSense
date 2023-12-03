@@ -40,6 +40,18 @@ namespace FashionSense.Framework.Managers
             return outfit;
         }
 
+        public void AddOutfit(Farmer who, Outfit outfit)
+        {
+            // Get the current outfits
+            var outfits = GetOutfits(who);
+
+            // Add it to the current listing
+            outfits.Add(outfit);
+
+            // Serialize the changes
+            SerializeOutfits(who, outfits);
+        }
+
         public void DeleteOutfit(Farmer who, string name)
         {
             // Get the current outfits
