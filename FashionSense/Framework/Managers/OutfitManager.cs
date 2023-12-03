@@ -1,6 +1,7 @@
 ﻿using FashionSense.Framework.Interfaces.API;
 using FashionSense.Framework.Models;
 using FashionSense.Framework.Models.Appearances;
+using FashionSense.Framework.Models.Appearances.Accessory;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
@@ -243,6 +244,36 @@ namespace FashionSense.Framework.Managers
             else if (outfit.AccessoryIds.Count > 0)
             {
                 FashionSense.accessoryManager.SetAccessories(who, outfit.AccessoryIds, outfit.AccessoryColors);
+
+                List<Color> accessoryColorMasks = new List<Color>();
+                if (outfit.AppearanceToMaskColors.Any(d => d.Key is IApi.Type.Accessory))
+                {
+                    accessoryColorMasks = outfit.AppearanceToMaskColors.First(d => d.Key is IApi.Type.Accessory).Value;
+                }
+
+                int accessoryCountOffset = 0;
+                foreach (int index in FashionSense.accessoryManager.GetActiveAccessoryIndices(who))
+                {
+                    var accessoryKey = FashionSense.accessoryManager.GetAccessoryIdByIndex(who, index);
+                    if (FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(accessoryKey) is AccessoryContentPack aPack && aPack != null)
+                    {
+                        AccessoryModel accessoryModel = aPack.GetAccessoryFromFacingDirection(who.FacingDirection);
+                        if (accessoryModel is null)
+                        {
+                            continue;
+                        }
+
+                        if (accessoryModel.ColorMaskLayers.Count > 1)
+                        {
+                            for (int x = 0; x < accessoryModel.ColorMaskLayers.Count - 1; x++)
+                            {
+                                FashionSense.colorManager.SetColor(who, AppearanceModel.GetColorKey(IApi.Type.Accessory, appearanceIndex: accessoryCountOffset, maskLayerIndex: x + accessoryCountOffset), accessoryColorMasks[x + accessoryCountOffset]);
+                            }
+
+                            accessoryCountOffset += 1;
+                        }
+                    }
+                }
             }
 
             FashionSense.SetSpriteDirty();
