@@ -271,7 +271,7 @@ namespace FashionSense.Framework.UI
                             }
                             if (exportButtons[i].containsPoint(x, y))
                             {
-                                ClipboardService.SetText(JsonConvert.SerializeObject(outfit, Formatting.Indented));
+                                ClipboardService.SetText(outfit.Export());
                                 Game1.addHUDMessage(new HUDMessage("Copied outfit JSON to clipboard!") { noIcon = true });
 
                                 return;
@@ -442,7 +442,7 @@ namespace FashionSense.Framework.UI
                     }
 
                     IClickableMenu.drawTextureBox(b, Game1.mouseCursors, new Rectangle(384, 396, 15, 15), outfitButtons[j].bounds.X, outfitButtons[j].bounds.Y, outfitButtons[j].bounds.Width, outfitButtons[j].bounds.Height, outfitButtons[j].containsPoint(Game1.getOldMouseX(), Game1.getOldMouseY()) ? Color.Wheat : Color.White, 4f, drawShadow: false);
-                    SpriteText.drawString(b, packName, outfitButtons[j].bounds.X + 32, outfitButtons[j].bounds.Y + 20);
+                    SpriteText.drawString(b, packName, outfitButtons[j].bounds.X + 32, outfitButtons[j].bounds.Y + 20, color: outfit.HasAllRequiredAppearances() ? new Color(86, 22, 12) : new Color(86, 22, 12, 150));
 
                     // Draw the functional buttons
                     if (outfit.IsGlobal is false)

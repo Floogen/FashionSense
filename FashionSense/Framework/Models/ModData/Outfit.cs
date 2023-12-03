@@ -3,6 +3,9 @@ using FashionSense.Framework.Models.Appearances;
 using FashionSense.Framework.Patches.Renderer;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using StardewValley;
 using System;
 using System.Collections.Generic;
@@ -93,6 +96,120 @@ namespace FashionSense.Framework.Models
             {
                 AppearanceToMaskColors[IApi.Type.Shoes] = new List<Color>() { FashionSense.colorManager.GetColor(who, AppearanceModel.GetColorKey(IApi.Type.Shoes)) };
             }
+        }
+
+        private class HideObsoleteAttributesResolver : DefaultContractResolver
+        {
+            private bool IsPropertyObsolete(Type type, string propertyName)
+            {
+                var fi = type.GetProperty(propertyName);
+                var attributes = (ObsoleteAttribute[])fi.GetCustomAttributes(typeof(ObsoleteAttribute), false);
+
+                return (attributes != null && attributes.Length > 0);
+            }
+
+            protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
+            {
+                IList<JsonProperty> properties = base.CreateProperties(type, memberSerialization);
+                foreach (var property in properties)
+                {
+                    if (IsPropertyObsolete(type, property.UnderlyingName))
+                    {
+                        property.Ignored = true;
+                    }
+
+                }
+                return properties;
+            }
+        }
+
+        private bool IsIdValid(string id)
+        {
+            return string.IsNullOrEmpty(id) is false && id != "None";
+        }
+
+        internal string Export()
+        {
+            // Convert any old accessory appearances into the current format
+            if (AccessoryIds is null)
+            {
+                AccessoryIds = new List<string>();
+                AccessoryColors = new List<string>();
+            }
+
+            if (IsIdValid(AccessoryOneId))
+            {
+                AccessoryIds.Add(AccessoryOneId);
+                AccessoryColors.Add(AccessoryOneColor);
+
+                AccessoryOneId = null;
+                AccessoryOneColor = null;
+            }
+            if (IsIdValid(AccessoryTwoId))
+            {
+                AccessoryIds.Add(AccessoryTwoId);
+                AccessoryColors.Add(AccessoryTwoColor);
+
+                AccessoryTwoId = null;
+                AccessoryTwoColor = null;
+            }
+            if (IsIdValid(AccessoryThreeId))
+            {
+                AccessoryIds.Add(AccessoryThreeId);
+                AccessoryColors.Add(AccessoryThreeColor);
+
+                AccessoryThreeId = null;
+                AccessoryThreeColor = null;
+            }
+
+            return JsonConvert.SerializeObject(this, new JsonSerializerSettings() { ContractResolver = new HideObsoleteAttributesResolver(), Formatting = Formatting.Indented });
+        }
+
+        internal List<string> GetMissingAppearanceIds()
+        {
+            List<string> missingAppearanceIds = new List<string>();
+
+            Dictionary<string, AppearanceContentPack> appearanceIds = FashionSense.textureManager.GetIdToAppearanceModels();
+            if (IsIdValid(HairId) && appearanceIds.ContainsKey(HairId) is false)
+            {
+                missingAppearanceIds.Add(HairId);
+            }
+
+            foreach (var appearanceId in appearanceIds.Keys)
+            {
+                if (IsIdValid(appearanceId) && appearanceIds.ContainsKey(appearanceId) is false)
+                {
+                    missingAppearanceIds.Add(appearanceId);
+                }
+            }
+
+            if (IsIdValid(HatId) && appearanceIds.ContainsKey(HatId) is false)
+            {
+                missingAppearanceIds.Add(HatId);
+            }
+            if (IsIdValid(ShirtId) && appearanceIds.ContainsKey(ShirtId) is false)
+            {
+                missingAppearanceIds.Add(ShirtId);
+            }
+            if (IsIdValid(SleevesId) && appearanceIds.ContainsKey(SleevesId) is false)
+            {
+                missingAppearanceIds.Add(SleevesId);
+            }
+            if (IsIdValid(PantsId) && appearanceIds.ContainsKey(PantsId) is false)
+            {
+                missingAppearanceIds.Add(PantsId);
+            }
+            if (IsIdValid(ShoesId) && appearanceIds.ContainsKey(ShoesId) is false)
+            {
+                missingAppearanceIds.Add(ShoesId);
+            }
+
+            return missingAppearanceIds;
+        }
+
+        internal bool HasAllRequiredAppearances()
+        {
+            return GetMissingAppearanceIds().Count == 0;
         }
     }
 }
