@@ -15,6 +15,7 @@ namespace FashionSense.Framework.Models
     public class Outfit
     {
         public string Name { get; set; }
+        public string Author { get; set; }
         public int Version { get; set; } = 1;
         public bool IsBeingShared { get; set; }
         public bool IsGlobal { get; set; }
@@ -96,6 +97,9 @@ namespace FashionSense.Framework.Models
             {
                 AppearanceToMaskColors[IApi.Type.Shoes] = new List<Color>() { FashionSense.colorManager.GetColor(who, AppearanceModel.GetColorKey(IApi.Type.Shoes)) };
             }
+
+            // Set the author's name
+            Author = who.Name;
         }
 
         private class HideObsoleteAttributesResolver : DefaultContractResolver

@@ -259,6 +259,12 @@ namespace FashionSense.Framework.UI
                             }
                             if (exportButtons[i].containsPoint(x, y))
                             {
+                                // Set the author name to the player's name, if it is null / empty
+                                if (string.IsNullOrEmpty(outfit.Author))
+                                {
+                                    outfit.Author = Game1.player.Name;
+                                }
+
                                 ClipboardService.SetText(outfit.Export());
                                 Game1.addHUDMessage(new HUDMessage("Copied outfit JSON to clipboard!") { noIcon = true });
 
