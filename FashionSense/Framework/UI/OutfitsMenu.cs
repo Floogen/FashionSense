@@ -266,7 +266,7 @@ namespace FashionSense.Framework.UI
                                 }
 
                                 ClipboardService.SetText(outfit.Export());
-                                Game1.addHUDMessage(new HUDMessage("Copied outfit JSON to clipboard!") { noIcon = true });
+                                Game1.addHUDMessage(new HUDMessage(FashionSense.modHelper.Translation.Get("ui.fashion_sense.exported_outfit")) { noIcon = true });
 
                                 return;
                             }
