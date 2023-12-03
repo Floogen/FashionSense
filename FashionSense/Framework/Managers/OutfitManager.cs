@@ -268,14 +268,27 @@ namespace FashionSense.Framework.Managers
                             continue;
                         }
 
-                        if (accessoryModel.ColorMaskLayers.Count > 0)
+                        try
                         {
-                            for (int x = 1; x < accessoryModel.ColorMaskLayers.Count; x++)
+                            if (accessoryModel.ColorMaskLayers.Count > 0)
                             {
-                                FashionSense.colorManager.SetColor(who, AppearanceModel.GetColorKey(IApi.Type.Accessory, appearanceIndex: index, maskLayerIndex: x + 1), accessoryColorMasks[accessoryCountOffset]);
+                                for (int x = 0; x < accessoryModel.ColorMaskLayers.Count; x++)
+                                {
+                                    FashionSense.colorManager.SetColor(who, AppearanceModel.GetColorKey(IApi.Type.Accessory, appearanceIndex: index, maskLayerIndex: x), accessoryColorMasks[accessoryCountOffset]);
 
+                                    accessoryCountOffset += 1;
+                                }
+                            }
+                            else
+                            {
+                                FashionSense.colorManager.SetColor(who, AppearanceModel.GetColorKey(IApi.Type.Accessory, appearanceIndex: index, maskLayerIndex: 0), accessoryColorMasks[accessoryCountOffset]);
                                 accessoryCountOffset += 1;
                             }
+                        }
+                        catch (Exception ex)
+                        {
+                            // TODO: Log errors
+                            continue;
                         }
                     }
                 }

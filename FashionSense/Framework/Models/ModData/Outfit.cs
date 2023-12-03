@@ -8,6 +8,7 @@ using Newtonsoft.Json.Serialization;
 using StardewValley;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FashionSense.Framework.Models
 {
@@ -90,7 +91,11 @@ namespace FashionSense.Framework.Models
                     continue;
                 }
 
-                AppearanceToMaskColors[metadata.Model.Pack.PackType] = metadata.Colors;
+                if (AppearanceToMaskColors.ContainsKey(metadata.Model.Pack.PackType) is false)
+                {
+                    AppearanceToMaskColors[metadata.Model.Pack.PackType] = new List<Color>();
+                }
+                AppearanceToMaskColors[metadata.Model.Pack.PackType] = AppearanceToMaskColors[metadata.Model.Pack.PackType].Concat(metadata.Colors).ToList();
             }
 
             // Add manual handling for the "Override Shoe Color" artificial ShoePack
