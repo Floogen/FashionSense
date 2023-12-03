@@ -353,6 +353,9 @@ namespace FashionSense
             textureManager.Reset(packId);
             conditionGroups = new Dictionary<string, ConditionGroup>();
 
+            // Clear the preset outfits
+            outfitManager.ClearPresetOutfits();
+
             // Load owned content packs
             foreach (IContentPack contentPack in Helper.ContentPacks.GetOwned().Where(c => String.IsNullOrEmpty(packId) is true || c.Manifest.UniqueID.Equals(packId, StringComparison.OrdinalIgnoreCase)))
             {

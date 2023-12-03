@@ -62,6 +62,11 @@ namespace FashionSense.Framework.Managers
             _presetOutfits.Add(outfit);
         }
 
+        public void ClearPresetOutfits()
+        {
+            _presetOutfits.Clear();
+        }
+
         public void DeleteOutfit(Farmer who, string name)
         {
             // Get the current outfits
