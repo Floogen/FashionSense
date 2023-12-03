@@ -6,11 +6,9 @@ using Newtonsoft.Json;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Menus;
-using StardewValley.Minigames;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
 using TextCopy;
 
 namespace FashionSense.Framework.UI
@@ -325,7 +323,7 @@ namespace FashionSense.Framework.UI
                                     FashionSense.outfitManager.DeleteOutfit(Game1.player, _pages[_currentPage][i].Name);
                                     PaginatePacks(FashionSense.outfitManager.GetOutfits(Game1.player));
                                     return;
-                                } 
+                                }
                             }
                             if (exportButtons[i].containsPoint(x, y))
                             {

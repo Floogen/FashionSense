@@ -4,7 +4,6 @@ using FashionSense.Framework.Patches.Renderer;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using StardewValley;
 using System;
