@@ -2,12 +2,14 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Menus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TextCopy;
 
 namespace FashionSense.Framework.UI
 {
@@ -22,6 +24,7 @@ namespace FashionSense.Framework.UI
         public ClickableTextureComponent forwardButton;
         public List<ClickableComponent> outfitButtons = new List<ClickableComponent>();
         public List<ClickableTextureComponent> shareButtons = new List<ClickableTextureComponent>();
+        public List<ClickableTextureComponent> exportButtons = new List<ClickableTextureComponent>();
         public List<ClickableTextureComponent> saveButtons = new List<ClickableTextureComponent>();
         public List<ClickableTextureComponent> renameButtons = new List<ClickableTextureComponent>();
         public List<ClickableTextureComponent> deleteButtons = new List<ClickableTextureComponent>();
@@ -59,7 +62,7 @@ namespace FashionSense.Framework.UI
                 };
                 outfitButtons.Add(packButton);
 
-                ClickableTextureComponent shareButton = new ClickableTextureComponent(new Rectangle(packButton.bounds.Right - 256, packButton.bounds.Y + packButton.bounds.Height / 4 + 2, 56, 48), Game1.mouseCursors, new Rectangle(0, 592, 16, 16), 3f)
+                ClickableTextureComponent shareButton = new ClickableTextureComponent(new Rectangle(packButton.bounds.Right - 320, packButton.bounds.Y + packButton.bounds.Height / 4 + 2, 56, 48), Game1.mouseCursors, new Rectangle(0, 592, 16, 16), 3f)
                 {
                     myID = i + 200,
                     downNeighborID = i < OUTFITS_PER_PAGE - 1 ? i + 200 + 1 : -1,
@@ -71,9 +74,21 @@ namespace FashionSense.Framework.UI
                 };
                 shareButtons.Add(shareButton);
 
-                ClickableTextureComponent renameButton = new ClickableTextureComponent(new Rectangle(packButton.bounds.Right - 192, packButton.bounds.Y + packButton.bounds.Height / 4 + 8, 56, 48), Game1.mouseCursors, new Rectangle(66, 4, 14, 12), 3f)
+                ClickableTextureComponent exportButton = new ClickableTextureComponent(new Rectangle(packButton.bounds.Right - 246, packButton.bounds.Y + packButton.bounds.Height / 4 - 4, 56, 48), FashionSense.assetManager.exportButton, new Rectangle(0, 0, 9, 16), 3f)
                 {
                     myID = i + 300,
+                    downNeighborID = i < OUTFITS_PER_PAGE - 1 ? i + 200 + 1 : -1,
+                    upNeighborID = i > 0 ? i + 200 - 1 : -1,
+                    rightNeighborID = i + 300,
+                    leftNeighborID = i,
+                    fullyImmutable = true,
+                    name = "inactive"
+                };
+                exportButtons.Add(exportButton);
+
+                ClickableTextureComponent renameButton = new ClickableTextureComponent(new Rectangle(packButton.bounds.Right - 192, packButton.bounds.Y + packButton.bounds.Height / 4 + 8, 56, 48), Game1.mouseCursors, new Rectangle(66, 4, 14, 12), 3f)
+                {
+                    myID = i + 400,
                     downNeighborID = i < OUTFITS_PER_PAGE - 1 ? i + 300 + 1 : -1,
                     upNeighborID = i > 0 ? i + 300 - 1 : -1,
                     rightNeighborID = i + 400,
@@ -84,7 +99,7 @@ namespace FashionSense.Framework.UI
 
                 ClickableTextureComponent saveButton = new ClickableTextureComponent(new Rectangle(renameButton.bounds.X + 64, packButton.bounds.Y + packButton.bounds.Height / 4 - 2, 56, 48), Game1.mouseCursors, new Rectangle(240, 320, 16, 16), 3f)
                 {
-                    myID = i + 400,
+                    myID = i + 500,
                     downNeighborID = i < OUTFITS_PER_PAGE - 1 ? i + 400 + 1 : -1,
                     upNeighborID = i > 0 ? i + 400 - 1 : -1,
                     rightNeighborID = i + 500,
@@ -95,7 +110,7 @@ namespace FashionSense.Framework.UI
 
                 ClickableTextureComponent deleteButton = new ClickableTextureComponent(new Rectangle(renameButton.bounds.X + 128, packButton.bounds.Y + packButton.bounds.Height / 4 + 4, 56, 48), Game1.mouseCursors, new Rectangle(323, 433, 9, 10), 4f)
                 {
-                    myID = i + 500,
+                    myID = i + 600,
                     downNeighborID = i < OUTFITS_PER_PAGE - 1 ? i + 500 + 1 : -1,
                     upNeighborID = i > 0 ? i + 500 - 1 : -1,
                     rightNeighborID = 101,
@@ -252,7 +267,14 @@ namespace FashionSense.Framework.UI
                                     FashionSense.outfitManager.DeleteOutfit(Game1.player, _pages[_currentPage][i].Name);
                                     PaginatePacks();
                                     return;
-                                }
+                                } 
+                            }
+                            if (exportButtons[i].containsPoint(x, y))
+                            {
+                                ClipboardService.SetText(JsonConvert.SerializeObject(outfit, Formatting.Indented));
+                                Game1.addHUDMessage(new HUDMessage("Copied outfit JSON to clipboard!") { noIcon = true });
+
+                                return;
                             }
                             if (shareButtons[i].containsPoint(x, y))
                             {
@@ -336,6 +358,11 @@ namespace FashionSense.Framework.UI
                             if (deleteButtons[i].containsPoint(x, y))
                             {
                                 _hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.outfit_info.delete");
+                                return;
+                            }
+                            if (exportButtons[i].containsPoint(x, y))
+                            {
+                                _hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.outfit_info.export");
                                 return;
                             }
                         }
@@ -426,6 +453,7 @@ namespace FashionSense.Framework.UI
                             renameButtons[j].draw(b);
                             deleteButtons[j].draw(b);
                         }
+                        exportButtons[j].draw(b);
                         shareButtons[j].draw(b, outfit.IsBeingShared ? Color.White : new Color(55, 55, 55, 55), 1f);
                     }
                     else

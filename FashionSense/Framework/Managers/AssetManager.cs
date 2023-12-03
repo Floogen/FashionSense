@@ -22,9 +22,7 @@ namespace FashionSense.Framework.Managers
         internal readonly Texture2D sleevesAndShoesButtonTexture;
         internal readonly Texture2D sleevesButtonTexture;
         internal readonly Texture2D shoesButtonTexture;
-        internal readonly Texture2D optionOneButton;
-        internal readonly Texture2D optionTwoButton;
-        internal readonly Texture2D optionThreeButton;
+        internal readonly Texture2D exportButton;
 
         public AssetManager(IModHelper helper)
         {
@@ -41,9 +39,7 @@ namespace FashionSense.Framework.Managers
             sleevesButtonTexture = helper.ModContent.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "SleevesButton.png"));
             sleevesAndShoesButtonTexture = helper.ModContent.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "SleevesShoesButton.png"));
             shoesButtonTexture = helper.ModContent.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "ShoesButton.png"));
-            optionOneButton = helper.ModContent.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "OptionOneButton.png"));
-            optionTwoButton = helper.ModContent.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "OptionTwoButton.png"));
-            optionThreeButton = helper.ModContent.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "OptionThreeButton.png"));
+            exportButton = helper.ModContent.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "ExportButton.png"));
 
             // Setup toolNames
             toolNames.Add("HandMirror", _handMirrorTexture);
