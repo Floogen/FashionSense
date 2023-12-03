@@ -59,6 +59,8 @@ namespace FashionSense.Framework.Models
         public string ShoesColor { get; set; }
         public Dictionary<IApi.Type, List<Color>> AppearanceToMaskColors { get; set; }
 
+        private const int _latestVersion = 3;
+
         public Outfit()
         {
 
@@ -67,7 +69,7 @@ namespace FashionSense.Framework.Models
         public Outfit(Farmer who, string name)
         {
             Name = name;
-            Version = 3;
+            Version = _latestVersion;
 
             HairId = who.modData[ModDataKeys.CUSTOM_HAIR_ID];
             AccessoryOneId = who.modData[ModDataKeys.CUSTOM_ACCESSORY_ID];
@@ -145,13 +147,18 @@ namespace FashionSense.Framework.Models
 
         internal string Export()
         {
-            // Convert any old accessory appearances into the current format
+            // Set any missing properties from old versions
             if (AccessoryIds is null)
             {
                 AccessoryIds = new List<string>();
                 AccessoryColors = new List<string>();
             }
+            if (AppearanceToMaskColors is null)
+            {
+                AppearanceToMaskColors = new Dictionary<IApi.Type, List<Color>>();
+            }
 
+            // Convert any old accessory appearances into the current format
             if (IsIdValid(AccessoryOneId))
             {
                 AccessoryIds.Add(AccessoryOneId);
@@ -175,6 +182,12 @@ namespace FashionSense.Framework.Models
 
                 AccessoryThreeId = null;
                 AccessoryThreeColor = null;
+            }
+
+            // Move to the latest version
+            if (Version < _latestVersion)
+            {
+                Version = _latestVersion;
             }
 
             return JsonConvert.SerializeObject(this, new JsonSerializerSettings() { ContractResolver = new HidePropertiesForExportResolver(), Formatting = Formatting.Indented });
