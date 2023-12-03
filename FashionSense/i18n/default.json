@@ -57,5 +57,6 @@
   "ui.fashion_sense.color_info.pants": "Color overlays will not affect these pants.",
   "ui.fashion_sense.color_info.accessory": "Color overlays will not affect this accessory.",
   "ui.fashion_sense.color_info.sleeves": "Color overlays will not affect these sleeves.",
-  "ui.fashion_sense.color_info.shoes": "Color overlays will not affect these shoes."
+  "ui.fashion_sense.color_info.shoes": "Color overlays will not affect these shoes.",
+  "ui.fashion_sense.warning.hiding_player_sprite": "This appearance is hiding the player's base sprite"
 }

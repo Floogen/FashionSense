@@ -1214,7 +1214,7 @@ namespace FashionSense.Framework.UI
                 }
                 else if (label == descriptionLabel && descriptionLabel.containsPoint(x, y) && GetActiveModel() is AppearanceModel model && model is not null && model.HidePlayerBase is true)
                 {
-                    hoverText = "This appearance is hiding the player's base sprite";
+                    hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.warning.hiding_player_sprite");
                     break;
                 }
             }
