@@ -373,7 +373,7 @@ namespace FashionSense.Framework.UI
                         }
                     }
 
-                    if (_pages[_currentPage][i].Name.Length > 18)
+                    if (_pages[_currentPage][i].Name.Length > 12)
                     {
                         _hoverText = $"{_pages[_currentPage][i].Name}";
                         return;
@@ -436,9 +436,9 @@ namespace FashionSense.Framework.UI
                     }
 
                     var outfit = FashionSense.outfitManager.GetOutfit(Game1.player, packName);
-                    if (packName.Length > 18)
+                    if (packName.Length > 12)
                     {
-                        packName = $"{packName.Substring(0, 18).TrimEnd()}...";
+                        packName = $"{packName.Substring(0, 12).TrimEnd()}...";
                     }
 
                     IClickableMenu.drawTextureBox(b, Game1.mouseCursors, new Rectangle(384, 396, 15, 15), outfitButtons[j].bounds.X, outfitButtons[j].bounds.Y, outfitButtons[j].bounds.Width, outfitButtons[j].bounds.Height, outfitButtons[j].containsPoint(Game1.getOldMouseX(), Game1.getOldMouseY()) ? Color.Wheat : Color.White, 4f, drawShadow: false);
