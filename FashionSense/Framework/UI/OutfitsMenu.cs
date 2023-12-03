@@ -370,7 +370,13 @@ namespace FashionSense.Framework.UI
                     if (_pages[_currentPage][i].Name.Length > 12)
                     {
                         _hoverText = $"{_pages[_currentPage][i].Name}";
-                        return;
+                    }
+
+                    var missingAppearanceIds = outfit.GetMissingAppearanceIds();
+                    if (missingAppearanceIds.Count > 0)
+                    {
+                        _hoverText += string.IsNullOrEmpty(_hoverText) ? "" : "\n\n";
+                        _hoverText += String.Format(FashionSense.modHelper.Translation.Get("ui.fashion_sense.outfit_info.missing_appearances"), string.Join("\n", missingAppearanceIds));
                     }
                 }
             }

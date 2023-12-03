@@ -35,6 +35,7 @@
   "ui.fashion_sense.outfit_info.export": "Exports the outfit's JSON to your clipboard.",
   "ui.fashion_sense.warning.name": "The outfit name is blank or already exists.",
   "ui.fashion_sense.mask_layer.base": "Base",
+  "ui.fashion_sense.outfit_info.missing_appearances": "The following appearances are missing:\n{0}",
 
   // UI - Etc
   "ui.fashion_sense.start_with_hand_mirror": "Start with Mirror",
