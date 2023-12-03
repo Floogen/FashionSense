@@ -21,6 +21,13 @@
   "ui.fashion_sense.title.shoes": "Shoes",
   "ui.fashion_sense.title.mask_layer": "Layer",
 
+  // UI - Search
+  "ui.fashion_sense.search.filter.none": "None",
+  "ui.fashion_sense.search.filter.author": "Author",
+  "ui.fashion_sense.search.filter.pack_name": "Pack Name",
+  "ui.fashion_sense.search.filter.tags": "Tags",
+  "ui.fashion_sense.search.about": "{0}\n\nAuthor: {1}\nPack: {2}\nTags: {3}",
+
   // UI - Outfits
   "ui.fashion_sense.title.outfits": "Outfits",
   "ui.fashion_sense.title.outfit_naming": "Outfit Name",
@@ -42,7 +49,7 @@
   "ui.fashion_sense.buttons.presets": "Presets",
   "ui.fashion_sense.buttons.presets.description": "View presets provided by Fashion Sense content packs.",
   "ui.fashion_sense.exported_outfit": "Copied outfit to clipboard.",
-  "ui.fashion_sense.preset_info": "{0}\n\nAuthor: {1}\nSource: {2}",
+  "ui.fashion_sense.preset_info": "{0}\n\nAuthor: {1}\nPack: {2}",
 
   // UI - Etc
   "ui.fashion_sense.start_with_hand_mirror": "Start with Mirror",
