@@ -1,6 +1,7 @@
 using FashionSense.Framework.External.ContentPatcher;
 using FashionSense.Framework.Interfaces.API;
 using FashionSense.Framework.Managers;
+using FashionSense.Framework.Models;
 using FashionSense.Framework.Models.Appearances;
 using FashionSense.Framework.Models.Appearances.Accessory;
 using FashionSense.Framework.Models.Appearances.Generic;
@@ -399,6 +400,24 @@ namespace FashionSense
                 // Load Shoes
                 Monitor.Log($"Loading shoes from pack: {contentPack.Manifest.Name} {contentPack.Manifest.Version} by {contentPack.Manifest.Author}", LogLevel.Trace);
                 AddShoesContentPacks(contentPack);
+
+                // Load Outfit Presets
+                Monitor.Log($"Loading outfit presets from pack: {contentPack.Manifest.Name} {contentPack.Manifest.Version} by {contentPack.Manifest.Author}", LogLevel.Trace);
+                if (File.Exists(Path.Combine(contentPack.DirectoryPath, "preset_outfits.json")))
+                {
+                    var outfits = contentPack.ReadJsonFile<List<Outfit>>("preset_outfits.json");
+                    foreach (var outfit in outfits)
+                    {
+                        if (string.IsNullOrEmpty(outfit.Author))
+                        {
+                            outfit.Author = contentPack.Manifest.Author;
+                        }
+                        outfit.Source = contentPack.Manifest.Name;
+                        outfit.IsPreset = true;
+
+                        outfitManager.AddPresetOutfit(outfit);
+                    }
+                }
 
                 // Load in Condition Groups
                 if (File.Exists(Path.Combine(contentPack.DirectoryPath, "conditions.json")))

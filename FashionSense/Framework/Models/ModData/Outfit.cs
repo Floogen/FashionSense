@@ -16,6 +16,8 @@ namespace FashionSense.Framework.Models
     {
         public string Name { get; set; }
         public string Author { get; set; }
+        internal string Source { get; set; }
+        internal bool IsPreset { get; set; }
         public int Version { get; set; } = 1;
         public bool IsBeingShared { get; set; }
         public bool IsGlobal { get; set; }
@@ -102,12 +104,18 @@ namespace FashionSense.Framework.Models
             Author = who.Name;
         }
 
-        private class HideObsoleteAttributesResolver : DefaultContractResolver
+        private class HidePropertiesForExportResolver : DefaultContractResolver
         {
+            private List<string> _ignoredProperties = new List<string>()
+            {
+                "IsBeingShared",
+                "IsGlobal"
+            };
+
             private bool IsPropertyObsolete(Type type, string propertyName)
             {
-                var fi = type.GetProperty(propertyName);
-                var attributes = (ObsoleteAttribute[])fi.GetCustomAttributes(typeof(ObsoleteAttribute), false);
+                var property = type.GetProperty(propertyName);
+                var attributes = (ObsoleteAttribute[])property.GetCustomAttributes(typeof(ObsoleteAttribute), false);
 
                 return (attributes != null && attributes.Length > 0);
             }
@@ -117,11 +125,10 @@ namespace FashionSense.Framework.Models
                 IList<JsonProperty> properties = base.CreateProperties(type, memberSerialization);
                 foreach (var property in properties)
                 {
-                    if (IsPropertyObsolete(type, property.UnderlyingName))
+                    if (IsPropertyObsolete(type, property.UnderlyingName) || _ignoredProperties.Contains(property.UnderlyingName))
                     {
                         property.Ignored = true;
                     }
-
                 }
                 return properties;
             }
@@ -166,7 +173,7 @@ namespace FashionSense.Framework.Models
                 AccessoryThreeColor = null;
             }
 
-            return JsonConvert.SerializeObject(this, new JsonSerializerSettings() { ContractResolver = new HideObsoleteAttributesResolver(), Formatting = Formatting.Indented });
+            return JsonConvert.SerializeObject(this, new JsonSerializerSettings() { ContractResolver = new HidePropertiesForExportResolver(), Formatting = Formatting.Indented });
         }
 
         internal List<string> GetMissingAppearanceIds()

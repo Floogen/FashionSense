@@ -17,10 +17,12 @@ namespace FashionSense.Framework.Managers
     {
         private IMonitor _monitor;
         private string _sharedOutfitDataPath = Path.Combine("Data", "Outfits.json");
+        private List<Outfit> _presetOutfits;
 
         public OutfitManager(IMonitor monitor)
         {
             _monitor = monitor;
+            _presetOutfits = new List<Outfit>();
         }
 
         public Outfit CreateOutfit(Farmer who, string name)
@@ -46,10 +48,17 @@ namespace FashionSense.Framework.Managers
             var outfits = GetOutfits(who);
 
             // Add it to the current listing
+            outfit.Name = GetUniqueOutfitName(outfits, outfit.Name);
             outfits.Add(outfit);
 
             // Serialize the changes
             SerializeOutfits(who, outfits);
+        }
+
+        public void AddPresetOutfit(Outfit outfit)
+        {
+            outfit.Name = GetUniqueOutfitName(_presetOutfits, outfit.Name);
+            _presetOutfits.Add(outfit);
         }
 
         public void DeleteOutfit(Farmer who, string name)
@@ -67,16 +76,21 @@ namespace FashionSense.Framework.Managers
             SerializeOutfits(who, outfits);
         }
 
-        public bool DoesOutfitExist(Farmer who, string name)
+        public bool DoesOutfitExist(Farmer who, string name, bool usePresets = false)
         {
             // Get the current outfits
-            var outfits = GetOutfits(who);
+            var outfits = GetOutfits(who, usePresets);
 
             return outfits.Any(o => o.Name.Equals(name, StringComparison.Ordinal));
         }
 
-        public List<Outfit> GetOutfits(Farmer who)
+        public List<Outfit> GetOutfits(Farmer who, bool usePresets = false)
         {
+            if (usePresets)
+            {
+                return _presetOutfits;
+            }
+
             List<Outfit> outfits = new List<Outfit>();
             if (who.modData.ContainsKey(ModDataKeys.OUTFITS))
             {
@@ -106,14 +120,19 @@ namespace FashionSense.Framework.Managers
             return sharedOutfits;
         }
 
-        public Outfit GetOutfit(Farmer who, string name)
+        public List<Outfit> GetPresetOutfits()
         {
-            if (DoesOutfitExist(who, name) is false)
+            return _presetOutfits.OrderBy(o => o.Source).ThenBy(o => o.Name).ToList();
+        }
+
+        public Outfit GetOutfit(Farmer who, string name, bool usePresets = false)
+        {
+            if (DoesOutfitExist(who, name, usePresets) is false)
             {
                 return null;
             }
 
-            return GetOutfits(who).First(o => o.Name.Equals(name, StringComparison.Ordinal));
+            return usePresets ? GetPresetOutfits().First(o => o.Name.Equals(name, StringComparison.Ordinal)) : GetOutfits(who).First(o => o.Name.Equals(name, StringComparison.Ordinal));
         }
 
         public void RenameOutfit(Farmer who, string originalName, string currentName)
@@ -257,6 +276,16 @@ namespace FashionSense.Framework.Managers
 
             // Serialize the changes
             SerializeOutfits(who, outfits);
+        }
+
+        private string GetUniqueOutfitName(List<Outfit> outfits, string outfitName)
+        {
+            if (outfits.Any(o => o.Name == outfitName))
+            {
+                return GetUniqueOutfitName(outfits, outfitName + " (Copy)");
+            }
+
+            return outfitName;
         }
     }
 }

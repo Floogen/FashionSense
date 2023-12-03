@@ -21,12 +21,14 @@ namespace FashionSense.Framework.UI
         private string _hoverText = "";
         private string _bottomBannerMessage = "";
         private double _bottomBannerTimeRemainingInMilliseconds = 0;
+        private bool _isDisplayingPresets;
         private const int OUTFITS_PER_PAGE = 6;
         private const string CREATE_OUTFIT_NAME = "PeacefulEnd.Create.Outfit.Button";
 
         public ClickableTextureComponent backButton;
         public ClickableTextureComponent forwardButton;
         public ClickableComponent importButton;
+        public ClickableComponent presetsButton;
         public List<ClickableComponent> outfitButtons = new List<ClickableComponent>();
         public List<ClickableTextureComponent> shareButtons = new List<ClickableTextureComponent>();
         public List<ClickableTextureComponent> exportButtons = new List<ClickableTextureComponent>();
@@ -52,7 +54,7 @@ namespace FashionSense.Framework.UI
             base.yPositionOnScreen = (int)topLeft.Y;
 
             Game1.playSound("bigSelect");
-            PaginatePacks();
+            PaginatePacks(FashionSense.outfitManager.GetOutfits(Game1.player));
 
             // Establish the buttons that will be used to select the outfits
             for (int i = 0; i <= OUTFITS_PER_PAGE; i++)
@@ -140,6 +142,10 @@ namespace FashionSense.Framework.UI
                 myID = 100,
                 rightNeighborID = -7777
             };
+            presetsButton = new ClickableComponent(new Rectangle(base.xPositionOnScreen + base.width - 202, base.yPositionOnScreen - 48, (int)Game1.dialogueFont.MeasureString(FashionSense.modHelper.Translation.Get("ui.fashion_sense.buttons.presets")).X + 64, 52), FashionSense.modHelper.Translation.Get("ui.fashion_sense.buttons.presets"))
+            {
+                myID = 99
+            };
 
             // Handle GamePad integration
             if (Game1.options.snappyMenus && Game1.options.gamepadControls)
@@ -149,9 +155,9 @@ namespace FashionSense.Framework.UI
             }
         }
 
-        public void PaginatePacks()
+        public void PaginatePacks(List<Outfit> outfits, bool isPreset = false)
         {
-            var outfits = FashionSense.outfitManager.GetOutfits(Game1.player);
+            _isDisplayingPresets = isPreset;
             _pages = new List<List<Outfit>>();
 
             int count = outfits.Count - 1;
@@ -165,7 +171,7 @@ namespace FashionSense.Framework.UI
                     _pages.Add(new List<Outfit>());
                 }
 
-                if (page == 0 && which == 0)
+                if (page == 0 && which == 0 && _isDisplayingPresets is false)
                 {
                     _pages[page].Add(new Outfit() { Name = CREATE_OUTFIT_NAME });
                     count--;
@@ -176,7 +182,7 @@ namespace FashionSense.Framework.UI
                 count--;
             }
 
-            if (_pages.Count == 0)
+            if (_pages.Count == 0 && _isDisplayingPresets is false)
             {
                 _pages.Add(new List<Outfit>());
                 _pages[0].Add(new Outfit() { Name = CREATE_OUTFIT_NAME });
@@ -197,17 +203,6 @@ namespace FashionSense.Framework.UI
             string_center.X = (int)(string_center.X / 4f) * 4;
             string_center.Y = (int)(string_center.Y / 4f) * 4;
             Utility.drawTextWithShadow(b, button.name, Game1.dialogueFont, new Vector2(button.bounds.Center.X, button.bounds.Center.Y) - string_center, Game1.textColor, 1f, 1f + 1E-06f, -1, -1, 0);
-        }
-
-        private string GetUniqueOutfitName(string outfitName)
-        {
-            var outfits = FashionSense.outfitManager.GetOutfits(Game1.player);
-            if (outfits.Any(o => o.Name == outfitName))
-            {
-                return GetUniqueOutfitName(outfitName + " (Copy)");
-            }
-
-            return outfitName;
         }
 
         public override void receiveScrollWheelAction(int direction)
@@ -231,8 +226,15 @@ namespace FashionSense.Framework.UI
             {
                 if (key == Keys.Escape && base.readyToClose())
                 {
-                    Game1.activeClickableMenu = _callbackMenu;
-                    base.exitThisMenu();
+                    if (_isDisplayingPresets)
+                    {
+                        PaginatePacks(FashionSense.outfitManager.GetOutfits(Game1.player), isPreset: false);
+                    }
+                    else
+                    {
+                        Game1.activeClickableMenu = _callbackMenu;
+                        base.exitThisMenu();
+                    }
                     return;
                 }
                 else if (Game1.options.snappyMenus && Game1.options.gamepadControls && !base.overrideSnappyMenuCursorMovementBan())
@@ -262,10 +264,9 @@ namespace FashionSense.Framework.UI
                 try
                 {
                     var outfit = JsonConvert.DeserializeObject<Outfit>(clipboardText);
-                    outfit.Name = GetUniqueOutfitName(outfit.Name);
 
                     FashionSense.outfitManager.AddOutfit(Game1.player, outfit);
-                    PaginatePacks();
+                    PaginatePacks(FashionSense.outfitManager.GetOutfits(Game1.player));
 
                     CreateBottomBannerMesage($"Imported the outfit \"{outfit.Name}\" by {outfit.Author}");
                 }
@@ -275,6 +276,11 @@ namespace FashionSense.Framework.UI
                     FashionSense.monitor.Log($"Failed to parse clipboard text into a Fashion Sense outfit: {ex}", StardewModdingAPI.LogLevel.Trace);
                 }
 
+                return;
+            }
+            if (presetsButton.containsPoint(x, y))
+            {
+                PaginatePacks(FashionSense.outfitManager.GetPresetOutfits(), isPreset: true);
                 return;
             }
 
@@ -296,8 +302,8 @@ namespace FashionSense.Framework.UI
                     {
                         // Check if the functional buttons are being clicked
 
-                        var outfit = FashionSense.outfitManager.GetOutfit(Game1.player, _pages[_currentPage][i].Name);
-                        if (outfit.IsGlobal is false)
+                        var outfit = FashionSense.outfitManager.GetOutfit(Game1.player, _pages[_currentPage][i].Name, _isDisplayingPresets);
+                        if (outfit.IsGlobal is false && outfit.IsPreset is false)
                         {
                             if (outfit.IsBeingShared is false)
                             {
@@ -317,7 +323,7 @@ namespace FashionSense.Framework.UI
                                 if (deleteButtons[i].containsPoint(x, y))
                                 {
                                     FashionSense.outfitManager.DeleteOutfit(Game1.player, _pages[_currentPage][i].Name);
-                                    PaginatePacks();
+                                    PaginatePacks(FashionSense.outfitManager.GetOutfits(Game1.player));
                                     return;
                                 } 
                             }
@@ -386,6 +392,11 @@ namespace FashionSense.Framework.UI
                 _hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.buttons.import.description");
                 return;
             }
+            else if (presetsButton.containsPoint(x, y))
+            {
+                _hoverText = FashionSense.modHelper.Translation.Get("ui.fashion_sense.buttons.presets.description");
+                return;
+            }
 
             for (int i = 0; i < outfitButtons.Count; i++)
             {
@@ -404,8 +415,8 @@ namespace FashionSense.Framework.UI
                     }
 
                     // Check if the functional buttons are being hovered
-                    var outfit = FashionSense.outfitManager.GetOutfit(Game1.player, _pages[_currentPage][i].Name);
-                    if (outfit.IsGlobal is false)
+                    var outfit = FashionSense.outfitManager.GetOutfit(Game1.player, _pages[_currentPage][i].Name, _isDisplayingPresets);
+                    if (outfit.IsGlobal is false && outfit.IsPreset is false)
                     {
                         if (outfit.IsBeingShared is false)
                         {
@@ -436,8 +447,11 @@ namespace FashionSense.Framework.UI
                             return;
                         }
                     }
-
-                    if (_pages[_currentPage][i].Name.Length > 12)
+                    else if (outfit.IsPreset)
+                    {
+                        _hoverText = string.Format(FashionSense.modHelper.Translation.Get("ui.fashion_sense.preset_info"), outfit.Name, outfit.Author, outfit.Source);
+                    }
+                    else if (_pages[_currentPage][i].Name.Length > 12)
                     {
                         _hoverText = $"{_pages[_currentPage][i].Name}";
                     }
@@ -446,7 +460,7 @@ namespace FashionSense.Framework.UI
                     if (missingAppearanceIds.Count > 0)
                     {
                         _hoverText += string.IsNullOrEmpty(_hoverText) ? "" : "\n\n";
-                        _hoverText += String.Format(FashionSense.modHelper.Translation.Get("ui.fashion_sense.outfit_info.missing_appearances"), string.Join("\n", missingAppearanceIds));
+                        _hoverText += string.Format(FashionSense.modHelper.Translation.Get("ui.fashion_sense.outfit_info.missing_appearances"), string.Join("\n", missingAppearanceIds));
                     }
                 }
             }
@@ -515,7 +529,7 @@ namespace FashionSense.Framework.UI
                         continue;
                     }
 
-                    var outfit = FashionSense.outfitManager.GetOutfit(Game1.player, packName);
+                    var outfit = FashionSense.outfitManager.GetOutfit(Game1.player, packName, _isDisplayingPresets);
                     if (packName.Length > 12)
                     {
                         packName = $"{packName.Substring(0, 12).TrimEnd()}...";
@@ -525,7 +539,11 @@ namespace FashionSense.Framework.UI
                     SpriteText.drawString(b, packName, outfitButtons[j].bounds.X + 32, outfitButtons[j].bounds.Y + 20, color: outfit.HasAllRequiredAppearances() ? new Color(86, 22, 12) : new Color(86, 22, 12, 150));
 
                     // Draw the functional buttons
-                    if (outfit.IsGlobal is false)
+                    if (outfit.IsPreset is true)
+                    {
+                        SpriteText.drawString(b, FashionSense.modHelper.Translation.Get("ui.fashion_sense.outfit_info.preset"), outfitButtons[j].bounds.Width + 135, outfitButtons[j].bounds.Y + 20);
+                    }
+                    else if (outfit.IsGlobal is false)
                     {
                         if (outfit.IsBeingShared is false)
                         {
@@ -533,6 +551,7 @@ namespace FashionSense.Framework.UI
                             renameButtons[j].draw(b);
                             deleteButtons[j].draw(b);
                         }
+
                         exportButtons[j].draw(b);
                         shareButtons[j].draw(b, outfit.IsBeingShared ? Color.White : new Color(55, 55, 55, 55), 1f);
                     }
@@ -554,6 +573,7 @@ namespace FashionSense.Framework.UI
 
             // Draw import / presets buttons
             DrawButton(b, this.importButton);
+            DrawButton(b, this.presetsButton);
 
             // Draw hover text
             if (!_hoverText.Equals(""))
