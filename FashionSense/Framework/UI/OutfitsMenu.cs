@@ -32,7 +32,7 @@ namespace FashionSense.Framework.UI
         private HandMirrorMenu _callbackMenu;
         private List<List<Outfit>> _pages;
 
-        public OutfitsMenu(HandMirrorMenu callbackMenu) : base(0, 0, 700, 550, showUpperRightCloseButton: true)
+        public OutfitsMenu(HandMirrorMenu callbackMenu) : base(0, 0, 700, 550, showUpperRightCloseButton: false)
         {
             _callbackMenu = callbackMenu;
 
@@ -130,7 +130,6 @@ namespace FashionSense.Framework.UI
             {
                 myID = 101
             };
-            base.upperRightCloseButton = new ClickableTextureComponent(new Rectangle(base.xPositionOnScreen + base.width - 20, base.yPositionOnScreen - 8, 48, 48), Game1.mouseCursors, new Rectangle(337, 494, 12, 12), 4f);
 
             // Handle GamePad integration
             if (Game1.options.snappyMenus && Game1.options.gamepadControls)
@@ -213,17 +212,6 @@ namespace FashionSense.Framework.UI
             if (Game1.activeClickableMenu == null)
             {
                 return;
-            }
-
-            if (base.upperRightCloseButton != null && base.readyToClose() && base.upperRightCloseButton.containsPoint(x, y))
-            {
-                if (playSound)
-                {
-                    Game1.playSound("bigDeSelect");
-                }
-
-                Game1.activeClickableMenu = _callbackMenu;
-                base.exitThisMenu();
             }
 
             for (int i = 0; i < outfitButtons.Count; i++)
@@ -479,7 +467,6 @@ namespace FashionSense.Framework.UI
                 b.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
                 IClickableMenu.drawHoverText(b, _hoverText, Game1.smallFont);
             }
-            base.upperRightCloseButton.draw(b);
 
             Game1.mouseCursorTransparency = 1f;
             base.drawMouse(b);
