@@ -1,0 +1,82 @@
+﻿[
+  {
+    "Name": "Template",
+    "Author": "ExampleAuthor",
+    "Version": 3,
+    "AccessoryIds": [
+      "ExampleAuthor.ExampleFashionSensePack/Accessory/Accessory Template",
+      "None",
+      "None"
+    ],
+    "HairId": "ExampleAuthor.ExampleFashionSensePack/Hair/Hair Template",
+    "HatId": "ExampleAuthor.ExampleFashionSensePack/Hat/Hat Template",
+    "ShirtId": "ExampleAuthor.ExampleFashionSensePack/Shirt/Shirt Template",
+    "SleevesId": "ExampleAuthor.ExampleFashionSensePack/Sleeves/Sleeves Template",
+    "PantsId": "ExampleAuthor.ExampleFashionSensePack/Pants/Pants Template",
+    "ShoesId": "ExampleAuthor.ExampleFashionSensePack/Shoes/Shoes Template",
+    "AccessoryColors": [
+      "4288138649",
+      "4291399865",
+      "4280488222"
+    ],
+    "HairColor": "4280488222",
+    "AppearanceToMaskColors": {
+      "Pants": [
+        {
+          "B": 35,
+          "G": 17,
+          "R": 30,
+          "A": 255
+        }
+      ],
+      "Hair": [
+        {
+          "B": 35,
+          "G": 17,
+          "R": 30,
+          "A": 255
+        }
+      ],
+      "Accessory": [
+        {
+          "B": 151,
+          "G": 205,
+          "R": 153,
+          "A": 255
+        }
+      ],
+      "Hat": [
+        {
+          "B": 151,
+          "G": 205,
+          "R": 153,
+          "A": 255
+        }
+      ],
+      "Shirt": [
+        {
+          "B": 35,
+          "G": 17,
+          "R": 30,
+          "A": 255
+        }
+      ],
+      "Sleeves": [
+        {
+          "B": 35,
+          "G": 17,
+          "R": 30,
+          "A": 255
+        }
+      ],
+      "Shoes": [
+        {
+          "B": 151,
+          "G": 205,
+          "R": 153,
+          "A": 255
+        }
+      ]
+    }
+  }
+]
