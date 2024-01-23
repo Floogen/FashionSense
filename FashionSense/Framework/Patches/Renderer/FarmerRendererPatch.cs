@@ -109,10 +109,10 @@ namespace FashionSense.Framework.Patches.Renderer
                     feature_y_offset = FarmerRenderer.featureYOffsetPerFrame[0];
                     break;
             }
-            feature_y_offset -= who.isMale ? 1 : 0;
+            feature_y_offset -= who.IsMale ? 1 : 0;
 
             // Draw the player's face, then the custom hairstyle
-            b.Draw(___baseTexture, position, new Rectangle(0, yOffset, 16, who.isMale ? 15 : 16), Color.White, 0f, Vector2.Zero, scale, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
+            b.Draw(___baseTexture, position, new Rectangle(0, yOffset, 16, who.IsMale ? 15 : 16), Color.White, 0f, Vector2.Zero, scale, flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
 
             // Draw the hair
             float hair_draw_layer = 2.2E-05f;

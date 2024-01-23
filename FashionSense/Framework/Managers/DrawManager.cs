@@ -240,7 +240,7 @@ namespace FashionSense.Framework.Managers
                         break;
                 }
 
-                if (who.isMale)
+                if (who.IsMale)
                 {
                     adjustedBaseRectangle.Height -= 1;
                 }
