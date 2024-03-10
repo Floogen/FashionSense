@@ -536,7 +536,7 @@ namespace FashionSense.Framework.Managers
             }
 
             // Get any positional offset
-            Position positionOffset = GetPositionOffset(model);
+            Position positionOffset = GetPositionOffset(model, _appearanceTypeToAnimationModels);
 
             // Get any feature offset
             var featureOffset = GetFeatureOffset(DrawTool.FacingDirection, DrawTool.CurrentFrame, DrawTool.Scale, DrawTool.FarmerRenderer, model, who);
@@ -563,7 +563,7 @@ namespace FashionSense.Framework.Managers
             var sleevesModelPack = sleevesModel.Pack as SleevesContentPack;
 
             // Get any positional offset
-            Position positionOffset = GetPositionOffset(sleevesModel);
+            Position positionOffset = GetPositionOffset(sleevesModel, _appearanceTypeToAnimationModels);
 
             // Get any feature offset
             var featureOffset = GetFeatureOffset(DrawTool.FacingDirection, DrawTool.CurrentFrame, DrawTool.Scale, DrawTool.FarmerRenderer, sleevesModel, who);
@@ -901,26 +901,40 @@ namespace FashionSense.Framework.Managers
         #endregion
 
         #region Helper methods
-        private Position GetPositionOffset(AppearanceModel model)
+        private Position GetPositionOffset(AppearanceModel model, Dictionary<AppearanceModel, AnimationModel> appearanceTypeToAnimationModels)
         {
+            var offset = new Position();
             switch (model)
             {
                 case PantsModel pantsModel:
-                    return pantsModel.BodyPosition;
+                    offset = pantsModel.BodyPosition;
+                    break;
                 case ShoesModel shoesModel:
-                    return shoesModel.BodyPosition;
+                    offset = shoesModel.BodyPosition;
+                    break;
                 case ShirtModel shirtModel:
-                    return shirtModel.BodyPosition;
+                    offset = shirtModel.BodyPosition;
+                    break;
                 case AccessoryModel accessoryModel:
-                    return accessoryModel.HeadPosition;
+                    offset = accessoryModel.HeadPosition;
+                    break;
                 case HairModel hairModel:
-                    return hairModel.HeadPosition;
+                    offset = hairModel.HeadPosition;
+                    break;
                 case SleevesModel sleevesModel:
-                    return sleevesModel.BodyPosition;
+                    offset = sleevesModel.BodyPosition;
+                    break;
                 case HatModel hatModel:
-                    return hatModel.HeadPosition;
+                    offset = hatModel.HeadPosition;
+                    break;
             }
-            return new Position();
+
+            if (appearanceTypeToAnimationModels.TryGetValue(model, out var animation) is true && animation is not null)
+            {
+                offset = new Position() { X = offset.X + animation.Offset.X, Y = offset.Y + animation.Offset.Y };
+            }
+
+            return offset;
         }
 
         private Rectangle GetSourceRectangle(AppearanceModel model, Dictionary<AppearanceModel, AnimationModel> appearanceTypeToAnimationModels, SubFrame subFrame = null)
