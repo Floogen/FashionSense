@@ -1703,9 +1703,9 @@ namespace FashionSense.Framework.UI
                         {
                             name = GetColorPickerLabel(true, enabledFilterName: GetNameOfEnabledFilter());
                         }
-                        else if (contentPack is not null && contentPack.PackType == IApi.Type.Shoes)
+                        if (contentPack is ShoesContentPack shoesPack && shoesPack.GetShoesFromFacingDirection(Game1.player.FacingDirection) is ShoesModel sModel && sModel != null && sModel.IsPlayerColorChoiceIgnored())
                         {
-                            name = FashionSense.modHelper.Translation.Get("ui.fashion_sense.color_active.shoes");
+                            name = GetColorPickerLabel(true, enabledFilterName: GetNameOfEnabledFilter());
                         }
                     }
 
