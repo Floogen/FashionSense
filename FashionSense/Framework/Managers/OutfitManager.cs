@@ -1,6 +1,7 @@
 ﻿using FashionSense.Framework.Interfaces.API;
 using FashionSense.Framework.Models;
 using FashionSense.Framework.Models.Appearances;
+using FashionSense.Framework.Models.Appearances.Accessory;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
@@ -17,10 +18,12 @@ namespace FashionSense.Framework.Managers
     {
         private IMonitor _monitor;
         private string _sharedOutfitDataPath = Path.Combine("Data", "Outfits.json");
+        private List<Outfit> _presetOutfits;
 
         public OutfitManager(IMonitor monitor)
         {
             _monitor = monitor;
+            _presetOutfits = new List<Outfit>();
         }
 
         public Outfit CreateOutfit(Farmer who, string name)
@@ -40,6 +43,30 @@ namespace FashionSense.Framework.Managers
             return outfit;
         }
 
+        public void AddOutfit(Farmer who, Outfit outfit)
+        {
+            // Get the current outfits
+            var outfits = GetOutfits(who);
+
+            // Add it to the current listing
+            outfit.Name = GetUniqueOutfitName(outfits, outfit.Name);
+            outfits.Add(outfit);
+
+            // Serialize the changes
+            SerializeOutfits(who, outfits);
+        }
+
+        public void AddPresetOutfit(Outfit outfit)
+        {
+            outfit.Name = GetUniqueOutfitName(_presetOutfits, outfit.Name);
+            _presetOutfits.Add(outfit);
+        }
+
+        public void ClearPresetOutfits()
+        {
+            _presetOutfits.Clear();
+        }
+
         public void DeleteOutfit(Farmer who, string name)
         {
             // Get the current outfits
@@ -55,16 +82,21 @@ namespace FashionSense.Framework.Managers
             SerializeOutfits(who, outfits);
         }
 
-        public bool DoesOutfitExist(Farmer who, string name)
+        public bool DoesOutfitExist(Farmer who, string name, bool usePresets = false)
         {
             // Get the current outfits
-            var outfits = GetOutfits(who);
+            var outfits = GetOutfits(who, usePresets);
 
             return outfits.Any(o => o.Name.Equals(name, StringComparison.Ordinal));
         }
 
-        public List<Outfit> GetOutfits(Farmer who)
+        public List<Outfit> GetOutfits(Farmer who, bool usePresets = false)
         {
+            if (usePresets)
+            {
+                return _presetOutfits;
+            }
+
             List<Outfit> outfits = new List<Outfit>();
             if (who.modData.ContainsKey(ModDataKeys.OUTFITS))
             {
@@ -94,14 +126,19 @@ namespace FashionSense.Framework.Managers
             return sharedOutfits;
         }
 
-        public Outfit GetOutfit(Farmer who, string name)
+        public List<Outfit> GetPresetOutfits()
         {
-            if (DoesOutfitExist(who, name) is false)
+            return _presetOutfits.OrderBy(o => o.Source).ThenBy(o => o.Name).ToList();
+        }
+
+        public Outfit GetOutfit(Farmer who, string name, bool usePresets = false)
+        {
+            if (DoesOutfitExist(who, name, usePresets) is false)
             {
                 return null;
             }
 
-            return GetOutfits(who).First(o => o.Name.Equals(name, StringComparison.Ordinal));
+            return usePresets ? GetPresetOutfits().First(o => o.Name.Equals(name, StringComparison.Ordinal)) : GetOutfits(who).First(o => o.Name.Equals(name, StringComparison.Ordinal));
         }
 
         public void RenameOutfit(Farmer who, string originalName, string currentName)
@@ -143,6 +180,18 @@ namespace FashionSense.Framework.Managers
             who.modData[ModDataKeys.OUTFITS] = JsonConvert.SerializeObject(outfits);
 
             UpdateSharedOutfits(who);
+        }
+
+        public void ClearOutfit(Farmer who)
+        {
+            who.modData[ModDataKeys.CUSTOM_HAIR_ID] = "None";
+            who.modData[ModDataKeys.CUSTOM_HAT_ID] = "None";
+            who.modData[ModDataKeys.CUSTOM_SHIRT_ID] = "None";
+            who.modData[ModDataKeys.CUSTOM_SLEEVES_ID] = "None";
+            who.modData[ModDataKeys.CUSTOM_PANTS_ID] = "None";
+            who.modData[ModDataKeys.CUSTOM_SHOES_ID] = "None";
+
+            FashionSense.accessoryManager.ClearAccessories(who);
         }
 
         public void SetOutfit(Farmer who, Outfit outfit)
@@ -200,6 +249,49 @@ namespace FashionSense.Framework.Managers
             else if (outfit.AccessoryIds.Count > 0)
             {
                 FashionSense.accessoryManager.SetAccessories(who, outfit.AccessoryIds, outfit.AccessoryColors);
+
+                List<Color> accessoryColorMasks = new List<Color>();
+                if (outfit.AppearanceToMaskColors.Any(d => d.Key is IApi.Type.Accessory))
+                {
+                    accessoryColorMasks = outfit.AppearanceToMaskColors.First(d => d.Key is IApi.Type.Accessory).Value;
+                }
+
+                int accessoryCountOffset = 0;
+                foreach (int index in FashionSense.accessoryManager.GetActiveAccessoryIndices(who))
+                {
+                    var accessoryKey = FashionSense.accessoryManager.GetAccessoryIdByIndex(who, index);
+                    if (FashionSense.textureManager.GetSpecificAppearanceModel<AccessoryContentPack>(accessoryKey) is AccessoryContentPack aPack && aPack != null)
+                    {
+                        AccessoryModel accessoryModel = aPack.GetAccessoryFromFacingDirection(who.FacingDirection);
+                        if (accessoryModel is null)
+                        {
+                            continue;
+                        }
+
+                        try
+                        {
+                            if (accessoryModel.ColorMaskLayers.Count > 0)
+                            {
+                                for (int x = 0; x < accessoryModel.ColorMaskLayers.Count; x++)
+                                {
+                                    FashionSense.colorManager.SetColor(who, AppearanceModel.GetColorKey(IApi.Type.Accessory, appearanceIndex: index, maskLayerIndex: x), accessoryColorMasks[accessoryCountOffset]);
+
+                                    accessoryCountOffset += 1;
+                                }
+                            }
+                            else
+                            {
+                                FashionSense.colorManager.SetColor(who, AppearanceModel.GetColorKey(IApi.Type.Accessory, appearanceIndex: index, maskLayerIndex: 0), accessoryColorMasks[accessoryCountOffset]);
+                                accessoryCountOffset += 1;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            // TODO: Log errors
+                            continue;
+                        }
+                    }
+                }
             }
 
             FashionSense.SetSpriteDirty();
@@ -233,6 +325,16 @@ namespace FashionSense.Framework.Managers
 
             // Serialize the changes
             SerializeOutfits(who, outfits);
+        }
+
+        private string GetUniqueOutfitName(List<Outfit> outfits, string outfitName)
+        {
+            if (outfits.Any(o => o.Name == outfitName))
+            {
+                return GetUniqueOutfitName(outfits, outfitName + " (Copy)");
+            }
+
+            return outfitName;
         }
     }
 }

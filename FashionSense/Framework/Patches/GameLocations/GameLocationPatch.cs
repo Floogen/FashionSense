@@ -21,9 +21,9 @@ namespace FashionSense.Framework.Patches.GameLocations
             harmony.Patch(AccessTools.Method(_object, nameof(GameLocation.performAction), new[] { typeof(string), typeof(Farmer), typeof(Location) }), postfix: new HarmonyMethod(GetType(), nameof(PerformActionPostfix)));
         }
 
-        private static void PerformActionPostfix(GameLocation __instance, ref bool __result, string action, Farmer who, Location tileLocation)
+        private static void PerformActionPostfix(GameLocation __instance, ref bool __result, string fullActionString, Farmer who, Location tileLocation)
         {
-            if (__result is false && Game1.activeClickableMenu is null && action.Equals("OpenFashionSense", StringComparison.OrdinalIgnoreCase))
+            if (__result is false && Game1.activeClickableMenu is null && fullActionString.Equals("OpenFashionSense", StringComparison.OrdinalIgnoreCase))
             {
                 Game1.activeClickableMenu = new HandMirrorMenu();
                 __result = true;

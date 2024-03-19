@@ -100,7 +100,7 @@ namespace FashionSense.Framework.Patches.Renderer
             ShirtModel shirtModel = null;
             if (who.modData.ContainsKey(ModDataKeys.CUSTOM_SHIRT_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<ShirtContentPack>(who.modData[ModDataKeys.CUSTOM_SHIRT_ID]) is ShirtContentPack sPack && sPack != null)
             {
-                shirtModel = sPack.GetShirtFromFacingDirection(who.facingDirection);
+                shirtModel = sPack.GetShirtFromFacingDirection(who.FacingDirection);
             }
 
             if (shirtModel is null)
@@ -247,7 +247,7 @@ namespace FashionSense.Framework.Patches.Renderer
             AppearanceHelpers.OffsetSourceRectangles(who, facingDirection, rotation, ref ___shirtSourceRect, ref dyedShirtSourceRect, ref ___accessorySourceRect, ref ___hatSourceRect, ref ___rotationAdjustment);
 
             // Prepare the DrawManager
-            DrawManager drawManager = new DrawManager(b, who, __instance, skinTone, baseTexture, sourceRect, ___shirtSourceRect, dyedShirtSourceRect, ___accessorySourceRect, ___hatSourceRect, appearanceTypeToAnimationModels, animationFrame, overrideColor, position, origin, ___positionOffset, ___rotationAdjustment, facingDirection, currentFrame, scale, rotation, FarmerRendererPatch.AreColorMasksPendingRefresh, FarmerRenderer.isDrawingForUI, AppearanceHelpers.AreSleevesForcedHidden(equippedModels))
+            DrawManager drawManager = new DrawManager(b, who, __instance, skinTone, baseTexture, sourceRect, ___shirtSourceRect, dyedShirtSourceRect, ___accessorySourceRect, ___hatSourceRect, appearanceTypeToAnimationModels, animationFrame, overrideColor, position, origin, ___positionOffset, ___rotationAdjustment, facingDirection, currentFrame, scale, rotation, FarmerRendererPatch.AreColorMasksPendingRefresh, FarmerRenderer.isDrawingForUI, AppearanceHelpers.AreSleevesForcedHidden(equippedModels), AppearanceHelpers.IsPlayerBaseForcedHidden(equippedModels))
             {
                 LayerDepth = layerDepth
             };
@@ -308,14 +308,14 @@ namespace FashionSense.Framework.Patches.Renderer
             DrawPatch.ExecuteRecolorActionsReversePatch(__instance, who);
 
             // Set the source rectangles for vanilla shirts, accessories and hats
-            ___shirtSourceRect = new Rectangle(__instance.ClampShirt(who.GetShirtIndex()) * 8 % 128, __instance.ClampShirt(who.GetShirtIndex()) * 8 / 128 * 32, 8, 8);
+            ___shirtSourceRect = new Rectangle(who.GetShirtIndex() * 8 % 128, who.GetShirtIndex() * 8 / 128 * 32, 8, 8);
             if ((int)who.accessory.Value >= 0)
             {
                 ___accessorySourceRect = new Rectangle((int)who.accessory.Value * 16 % FarmerRenderer.accessoriesTexture.Width, (int)who.accessory.Value * 16 / FarmerRenderer.accessoriesTexture.Width * 32, 16, 16);
             }
             if (who.hat.Value != null)
             {
-                ___hatSourceRect = new Rectangle(20 * (int)who.hat.Value.which.Value % FarmerRenderer.hatsTexture.Width, 20 * (int)who.hat.Value.which.Value / FarmerRenderer.hatsTexture.Width * 20 * 4, 20, 20);
+                ___hatSourceRect = new Rectangle(20 * ItemRegistry.GetDataOrErrorItem(who.hat.Value.QualifiedItemId).SpriteIndex % FarmerRenderer.hatsTexture.Width, 20 * ItemRegistry.GetDataOrErrorItem(who.hat.Value.QualifiedItemId).SpriteIndex / FarmerRenderer.hatsTexture.Width * 20 * 4, 20, 20);
             }
 
             // Go through the models and determine draw order

@@ -29,7 +29,7 @@ namespace FashionSense.Framework.Patches.Menus
         {
             if (mailTitle.Equals(ModDataKeys.LETTER_HAND_MIRROR, StringComparison.OrdinalIgnoreCase) && fromCollection is false)
             {
-                __instance.itemsToGrab.Add(new ClickableComponent(new Rectangle(__instance.xPositionOnScreen + __instance.width / 2 - 48, __instance.yPositionOnScreen + __instance.height - 32 - 96, 96, 96), SeedShopPatch.GetHandMirrorTool())
+                __instance.itemsToGrab.Add(new ClickableComponent(new Rectangle(__instance.xPositionOnScreen + __instance.width / 2 - 48, __instance.yPositionOnScreen + __instance.height - 32 - 96, 96, 96), ShopBuilderPatch.GetHandMirrorTool())
                 {
                     myID = 104,
                     leftNeighborID = 101,
