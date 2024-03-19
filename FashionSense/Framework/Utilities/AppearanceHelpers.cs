@@ -404,11 +404,11 @@ namespace FashionSense.Framework.Utilities
             // Handle updating the position and other values of the light
             if (!Game1.currentLocation.sharedLights.ContainsKey(animationData.LightId.Value))
             {
-                Game1.currentLocation.sharedLights[animationData.LightId.Value] = new LightSource(lightModel.GetTextureSource(), who.position - new Vector2(lightModel.Position.X, lightModel.Position.Y), lightModel.GetRadius(recalculateLight), lightModel.GetColor(), LightSource.LightContext.None);
+                Game1.currentLocation.sharedLights[animationData.LightId.Value] = new LightSource(lightModel.GetTextureSource(), who.Position - new Vector2(lightModel.Position.X, lightModel.Position.Y), lightModel.GetRadius(recalculateLight), lightModel.GetColor(), LightSource.LightContext.None);
             }
             else
             {
-                Game1.currentLocation.sharedLights[animationData.LightId.Value].position.Value = who.position - new Vector2(lightModel.Position.X, lightModel.Position.Y);
+                Game1.currentLocation.sharedLights[animationData.LightId.Value].position.Value = who.Position - new Vector2(lightModel.Position.X, lightModel.Position.Y);
                 Game1.currentLocation.sharedLights[animationData.LightId.Value].radius.Value = lightModel.GetRadius(recalculateLight);
                 Game1.currentLocation.sharedLights[animationData.LightId.Value].color.Value = lightModel.GetColor();
             }
@@ -433,6 +433,19 @@ namespace FashionSense.Framework.Utilities
             foreach (var data in metadata.Where(d => d.Model is not null))
             {
                 if (data.Model.HideSleeves)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        internal static bool IsPlayerBaseForcedHidden(List<AppearanceMetadata> metadata)
+        {
+            foreach (var data in metadata.Where(d => d.Model is not null))
+            {
+                if (data.Model.HidePlayerBase)
                 {
                     return true;
                 }
@@ -656,7 +669,7 @@ namespace FashionSense.Framework.Utilities
                 }
                 else if (condition.Name is Condition.Type.IsDarkOut)
                 {
-                    passedCheck = condition.IsValid(Game1.isDarkOut() || Game1.IsRainingHere(Game1.currentLocation) || (Game1.mine != null && Game1.mine.isDarkArea()));
+                    passedCheck = condition.IsValid(Game1.isDarkOut(Game1.currentLocation) || Game1.IsRainingHere(Game1.currentLocation) || (Game1.mine != null && Game1.mine.isDarkArea()));
                 }
                 else if (condition.Name is Condition.Type.IsRaining)
                 {
@@ -793,6 +806,10 @@ namespace FashionSense.Framework.Utilities
                 else if (condition.Name is Condition.Type.RandomChance)
                 {
                     passedCheck = condition.IsValid(Game1.random.NextDouble());
+                }
+                else if (condition.Name is Condition.Type.GameStateQuery)
+                {
+                    passedCheck = GameStateQuery.CheckConditions(condition.GetParsedValue<string>());
                 }
 
                 // If the condition is independent and is true, then skip rest of evaluations
@@ -998,7 +1015,7 @@ namespace FashionSense.Framework.Utilities
             // Perform initial vanilla logic
             Color[] shirtData = new Color[FarmerRenderer.shirtsTexture.Bounds.Width * FarmerRenderer.shirtsTexture.Bounds.Height];
             FarmerRenderer.shirtsTexture.GetData(shirtData);
-            int index = renderer.ClampShirt(who.GetShirtIndex()) * 8 / 128 * 32 * FarmerRenderer.shirtsTexture.Bounds.Width + renderer.ClampShirt(who.GetShirtIndex()) * 8 % 128 + FarmerRenderer.shirtsTexture.Width * 4;
+            int index = who.GetShirtIndex() * 8 / 128 * 32 * FarmerRenderer.shirtsTexture.Bounds.Width + who.GetShirtIndex() * 8 % 128 + FarmerRenderer.shirtsTexture.Width * 4;
             int dye_index = index + 128;
             Color shirtSleeveColor = Color.White;
 

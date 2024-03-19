@@ -23,14 +23,14 @@ namespace FashionSense.Framework.Patches.Menus
 
         internal void Apply(Harmony harmony)
         {
-            harmony.Patch(AccessTools.Method(_menu, "setUpPositions", null), postfix: new HarmonyMethod(GetType(), nameof(SetUpPositionsPostfix)));
+            harmony.Patch(AccessTools.Method(_menu, "ResetComponents", null), postfix: new HarmonyMethod(GetType(), nameof(ResetComponentsPostfix)));
             harmony.Patch(AccessTools.Method(_menu, "selectionClick", new[] { typeof(string), typeof(int) }), postfix: new HarmonyMethod(GetType(), nameof(SelectionClickPostfix)));
 
             harmony.Patch(AccessTools.Method(_menu, nameof(CharacterCustomization.performHoverAction), new[] { typeof(int), typeof(int) }), postfix: new HarmonyMethod(GetType(), nameof(PerformHoverActionPostfix)));
             harmony.Patch(AccessTools.Method(_menu, nameof(CharacterCustomization.draw), new[] { typeof(SpriteBatch) }), postfix: new HarmonyMethod(GetType(), nameof(DrawPostfix)));
         }
 
-        private static void SetUpPositionsPostfix(CharacterCustomization __instance, List<ClickableComponent> ___labels, ClickableComponent ___accLabel, List<ClickableComponent> ___leftSelectionButtons, List<ClickableComponent> ___rightSelectionButtons)
+        private static void ResetComponentsPostfix(CharacterCustomization __instance, List<ClickableComponent> ___labels, ClickableComponent ___accLabel, List<ClickableComponent> ___leftSelectionButtons, List<ClickableComponent> ___rightSelectionButtons)
         {
             if (__instance.source != Source.NewGame)
             {

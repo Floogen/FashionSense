@@ -3,15 +3,21 @@ using FashionSense.Framework.Models.Appearances;
 using FashionSense.Framework.Patches.Renderer;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using StardewValley;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FashionSense.Framework.Models
 {
     public class Outfit
     {
         public string Name { get; set; }
+        public string Author { get; set; }
+        internal string Source { get; set; }
+        internal bool IsPreset { get; set; }
         public int Version { get; set; } = 1;
         public bool IsBeingShared { get; set; }
         public bool IsGlobal { get; set; }
@@ -53,6 +59,8 @@ namespace FashionSense.Framework.Models
         public string ShoesColor { get; set; }
         public Dictionary<IApi.Type, List<Color>> AppearanceToMaskColors { get; set; }
 
+        private const int _latestVersion = 3;
+
         public Outfit()
         {
 
@@ -61,7 +69,7 @@ namespace FashionSense.Framework.Models
         public Outfit(Farmer who, string name)
         {
             Name = name;
-            Version = 3;
+            Version = _latestVersion;
 
             HairId = who.modData[ModDataKeys.CUSTOM_HAIR_ID];
             AccessoryOneId = who.modData[ModDataKeys.CUSTOM_ACCESSORY_ID];
@@ -85,7 +93,11 @@ namespace FashionSense.Framework.Models
                     continue;
                 }
 
-                AppearanceToMaskColors[metadata.Model.Pack.PackType] = metadata.Colors;
+                if (AppearanceToMaskColors.ContainsKey(metadata.Model.Pack.PackType) is false)
+                {
+                    AppearanceToMaskColors[metadata.Model.Pack.PackType] = new List<Color>();
+                }
+                AppearanceToMaskColors[metadata.Model.Pack.PackType] = AppearanceToMaskColors[metadata.Model.Pack.PackType].Concat(metadata.Colors).ToList();
             }
 
             // Add manual handling for the "Override Shoe Color" artificial ShoePack
@@ -93,6 +105,139 @@ namespace FashionSense.Framework.Models
             {
                 AppearanceToMaskColors[IApi.Type.Shoes] = new List<Color>() { FashionSense.colorManager.GetColor(who, AppearanceModel.GetColorKey(IApi.Type.Shoes)) };
             }
+
+            // Set the author's name
+            Author = who.Name;
+        }
+
+        private class HidePropertiesForExportResolver : DefaultContractResolver
+        {
+            private List<string> _ignoredProperties = new List<string>()
+            {
+                "IsBeingShared",
+                "IsGlobal"
+            };
+
+            private bool IsPropertyObsolete(Type type, string propertyName)
+            {
+                var property = type.GetProperty(propertyName);
+                var attributes = (ObsoleteAttribute[])property.GetCustomAttributes(typeof(ObsoleteAttribute), false);
+
+                return (attributes != null && attributes.Length > 0);
+            }
+
+            protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
+            {
+                IList<JsonProperty> properties = base.CreateProperties(type, memberSerialization);
+                foreach (var property in properties)
+                {
+                    if (IsPropertyObsolete(type, property.UnderlyingName) || _ignoredProperties.Contains(property.UnderlyingName))
+                    {
+                        property.Ignored = true;
+                    }
+                }
+                return properties;
+            }
+        }
+
+        private bool IsIdValid(string id)
+        {
+            return string.IsNullOrEmpty(id) is false && id != "None";
+        }
+
+        internal string Export()
+        {
+            // Set any missing properties from old versions
+            if (AccessoryIds is null)
+            {
+                AccessoryIds = new List<string>();
+                AccessoryColors = new List<string>();
+            }
+            if (AppearanceToMaskColors is null)
+            {
+                AppearanceToMaskColors = new Dictionary<IApi.Type, List<Color>>();
+            }
+
+            // Convert any old accessory appearances into the current format
+            if (IsIdValid(AccessoryOneId))
+            {
+                AccessoryIds.Add(AccessoryOneId);
+                AccessoryColors.Add(AccessoryOneColor);
+
+                AccessoryOneId = null;
+                AccessoryOneColor = null;
+            }
+            if (IsIdValid(AccessoryTwoId))
+            {
+                AccessoryIds.Add(AccessoryTwoId);
+                AccessoryColors.Add(AccessoryTwoColor);
+
+                AccessoryTwoId = null;
+                AccessoryTwoColor = null;
+            }
+            if (IsIdValid(AccessoryThreeId))
+            {
+                AccessoryIds.Add(AccessoryThreeId);
+                AccessoryColors.Add(AccessoryThreeColor);
+
+                AccessoryThreeId = null;
+                AccessoryThreeColor = null;
+            }
+
+            // Move to the latest version
+            if (Version < _latestVersion)
+            {
+                Version = _latestVersion;
+            }
+
+            return JsonConvert.SerializeObject(this, new JsonSerializerSettings() { ContractResolver = new HidePropertiesForExportResolver(), Formatting = Formatting.Indented });
+        }
+
+        internal List<string> GetMissingAppearanceIds()
+        {
+            List<string> missingAppearanceIds = new List<string>();
+
+            Dictionary<string, AppearanceContentPack> appearanceIds = FashionSense.textureManager.GetIdToAppearanceModels();
+            if (IsIdValid(HairId) && appearanceIds.ContainsKey(HairId) is false)
+            {
+                missingAppearanceIds.Add(HairId);
+            }
+
+            foreach (var appearanceId in appearanceIds.Keys)
+            {
+                if (IsIdValid(appearanceId) && appearanceIds.ContainsKey(appearanceId) is false)
+                {
+                    missingAppearanceIds.Add(appearanceId);
+                }
+            }
+
+            if (IsIdValid(HatId) && appearanceIds.ContainsKey(HatId) is false)
+            {
+                missingAppearanceIds.Add(HatId);
+            }
+            if (IsIdValid(ShirtId) && appearanceIds.ContainsKey(ShirtId) is false)
+            {
+                missingAppearanceIds.Add(ShirtId);
+            }
+            if (IsIdValid(SleevesId) && appearanceIds.ContainsKey(SleevesId) is false)
+            {
+                missingAppearanceIds.Add(SleevesId);
+            }
+            if (IsIdValid(PantsId) && appearanceIds.ContainsKey(PantsId) is false)
+            {
+                missingAppearanceIds.Add(PantsId);
+            }
+            if (IsIdValid(ShoesId) && appearanceIds.ContainsKey(ShoesId) is false)
+            {
+                missingAppearanceIds.Add(ShoesId);
+            }
+
+            return missingAppearanceIds;
+        }
+
+        internal bool HasAllRequiredAppearances()
+        {
+            return GetMissingAppearanceIds().Count == 0;
         }
     }
 }

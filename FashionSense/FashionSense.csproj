@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<Version>5.8.1</Version>
-		<TargetFramework>net5.0</TargetFramework>
+		<Version>6.0.0-alpha.7</Version>
+		<TargetFramework>net6.0</TargetFramework>
 		<LangVersion>latest</LangVersion>
 		<EnableHarmony>true</EnableHarmony>
 		<EnableModZip>false</EnableModZip>
@@ -45,13 +45,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-		<PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.0.2" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.1.1" />
+		<PackageReference Include="TextCopy" Version="6.2.1" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<None Update="Framework\Assets\UI\CheckButton.png">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Framework\Assets\UI\ExportButton.png">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Framework\Assets\UI\ShoesButton.png">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -88,7 +92,7 @@
 			powershell -Command "(ls *manifest.json -rec | foreach-object { $f=$_.FullName; (gc -LiteralPath \"$f\") -replace 'REPLACE_ME_WITH_VERSION',  '$(Version)' | sc -LiteralPath \"$f\" })"
 
 			powershell Remove-Item -Path 'C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\releases\latest\FashionSense"' -Recurse -Force
-			xcopy /s /y /i "C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\bin\Debug\net5.0" "C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\releases\latest\FashionSense"
+			xcopy /s /y /i "C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\bin\Debug\$(TargetFramework)" "C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\releases\latest\FashionSense"
 			7z a -tzip "C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\releases\FashionSense-$(Version).zip" "C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\releases\latest\FashionSense"
 
 			powershell Remove-Item -Path '$(GameModsPath)\FashionSense' -Recurse -Exclude "Outfits.json", "Data" -Force

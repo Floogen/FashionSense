@@ -6,6 +6,7 @@ using FashionSense.Framework.Models.Appearances.Pants;
 using FashionSense.Framework.Models.Appearances.Shirt;
 using FashionSense.Framework.Models.Appearances.Shoes;
 using FashionSense.Framework.Models.Appearances.Sleeves;
+using FashionSense.Framework.UI.Components;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -23,7 +24,6 @@ namespace FashionSense.Framework.UI
     {
         public ClickableTextureComponent forwardButton;
         public ClickableTextureComponent backButton;
-        public ClickableTextureComponent queryButton;
 
         public List<AppearanceContentPack> filteredTextureOptions = new List<AppearanceContentPack>();
         public List<AppearanceContentPack> cachedTextureOptions = new List<AppearanceContentPack>();
@@ -45,6 +45,8 @@ namespace FashionSense.Framework.UI
         private string _appearanceFilter;
         private Farmer _displayFarmer;
         private HandMirrorMenu _callbackMenu;
+
+        private FilterDropDown _searchFilterOptions;
 
         public SearchMenu(Farmer who, string appearanceFilter, HandMirrorMenu callbackMenu) : base(0, 0, 832, 576, showUpperRightCloseButton: true)
         {
@@ -108,7 +110,7 @@ namespace FashionSense.Framework.UI
                 for (int c = 0; c < _texturesPerRow; c++)
                 {
                     var componentId = c + r * _texturesPerRow;
-                    availableTextures.Add(new ClickableTextureComponent(new Rectangle(32 + base.xPositionOnScreen + IClickableMenu.borderWidth + componentId % _texturesPerRow * 64 * widthOffsetScale, base.yPositionOnScreen + sourceRect.Height / 2 + componentId + (r * sourceRect.Height) + (r > 0 ? 64 : 0) - 32, sourceRect.Width, sourceRect.Height), null, new Rectangle(), drawingScale, false)
+                    availableTextures.Add(new ClickableTextureComponent(new Rectangle(32 + base.xPositionOnScreen + IClickableMenu.borderWidth + componentId % _texturesPerRow * 64 * widthOffsetScale, base.yPositionOnScreen + sourceRect.Height / 2 + componentId + (r * sourceRect.Height) + (r > 0 ? 64 : 32) - 32, sourceRect.Width, sourceRect.Height), null, new Rectangle(), drawingScale, false)
                     {
                         myID = componentId,
                         downNeighborID = componentId + _texturesPerRow,
@@ -118,7 +120,7 @@ namespace FashionSense.Framework.UI
                     });
 
                     var fakeFarmer = _displayFarmer.CreateFakeEventFarmer();
-                    fakeFarmer.faceDirection(who.facingDirection);
+                    fakeFarmer.faceDirection(who.FacingDirection);
                     foreach (var key in _displayFarmer.modData.Keys)
                     {
                         fakeFarmer.modData[key] = _displayFarmer.modData[key];
@@ -149,12 +151,18 @@ namespace FashionSense.Framework.UI
             var yTextbox = base.yPositionOnScreen - 58;
             _searchBox = new TextBox(Game1.content.Load<Texture2D>("LooseSprites\\textBox"), null, Game1.smallFont, Game1.textColor)
             {
-                X = xTextbox,
-                Y = yTextbox,
+                X = base.xPositionOnScreen + 32,
+                Y = base.yPositionOnScreen + 32,
                 Width = 384,
                 limitWidth = false,
                 Text = String.Empty
             };
+
+            // Establish the search options
+            List<string> options = new List<string>() { FashionSense.modHelper.Translation.Get("ui.fashion_sense.search.filter.none"), FashionSense.modHelper.Translation.Get("ui.fashion_sense.search.filter.author"), FashionSense.modHelper.Translation.Get("ui.fashion_sense.search.filter.pack_name"), FashionSense.modHelper.Translation.Get("ui.fashion_sense.search.filter.tags") };
+            _searchFilterOptions = new FilterDropDown("Filter", 0) { dropDownDisplayOptions = options, dropDownOptions = options };
+            _searchFilterOptions.bounds = new Rectangle(_searchBox.X + _searchBox.Width + 16, _searchBox.Y - 1, 256, 48);
+            _searchFilterOptions.RecalculateBounds();
 
             _searchBoxCC = new ClickableComponent(new Rectangle(xTextbox, yTextbox, 192, 48), "")
             {
@@ -166,8 +174,6 @@ namespace FashionSense.Framework.UI
             };
             Game1.keyboardDispatcher.Subscriber = _searchBox;
             _searchBox.Selected = true;
-
-            queryButton = new ClickableTextureComponent(new Rectangle(xTextbox - 32, base.yPositionOnScreen - 48, 48, 44), Game1.mouseCursors, new Rectangle(208, 320, 16, 16), 2f);
 
             // Handle GamePad integration
             if (Game1.options.snappyMenus && Game1.options.gamepadControls)
@@ -194,7 +200,7 @@ namespace FashionSense.Framework.UI
                             break;
                         case HandMirrorMenu.ACCESSORY_FILTER_BUTTON:
                             FashionSense.accessoryManager.AddAccessory(fakeFarmers[i], targetPack.Id, _callbackMenu.GetAccessoryIndex(), preserveColor: true);
-                            FashionSense.ResetAnimationModDataFields(fakeFarmers[i], 0, AnimationModel.Type.Idle, fakeFarmers[i].facingDirection);
+                            FashionSense.ResetAnimationModDataFields(fakeFarmers[i], 0, AnimationModel.Type.Idle, fakeFarmers[i].FacingDirection);
                             FashionSense.SetSpriteDirty();
                             continue;
                         case HandMirrorMenu.HAT_FILTER_BUTTON:
@@ -216,7 +222,7 @@ namespace FashionSense.Framework.UI
                     }
 
                     fakeFarmers[i].modData[modDataKey] = targetPack.Id;
-                    FashionSense.ResetAnimationModDataFields(fakeFarmers[i], 0, AnimationModel.Type.Idle, fakeFarmers[i].facingDirection);
+                    FashionSense.ResetAnimationModDataFields(fakeFarmers[i], 0, AnimationModel.Type.Idle, fakeFarmers[i].FacingDirection);
                     FashionSense.SetSpriteDirty();
                 }
             }
@@ -230,6 +236,11 @@ namespace FashionSense.Framework.UI
                 return;
             }
 
+            if (_searchFilterOptions.IsClicked && _searchFilterOptions.dropDownBounds.Contains(x, y))
+            {
+                return;
+            }
+
             for (int i = 0; i < availableTextures.Count; i++)
             {
                 var textureIndex = i + _startingRow * _texturesPerRow;
@@ -237,7 +248,7 @@ namespace FashionSense.Framework.UI
                 {
                     var targetPack = filteredTextureOptions[textureIndex];
 
-                    _hoverText = $"{targetPack.Name}\nBy: {targetPack.Author}";
+                    _hoverText = string.Format(FashionSense.modHelper.Translation.Get("ui.fashion_sense.search.about"), targetPack.Name, targetPack.Author, targetPack.PackName, string.Join(", ", targetPack.Tags));
                 }
             }
 
@@ -275,7 +286,21 @@ namespace FashionSense.Framework.UI
                 }
                 else
                 {
-                    filteredTextureOptions = cachedTextureOptions.Where(p => p.Name.Contains(_searchBox.Text, StringComparison.OrdinalIgnoreCase)).ToList();
+                    switch (_searchFilterOptions.selectedOption)
+                    {
+                        case 0:
+                            filteredTextureOptions = cachedTextureOptions.Where(i => i.Name.Contains(_searchBox.Text, StringComparison.OrdinalIgnoreCase)).ToList();
+                            break;
+                        case 1:
+                            filteredTextureOptions = cachedTextureOptions.Where(i => i.Author.Contains(_searchBox.Text, StringComparison.OrdinalIgnoreCase)).ToList();
+                            break;
+                        case 2:
+                            filteredTextureOptions = cachedTextureOptions.Where(i => i.PackName.Contains(_searchBox.Text, StringComparison.OrdinalIgnoreCase)).ToList();
+                            break;
+                        case 3:
+                            filteredTextureOptions = cachedTextureOptions.Where(i => i.HasTag(_searchBox.Text)).ToList();
+                            break;
+                    }
                 }
 
                 UpdateDisplayFarmers();
@@ -302,7 +327,7 @@ namespace FashionSense.Framework.UI
                     }
                     FashionSense.accessoryManager.CopyAccessories(fakeFarmers[i], _displayFarmer);
 
-                    FashionSense.ResetAnimationModDataFields(_displayFarmer, 0, AnimationModel.Type.Idle, _displayFarmer.facingDirection);
+                    FashionSense.ResetAnimationModDataFields(_displayFarmer, 0, AnimationModel.Type.Idle, _displayFarmer.FacingDirection);
                     FashionSense.SetSpriteDirty();
                     _callbackMenu.Reset();
 
@@ -325,6 +350,35 @@ namespace FashionSense.Framework.UI
                 UpdateDisplayFarmers();
                 Game1.playSound("shiny4");
                 return;
+            }
+
+            // Handle filter
+            if (_searchFilterOptions.bounds.Contains(x, y) || (_searchFilterOptions.IsClicked && _searchFilterOptions.dropDownBounds.Contains(x, y)))
+            {
+                _searchFilterOptions.receiveLeftClick(x, y);
+            }
+        }
+
+        public override void leftClickHeld(int x, int y)
+        {
+            base.leftClickHeld(x, y);
+
+            // Handle filter
+            if (_searchFilterOptions.bounds.Contains(x, y) || (_searchFilterOptions.IsClicked && _searchFilterOptions.dropDownBounds.Contains(x, y)))
+            {
+                _searchFilterOptions.leftClickHeld(x, y);
+            }
+        }
+
+        public override void releaseLeftClick(int x, int y)
+        {
+            base.releaseLeftClick(x, y);
+
+            // Handle filter
+            if (_searchFilterOptions.bounds.Contains(x, y) || _searchFilterOptions.dropDownBounds.Contains(x, y))
+            {
+                _searchFilterOptions.leftClickReleased(x, y);
+                _cachedTextBoxValue = null;
             }
         }
 
@@ -379,7 +433,7 @@ namespace FashionSense.Framework.UI
             if (!Game1.dialogueUp && !Game1.IsFading())
             {
                 b.Draw(Game1.fadeToBlackRect, Game1.graphics.GraphicsDevice.Viewport.Bounds, Color.Black * 0.75f);
-                SpriteText.drawStringWithScrollCenteredAt(b, _title, base.xPositionOnScreen + base.width / 4, base.yPositionOnScreen - 64);
+                SpriteText.drawStringWithScrollCenteredAt(b, _title, base.xPositionOnScreen + 128, base.yPositionOnScreen - 64);
                 IClickableMenu.drawTextureBox(b, Game1.mouseCursors, new Rectangle(384, 373, 18, 18), base.xPositionOnScreen, base.yPositionOnScreen, base.width, base.height, Color.White, 4f);
 
                 for (int i = 0; i < availableTextures.Count; i++)
@@ -404,7 +458,6 @@ namespace FashionSense.Framework.UI
                 }
 
                 _searchBox.Draw(b);
-                queryButton.draw(b);
             }
 
             if (_startingRow > 0)
@@ -415,6 +468,9 @@ namespace FashionSense.Framework.UI
             {
                 forwardButton.draw(b);
             }
+
+            // Draw the filter options box
+            _searchFilterOptions.draw(b, 0, 0);
 
             // Draw hover text
             if (!_hoverText.Equals(""))

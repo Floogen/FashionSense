@@ -186,7 +186,14 @@ namespace FashionSense.Framework.Managers
         private void MoveLayerDataItem(int index, LayerData layerData, ref List<LayerData> sourceList)
         {
             sourceList.Remove(layerData);
-            sourceList.Insert(index, layerData);
+            if (sourceList.Count > index)
+            {
+                sourceList.Insert(index, layerData);
+            }
+            else
+            {
+                sourceList.Add(layerData);
+            }
         }
 
         #region Add methods for rawLayerData

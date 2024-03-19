@@ -93,7 +93,7 @@ namespace FashionSense.Framework.UI
                     exitThisMenu();
 
                     // Paginate the obelisks to order them with the new name
-                    _callbackMenu.PaginatePacks();
+                    _callbackMenu.PaginatePacks(FashionSense.outfitManager.GetOutfits(Game1.player));
                     Game1.activeClickableMenu = _callbackMenu;
                 }
             }
