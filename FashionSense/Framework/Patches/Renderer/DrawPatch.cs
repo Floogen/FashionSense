@@ -48,6 +48,14 @@ namespace FashionSense.Framework.Patches.Renderer
         {
             // Since the game doesn't pass the farmer over to the native ApplyShoeColor method, we have to find it by matching the FarmerRender instance
             Farmer who = Game1.player;
+            foreach (var farmer in Game1.getOnlineFarmers())
+            {
+                if (farmer.FarmerRenderer == __instance)
+                {
+                    who = farmer;
+                }
+            }
+
             if (who.FarmerRenderer != __instance && Game1.activeClickableMenu is SearchMenu searchMenu && searchMenu is not null)
             {
                 foreach (var fakeFarmer in searchMenu.fakeFarmers)
@@ -69,10 +77,10 @@ namespace FashionSense.Framework.Patches.Renderer
                 return true;
             }
 
-            if (!uint.TryParse(Game1.player.modData[shoeColorKey], out uint shoeColorValue))
+            if (!uint.TryParse(who.modData[shoeColorKey], out uint shoeColorValue))
             {
-                shoeColorValue = Game1.player.hairstyleColor.Value.PackedValue;
-                Game1.player.modData[shoeColorKey] = shoeColorValue.ToString();
+                shoeColorValue = who.hairstyleColor.Value.PackedValue;
+                who.modData[shoeColorKey] = shoeColorValue.ToString();
             }
 
             var shoeColor = new Color() { PackedValue = shoeColorValue };
