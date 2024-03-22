@@ -282,6 +282,12 @@ namespace FashionSense.Framework.Patches.Renderer
                 Game1.drawPlayerHeldObject(who);
             }
 
+            // Slightly offset the drawLayerDisambiguator when the player is facing downwards
+            if (facingDirection == 2)
+            {
+                who.drawLayerDisambiguator += 0.01f;
+            }
+
             FarmerRendererPatch.AreColorMasksPendingRefresh = false;
         }
 
