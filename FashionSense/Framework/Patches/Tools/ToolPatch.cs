@@ -72,6 +72,8 @@ namespace FashionSense.Framework.Patches.Tools
             if (__instance.modData.ContainsKey(ModDataKeys.HAND_MIRROR_FLAG) && who == Game1.player)
             {
                 __result = true;
+
+                CancelUsing(who);
                 return UseHandMirror(location, x, y, who);
             }
 
