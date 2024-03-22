@@ -19,8 +19,7 @@ namespace FashionSense.Framework.Managers
 
         internal void BroadcastColorChange(Farmer who, string colorKey, Color colorValue)
         {
-            var colorChangeMessage = new ColorChangeMessage(who.UniqueMultiplayerID, colorKey, colorValue);
-            FashionSense.modHelper.Multiplayer.SendMessage(colorChangeMessage, "ColorChangeMessage", modIDs: new[] { FashionSense.modManifest.UniqueID });
+            FashionSense.messageManager.SendColorKeyChangeMessage(who, colorKey, colorValue);
         }
 
         internal Color GetColor(Farmer who, string colorKey)

@@ -653,6 +653,7 @@ namespace FashionSense.Framework.UI
                     if (GetCurrentFeatureSlotKey() == ModDataKeys.CUSTOM_SHOES_ID && Game1.player.modData.ContainsKey(ModDataKeys.CUSTOM_SHOES_ID) && Game1.player.modData[ModDataKeys.CUSTOM_SHOES_ID] == ModDataKeys.INTERNAL_COLOR_OVERRIDE_SHOE_ID)
                     {
                         FashionSense.SetSpriteDirty(skipColorMaskRefresh: true);
+                        FashionSense.messageManager.SendVanillaBootColorChangeMessage(_displayFarmer);
                     }
                     break;
             }
