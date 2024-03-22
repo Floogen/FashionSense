@@ -1,10 +1,8 @@
 ﻿using FashionSense.Framework.Models.Messages;
-using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
-using StardewValley.Buildings;
 using System;
 using System.Linq;
 
@@ -58,7 +56,7 @@ namespace FashionSense.Framework.Managers
             }
             FashionSense.colorManager.SetColor(farmer, message.ColorKey, message.ColorValue);
         }
-        
+
 
         private void ProcessVanillaBootColorChangeMessage(VanillaBootColorChangeMessage message)
         {

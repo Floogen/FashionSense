@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-
-namespace FashionSense.Framework.Models.Messages
+﻿namespace FashionSense.Framework.Models.Messages
 {
     public class VanillaBootColorChangeMessage
     {

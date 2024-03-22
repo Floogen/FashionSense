@@ -1,5 +1,4 @@
-﻿using FashionSense.Framework.Models.Messages;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using System.Collections.Generic;

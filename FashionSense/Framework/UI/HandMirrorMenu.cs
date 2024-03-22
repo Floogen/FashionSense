@@ -1,5 +1,4 @@
-﻿using FashionSense.Framework.Interfaces.API;
-using FashionSense.Framework.Models.Appearances;
+﻿using FashionSense.Framework.Models.Appearances;
 using FashionSense.Framework.Models.Appearances.Accessory;
 using FashionSense.Framework.Models.Appearances.Hair;
 using FashionSense.Framework.Models.Appearances.Hat;
