@@ -7,7 +7,7 @@
   "messages.warning.no_content_packs": "У вас не встановлено жодного набору на новий вміст для моду \"Fashion Sense\"!",
 
   // Letters
-  "letters.hand_mirror": "Я чула, що хтось новенький переїхав у долину, тому подумала запропонувати подарунок на новосілля.^ ^Я додала своє старе Ручне люстерко до листа, яке має допомогти тобі відчути себе модним.^ ^навіть якщо ти втратиш його, то можеш купити інше в крамниці У П'єра.  ^   -Хейлі %item tool HandMirror %%¦Я чула, що хтось новенький переїхав у долину, тому подумала запропонувати подарунок на новосілля.^ ^Я додала своє старе Ручне люстерко до листа, яке має допомогти тобі відчути себе модною.^ ^навіть якщо ти втратиш його, то можеш купити інше в крамниці У П'єра.  ^   -Хейлі %item tool HandMirror %%",
+  "letters.hand_mirror": "Я чула, що хтось новенький переїхав у долину, тому подумала запропонувати подарунок на новосілля.^ ^Я додала своє старе ручне люстерко до листа, яке має допомогти тобі відчути себе модним.^ ^навіть якщо ти втратиш його, то можеш купити інше в крамниці У П'єра.  ^   -Хейлі %item tool HandMirror %%¦Я чула, що хтось новенький переїхав у долину, тому подумала запропонувати подарунок на новосілля.^ ^Я додала своє старе ручне люстерко до листа, яке має допомогти тобі відчути себе модною.^ ^навіть якщо ти втратиш його, то можеш купити інше в крамниці У П'єра.  ^   -Хейлі %item tool HandMirror %%",
 
   // UI - Titles
   "ui.fashion_sense.title.search": "Виберіть набір для моду \"Fashion Sense\"",
@@ -19,17 +19,37 @@
   "ui.fashion_sense.title.sleeves": "Рукава",
   "ui.fashion_sense.title.sleevesAndShoes": "Рукава та взуття",
   "ui.fashion_sense.title.shoes": "Взуття",
+  "ui.fashion_sense.title.mask_layer": "Шар",
+
+  // UI - Search
+  "ui.fashion_sense.search.filter.none": "Немає",
+  "ui.fashion_sense.search.filter.author": "Автор",
+  "ui.fashion_sense.search.filter.pack_name": "Назва пакунка",
+  "ui.fashion_sense.search.filter.tags": "Теґ",
+  "ui.fashion_sense.search.about": "{0}\n\nАвтор: {1}\nПакунок: {2}\nТеґи: {3}",
 
   // UI - Outfits
   "ui.fashion_sense.title.outfits": "Убрання",
   "ui.fashion_sense.title.outfit_naming": "Назва вбрання",
   "ui.fashion_sense.create_outfit_button": "Створити вбрання",
   "ui.fashion_sense.create_outfit_hover": "Створіть нове вбрання на основі вашого поточного одягу.",
-  "ui.fashion_sense.outfit_info.save": "Зберігти ваш поточний одяг у цьому вбранні.",
+  "ui.fashion_sense.outfit_info.save": "Зберегти ваш поточний одяг у цьому вбранні.",
   "ui.fashion_sense.outfit_info.rename": "Переназвати це вбрання.",
   "ui.fashion_sense.outfit_info.delete": "Видалити це вбрання.",
+  "ui.fashion_sense.outfit_info.share.active": "Зараз вбрання переноситиметься з іншими файлами збереження.",
+  "ui.fashion_sense.outfit_info.share.inactive": "Не переносити це вбрання до інших файлів збереження.",
+  "ui.fashion_sense.outfit_info.shared": "Перенести",
+  "ui.fashion_sense.outfit_info.preset": "Набір",
+  "ui.fashion_sense.outfit_info.export": "Експортує вбрання у вигляді JSON до вашого буфера обміну.",
   "ui.fashion_sense.warning.name": "Назва вбрання порожня або вже існує.",
   "ui.fashion_sense.mask_layer.base": "Основа",
+  "ui.fashion_sense.outfit_info.missing_appearances": "Відсутні наступні елементи зовнішності:\n{0}",
+  "ui.fashion_sense.buttons.import": "Імпорт",
+  "ui.fashion_sense.buttons.import.description": "Імпортувати зовнішнє Fashion Sense вбрання з вашого буфера обміну.",
+  "ui.fashion_sense.buttons.presets": "Набори",
+  "ui.fashion_sense.buttons.presets.description": "Переглянути попередньо налаштовані набори, які надані пакунком Fashion Sense.",
+  "ui.fashion_sense.exported_outfit": "Вбрання скопійовано до буфера обміну.",
+  "ui.fashion_sense.preset_info": "{0}\n\nАвтор: {1}\nПакунок: {2}",
 
   // UI - Etc
   "ui.fashion_sense.start_with_hand_mirror": "Почати з люстерком",
@@ -42,13 +62,9 @@
   "ui.fashion_sense.color_paste_button_empty": "Вставити збережений колір (порожньо).",
   "ui.fashion_sense.clear_button": "Очистити поточний вибраний предмет \"Fashion Sense\".",
   "ui.fashion_sense.random_button": "Випадково вибирати предмет з \"Fashion Sense\".",
-  "ui.fashion_sense.color_active.hair": "Колір волосся",
-  "ui.fashion_sense.color_active.hat": "Колір капелюха",
-  "ui.fashion_sense.color_active.shirt": "Колір сорочки",
-  "ui.fashion_sense.color_active.pants": "Колір штанів",
-  "ui.fashion_sense.color_active.accessory": "Колір акс.",
-  "ui.fashion_sense.color_active.sleeves": "Колір рукава",
+  "ui.fashion_sense.exit_button": "Вийти в меню.",
   "ui.fashion_sense.color_active.shoes": "Колір взуття",
+  "ui.fashion_sense.color_active.generic": "Колір",
   "ui.fashion_sense.color_disabled.generic": "(Нехтовано)",
   "ui.fashion_sense.color_info.hair": "Кольорові накладення не вплинуть на цю зачіску.",
   "ui.fashion_sense.color_info.hat": "Кольорові накладення не вплинуть на цей капелюх.",
@@ -57,4 +73,5 @@
   "ui.fashion_sense.color_info.accessory": "Кольорові накладення не вплинуть на цей аксесуар.",
   "ui.fashion_sense.color_info.sleeves": "Кольорові накладення не вплинуть на ці рукава.",
   "ui.fashion_sense.color_info.shoes": "Кольорові накладення не вплинуть на це взуття."
+  "ui.fashion_sense.warning.hiding_player_sprite": "Цей зовнішній вигляд приховує основний спрайт гравця"
 }
