@@ -115,7 +115,7 @@ namespace FashionSense.Framework.Utilities
                 models.Add(new AppearanceMetadata(bModel, AppearanceHelpers.GetAllAppearanceColors(who, bModel)));
             }
 
-            return models.Where(m => m is not null && m.Model is not null && m.Model.Pack is not null).ToList();
+            return models.Where(m => m is not null && m.IsValid()).ToList();
         }
 
         public static void HandleAppearanceAnimation(List<AppearanceModel> models, AppearanceModel model, Farmer who, int facingDirection, ref Dictionary<AppearanceModel, AnimationModel> appearanceTypeToAnimationModels, bool forceUpdate = false)
