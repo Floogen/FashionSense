@@ -263,6 +263,13 @@ namespace FashionSense.Framework.Managers
                 }
             }
 
+            // Swimming body render cutoff
+            if (!FarmerRenderer.isDrawingForUI && who.swimming.Value)
+            {
+                adjustedBaseRectangle.Height /= 2;
+                adjustedBaseRectangle.Height -= (int)who.yOffset / 4;
+            }
+
             // Draw the player's base texture
             DrawTool.SpriteBatch.Draw(DrawTool.BaseTexture, DrawTool.Position + DrawTool.Origin + DrawTool.PositionOffset, adjustedBaseRectangle, DrawTool.OverrideColor, DrawTool.Rotation, DrawTool.Origin, 4f * DrawTool.Scale, DrawTool.AnimationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
 
@@ -823,12 +830,42 @@ namespace FashionSense.Framework.Managers
             // Get any positional offset
             Position positionOffset = GetPositionOffset(bodyModel, _appearanceTypeToAnimationModels);
 
+            // Swimming body render cutoff
+            if (!FarmerRenderer.isDrawingForUI && who.swimming.Value)
+            {
+                sourceRectangle.Height /= 2;
+                sourceRectangle.Height -= (int)who.yOffset / 4;
+            }
+
             // Draw the player's base texture
             DrawTool.SpriteBatch.Draw(bodyPack.Texture, DrawTool.Position + DrawTool.Origin + DrawTool.PositionOffset, sourceRectangle, bodyModel.HasColorMask() ? Color.White : colorOverride is not null ? colorOverride.Value : modelColor, DrawTool.Rotation, DrawTool.Origin + new Vector2(positionOffset.X, positionOffset.Y), 4f * DrawTool.Scale, DrawTool.AnimationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
 
             if (bodyModel.HasColorMask())
             {
                 DrawColorMask(DrawTool.SpriteBatch, bodyPack, bodyModel, _areColorMasksPendingRefresh, GetScaledPosition(DrawTool.Position, bodyModel, DrawTool.IsDrawingForUI) + DrawTool.Origin + DrawTool.PositionOffset, sourceRectangle, colorOverride, layer.Colors, DrawTool.Rotation, DrawTool.Origin + new Vector2(positionOffset.X, positionOffset.Y), bodyModel.Scale * DrawTool.Scale, IncrementAndGetLayerDepth());
+
+                if (bodyPack.EyesColorMaskTextures is null || _areColorMasksPendingRefresh)
+                {
+                    var colorMaskTextures = new List<Texture2D>();
+                    for (int x = 0; x < bodyModel.ColorMaskLayers.Count; x++)
+                    {
+                        Color[] data = new Color[bodyPack.EyesTexture.Width * bodyPack.EyesTexture.Height];
+                        bodyPack.EyesTexture.GetData(data);
+                        Texture2D maskedTexture = new Texture2D(Game1.graphics.GraphicsDevice, bodyPack.EyesTexture.Width, bodyPack.EyesTexture.Height);
+
+                        for (int i = 0; i < data.Length; i++)
+                        {
+                            if (!bodyModel.IsMaskedColor(data[i], layerIndexToCheck: x))
+                            {
+                                data[i] = Color.Transparent;
+                            }
+                        }
+
+                        maskedTexture.SetData(data);
+                        colorMaskTextures.Add(maskedTexture);
+                    }
+                    bodyPack.EyesColorMaskTextures = colorMaskTextures;
+                }
             }
 
             // Vanilla swim draw logic
@@ -836,8 +873,23 @@ namespace FashionSense.Framework.Managers
             {
                 if (who.currentEyes != 0 && who.FacingDirection != 0 && (Game1.timeOfDay < 2600 || (who.isInBed.Value && who.timeWentToBed.Value != 0)) && ((!who.FarmerSprite.PauseForSingleAnimation && !who.UsingTool) || (who.UsingTool && who.CurrentTool is FishingRod)))
                 {
-                    DrawTool.SpriteBatch.Draw(DrawTool.BaseTexture, DrawTool.Position + DrawTool.Origin + DrawTool.PositionOffset + new Vector2(AppearanceHelpers.GetFarmerRendererXFeatureOffset(DrawTool.CurrentFrame) * 4 + 20 + ((who.FacingDirection == 1) ? 12 : ((who.FacingDirection == 3) ? 4 : 0)), AppearanceHelpers.GetFarmerRendererYFeatureOffset(DrawTool.CurrentFrame) * 4 + 40), new Rectangle(5, 16, (who.FacingDirection == 2) ? 6 : 2, 2), DrawTool.OverrideColor, 0f, DrawTool.Origin + new Vector2(positionOffset.X, positionOffset.Y), 4f * DrawTool.Scale, SpriteEffects.None, IncrementAndGetLayerDepth());
-                    DrawTool.SpriteBatch.Draw(bodyPack.EyesTexture, DrawTool.Position + DrawTool.Origin + DrawTool.PositionOffset + new Vector2(AppearanceHelpers.GetFarmerRendererXFeatureOffset(DrawTool.CurrentFrame) * 4 + 20 + ((who.FacingDirection == 1) ? 12 : ((who.FacingDirection == 3) ? 4 : 0)), AppearanceHelpers.GetFarmerRendererYFeatureOffset(DrawTool.CurrentFrame) * 4 + 40), new Rectangle(264 + ((who.FacingDirection == 3) ? 4 : 0), (who.currentEyes - 1) * 2, (who.FacingDirection == 2) ? 6 : 2, 2), DrawTool.OverrideColor, 0f, DrawTool.Origin + new Vector2(positionOffset.X, positionOffset.Y), 4f * DrawTool.Scale, SpriteEffects.None, IncrementAndGetLayerDepth());
+                    DrawTool.SpriteBatch.Draw(bodyPack.EyesTexture, DrawTool.Position + DrawTool.Origin + DrawTool.PositionOffset + new Vector2(AppearanceHelpers.GetFarmerRendererXFeatureOffset(DrawTool.CurrentFrame) * 4 + 20 + ((who.FacingDirection == 1) ? 12 : ((who.FacingDirection == 3) ? 4 : 0)), AppearanceHelpers.GetFarmerRendererYFeatureOffset(DrawTool.CurrentFrame) * 4 + 40), new Rectangle(((who.FacingDirection == 3) ? 4 : 0), (who.currentEyes - 1) * 2, (who.FacingDirection == 2) ? 6 : 2, 2), bodyModel.HasColorMask() ? Color.White : colorOverride is not null ? colorOverride.Value : modelColor, 0f, DrawTool.Origin + new Vector2(positionOffset.X, positionOffset.Y), 4f * DrawTool.Scale, SpriteEffects.None, IncrementAndGetLayerDepth());
+                    if (bodyModel.HasColorMask())
+                    {
+                        for (int t = 0; t < bodyPack.EyesColorMaskTextures.Count; t++)
+                        {
+                            var colorToUse = Color.White;
+                            if (colorOverride is not null)
+                            {
+                                colorToUse = colorOverride.Value;
+                            }
+                            else if (layer.Colors.Count > t)
+                            {
+                                colorToUse = layer.Colors[t];
+                            }
+                            DrawTool.SpriteBatch.Draw(bodyPack.EyesColorMaskTextures[t], DrawTool.Position + DrawTool.Origin + DrawTool.PositionOffset + new Vector2(AppearanceHelpers.GetFarmerRendererXFeatureOffset(DrawTool.CurrentFrame) * 4 + 20 + ((who.FacingDirection == 1) ? 12 : ((who.FacingDirection == 3) ? 4 : 0)), AppearanceHelpers.GetFarmerRendererYFeatureOffset(DrawTool.CurrentFrame) * 4 + 40), new Rectangle(((who.FacingDirection == 3) ? 4 : 0), (who.currentEyes - 1) * 2, (who.FacingDirection == 2) ? 6 : 2, 2), colorToUse, 0f, DrawTool.Origin + new Vector2(positionOffset.X, positionOffset.Y), 4f * DrawTool.Scale, SpriteEffects.None, IncrementAndGetLayerDepth());
+                        }
+                    }
                 }
 
                 // Exiting early from this method, as copied from the vanilla logic
@@ -887,29 +939,6 @@ namespace FashionSense.Framework.Managers
                 DrawTool.SpriteBatch.Draw(bodyPack.EyesTexture, eyePosition, new Rectangle(0, (who.currentEyes - 1) * 2, (DrawTool.FacingDirection == 2) ? 6 : 2, 2), bodyModel.HasColorMask() ? Color.White : colorOverride is not null ? colorOverride.Value : modelColor, 0f, DrawTool.Origin + new Vector2(positionOffset.X, positionOffset.Y), 4f * DrawTool.Scale, SpriteEffects.None, IncrementAndGetLayerDepth());
                 if (bodyModel.HasColorMask())
                 {
-                    if (bodyPack.EyesColorMaskTextures is null || _areColorMasksPendingRefresh)
-                    {
-                        var colorMaskTextures = new List<Texture2D>();
-                        for (int x = 0; x < bodyModel.ColorMaskLayers.Count; x++)
-                        {
-                            Color[] data = new Color[bodyPack.EyesTexture.Width * bodyPack.EyesTexture.Height];
-                            bodyPack.EyesTexture.GetData(data);
-                            Texture2D maskedTexture = new Texture2D(Game1.graphics.GraphicsDevice, bodyPack.EyesTexture.Width, bodyPack.EyesTexture.Height);
-
-                            for (int i = 0; i < data.Length; i++)
-                            {
-                                if (!bodyModel.IsMaskedColor(data[i], layerIndexToCheck: x))
-                                {
-                                    data[i] = Color.Transparent;
-                                }
-                            }
-
-                            maskedTexture.SetData(data);
-                            colorMaskTextures.Add(maskedTexture);
-                        }
-                        bodyPack.EyesColorMaskTextures = colorMaskTextures;
-                    }
-
                     for (int t = 0; t < bodyPack.EyesColorMaskTextures.Count; t++)
                     {
                         var colorToUse = Color.White;
