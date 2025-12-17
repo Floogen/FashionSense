@@ -867,7 +867,7 @@ namespace FashionSense.Framework.Managers
                 if (who.currentEyes != 0 && who.FacingDirection != 0 && (Game1.timeOfDay < 2600 || (who.isInBed.Value && who.timeWentToBed.Value != 0)) && ((!who.FarmerSprite.PauseForSingleAnimation && !who.UsingTool) || (who.UsingTool && who.CurrentTool is FishingRod)))
                 {
                     DrawTool.SpriteBatch.Draw(bodyPack.EyesTexture, DrawTool.Position + DrawTool.Origin + DrawTool.PositionOffset + new Vector2(AppearanceHelpers.GetFarmerRendererXFeatureOffset(DrawTool.CurrentFrame) * 4 + 20 + ((who.FacingDirection == 1) ? 12 : ((who.FacingDirection == 3) ? 4 : 0)), AppearanceHelpers.GetFarmerRendererYFeatureOffset(DrawTool.CurrentFrame) * 4 + 40), new Rectangle(((who.FacingDirection == 3) ? 4 : 0), (who.currentEyes - 1) * 2, (who.FacingDirection == 2) ? 6 : 2, 2), bodyModel.HasColorMask() ? Color.White : colorOverride is not null ? colorOverride.Value : modelColor, 0f, DrawTool.Origin + new Vector2(positionOffset.X, positionOffset.Y), 4f * DrawTool.Scale, SpriteEffects.None, IncrementAndGetLayerDepth());
-                    if (bodyModel.HasColorMask())
+                    if (bodyModel.HasColorMask() && bodyPack.EyesColorMaskTextures is not null)
                     {
                         for (int t = 0; t < bodyPack.EyesColorMaskTextures.Count; t++)
                         {
@@ -930,7 +930,7 @@ namespace FashionSense.Framework.Managers
 
                 var eyePosition = DrawTool.Position + DrawTool.Origin + DrawTool.PositionOffset + new Vector2(x_adjustment, AppearanceHelpers.GetFarmerRendererYFeatureOffset(DrawTool.CurrentFrame) * 4 + bodyModel.EyePosition) + eyesOffset;
                 DrawTool.SpriteBatch.Draw(bodyPack.EyesTexture, eyePosition, new Rectangle(0, (who.currentEyes - 1) * 2, (DrawTool.FacingDirection == 2) ? 6 : 2, 2), bodyModel.HasColorMask() ? Color.White : colorOverride is not null ? colorOverride.Value : modelColor, 0f, DrawTool.Origin + new Vector2(positionOffset.X, positionOffset.Y), 4f * DrawTool.Scale, SpriteEffects.None, IncrementAndGetLayerDepth());
-                if (bodyModel.HasColorMask())
+                if (bodyModel.HasColorMask() && bodyPack.EyesColorMaskTextures is not null)
                 {
                     for (int t = 0; t < bodyPack.EyesColorMaskTextures.Count; t++)
                     {
