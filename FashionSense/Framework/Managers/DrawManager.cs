@@ -827,7 +827,7 @@ namespace FashionSense.Framework.Managers
             if (!FarmerRenderer.isDrawingForUI && who.swimming.Value)
             {
                 sourceRectangle.Height /= 2;
-                sourceRectangle.Height -= (int)who.yOffset / 4;
+                sourceRectangle.Height -= _heightOffset;
             }
 
             // Draw the player's base texture
