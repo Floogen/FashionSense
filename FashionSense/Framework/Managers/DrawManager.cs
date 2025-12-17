@@ -263,13 +263,6 @@ namespace FashionSense.Framework.Managers
                 }
             }
 
-            // Swimming body render cutoff
-            if (!FarmerRenderer.isDrawingForUI && who.swimming.Value)
-            {
-                adjustedBaseRectangle.Height /= 2;
-                adjustedBaseRectangle.Height -= (int)who.yOffset / 4;
-            }
-
             // Draw the player's base texture
             DrawTool.SpriteBatch.Draw(DrawTool.BaseTexture, DrawTool.Position + DrawTool.Origin + DrawTool.PositionOffset, adjustedBaseRectangle, DrawTool.OverrideColor, DrawTool.Rotation, DrawTool.Origin, 4f * DrawTool.Scale, DrawTool.AnimationFrame.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, IncrementAndGetLayerDepth());
 
