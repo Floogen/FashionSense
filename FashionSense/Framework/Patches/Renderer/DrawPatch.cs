@@ -249,8 +249,8 @@ namespace FashionSense.Framework.Patches.Renderer
 
                     var oldFacingDirection = who.FacingDirection;
 
-                    // Force facing direction to be downwards when drawing in UI (only when animationFrame.frame is 0)
-                    if (FarmerRenderer.isDrawingForUI && animationFrame.frame == 0)
+                    // Force facing direction to be downwards when drawing in UI (only when animationFrame.frame is <= 2, this ensures compatibility with SpaceCore's custom skill menu)
+                    if (FarmerRenderer.isDrawingForUI && animationFrame.frame <= 2)
                     {
                         who.faceDirection(2);
                     }

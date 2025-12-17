@@ -1221,7 +1221,8 @@ namespace FashionSense.Framework.Managers
 
         private float IncrementAndGetLayerDepth()
         {
-            LayerDepth += 0.0001f;
+            //Increment LayerDepth by 1/10000 instead of 1/1000 to ensure that the player gets drawn between layers properly.
+            LayerDepth += 0.00001f;
             return LayerDepth;
         }
         #endregion
