@@ -72,6 +72,9 @@
 		<None Update="Framework\Assets\UI\SleevesShoesButton.png">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="i18n\fr.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="i18n\ja.json">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
