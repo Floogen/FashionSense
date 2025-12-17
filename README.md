@@ -14,6 +14,7 @@ See the [example content pack](https://github.com/Floogen/FashionSense/tree/deve
 ## 🌐 Translations
 A huge thank you to our amazing community members who provided translations for Fashion Sense:
 
+- **Chinese** - moore5859 🇨🇳
 - **Japanese** - mitekano23 🇯🇵
 - **Thai** - ellipszist 🇹🇭
 - **Turkish** - KediDili 🇹🇷

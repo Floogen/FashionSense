@@ -1,0 +1,93 @@
+{
+  // 配置
+  "config.general.title": "时尚感知",
+  "config.general.require_hand_mirror.name": "需要手持镜子",
+  "config.general.require_hand_mirror.description": "启用后，手持镜子的快捷键要求玩家的背包中必须有手持镜子。",
+  "config.general.shortcut_key.name": "手持镜子快捷键",
+  "config.general.shortcut_key.description": "按下此键时，将显示手持镜子菜单。",
+  "config.general.allow_mannequin_animations.name": "允许模特动画",
+  "config.general.allow_mannequin_animations.description": "启用后，使用时尚感知外观的模特将播放其动画。",
+
+  // 工具
+  "tools.name.hand_mirror": "手持镜子",
+  "tools.description.hand_mirror": "允许你将外观变得更生动。",
+
+  // 消息
+  "messages.warning.mannequin_copied_appearance": "已从模特身上复制服装！",
+  "messages.warning.mannequin_occupied": "模特身上有衣物。请移除它们以设置时尚感知外观。",
+  "messages.warning.mannequin_using_fashion_sense": "模特正在使用时尚感知外观。按住 Shift 键并点击手持镜子以移除它。",
+  "messages.warning.requires_hand_mirror": "背包中没有手持镜子！请禁用 RequireHandMirrorInInventory 配置设置以忽略此要求。",
+  "messages.warning.no_content_packs": "你尚未安装任何时尚感知内容包！",
+
+  // 信件
+  "letters.hand_mirror": "我听说有人要搬进山谷，所以想送上一份乔迁礼物。^ ^我随信附上了我的旧手持镜子，它应该能帮助你提升时尚感。^ ^如果你不小心弄丢了，可以从皮埃尔的商店再买一个。^   -海莉 %item tool HandMirror %%",
+
+  // UI - 标题
+  "ui.fashion_sense.title.search": "选择时尚感知包",
+  "ui.fashion_sense.title.hair": "发型",
+  "ui.fashion_sense.title.accessory": "配饰",
+  "ui.fashion_sense.title.hat": "帽子",
+  "ui.fashion_sense.title.shirt": "衬衫",
+  "ui.fashion_sense.title.pants": "裤子",
+  "ui.fashion_sense.title.sleeves": "袖子",
+  "ui.fashion_sense.title.sleevesAndShoes": "袖子和鞋子",
+  "ui.fashion_sense.title.shoes": "鞋子",
+  "ui.fashion_sense.title.body": "身体",
+  "ui.fashion_sense.title.mask_layer": "图层",
+
+  // UI - 搜索
+  "ui.fashion_sense.search.filter.none": "无",
+  "ui.fashion_sense.search.filter.author": "作者",
+  "ui.fashion_sense.search.filter.pack_name": "包名称",
+  "ui.fashion_sense.search.filter.tags": "标签",
+  "ui.fashion_sense.search.about": "{0}\n\n作者：{1}\n包：{2}\n标签：{3}",
+
+  // UI - 服装
+  "ui.fashion_sense.title.outfits": "服装",
+  "ui.fashion_sense.title.outfit_naming": "服装名称",
+  "ui.fashion_sense.create_outfit_button": "创建服装",
+  "ui.fashion_sense.create_outfit_hover": "根据你当前的服饰创建一套新服装。",
+  "ui.fashion_sense.outfit_info.save": "将你当前的服饰保存到此服装中。",
+  "ui.fashion_sense.outfit_info.rename": "重命名此服装。",
+  "ui.fashion_sense.outfit_info.delete": "删除此服装。",
+  "ui.fashion_sense.outfit_info.share.active": "当前正在与其他存档文件共享此服装。",
+  "ui.fashion_sense.outfit_info.share.inactive": "未与其他存档文件共享此服装。",
+  "ui.fashion_sense.outfit_info.shared": "已共享",
+  "ui.fashion_sense.outfit_info.preset": "预设",
+  "ui.fashion_sense.outfit_info.export": "将服装的 JSON 导出到剪贴板。",
+  "ui.fashion_sense.warning.name": "服装名称为空或已存在。",
+  "ui.fashion_sense.mask_layer.base": "基础",
+  "ui.fashion_sense.outfit_info.missing_appearances": "以下外观缺失：\n{0}",
+  "ui.fashion_sense.buttons.import": "导入",
+  "ui.fashion_sense.buttons.import.description": "从剪贴板导入外部的时尚感知服装。",
+  "ui.fashion_sense.buttons.presets": "预设",
+  "ui.fashion_sense.buttons.presets.description": "查看时尚感知内容包提供的预设。",
+  "ui.fashion_sense.exported_outfit": "已将服装复制到剪贴板。",
+  "ui.fashion_sense.preset_info": "{0}\n\n作者：{1}\n包：{2}",
+
+  // UI - 其他
+  "ui.fashion_sense.start_with_hand_mirror": "开始游戏时拥有镜子",
+  "ui.fashion_sense.start_with_hand_mirror.description": "你将在新游戏开始时在背包中获得手持镜子。",
+  "ui.fashion_sense.color_override.shoes": "覆盖鞋子颜色",
+  "ui.fashion_sense.color_override.body": "覆盖身体颜色",
+  "ui.fashion_sense.search_button": "搜索特定的时尚感知包。",
+  "ui.fashion_sense.outfit_button": "访问你的时尚感知服装。",
+  "ui.fashion_sense.color_copy_button": "复制当前颜色。",
+  "ui.fashion_sense.color_paste_button": "粘贴已保存的颜色。",
+  "ui.fashion_sense.color_paste_button_empty": "粘贴已保存的颜色（空）。",
+  "ui.fashion_sense.clear_button": "清除当前选中的时尚感知物品。\n按住 Shift 键点击以清除所有外观。",
+  "ui.fashion_sense.random_button": "随机选择一个时尚感知物品。",
+  "ui.fashion_sense.exit_button": "退出菜单。",
+  "ui.fashion_sense.color_active.shoes": "鞋子颜色",
+  "ui.fashion_sense.color_active.generic": "颜色",
+  "ui.fashion_sense.color_disabled.generic": "（忽略）",
+  "ui.fashion_sense.color_info.hair": "颜色叠加不会影响此发型。",
+  "ui.fashion_sense.color_info.hat": "颜色叠加不会影响此帽子。",
+  "ui.fashion_sense.color_info.shirt": "颜色叠加不会影响此衬衫。",
+  "ui.fashion_sense.color_info.pants": "颜色叠加不会影响此裤子。",
+  "ui.fashion_sense.color_info.accessory": "颜色叠加不会影响此配饰。",
+  "ui.fashion_sense.color_info.sleeves": "颜色叠加不会影响此袖子。",
+  "ui.fashion_sense.color_info.shoes": "颜色叠加不会影响此鞋子。",
+  "ui.fashion_sense.color_info.body": "颜色叠加不会影响此身体。",
+  "ui.fashion_sense.warning.hiding_player_sprite": "此外观隐藏了玩家的基础精灵。"
+}
