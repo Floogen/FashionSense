@@ -13,5 +13,10 @@ namespace FashionSense.Framework.Models.Appearances
             Model = model;
             Colors = colors;
         }
+
+        public bool IsValid()
+        {
+            return Model is not null && Model.Pack is not null && Model.Pack.Texture is not null;
+        }
     }
 }

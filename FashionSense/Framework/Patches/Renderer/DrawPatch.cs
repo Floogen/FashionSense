@@ -375,7 +375,7 @@ namespace FashionSense.Framework.Patches.Renderer
         private static List<LayerData> GenerateDrawLayers(List<AppearanceMetadata> metadata, FarmerRenderer __instance, ref Dictionary<AppearanceModel, AnimationModel> appearanceTypeToAnimationModels, bool ___isDrawingForUI, Vector2 ___positionOffset, Vector2 ___rotationAdjustment, LocalizedContentManager ___farmerTextureManager, Texture2D ___baseTexture, NetInt ___skin, bool ____sickFrame, ref Rectangle ___hairstyleSourceRect, ref Rectangle ___shirtSourceRect, ref Rectangle ___accessorySourceRect, ref Rectangle ___hatSourceRect, SpriteBatch b, int facingDirection, Farmer who, Vector2 position, Vector2 origin, float scale, int currentFrame, float rotation, Color overrideColor, float layerDepth)
         {
             // Check if all the models are null, if so revert back to vanilla logic
-            List<AppearanceModel> models = metadata.Where(m => m.Model is not null).Select(m => m.Model).ToList();
+            List<AppearanceModel> models = metadata.Where(m => m is not null && m.IsValid()).Select(m => m.Model).ToList();
             if (models.Count == 0)
             {
                 return new List<LayerData>();
