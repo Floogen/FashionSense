@@ -17,7 +17,7 @@ namespace FashionSense.Framework.Models.Appearances
     public class AppearanceModel
     {
         internal AppearanceContentPack Pack { get; set; }
-        public Position StartingPosition { get; set; } = new Position();
+        public Position StartingPosition { get; set; }
         public DrawOrder DrawOrderOverride { get; set; } = new DrawOrder();
         public bool Flipped { get; set; }
         public bool RequireAnimationToFinish { get; set; }
