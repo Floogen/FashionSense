@@ -62,6 +62,20 @@ namespace FashionSense.Framework.Managers
                 _appearanceTextures.Add(model);
             }
 
+            // Ensure AppearanceModel.StartingPosition is set
+            foreach (var appearanceModel in model.GetAppearanceModels())
+            {
+                if (appearanceModel is null)
+                {
+                    continue;
+                }
+
+                if (appearanceModel.StartingPosition is null)
+                {
+                    appearanceModel.StartingPosition = new Position() { X = 0, Y = 0 };
+                }
+            }
+
             _idToModels[model.Id] = model;
         }
 

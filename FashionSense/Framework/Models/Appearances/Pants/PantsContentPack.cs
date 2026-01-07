@@ -1,4 +1,6 @@
-﻿namespace FashionSense.Framework.Models.Appearances.Pants
+﻿using System.Collections.Generic;
+
+namespace FashionSense.Framework.Models.Appearances.Pants
 {
     public class PantsContentPack : AppearanceContentPack
     {
@@ -47,6 +49,11 @@
             {
                 leftModel.Pack = this;
             }
+        }
+
+        internal override IEnumerable<AppearanceModel> GetAppearanceModels()
+        {
+            return new List<AppearanceModel>() { FrontPants, LeftPants, RightPants, BackPants };
         }
     }
 }

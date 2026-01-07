@@ -92,5 +92,10 @@ namespace FashionSense.Framework.Models.Appearances
         {
             return Tags.Any(k => k.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0);
         }
+
+        internal virtual IEnumerable<AppearanceModel> GetAppearanceModels()
+        {
+            return new List<AppearanceModel>();
+        }
     }
 }

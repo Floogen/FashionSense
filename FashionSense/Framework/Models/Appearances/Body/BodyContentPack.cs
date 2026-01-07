@@ -54,5 +54,10 @@ namespace FashionSense.Framework.Models.Appearances.Body
                 leftModel.Pack = this;
             }
         }
+
+        internal override IEnumerable<AppearanceModel> GetAppearanceModels()
+        {
+            return new List<AppearanceModel>() { FrontBody, LeftBody, RightBody, BackBody };
+        }
     }
 }

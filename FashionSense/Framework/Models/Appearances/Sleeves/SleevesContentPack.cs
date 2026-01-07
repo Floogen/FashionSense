@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace FashionSense.Framework.Models.Appearances.Sleeves
 {
@@ -50,6 +51,11 @@ namespace FashionSense.Framework.Models.Appearances.Sleeves
             {
                 leftModel.Pack = this;
             }
+        }
+
+        internal override IEnumerable<AppearanceModel> GetAppearanceModels()
+        {
+            return new List<AppearanceModel>() { FrontSleeves, LeftSleeves, RightSleeves, BackSleeves };
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace FashionSense.Framework.Models.Appearances.Hair
+﻿using System.Collections.Generic;
+
+namespace FashionSense.Framework.Models.Appearances.Hair
 {
     public class HairContentPack : AppearanceContentPack
     {
@@ -47,6 +49,11 @@
             {
                 leftModel.Pack = this;
             }
+        }
+
+        internal override IEnumerable<AppearanceModel> GetAppearanceModels()
+        {
+            return new List<AppearanceModel>() { FrontHair, LeftHair, RightHair, BackHair };
         }
     }
 }
