@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.ItemTypeDefinitions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,7 +80,7 @@ namespace FashionSense.Framework.Managers
             _idToModels[model.Id] = model;
         }
 
-        private void HandleVanillaHatDimensions(HatContentPack pack, HatModel model, Rectangle spriteDimensions)
+        private void HandleVanillaHatDimensions(ParsedItemData itemData, HatContentPack pack, HatModel model, Rectangle spriteDimensions)
         {
             if (model.HatSize is null)
             {
@@ -88,26 +89,29 @@ namespace FashionSense.Framework.Managers
 
             if (model.StartingPosition is null)
             {
+                int assumedDirectionalSpriteCount = 4;
+                var xOffset = spriteDimensions.Width * itemData.SpriteIndex % pack.Texture.Width;
+                var yOffset = spriteDimensions.Width * itemData.SpriteIndex / pack.Texture.Width * spriteDimensions.Width * assumedDirectionalSpriteCount;
                 if (pack.FrontHat == model)
                 {
-                    model.StartingPosition = new Position() { X = 0, Y = 0 };
+                    model.StartingPosition = new Position() { X = xOffset, Y = yOffset + 0 };
                 }
                 else if (pack.RightHat == model)
                 {
-                    model.StartingPosition = new Position() { X = 0, Y = 20 };
+                    model.StartingPosition = new Position() { X = xOffset, Y = yOffset + 20 };
                 }
                 else if (pack.LeftHat == model)
                 {
-                    model.StartingPosition = new Position() { X = 0, Y = 40 };
+                    model.StartingPosition = new Position() { X = xOffset, Y = yOffset + 40 };
                 }
                 else if (pack.BackHat == model)
                 {
-                    model.StartingPosition = new Position() { X = 0, Y = 60 };
+                    model.StartingPosition = new Position() { X = xOffset, Y = yOffset + 60 };
                 }
             }
         }
 
-        private void HandleVanillaShirtDimensions(ShirtContentPack pack, ShirtModel model, Rectangle spriteDimensions)
+        private void HandleVanillaShirtDimensions(ParsedItemData itemData, ShirtContentPack pack, ShirtModel model, Rectangle spriteDimensions)
         {
             if (model.ShirtSize is null)
             {
@@ -116,21 +120,24 @@ namespace FashionSense.Framework.Managers
 
             if (model.StartingPosition is null)
             {
+                int assumedDirectionalSpriteCount = 4;
+                var xOffset = spriteDimensions.Width * itemData.SpriteIndex % pack.Texture.Width;
+                var yOffset = spriteDimensions.Width * itemData.SpriteIndex / pack.Texture.Width * spriteDimensions.Width * assumedDirectionalSpriteCount;
                 if (pack.FrontShirt == model)
                 {
-                    model.StartingPosition = new Position() { X = 0, Y = 0 };
+                    model.StartingPosition = new Position() { X = xOffset, Y = yOffset + 0 };
                 }
                 else if (pack.RightShirt == model)
                 {
-                    model.StartingPosition = new Position() { X = 0, Y = 8 };
+                    model.StartingPosition = new Position() { X = xOffset, Y = yOffset + 8 };
                 }
                 else if (pack.LeftShirt == model)
                 {
-                    model.StartingPosition = new Position() { X = 0, Y = 16 };
+                    model.StartingPosition = new Position() { X = xOffset, Y = yOffset + 16 };
                 }
                 else if (pack.BackShirt == model)
                 {
-                    model.StartingPosition = new Position() { X = 0, Y = 24 };
+                    model.StartingPosition = new Position() { X = xOffset, Y = yOffset + 24 };
                 }
             }
         }
@@ -157,8 +164,14 @@ namespace FashionSense.Framework.Managers
             if (string.IsNullOrEmpty(appearanceContentPack.FromItemId) is false)
             {
                 var itemData = ItemRegistry.GetData(appearanceContentPack.FromItemId);
+                
                 appearanceContentPack.Name = itemData.DisplayName;
                 appearanceContentPack.TexturePath = itemData.TextureName;
+
+                if (appearanceContentPack.Texture is null && string.IsNullOrEmpty(appearanceContentPack.TexturePath) is false)
+                {
+                    appearanceContentPack.Texture = FashionSense.modHelper.GameContent.Load<Texture2D>(appearanceContentPack.TexturePath);
+                }
 
                 var spriteDimensions = itemData.GetSourceRect();
                 if (appearanceContentPack is HatContentPack hatContentPack)
@@ -169,7 +182,7 @@ namespace FashionSense.Framework.Managers
                     }
                     else
                     {
-                        HandleVanillaHatDimensions(hatContentPack, hatContentPack.FrontHat, spriteDimensions);
+                        HandleVanillaHatDimensions(itemData, hatContentPack, hatContentPack.FrontHat, spriteDimensions);
                     }
 
                     if (hatContentPack.RightHat is null)
@@ -178,7 +191,7 @@ namespace FashionSense.Framework.Managers
                     }
                     else
                     {
-                        HandleVanillaHatDimensions(hatContentPack, hatContentPack.RightHat, spriteDimensions);
+                        HandleVanillaHatDimensions(itemData, hatContentPack, hatContentPack.RightHat, spriteDimensions);
                     }
 
                     if (hatContentPack.LeftHat is null)
@@ -187,7 +200,7 @@ namespace FashionSense.Framework.Managers
                     }
                     else
                     {
-                        HandleVanillaHatDimensions(hatContentPack, hatContentPack.LeftHat, spriteDimensions);
+                        HandleVanillaHatDimensions(itemData, hatContentPack, hatContentPack.LeftHat, spriteDimensions);
                     }
 
                     if (hatContentPack.BackHat is null)
@@ -196,7 +209,7 @@ namespace FashionSense.Framework.Managers
                     }
                     else
                     {
-                        HandleVanillaHatDimensions(hatContentPack, hatContentPack.BackHat, spriteDimensions);
+                        HandleVanillaHatDimensions(itemData, hatContentPack, hatContentPack.BackHat, spriteDimensions);
                     }
                 }
                 else if (appearanceContentPack is ShirtContentPack shirtContentPack)
@@ -207,7 +220,7 @@ namespace FashionSense.Framework.Managers
                     }
                     else
                     {
-                        HandleVanillaShirtDimensions(shirtContentPack, shirtContentPack.FrontShirt, spriteDimensions);
+                        HandleVanillaShirtDimensions(itemData, shirtContentPack, shirtContentPack.FrontShirt, spriteDimensions);
                     }
 
                     if (shirtContentPack.RightShirt is null)
@@ -216,7 +229,7 @@ namespace FashionSense.Framework.Managers
                     }
                     else
                     {
-                        HandleVanillaShirtDimensions(shirtContentPack, shirtContentPack.RightShirt, spriteDimensions);
+                        HandleVanillaShirtDimensions(itemData, shirtContentPack, shirtContentPack.RightShirt, spriteDimensions);
                     }
 
                     if (shirtContentPack.LeftShirt is null)
@@ -225,7 +238,7 @@ namespace FashionSense.Framework.Managers
                     }
                     else
                     {
-                        HandleVanillaShirtDimensions(shirtContentPack, shirtContentPack.LeftShirt, spriteDimensions);
+                        HandleVanillaShirtDimensions(itemData, shirtContentPack, shirtContentPack.LeftShirt, spriteDimensions);
                     }
 
                     if (shirtContentPack.BackShirt is null)
@@ -234,7 +247,7 @@ namespace FashionSense.Framework.Managers
                     }
                     else
                     {
-                        HandleVanillaShirtDimensions(shirtContentPack, shirtContentPack.BackShirt, spriteDimensions);
+                        HandleVanillaShirtDimensions(itemData, shirtContentPack, shirtContentPack.BackShirt, spriteDimensions);
                     }
                 }
             }
