@@ -1,4 +1,6 @@
-﻿namespace FashionSense.Framework.Models.Appearances.Shoes
+﻿using System.Collections.Generic;
+
+namespace FashionSense.Framework.Models.Appearances.Shoes
 {
     public class ShoesContentPack : AppearanceContentPack
     {
@@ -47,6 +49,11 @@
             {
                 leftModel.Pack = this;
             }
+        }
+
+        internal override IEnumerable<AppearanceModel> GetAppearanceModels()
+        {
+            return new List<AppearanceModel>() { FrontShoes, LeftShoes, RightShoes, BackShoes };
         }
     }
 }

@@ -249,8 +249,8 @@ namespace FashionSense.Framework.Patches.Renderer
 
                     var oldFacingDirection = who.FacingDirection;
 
-                    // Force facing direction to be downwards when drawing in UI (only when animationFrame.frame is 0)
-                    if (FarmerRenderer.isDrawingForUI && animationFrame.frame == 0)
+                    // Force facing direction to be downwards when drawing in UI (only when animationFrame.frame is <= 2, this ensures compatibility with SpaceCore's custom skill menu)
+                    if (FarmerRenderer.isDrawingForUI && animationFrame.frame <= 2)
                     {
                         who.faceDirection(2);
                     }
@@ -350,6 +350,8 @@ namespace FashionSense.Framework.Patches.Renderer
                 {
                     b.Draw(Game1.staminaRect, new Rectangle((int)position.X + (int)who.yOffset + 8, (int)position.Y - 128 + sourceRect.Height * 4 + (int)origin.Y - (int)who.yOffset, sourceRect.Width * 4 - (int)who.yOffset * 2 - 16, 4), Game1.staminaRect.Bounds, Color.White * 0.75f, 0f, Vector2.Zero, SpriteEffects.None, drawManager.LayerDepth + 0.001f);
                 }
+
+                FarmerRendererPatch.AreColorMasksPendingRefresh = false;
                 return;
             }
 

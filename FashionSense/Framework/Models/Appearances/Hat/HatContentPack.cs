@@ -1,4 +1,6 @@
-﻿namespace FashionSense.Framework.Models.Appearances.Hat
+﻿using System.Collections.Generic;
+
+namespace FashionSense.Framework.Models.Appearances.Hat
 {
     public class HatContentPack : AppearanceContentPack
     {
@@ -47,6 +49,11 @@
             {
                 leftModel.Pack = this;
             }
+        }
+
+        internal override IEnumerable<AppearanceModel> GetAppearanceModels()
+        {
+            return new List<AppearanceModel>() { FrontHat, LeftHat, RightHat, BackHat };
         }
     }
 }

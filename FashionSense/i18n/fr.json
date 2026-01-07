@@ -1,0 +1,93 @@
+{
+  // Config
+  "config.general.title": "Fashion Sense",
+  "config.general.require_hand_mirror.name": "Nécessite le miroir à main",
+  "config.general.require_hand_mirror.description": "Si activé, le raccourci du miroir à main nécessite que cet accessoire soit dans l’inventaire du joueur.",
+  "config.general.shortcut_key.name": "Raccourci du miroir à main",
+  "config.general.shortcut_key.description": "Lorsque cette touche est pressée, le menu du miroir à main apparaitra.",
+  "config.general.allow_mannequin_animations.name": "Permettre les animations des mannequins",
+  "config.general.allow_mannequin_animations.description": "Si activé, les mannequins avec l’apparence de Fashion Sense joueront leurs animations.",
+
+  // Tools
+  "tools.name.hand_mirror": "Miroir à main",
+  "tools.description.hand_mirror": "Vous permet de changer votre apparence en une apparence plus classe.",
+
+  // Messages
+  "messages.warning.mannequin_copied_appearance": "Tenue copiée du mannequin !",
+  "messages.warning.mannequin_occupied": "Le mannequin a des vêtements sur lui. Retirez-lui pour paramétrer l’apparence de Fashion Sense.",
+  "messages.warning.mannequin_using_fashion_sense": "Le mannequin utilise une apparence de Fashion Sense. Cliquez tout en maintenant shift avec le miroir à main pour le retirer.",
+  "messages.warning.requires_hand_mirror": "Pas de miroir à main dans l’invenaire ! Désactivez l’option dans le menu pour ignorer ce pré-requis.",
+  "messages.warning.no_content_packs": "Vous n'avez installé aucun pack de contenu Fashion Sense !",
+
+  // Letters
+  "letters.hand_mirror": "J'ai entendu dire que quelqu'un de nouveau emménageait dans la vallée, j'ai donc pensé à t’offrir un cadeau de pendaison de crémaillère.^ ^J'ai inclus mon ancien miroir à main avec cette lettre, ce qui devrait t’aider à développer ton sens de la mode.^ ^Si jamais tu le perds, tu pourras en acheter un autre dans la boutique de Pierre.  ^   -Haley %item tool HandMirror %%",
+
+  // UI - Titles
+  "ui.fashion_sense.title.search": "Sélectionner un pack Fashion Sense",
+  "ui.fashion_sense.title.hair": "Coiffures",
+  "ui.fashion_sense.title.accessory": "Accessoires",
+  "ui.fashion_sense.title.hat": "Chapeaux",
+  "ui.fashion_sense.title.shirt": "Chemises",
+  "ui.fashion_sense.title.pants": "Pantalons",
+  "ui.fashion_sense.title.sleeves": "Manches",
+  "ui.fashion_sense.title.sleevesAndShoes": "Manches & Chaussures",
+  "ui.fashion_sense.title.shoes": "Chaussures",
+  "ui.fashion_sense.title.body": "Corps",
+  "ui.fashion_sense.title.mask_layer": "Couche",
+
+  // UI - Search
+  "ui.fashion_sense.search.filter.none": "Aucune",
+  "ui.fashion_sense.search.filter.author": "Auteur",
+  "ui.fashion_sense.search.filter.pack_name": "Nom de pack",
+  "ui.fashion_sense.search.filter.tags": "Étiquettes",
+  "ui.fashion_sense.search.about": "{0}\n\nAuteur : {1}\nPack : {2}\nÉtiquettes : {3}",
+
+  // UI - Outfits
+  "ui.fashion_sense.title.outfits": "Tenues",
+  "ui.fashion_sense.title.outfit_naming": "Nom de la tenue",
+  "ui.fashion_sense.create_outfit_button": "Créer une tenue",
+  "ui.fashion_sense.create_outfit_hover": "Créer une nouvelle tenue basée sur vos vêtements actuels.",
+  "ui.fashion_sense.outfit_info.save": "Enregistre vos vêtements actuels dans cette tenue.",
+  "ui.fashion_sense.outfit_info.rename": "Renommer cette tenue.",
+  "ui.fashion_sense.outfit_info.delete": "Supprimer cette tenue.",
+  "ui.fashion_sense.outfit_info.share.active": "Partager cette tenue avec d'autres fichiers de sauvegarde.",
+  "ui.fashion_sense.outfit_info.share.inactive": "Ne pas partager cette tenue avec d'autres fichiers de sauvegarde.",
+  "ui.fashion_sense.outfit_info.shared": "Partagé",
+  "ui.fashion_sense.outfit_info.preset": "Préréglage",
+  "ui.fashion_sense.outfit_info.export": "Exporte le JSON de la tenue à votre presse-papier.",
+  "ui.fashion_sense.warning.name": "Le nom de la tenue est vide ou existe déjà.",
+  "ui.fashion_sense.mask_layer.base": "Base",
+  "ui.fashion_sense.outfit_info.missing_appearances": "L’apparence suivante est manquante :\n{0}",
+  "ui.fashion_sense.buttons.import": "Importer",
+  "ui.fashion_sense.buttons.import.description": "Importer une tenue Fashion Sense extérieure depuis votre presse-papier.",
+  "ui.fashion_sense.buttons.presets": "Préréglages",
+  "ui.fashion_sense.buttons.presets.description": "Montre une préselection fournie par un paquet de contenu Fashion Sense",
+  "ui.fashion_sense.exported_outfit": "Tenue copiée dans le presse-papier.",
+  "ui.fashion_sense.preset_info": "{0}\n\nAuteur : {1}\nPack : {2}",
+
+  // UI - Etc
+  "ui.fashion_sense.start_with_hand_mirror": "Commencer avec le miroir",
+  "ui.fashion_sense.start_with_hand_mirror.description": "Vous commencerez votre nouvelle partie avec le miroir à main dans votre inventaire.",
+  "ui.fashion_sense.color_override.shoes": "Remplacer la couleur des chaussures",
+  "ui.fashion_sense.color_override.body": "Remplacer la couleur du corps",
+  "ui.fashion_sense.search_button": "Rechercher un pack Fashion Sense spécifique.",
+  "ui.fashion_sense.outfit_button": "Accéder à vos tenues Fashion Sense.",
+  "ui.fashion_sense.color_copy_button": "Copier la couleur actuelle.",
+  "ui.fashion_sense.color_paste_button": "Coller la couleur enregistrée.",
+  "ui.fashion_sense.color_paste_button_empty": "Coller la couleur enregistrée (vide).",
+  "ui.fashion_sense.clear_button": "Efface l’élément Fashion Sense actuellement sélectionné.",
+  "ui.fashion_sense.random_button": "Sélectionne au hasard un article Fashion Sense.",
+  "ui.fashion_sense.exit_button": "Quitter le menu",
+  "ui.fashion_sense.color_active.shoes": "Couleur des chaussures",
+  "ui.fashion_sense.color_active.generic": "Couleur",
+  "ui.fashion_sense.color_disabled.generic": "(Ignoré)",
+  "ui.fashion_sense.color_info.hair": "Les superpositions de couleurs n’affecteront pas cette coiffure.",
+  "ui.fashion_sense.color_info.hat": "Les superpositions de couleurs n’affecteront pas ce chapeau.",
+  "ui.fashion_sense.color_info.shirt": "Les superpositions de couleurs n’affecteront pas cette chemise.",
+  "ui.fashion_sense.color_info.pants": "Les superpositions de couleurs n’affecteront pas ce pantalon.",
+  "ui.fashion_sense.color_info.accessory": "Les superpositions de couleurs n’affecteront pas cet accessoire.",
+  "ui.fashion_sense.color_info.sleeves": "Les superpositions de couleurs n’affecteront pas ces manches.",
+  "ui.fashion_sense.color_info.shoes": "Les superpositions de couleurs n'affecteront pas ces chaussures.",
+  "ui.fashion_sense.color_info.body": "Les superpositions de couleurs n'affecteront pas ce corps.",
+  "ui.fashion_sense.warning.hiding_player_sprite": "Cette apparence cache celle par défaut du joueur."
+}

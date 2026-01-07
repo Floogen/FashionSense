@@ -1,8 +1,10 @@
 ﻿using FashionSense.Framework.Interfaces.API;
 using FashionSense.Framework.Models.Appearances;
 using FashionSense.Framework.Models.Appearances.Generic;
+using FashionSense.Framework.Models.Appearances.Hair;
 using FashionSense.Framework.Models.Appearances.Hat;
 using FashionSense.Framework.Models.Appearances.Shirt;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
@@ -60,7 +62,77 @@ namespace FashionSense.Framework.Managers
                 _appearanceTextures.Add(model);
             }
 
+            // Ensure AppearanceModel.StartingPosition is set
+            foreach (var appearanceModel in model.GetAppearanceModels())
+            {
+                if (appearanceModel is null)
+                {
+                    continue;
+                }
+
+                if (appearanceModel.StartingPosition is null)
+                {
+                    appearanceModel.StartingPosition = new Position() { X = 0, Y = 0 };
+                }
+            }
+
             _idToModels[model.Id] = model;
+        }
+
+        private void HandleVanillaHatDimensions(HatContentPack pack, HatModel model, Rectangle spriteDimensions)
+        {
+            if (model.HatSize is null)
+            {
+                model.HatSize = new Size() { Length = spriteDimensions.Height, Width = spriteDimensions.Width };
+            }
+
+            if (model.StartingPosition is null)
+            {
+                if (pack.FrontHat == model)
+                {
+                    model.StartingPosition = new Position() { X = 0, Y = 0 };
+                }
+                else if (pack.RightHat == model)
+                {
+                    model.StartingPosition = new Position() { X = 0, Y = 20 };
+                }
+                else if (pack.LeftHat == model)
+                {
+                    model.StartingPosition = new Position() { X = 0, Y = 40 };
+                }
+                else if (pack.BackHat == model)
+                {
+                    model.StartingPosition = new Position() { X = 0, Y = 60 };
+                }
+            }
+        }
+
+        private void HandleVanillaShirtDimensions(ShirtContentPack pack, ShirtModel model, Rectangle spriteDimensions)
+        {
+            if (model.ShirtSize is null)
+            {
+                model.ShirtSize = new Size() { Length = spriteDimensions.Height, Width = spriteDimensions.Width };
+            }
+
+            if (model.StartingPosition is null)
+            {
+                if (pack.FrontShirt == model)
+                {
+                    model.StartingPosition = new Position() { X = 0, Y = 0 };
+                }
+                else if (pack.RightShirt == model)
+                {
+                    model.StartingPosition = new Position() { X = 0, Y = 8 };
+                }
+                else if (pack.LeftShirt == model)
+                {
+                    model.StartingPosition = new Position() { X = 0, Y = 16 };
+                }
+                else if (pack.BackShirt == model)
+                {
+                    model.StartingPosition = new Position() { X = 0, Y = 24 };
+                }
+            }
         }
 
         private bool AttemptHandleExternalPack(AppearanceContentPack appearanceContentPack)
@@ -76,6 +148,11 @@ namespace FashionSense.Framework.Managers
                 _monitor.Log($"Unable to add appearance from {appearanceContentPack.PackName}: Must give FromItemId or Name", LogLevel.Warn);
                 return false;
             }
+            else if (string.IsNullOrEmpty(appearanceContentPack.Id))
+            {
+                _monitor.Log($"Unable to add appearance from {appearanceContentPack.PackName}: Missing Id property", LogLevel.Warn);
+                return false;
+            }
 
             if (string.IsNullOrEmpty(appearanceContentPack.FromItemId) is false)
             {
@@ -83,43 +160,81 @@ namespace FashionSense.Framework.Managers
                 appearanceContentPack.Name = itemData.DisplayName;
                 appearanceContentPack.TexturePath = itemData.TextureName;
 
-                var spriteDimension = itemData.GetSourceRect();
+                var spriteDimensions = itemData.GetSourceRect();
                 if (appearanceContentPack is HatContentPack hatContentPack)
                 {
                     if (hatContentPack.FrontHat is null)
                     {
-                        hatContentPack.FrontHat = new HatModel() { StartingPosition = new Position() { X = 0, Y = 0 }, HatSize = new Size() { Length = spriteDimension.Height, Width = spriteDimension.Width } };
+                        hatContentPack.FrontHat = new HatModel() { StartingPosition = new Position() { X = 0, Y = 0 }, HatSize = new Size() { Length = spriteDimensions.Height, Width = spriteDimensions.Width } };
                     }
+                    else
+                    {
+                        HandleVanillaHatDimensions(hatContentPack, hatContentPack.FrontHat, spriteDimensions);
+                    }
+
                     if (hatContentPack.RightHat is null)
                     {
-                        hatContentPack.RightHat = new HatModel() { StartingPosition = new Position() { X = 0, Y = 20 }, HatSize = new Size() { Length = spriteDimension.Height, Width = spriteDimension.Width } };
+                        hatContentPack.RightHat = new HatModel() { StartingPosition = new Position() { X = 0, Y = 20 }, HatSize = new Size() { Length = spriteDimensions.Height, Width = spriteDimensions.Width } };
                     }
+                    else
+                    {
+                        HandleVanillaHatDimensions(hatContentPack, hatContentPack.RightHat, spriteDimensions);
+                    }
+
                     if (hatContentPack.LeftHat is null)
                     {
-                        hatContentPack.LeftHat = new HatModel() { StartingPosition = new Position() { X = 0, Y = 40 }, HatSize = new Size() { Length = spriteDimension.Height, Width = spriteDimension.Width } };
+                        hatContentPack.LeftHat = new HatModel() { StartingPosition = new Position() { X = 0, Y = 40 }, HatSize = new Size() { Length = spriteDimensions.Height, Width = spriteDimensions.Width } };
                     }
+                    else
+                    {
+                        HandleVanillaHatDimensions(hatContentPack, hatContentPack.LeftHat, spriteDimensions);
+                    }
+
                     if (hatContentPack.BackHat is null)
                     {
-                        hatContentPack.BackHat = new HatModel() { StartingPosition = new Position() { X = 0, Y = 60 }, HatSize = new Size() { Length = spriteDimension.Height, Width = spriteDimension.Width } };
+                        hatContentPack.BackHat = new HatModel() { StartingPosition = new Position() { X = 0, Y = 60 }, HatSize = new Size() { Length = spriteDimensions.Height, Width = spriteDimensions.Width } };
+                    }
+                    else
+                    {
+                        HandleVanillaHatDimensions(hatContentPack, hatContentPack.BackHat, spriteDimensions);
                     }
                 }
                 else if (appearanceContentPack is ShirtContentPack shirtContentPack)
                 {
                     if (shirtContentPack.FrontShirt is null)
                     {
-                        shirtContentPack.FrontShirt = new ShirtModel() { StartingPosition = new Position() { X = 0, Y = 0 }, ShirtSize = new Size() { Length = spriteDimension.Height, Width = spriteDimension.Width } };
+                        shirtContentPack.FrontShirt = new ShirtModel() { StartingPosition = new Position() { X = 0, Y = 0 }, ShirtSize = new Size() { Length = spriteDimensions.Height, Width = spriteDimensions.Width } };
                     }
+                    else
+                    {
+                        HandleVanillaShirtDimensions(shirtContentPack, shirtContentPack.FrontShirt, spriteDimensions);
+                    }
+
                     if (shirtContentPack.RightShirt is null)
                     {
-                        shirtContentPack.RightShirt = new ShirtModel() { StartingPosition = new Position() { X = 0, Y = 8 }, ShirtSize = new Size() { Length = spriteDimension.Height, Width = spriteDimension.Width } };
+                        shirtContentPack.RightShirt = new ShirtModel() { StartingPosition = new Position() { X = 0, Y = 8 }, ShirtSize = new Size() { Length = spriteDimensions.Height, Width = spriteDimensions.Width } };
                     }
+                    else
+                    {
+                        HandleVanillaShirtDimensions(shirtContentPack, shirtContentPack.RightShirt, spriteDimensions);
+                    }
+
                     if (shirtContentPack.LeftShirt is null)
                     {
-                        shirtContentPack.LeftShirt = new ShirtModel() { StartingPosition = new Position() { X = 0, Y = 16 }, ShirtSize = new Size() { Length = spriteDimension.Height, Width = spriteDimension.Width } };
+                        shirtContentPack.LeftShirt = new ShirtModel() { StartingPosition = new Position() { X = 0, Y = 16 }, ShirtSize = new Size() { Length = spriteDimensions.Height, Width = spriteDimensions.Width } };
                     }
+                    else
+                    {
+                        HandleVanillaShirtDimensions(shirtContentPack, shirtContentPack.LeftShirt, spriteDimensions);
+                    }
+
                     if (shirtContentPack.BackShirt is null)
                     {
-                        shirtContentPack.BackShirt = new ShirtModel() { StartingPosition = new Position() { X = 0, Y = 24 }, ShirtSize = new Size() { Length = spriteDimension.Height, Width = spriteDimension.Width } };
+                        shirtContentPack.BackShirt = new ShirtModel() { StartingPosition = new Position() { X = 0, Y = 24 }, ShirtSize = new Size() { Length = spriteDimensions.Height, Width = spriteDimensions.Width } };
+                    }
+                    else
+                    {
+                        HandleVanillaShirtDimensions(shirtContentPack, shirtContentPack.BackShirt, spriteDimensions);
                     }
                 }
             }
@@ -128,10 +243,6 @@ namespace FashionSense.Framework.Managers
             if (string.IsNullOrEmpty(appearanceContentPack.Owner))
             {
                 appearanceContentPack.Owner = appearanceContentPack.PackId;
-            }
-            if (string.IsNullOrEmpty(appearanceContentPack.Id))
-            {
-                appearanceContentPack.Id = String.Concat(appearanceContentPack.Owner, "/", appearanceContentPack.PackType, "/", appearanceContentPack.Name);
             }
             if (appearanceContentPack.Texture is null && string.IsNullOrEmpty(appearanceContentPack.TexturePath) is false)
             {
@@ -144,11 +255,20 @@ namespace FashionSense.Framework.Managers
 
         public void Sync<T>(Dictionary<string, T> models, IApi.Type packType = IApi.Type.Unknown) where T : AppearanceContentPack
         {
-            foreach (var model in models.Values)
+            foreach (var idModelPair in models)
             {
+                var id = idModelPair.Key;
+                var model = idModelPair.Value;
+
                 if (model.IsLocalPack is false && model.PackType is IApi.Type.Unknown)
                 {
                     model.PackType = packType;
+                }
+
+                // Ensure ID is set (may be blank for external pack, as it isn't mandatory to set due to entry path being used instead)
+                if (string.IsNullOrEmpty(model.Id))
+                {
+                    model.Id = id;
                 }
 
                 AddAppearanceModel(model);
