@@ -134,6 +134,11 @@ namespace FashionSense.Framework.Managers
                 _monitor.Log($"Unable to add appearance from {appearanceContentPack.PackName}: Must give FromItemId or Name", LogLevel.Warn);
                 return false;
             }
+            else if (string.IsNullOrEmpty(appearanceContentPack.Id))
+            {
+                _monitor.Log($"Unable to add appearance from {appearanceContentPack.PackName}: Missing Id property", LogLevel.Warn);
+                return false;
+            }
 
             if (string.IsNullOrEmpty(appearanceContentPack.FromItemId) is false)
             {
@@ -225,10 +230,6 @@ namespace FashionSense.Framework.Managers
             {
                 appearanceContentPack.Owner = appearanceContentPack.PackId;
             }
-            if (string.IsNullOrEmpty(appearanceContentPack.Id))
-            {
-                appearanceContentPack.Id = String.Concat(appearanceContentPack.Owner, "/", appearanceContentPack.PackType, "/", appearanceContentPack.Name);
-            }
             if (appearanceContentPack.Texture is null && string.IsNullOrEmpty(appearanceContentPack.TexturePath) is false)
             {
                 appearanceContentPack.Texture = FashionSense.modHelper.GameContent.Load<Texture2D>(appearanceContentPack.TexturePath);
@@ -240,11 +241,20 @@ namespace FashionSense.Framework.Managers
 
         public void Sync<T>(Dictionary<string, T> models, IApi.Type packType = IApi.Type.Unknown) where T : AppearanceContentPack
         {
-            foreach (var model in models.Values)
+            foreach (var idModelPair in models)
             {
+                var id = idModelPair.Key;
+                var model = idModelPair.Value;
+
                 if (model.IsLocalPack is false && model.PackType is IApi.Type.Unknown)
                 {
                     model.PackType = packType;
+                }
+
+                // Ensure ID is set (may be blank for external pack, as it isn't mandatory to set due to entry path being used instead)
+                if (string.IsNullOrEmpty(model.Id))
+                {
+                    model.Id = id;
                 }
 
                 AddAppearanceModel(model);
