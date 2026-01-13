@@ -9,7 +9,6 @@ using StardewValley.Menus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TextCopy;
 
 namespace FashionSense.Framework.UI
 {
@@ -252,8 +251,8 @@ namespace FashionSense.Framework.UI
 
             if (importButton.containsPoint(x, y))
             {
-                string clipboardText = ClipboardService.GetText();
-                if (string.IsNullOrEmpty(clipboardText))
+                string clipboardText = null;
+                if (DesktopClipboard.GetText(ref clipboardText) is false || string.IsNullOrEmpty(clipboardText))
                 {
                     CreateBottomBannerMesage("No text found in clipboard!");
                     return;
@@ -333,7 +332,7 @@ namespace FashionSense.Framework.UI
                                     outfit.Author = Game1.player.Name;
                                 }
 
-                                ClipboardService.SetText(outfit.Export());
+                                DesktopClipboard.SetText(outfit.Export());
                                 CreateBottomBannerMesage(FashionSense.modHelper.Translation.Get("ui.fashion_sense.exported_outfit"));
 
                                 return;
