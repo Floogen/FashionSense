@@ -829,7 +829,7 @@ namespace FashionSense
                     textureManager.AddAppearanceModel(appearanceModel);
 
                     // Log it
-                    Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
+                    //Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
                 }
             }
             catch (Exception ex)
@@ -946,7 +946,7 @@ namespace FashionSense
                     textureManager.AddAppearanceModel(appearanceModel);
 
                     // Log it
-                    Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
+                    //Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
                 }
             }
             catch (Exception ex)
@@ -1075,7 +1075,7 @@ namespace FashionSense
                     textureManager.AddAppearanceModel(appearanceModel);
 
                     // Log it
-                    Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
+                    //Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
                 }
             }
             catch (Exception ex)
@@ -1204,7 +1204,7 @@ namespace FashionSense
                     textureManager.AddAppearanceModel(appearanceModel);
 
                     // Log it
-                    Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
+                    //Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
                 }
             }
             catch (Exception ex)
@@ -1333,7 +1333,7 @@ namespace FashionSense
                     textureManager.AddAppearanceModel(appearanceModel);
 
                     // Log it
-                    Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
+                    //Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
                 }
             }
             catch (Exception ex)
@@ -1450,7 +1450,7 @@ namespace FashionSense
                     textureManager.AddAppearanceModel(appearanceModel);
 
                     // Log it
-                    Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
+                    //Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
                 }
             }
             catch (Exception ex)
@@ -1579,7 +1579,7 @@ namespace FashionSense
                     textureManager.AddAppearanceModel(appearanceModel);
 
                     // Log it
-                    Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
+                    //Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
                 }
             }
             catch (Exception ex)
@@ -1706,7 +1706,7 @@ namespace FashionSense
                     textureManager.AddAppearanceModel(appearanceModel);
 
                     // Log it
-                    Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
+                    //Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
                 }
             }
             catch (Exception ex)
