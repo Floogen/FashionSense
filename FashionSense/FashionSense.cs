@@ -37,6 +37,7 @@ using StardewValley.GameData.Shirts;
 using StardewValley.Tools;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -589,6 +590,8 @@ namespace FashionSense
 
         private void LoadContentPacks(bool silent = false, string packId = null)
         {
+            Stopwatch collectiveLoadingStopwatch = Stopwatch.StartNew();
+
             // Clear the existing cache of AppearanceModels
             textureManager.Reset(packId);
             conditionGroups = new Dictionary<string, ConditionGroup>();
@@ -704,6 +707,9 @@ namespace FashionSense
             {
                 SetSpriteDirty(Game1.player);
             }
+
+            collectiveLoadingStopwatch.Stop();
+            monitor.Log($"Finished loading all content packs in {Math.Round(collectiveLoadingStopwatch.ElapsedMilliseconds / 1000f, 2)} seconds", LogLevel.Trace);
         }
 
         private static DirectoryInfo GetContentPackDirectory(IContentPack contentPack, string targetDirectoryName)
