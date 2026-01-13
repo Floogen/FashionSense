@@ -14,13 +14,13 @@ using FashionSense.Framework.Models.Appearances.Shirt;
 using FashionSense.Framework.Models.Appearances.Shoes;
 using FashionSense.Framework.Models.Appearances.Sleeves;
 using FashionSense.Framework.Models.General;
+using FashionSense.Framework.Patches;
 using FashionSense.Framework.Patches.Core;
 using FashionSense.Framework.Patches.Entities;
 using FashionSense.Framework.Patches.GameLocations;
 using FashionSense.Framework.Patches.Menus;
 using FashionSense.Framework.Patches.Objects;
 using FashionSense.Framework.Patches.Renderer;
-using FashionSense.Framework.Patches.ShopLocations;
 using FashionSense.Framework.Patches.Tools;
 using FashionSense.Framework.UI;
 using FashionSense.Framework.Utilities;
@@ -34,6 +34,7 @@ using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.GameData.Pants;
 using StardewValley.GameData.Shirts;
+using StardewValley.Tools;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -114,7 +115,6 @@ namespace FashionSense
 
                 // Apply tool related patches
                 new ToolPatch(monitor, modHelper).Apply(harmony);
-                new ShopBuilderPatch(monitor, modHelper).Apply(harmony);
                 new GameLocationPatch(monitor, modHelper).Apply(harmony);
 
                 // Apply UI related patches
@@ -150,7 +150,7 @@ namespace FashionSense
             helper.ConsoleCommands.Add("fs_display_player_frames", "Displays debug info related to player's frames (FarmerSprite.CurrentFrame). Use again to disable. \n\nUsage: fs_display_player_frames", delegate { _displayFarmerFrames = !_displayFarmerFrames; });
             helper.ConsoleCommands.Add("fs_reload", "Reloads all Fashion Sense content packs. Can specify a manifest unique ID to only reload that pack.\n\nUsage: fs_reload [manifest_unique_id]", ReloadFashionSense);
             helper.ConsoleCommands.Add("fs_reload_continuous", "Debug usage only: reloads all Fashion Sense content packs every 2 seconds. Use the command again to stop the continuous reloading.\n\nUsage: fs_reload_continuous", delegate { _continuousReloading = !_continuousReloading; });
-            helper.ConsoleCommands.Add("fs_add_mirror", "Gives you a Hand Mirror tool.\n\nUsage: fs_add_mirror", delegate { Game1.player.addItemToInventory(ShopBuilderPatch.GetHandMirrorTool()); });
+            helper.ConsoleCommands.Add("fs_add_mirror", "Gives you a Hand Mirror tool.\n\nUsage: fs_add_mirror", delegate { Game1.player.addItemToInventory(AssetManager.GetHandMirrorTool()); });
             helper.ConsoleCommands.Add("fs_freeze_self", "Locks yourself in place, which is useful for showcasing custom appearances. Use the command again to unfreeze yourself.\n\nUsage: fs_freeze_self", delegate { _ = _cachedPlayerPosition is null ? _cachedPlayerPosition = Game1.player.Position : _cachedPlayerPosition = null; });
             helper.ConsoleCommands.Add("fs_record_frames", "Records farmer frames that are played. Use the command again to stop recording.\n\nUsage: fs_record_frames", SetPlayerFrameRecording);
             helper.ConsoleCommands.Add("fs_play_next_frame", "Plays the next recorded frame.\n\nUsage: fs_play_next_frame", PlayNextFrame);
@@ -284,6 +284,18 @@ namespace FashionSense
                     var data = asset.AsDictionary<string, string>().Data;
                     data[ModDataKeys.LETTER_HAND_MIRROR] = modHelper.Translation.Get("letters.hand_mirror");
                 });
+            }
+            else if (e.NameWithoutLocale.IsEquivalentTo("Data/Tools"))
+            {
+                e.Edit(assetManager.AddToolData, AssetEditPriority.Early);
+            }
+            else if (e.NameWithoutLocale.IsEquivalentTo("Data/Shops"))
+            {
+                e.Edit(assetManager.EditShopData, AssetEditPriority.Early);
+            }
+            else if (e.NameWithoutLocale.IsEquivalentTo(AssetManager.HAND_MIRROR_TEXTURE_PATH))
+            {
+                e.LoadFrom(assetManager.GetHandMirrorTexture, AssetLoadPriority.High);
             }
             else if (e.NameWithoutLocale.IsEquivalentTo("Data/Hats"))
             {
@@ -506,6 +518,20 @@ namespace FashionSense
             {
                 Monitor.Log($"Giving the Hand Mirror to player {Game1.player.Name} via letter as they enabled STARTS_WITH_HAND_MIRROR");
                 Game1.player.mailbox.Add(ModDataKeys.LETTER_HAND_MIRROR);
+            }
+            else if (Game1.player.modData.ContainsKey(ModDataKeys.HAS_CONVERTED_MIRROR_TO_TOOL) is false)
+            {
+                Monitor.Log("Converting hand mirror tools to data tools...", LogLevel.Debug);
+                Utility.ForEachItemContext((in context) =>
+                {
+                    if (context.Item is not GenericTool genericTool || genericTool.modData.ContainsKey(ModDataKeys.HAND_MIRROR_FLAG) is false)
+                    {
+                        return true;
+                    }
+                    context.ReplaceItemWith(AssetManager.GetHandMirrorTool());
+                    return true;
+                });
+                Game1.player.modData[ModDataKeys.HAS_CONVERTED_MIRROR_TO_TOOL] = true.ToString();
             }
         }
 
