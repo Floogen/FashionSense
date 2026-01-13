@@ -30,6 +30,7 @@
 
         // Tool related keys
         internal const string HAND_MIRROR_FLAG = "FashionSense.Tools.HandMirror";
+        internal const string HAS_CONVERTED_MIRROR_TO_TOOL = "FashionSense.Tools.HasConvertedHandMirrors";
 
         // Outfit related keys
         internal const string OUTFITS = "FashionSense.Outfit.Collection";
