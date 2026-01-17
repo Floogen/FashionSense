@@ -17,6 +17,7 @@ A huge thank you to our amazing community members who provided translations for 
 - **Chinese** - moore5859 🇨🇳
 - **French** - CaranudLapin 🇫🇷
 - **Japanese** - mitekano23 🇯🇵
+- **Russian** - angel4killer, ellatuk 🇷🇺
 - **Thai** - ellipszist 🇹🇭
 - **Turkish** - KediDili 🇹🇷
 - **Ukrainian** - ChulkyBow 🇺🇦

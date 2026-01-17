@@ -37,6 +37,7 @@ using StardewValley.GameData.Shirts;
 using StardewValley.Tools;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -295,7 +296,7 @@ namespace FashionSense
             }
             else if (e.NameWithoutLocale.IsEquivalentTo(AssetManager.HAND_MIRROR_TEXTURE_PATH))
             {
-                e.LoadFrom(assetManager.GetHandMirrorTexture, AssetLoadPriority.High);
+                e.LoadFromModFile<Texture2D>(assetManager.GetHandMirrorAssetPath(), AssetLoadPriority.Exclusive);
             }
             else if (e.NameWithoutLocale.IsEquivalentTo("Data/Hats"))
             {
@@ -589,6 +590,8 @@ namespace FashionSense
 
         private void LoadContentPacks(bool silent = false, string packId = null)
         {
+            Stopwatch collectiveLoadingStopwatch = Stopwatch.StartNew();
+
             // Clear the existing cache of AppearanceModels
             textureManager.Reset(packId);
             conditionGroups = new Dictionary<string, ConditionGroup>();
@@ -704,6 +707,9 @@ namespace FashionSense
             {
                 SetSpriteDirty(Game1.player);
             }
+
+            collectiveLoadingStopwatch.Stop();
+            monitor.Log($"Finished loading all content packs in {Math.Round(collectiveLoadingStopwatch.ElapsedMilliseconds / 1000f, 2)} seconds", LogLevel.Trace);
         }
 
         private static DirectoryInfo GetContentPackDirectory(IContentPack contentPack, string targetDirectoryName)
@@ -829,7 +835,7 @@ namespace FashionSense
                     textureManager.AddAppearanceModel(appearanceModel);
 
                     // Log it
-                    Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
+                    //Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
                 }
             }
             catch (Exception ex)
@@ -946,7 +952,7 @@ namespace FashionSense
                     textureManager.AddAppearanceModel(appearanceModel);
 
                     // Log it
-                    Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
+                    //Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
                 }
             }
             catch (Exception ex)
@@ -1075,7 +1081,7 @@ namespace FashionSense
                     textureManager.AddAppearanceModel(appearanceModel);
 
                     // Log it
-                    Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
+                    //Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
                 }
             }
             catch (Exception ex)
@@ -1204,7 +1210,7 @@ namespace FashionSense
                     textureManager.AddAppearanceModel(appearanceModel);
 
                     // Log it
-                    Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
+                    //Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
                 }
             }
             catch (Exception ex)
@@ -1333,7 +1339,7 @@ namespace FashionSense
                     textureManager.AddAppearanceModel(appearanceModel);
 
                     // Log it
-                    Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
+                    //Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
                 }
             }
             catch (Exception ex)
@@ -1450,7 +1456,7 @@ namespace FashionSense
                     textureManager.AddAppearanceModel(appearanceModel);
 
                     // Log it
-                    Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
+                    //Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
                 }
             }
             catch (Exception ex)
@@ -1579,7 +1585,7 @@ namespace FashionSense
                     textureManager.AddAppearanceModel(appearanceModel);
 
                     // Log it
-                    Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
+                    //Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
                 }
             }
             catch (Exception ex)
@@ -1706,7 +1712,7 @@ namespace FashionSense
                     textureManager.AddAppearanceModel(appearanceModel);
 
                     // Log it
-                    Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
+                    //Monitor.Log(appearanceModel.ToString(), LogLevel.Trace);
                 }
             }
             catch (Exception ex)
