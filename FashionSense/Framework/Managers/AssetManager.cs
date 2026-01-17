@@ -17,9 +17,6 @@ namespace FashionSense.Framework.Managers
         internal const string HAND_MIRROR_TOOL_ID = $"(T){HAND_MIRROR_ID}";
         internal const string HAND_MIRROR_TEXTURE_PATH = "FashionSense/Textures/HandMirror";
 
-        // Tool textures
-        private Texture2D _handMirrorTexture;
-
         // UI textures
         internal readonly Texture2D scissorsButtonTexture;
         internal readonly Texture2D accessoryButtonTexture;
@@ -41,7 +38,6 @@ namespace FashionSense.Framework.Managers
             assetFolderPath = helper.ModContent.GetInternalAssetName(Path.Combine("Framework", "Assets")).Name;
 
             // Load in the UI assets
-            _handMirrorTexture = helper.ModContent.Load<Texture2D>(Path.Combine(assetFolderPath, "HandMirror.png"));
             scissorsButtonTexture = helper.ModContent.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "HairButton.png"));
             accessoryButtonTexture = helper.ModContent.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "AccessoryButton.png"));
             hatButtonTexture = helper.ModContent.Load<Texture2D>(Path.Combine(assetFolderPath, "UI", "HatButton.png"));
@@ -63,9 +59,9 @@ namespace FashionSense.Framework.Managers
             return localPack;
         }
 
-        internal Texture2D GetHandMirrorTexture()
+        internal string GetHandMirrorAssetPath()
         {
-            return _handMirrorTexture;
+            return Path.Combine(assetFolderPath, "HandMirror.png");
         }
 
         internal void AddToolData(IAssetData gameToolData)

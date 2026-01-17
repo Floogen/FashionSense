@@ -296,7 +296,7 @@ namespace FashionSense
             }
             else if (e.NameWithoutLocale.IsEquivalentTo(AssetManager.HAND_MIRROR_TEXTURE_PATH))
             {
-                e.LoadFrom(assetManager.GetHandMirrorTexture, AssetLoadPriority.High);
+                e.LoadFromModFile<Texture2D>(assetManager.GetHandMirrorAssetPath(), AssetLoadPriority.Exclusive);
             }
             else if (e.NameWithoutLocale.IsEquivalentTo("Data/Hats"))
             {
