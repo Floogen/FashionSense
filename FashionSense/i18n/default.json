@@ -8,7 +8,7 @@
   "config.general.allow_mannequin_animations.name": "Allow Mannequin Animations",
   "config.general.allow_mannequin_animations.description": "When enabled, mannequins with Fashion Sense appearances will play their animations.",
   "config.general.keep_hair_when_loading_outfits.name": "Keep Hair When Loading Outfits",
-  "config.general.keep_hair_when_loading_outfits.description": "When enabled, loading saved outfits doesn't override hairstyle",
+  "config.general.keep_hair_when_loading_outfits.description": "When enabled, loading saved outfits won't override the current hairstyle.",
 
 
   // Tools
