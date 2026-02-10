@@ -7,6 +7,9 @@
   "config.general.shortcut_key.description": "When this key is pressed, the Hand Mirror menu will appear.",
   "config.general.allow_mannequin_animations.name": "Allow Mannequin Animations",
   "config.general.allow_mannequin_animations.description": "When enabled, mannequins with Fashion Sense appearances will play their animations.",
+  "config.general.keep_hair_when_loading_outfits.name": "Keep Hair When Loading Outfits",
+  "config.general.keep_hair_when_loading_outfits.description": "When enabled, loading saved outfits won't override the current hairstyle.",
+
 
   // Tools
   "tools.name.hand_mirror": "Hand Mirror",

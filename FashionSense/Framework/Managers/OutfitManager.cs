@@ -199,7 +199,10 @@ namespace FashionSense.Framework.Managers
 
         public void SetOutfit(Farmer who, Outfit outfit)
         {
-            who.modData[ModDataKeys.CUSTOM_HAIR_ID] = String.IsNullOrEmpty(outfit.HairId) ? "None" : outfit.HairId;
+            if (FashionSense.modConfig.KeepHairWhenLoadingOutfits is false)
+            {
+                who.modData[ModDataKeys.CUSTOM_HAIR_ID] = String.IsNullOrEmpty(outfit.HairId) ? "None" : outfit.HairId;
+            }
             who.modData[ModDataKeys.CUSTOM_HAT_ID] = String.IsNullOrEmpty(outfit.HatId) ? "None" : outfit.HatId;
             who.modData[ModDataKeys.CUSTOM_SHIRT_ID] = String.IsNullOrEmpty(outfit.ShirtId) ? "None" : outfit.ShirtId;
             who.modData[ModDataKeys.CUSTOM_SLEEVES_ID] = String.IsNullOrEmpty(outfit.SleevesId) ? "None" : outfit.SleevesId;

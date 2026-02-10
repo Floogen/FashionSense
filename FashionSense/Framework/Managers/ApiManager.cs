@@ -57,6 +57,7 @@ namespace FashionSense.Framework.Managers
             _genericModConfigMenuApi.AddKeybind(modManifest, () => FashionSense.modConfig.QuickMenuKey, value => FashionSense.modConfig.QuickMenuKey = value, () => helper.Translation.Get("config.general.shortcut_key.name"), () => helper.Translation.Get("config.general.shortcut_key.description"));
 
             _genericModConfigMenuApi.AddBoolOption(modManifest, () => FashionSense.modConfig.AllowMannequinAnimations, value => FashionSense.modConfig.AllowMannequinAnimations = value, () => helper.Translation.Get("config.general.allow_mannequin_animations.name"), () => helper.Translation.Get("config.general.allow_mannequin_animations.description"));
+            _genericModConfigMenuApi.AddBoolOption(modManifest, () => FashionSense.modConfig.KeepHairWhenLoadingOutfits, value => FashionSense.modConfig.KeepHairWhenLoadingOutfits = value, () => helper.Translation.Get("config.general.keep_hair_when_loading_outfits.name"), () => helper.Translation.Get("config.general.keep_hair_when_loading_outfits.description"));
         }
 
         private static void ResetConfig()
