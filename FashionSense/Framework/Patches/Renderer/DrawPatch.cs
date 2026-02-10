@@ -26,32 +26,15 @@ namespace FashionSense.Framework.Patches.Renderer
 {
     internal class DrawPatch : PatchTemplate
     {
-        // PERF: cache skin color lookup texture + raw data so we don't Load/GetData every draw call.
+        // Performance related to caching skin texture and related data
         private static readonly object _skinColorsLock = new();
         private static Texture2D _skinColorsTexture;
         private static Color[] _skinColorsData;
         private static int _skinColorsWidth;
         private static int _skinColorsHeight;
 
-        private static Texture2D GetSkinColorsTexture(LocalizedContentManager farmerTextureManager)
-        {
-            // LocalizedContentManager.Load caches internally, but calling it thousands of times per second still adds overhead,
-            // and GetData is extremely expensive. Cache both the texture and its data.
-            lock (_skinColorsLock)
-            {
-                _skinColorsTexture ??= farmerTextureManager.Load<Texture2D>(@"Characters\Farmer\skinColors");
-                if (_skinColorsData is null || _skinColorsWidth != _skinColorsTexture.Width || _skinColorsHeight != _skinColorsTexture.Height)
-                {
-                    _skinColorsWidth = _skinColorsTexture.Width;
-                    _skinColorsHeight = _skinColorsTexture.Height;
-                    _skinColorsData = new Color[_skinColorsWidth * _skinColorsHeight];
-                    _skinColorsTexture.GetData(_skinColorsData);
-                }
-                return _skinColorsTexture;
-            }
-        }
-
         internal static float? lastCustomLayerDepth;
+
         private readonly Type _entity = typeof(FarmerRenderer);
 
         internal DrawPatch(IMonitor modMonitor, IModHelper modHelper) : base(modMonitor, modHelper)
@@ -498,7 +481,7 @@ namespace FashionSense.Framework.Patches.Renderer
                 skin_index = 0;
             }
 
-                        Color darkest = skinColorsData[skin_index * 3 % (skinColors.Height * 3)];
+            Color darkest = skinColorsData[skin_index * 3 % (skinColors.Height * 3)];
             Color medium = skinColorsData[skin_index * 3 % (skinColors.Height * 3) + 1];
             Color lightest = skinColorsData[skin_index * 3 % (skinColors.Height * 3) + 2];
 
@@ -540,6 +523,24 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             return new SkinToneModel(lightest, medium, darkest);
+        }
+
+        private static Texture2D GetSkinColorsTexture(LocalizedContentManager farmerTextureManager)
+        {
+            // LocalizedContentManager.Load caches internally, but calling it thousands of times per second still adds overhead and GetData is extremely expensive
+            // Cache both the texture and its data
+            lock (_skinColorsLock)
+            {
+                _skinColorsTexture ??= farmerTextureManager.Load<Texture2D>(@"Characters\Farmer\skinColors");
+                if (_skinColorsData is null || _skinColorsWidth != _skinColorsTexture.Width || _skinColorsHeight != _skinColorsTexture.Height)
+                {
+                    _skinColorsWidth = _skinColorsTexture.Width;
+                    _skinColorsHeight = _skinColorsTexture.Height;
+                    _skinColorsData = new Color[_skinColorsWidth * _skinColorsHeight];
+                    _skinColorsTexture.GetData(_skinColorsData);
+                }
+                return _skinColorsTexture;
+            }
         }
 
         internal static void ExecuteRecolorActionsReversePatch(FarmerRenderer __instance, Farmer who)
