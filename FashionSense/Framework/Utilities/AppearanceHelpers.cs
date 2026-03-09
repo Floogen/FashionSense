@@ -704,7 +704,7 @@ namespace FashionSense.Framework.Utilities
             }
 
             // Get the farmer's FarmerSprite.currentSingleAnimation via reflection
-            int currentSingleAnimation = FashionSense.modHelper.Reflection.GetField<int>(who.FarmerSprite, "currentSingleAnimation").GetValue();
+            int currentSingleAnimation = who.FarmerSprite.currentSingleAnimation;
 
             bool isValid = AreConditionsValid(animationModel.Conditions, currentSingleAnimation, who, model, animations, iterator, probe);
 
