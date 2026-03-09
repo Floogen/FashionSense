@@ -907,7 +907,16 @@ namespace FashionSense.Framework.Utilities
                 }
                 else if (condition.Name is Condition.Type.CurrentFarmerFrame)
                 {
-                    passedCheck = condition.IsValid(who.FarmerSprite.CurrentFrame);
+                    int currentFarmerFrame = who.FarmerSprite.CurrentFrame;
+                    if (FashionSense.conditionData.AreBathingClothesOverridden(who))
+                    {
+                        // Handle bathing clothes override
+                        passedCheck = condition.IsValid(currentFarmerFrame - 108) || condition.IsValid(currentFarmerFrame);
+                    }
+                    else
+                    {
+                        passedCheck = condition.IsValid(currentFarmerFrame);
+                    }
                 }
                 else if (condition.Name is Condition.Type.RandomChance)
                 {

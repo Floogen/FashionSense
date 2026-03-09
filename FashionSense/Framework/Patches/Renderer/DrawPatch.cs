@@ -326,6 +326,9 @@ namespace FashionSense.Framework.Patches.Renderer
                 facingDirection = ((!animationFrame.flip) ? 1 : 3);
             }
 
+            // Set bathing clothes override
+            FashionSense.conditionData.SetBathingClothesOverride(who, equippedModels);
+
             // Get skin tone
             var skinTone = DrawPatch.GetSkinTone(___farmerTextureManager, baseTexture, null, ___skin, ____sickFrame, who);
 

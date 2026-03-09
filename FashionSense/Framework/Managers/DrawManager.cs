@@ -50,6 +50,14 @@ namespace FashionSense.Framework.Managers
                 adjustedPositionOffset = new Vector2(positionOffset.X + animation.PlayerOffset.X, positionOffset.Y + animation.PlayerOffset.Y);
             }
 
+            // Handle bathing clothes override
+            if (FashionSense.conditionData.AreBathingClothesOverridden(who))
+            {
+                farmerSourceRectangle.Y -= 576;
+                currentFrame -= 108;
+                animationFrame.armOffset = 6;
+            }
+
             DrawTool = new DrawTool()
             {
                 Farmer = who,
@@ -327,7 +335,7 @@ namespace FashionSense.Framework.Managers
             }
 
             // Handle the vanilla sleeve / arm drawing, if a custom sleeve model isn't given
-            if (sleevesModel is null && _hideSleeves is false && who.bathingClothes.Value is false)
+            if (sleevesModel is null && _hideSleeves is false && (who.bathingClothes.Value is false || FashionSense.conditionData.AreBathingClothesOverridden(who)))
             {
                 DrawSlingshotVanilla(who);
             }
