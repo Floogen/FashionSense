@@ -13,7 +13,8 @@ namespace FashionSense.Framework.Models.Appearances.Generic
         {
             EqualTo,
             GreaterThan,
-            LessThan
+            LessThan,
+            NotEqualTo
         }
 
         public enum Type
@@ -107,6 +108,9 @@ namespace FashionSense.Framework.Models.Appearances.Generic
                 case Comparison.LessThan:
                     passed = numericalValue < comparisonValue;
                     break;
+                case Comparison.NotEqualTo:
+                    passed = numericalValue != comparisonValue;
+                    break;
             }
             if (Inverse)
             {
@@ -130,6 +134,9 @@ namespace FashionSense.Framework.Models.Appearances.Generic
                     break;
                 case Comparison.LessThan:
                     passed = numericalValue < comparisonValue;
+                    break;
+                case Comparison.NotEqualTo:
+                    passed = numericalValue != comparisonValue;
                     break;
             }
             if (Inverse)
