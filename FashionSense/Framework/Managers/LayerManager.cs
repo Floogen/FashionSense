@@ -219,7 +219,15 @@ namespace FashionSense.Framework.Managers
         private void AddShoes(Farmer who, ShoesModel shoesModel, List<Color> colors, ref List<LayerData> rawLayerData)
         {
             var layerData = new LayerData(IApi.Type.Shoes, shoesModel);
-            if (AppearanceHelpers.ShouldHideWhileSwimmingOrWearingBathingSuit(who, shoesModel) || AppearanceHelpers.ShouldHideLegs(who, _facingDirection))
+            if (AppearanceHelpers.ShouldHideLegs(who, _facingDirection))
+            {
+                layerData.IsHidden = true;
+            }
+            else if (AppearanceHelpers.ShouldHideWhileWearingBathingSuit(who, shoesModel) && FashionSense.conditionData.AreBathingClothesOverridden(who) is false)
+            {
+                layerData.IsHidden = true;
+            }
+            else if (AppearanceHelpers.ShouldWhileSwimming(who, shoesModel))
             {
                 layerData.IsHidden = true;
             }

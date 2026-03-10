@@ -611,7 +611,17 @@ namespace FashionSense.Framework.Utilities
 
         internal static bool ShouldHideWhileSwimmingOrWearingBathingSuit(Farmer who, AppearanceModel model)
         {
-            return (model.HideWhileWearingBathingSuit && who.bathingClothes.Value) || (model.HideWhileSwimming && who.swimming.Value);
+            return ShouldHideWhileWearingBathingSuit(who, model) || ShouldWhileSwimming(who, model);
+        }
+
+        internal static bool ShouldHideWhileWearingBathingSuit(Farmer who, AppearanceModel model)
+        {
+            return model.HideWhileWearingBathingSuit && who.bathingClothes.Value;
+        }
+
+        internal static bool ShouldWhileSwimming(Farmer who, AppearanceModel model)
+        {
+            return model.HideWhileSwimming && who.swimming.Value;
         }
 
         internal static bool ShouldHideLegs(Farmer who, int facingDirection)
