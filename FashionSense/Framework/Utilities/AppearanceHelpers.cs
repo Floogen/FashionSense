@@ -803,6 +803,10 @@ namespace FashionSense.Framework.Utilities
                 {
                     passedCheck = condition.IsValid(FashionSense.conditionData.IsRunning(who));
                 }
+                else if (condition.Name is Condition.Type.IsMoving)
+                {
+                    passedCheck = condition.IsValid(FashionSense.conditionData.IsPlayerMoving(who));
+                }
                 else if (condition.Name is Condition.Type.IsEating)
                 {
                     passedCheck = condition.IsValid(who.isEating && currentSingleAnimation == FarmerSprite.eat);

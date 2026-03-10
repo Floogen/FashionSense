@@ -34,6 +34,7 @@ namespace FashionSense.Framework.Models.Appearances.Generic
             IsSnowing,
             IsWalking,
             IsRunning,
+            IsMoving,
             IsEating,
             IsDrinking,
             IsCasting,
