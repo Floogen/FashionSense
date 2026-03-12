@@ -21,6 +21,10 @@ namespace FashionSense.Framework.Models.Appearances
 
         public int Frame { get; set; }
         public List<SubFrame> SubFrames { get; set; } = new List<SubFrame>();
+        /// <summary>
+        /// Used to optionally override the AppearanceModel.DrawOrderOverride
+        /// </summary>
+        public DrawOrder DrawOrderOverride { get; set; }
         public Position Offset { get; set; } = new Position() { X = 0, Y = 0 };
         ///<summary>Used only by BodyModel</summary>
         public Position EyesOffset { get; set; } = new Position() { X = 0, Y = 0 };

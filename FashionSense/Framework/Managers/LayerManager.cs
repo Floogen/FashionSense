@@ -12,6 +12,7 @@ using FashionSense.Framework.Models.Appearances.Sleeves;
 using FashionSense.Framework.Models.General;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
 using System.Collections.Generic;
@@ -30,7 +31,7 @@ namespace FashionSense.Framework.Managers
             _monitor = monitor;
         }
 
-        public List<LayerData> SortModelsForDrawing(Farmer who, int facingDirection, List<AppearanceMetadata> metadata)
+        public List<LayerData> SortModelsForDrawing(Farmer who, int facingDirection, List<AppearanceMetadata> metadata, Dictionary<AppearanceModel, AnimationModel> appearanceTypeToAnimationModels)
         {
             // Set the required variables
             _facingDirection = facingDirection;
@@ -137,6 +138,14 @@ namespace FashionSense.Framework.Managers
 
                 // Perform sorting for DrawOrder property
                 var drawOrderOverride = layerData.AppearanceModel.DrawOrderOverride;
+
+                // Check if animation contains an override for the DrawOrderOverride
+                var animation = AppearanceHelpers.GetAnimationByModel(layerData.AppearanceModel, appearanceTypeToAnimationModels);
+                if (animation is not null && animation.DrawOrderOverride is not null)
+                {
+                    drawOrderOverride = animation.DrawOrderOverride;
+                }
+
                 if (drawOrderOverride is not null && drawOrderOverride.IsValid())
                 {
                     MoveLayerDataItem(sortedLayerData.FindIndex(d => d.AppearanceType == drawOrderOverride.AppearanceType) + (drawOrderOverride.Preposition is DrawOrder.Order.After ? 1 : 0), layerData, ref sortedLayerData);
@@ -219,7 +228,15 @@ namespace FashionSense.Framework.Managers
         private void AddShoes(Farmer who, ShoesModel shoesModel, List<Color> colors, ref List<LayerData> rawLayerData)
         {
             var layerData = new LayerData(IApi.Type.Shoes, shoesModel);
-            if (AppearanceHelpers.ShouldHideWhileSwimmingOrWearingBathingSuit(who, shoesModel) || AppearanceHelpers.ShouldHideLegs(who, _facingDirection))
+            if (AppearanceHelpers.ShouldHideLegs(who, _facingDirection))
+            {
+                layerData.IsHidden = true;
+            }
+            else if (AppearanceHelpers.ShouldHideWhileWearingBathingSuit(who, shoesModel) && FashionSense.conditionData.AreBathingClothesOverridden(who) is false)
+            {
+                layerData.IsHidden = true;
+            }
+            else if (AppearanceHelpers.ShouldWhileSwimming(who, shoesModel))
             {
                 layerData.IsHidden = true;
             }

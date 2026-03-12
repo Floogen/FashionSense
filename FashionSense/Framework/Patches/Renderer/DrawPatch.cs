@@ -326,6 +326,9 @@ namespace FashionSense.Framework.Patches.Renderer
                 facingDirection = ((!animationFrame.flip) ? 1 : 3);
             }
 
+            // Set bathing clothes override
+            FashionSense.conditionData.SetBathingClothesOverride(who, equippedModels);
+
             // Get skin tone
             var skinTone = DrawPatch.GetSkinTone(___farmerTextureManager, baseTexture, null, ___skin, ____sickFrame, who);
 
@@ -425,7 +428,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             // Go through the models and determine draw order
-            return FashionSense.layerManager.SortModelsForDrawing(who, facingDirection, metadata);
+            return FashionSense.layerManager.SortModelsForDrawing(who, facingDirection, metadata, appearanceTypeToAnimationModels);
         }
 
         internal static Color? GetOutdatedColorValue(Farmer who, AppearanceModel model, int appearanceIndex = 0)
