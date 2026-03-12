@@ -428,7 +428,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
 
             // Go through the models and determine draw order
-            return FashionSense.layerManager.SortModelsForDrawing(who, facingDirection, metadata);
+            return FashionSense.layerManager.SortModelsForDrawing(who, facingDirection, metadata, appearanceTypeToAnimationModels);
         }
 
         internal static Color? GetOutdatedColorValue(Farmer who, AppearanceModel model, int appearanceIndex = 0)

@@ -1267,5 +1267,15 @@ namespace FashionSense.Framework.Utilities
 
             return farmerRenderer.heightOffset.Value;
         }
+
+        public static AnimationModel GetAnimationByModel(AppearanceModel model, Dictionary<AppearanceModel, AnimationModel> appearanceTypeToAnimationModels)
+        {
+            if (model is not null && appearanceTypeToAnimationModels.TryGetValue(model, out var animation) is true && animation is not null)
+            {
+                return animation;
+            }
+
+            return null;
+        }
     }
 }
