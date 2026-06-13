@@ -30,7 +30,8 @@ namespace FashionSense.Framework.Interfaces.API
             Pants,
             Sleeves,
             Shoes,
-            Player
+            Player,
+            Body
         }
 
         public record RawTextureData(int Width, int Height, Color[] Data) : IRawTextureData;
@@ -266,6 +267,10 @@ namespace FashionSense.Framework.Interfaces.API
                     break;
                 case IApi.Type.Shoes:
                     modDataKey = ModDataKeys.CUSTOM_SHOES_ID;
+                    break;
+                case IApi.Type.Player:
+                case IApi.Type.Body:
+                    modDataKey = ModDataKeys.CUSTOM_BODY_ID;
                     break;
             }
 
