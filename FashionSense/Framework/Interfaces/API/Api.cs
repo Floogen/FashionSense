@@ -267,6 +267,9 @@ namespace FashionSense.Framework.Interfaces.API
                 case IApi.Type.Shoes:
                     modDataKey = ModDataKeys.CUSTOM_SHOES_ID;
                     break;
+                case IApi.Type.Player:
+                    modDataKey = ModDataKeys.CUSTOM_BODY_ID;
+                    break;
             }
 
             return modDataKey;
