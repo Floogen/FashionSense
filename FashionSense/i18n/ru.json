@@ -7,6 +7,8 @@
   "config.general.shortcut_key.description": "При нажатии этой клавиши откроется меню Ручного зеркала.",
   "config.general.allow_mannequin_animations.name": "Разрешить анимации манекенов",
   "config.general.allow_mannequin_animations.description": "Если включено, манекены с внешностью из Fashion Sense будут проигрывать анимации.",
+  "config.general.keep_hair_when_loading_outfits.name": "Сохранять причёску при загрузке нарядов",
+  "config.general.keep_hair_when_loading_outfits.description": "Если включено, загрузка сохранённых нарядов не будет заменять текущую причёску.",
 
   // Tools
   "tools.name.hand_mirror": "Ручное зеркало",
@@ -27,7 +29,7 @@
   "ui.fashion_sense.title.hair": "Причёски",
   "ui.fashion_sense.title.accessory": "Аксессуары",
   "ui.fashion_sense.title.hat": "Шляпы",
-  "ui.fashion_sense.title.shirt": "Топы",
+  "ui.fashion_sense.title.shirt": "Рубашки",
   "ui.fashion_sense.title.pants": "Штаны",
   "ui.fashion_sense.title.sleeves": "Рукава",
   "ui.fashion_sense.title.sleevesAndShoes": "Рукава и Обувь",
@@ -56,6 +58,7 @@
   "ui.fashion_sense.outfit_info.preset": "Предустановка",
   "ui.fashion_sense.outfit_info.export": "Копирует JSON наряда в буфер обмена.",
   "ui.fashion_sense.warning.name": "Имя наряда пустое или уже существует.",
+  "ui.fashion_sense.mask_layer.base": "Основа",
   "ui.fashion_sense.outfit_info.missing_appearances": "Отсутствуют следующие элементы внешности:\n{0}",
   "ui.fashion_sense.buttons.import": "Импорт",
   "ui.fashion_sense.buttons.import.description": "Импортирует внешний наряд Fashion Sense из буфера обмена.",
@@ -63,7 +66,6 @@
   "ui.fashion_sense.buttons.presets.description": "Просмотр предустановок из контент-пакетов Fashion Sense.",
   "ui.fashion_sense.exported_outfit": "Наряд скопирован в буфер обмена.",
   "ui.fashion_sense.preset_info": "{0}\n\nАвтор: {1}\nПакет: {2}",
-  "ui.fashion_sense.mask_layer.base": "Основа",
 
   // UI - Etc
   "ui.fashion_sense.start_with_hand_mirror": "Начать с зеркалом",
@@ -83,7 +85,7 @@
   "ui.fashion_sense.color_disabled.generic": "(Игнорируется)",
   "ui.fashion_sense.color_info.hair": "Изменение цвета не повлияет на эту причёску.",
   "ui.fashion_sense.color_info.hat": "Изменение цвета не повлияет на эту шляпу.",
-  "ui.fashion_sense.color_info.shirt": "Изменение цвета не повлияет на этот топ.",
+  "ui.fashion_sense.color_info.shirt": "Изменение цвета не повлияет на эту рубашку.",
   "ui.fashion_sense.color_info.pants": "Изменение цвета не повлияет на эти штаны.",
   "ui.fashion_sense.color_info.accessory": "Изменение цвета не повлияет на этот аксессуар.",
   "ui.fashion_sense.color_info.sleeves": "Изменение цвета не повлияет на эти рукава.",
