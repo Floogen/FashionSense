@@ -45,9 +45,17 @@ namespace FashionSense.Framework.Managers
         {
             // Handle player offset via custom body, if any
             var adjustedPositionOffset = positionOffset;
-            if (GetAnimationByModel(customBody, appearanceTypeToAnimationModels) is AnimationModel animation && animation is not null)
+            if (AppearanceHelpers.GetAnimationByModel(customBody, appearanceTypeToAnimationModels) is AnimationModel animation && animation is not null)
             {
                 adjustedPositionOffset = new Vector2(positionOffset.X + animation.PlayerOffset.X, positionOffset.Y + animation.PlayerOffset.Y);
+            }
+
+            // Handle bathing clothes override
+            if (FashionSense.conditionData.AreBathingClothesOverridden(who))
+            {
+                farmerSourceRectangle.Y -= 576;
+                currentFrame -= 108;
+                animationFrame.armOffset = 6;
             }
 
             DrawTool = new DrawTool()
@@ -327,7 +335,7 @@ namespace FashionSense.Framework.Managers
             }
 
             // Handle the vanilla sleeve / arm drawing, if a custom sleeve model isn't given
-            if (sleevesModel is null && _hideSleeves is false && who.bathingClothes.Value is false)
+            if (sleevesModel is null && _hideSleeves is false && (who.bathingClothes.Value is false || FashionSense.conditionData.AreBathingClothesOverridden(who)))
             {
                 DrawSlingshotVanilla(who);
             }
@@ -803,7 +811,7 @@ namespace FashionSense.Framework.Managers
             }
 
             // Get any body animation data
-            var animation = GetAnimationByModel(bodyModel, _appearanceTypeToAnimationModels);
+            var animation = AppearanceHelpers.GetAnimationByModel(bodyModel, _appearanceTypeToAnimationModels);
 
             // Display forward facing farmer when in inventory / vanilla UIs
             var sourceRectangle = GetSourceRectangle(bodyModel, _appearanceTypeToAnimationModels);
@@ -1129,16 +1137,6 @@ namespace FashionSense.Framework.Managers
         #endregion
 
         #region Helper methods
-        private AnimationModel GetAnimationByModel(AppearanceModel model, Dictionary<AppearanceModel, AnimationModel> appearanceTypeToAnimationModels)
-        {
-            if (model is not null && appearanceTypeToAnimationModels.TryGetValue(model, out var animation) is true && animation is not null)
-            {
-                return animation;
-            }
-
-            return null;
-        }
-
         private Position GetPositionOffset(AppearanceModel model, Dictionary<AppearanceModel, AnimationModel> appearanceTypeToAnimationModels)
         {
             var offset = new Position();
@@ -1170,7 +1168,7 @@ namespace FashionSense.Framework.Managers
                     break;
             }
 
-            var animation = GetAnimationByModel(model, appearanceTypeToAnimationModels);
+            var animation = AppearanceHelpers.GetAnimationByModel(model, appearanceTypeToAnimationModels);
             if (animation is not null)
             {
                 offset = new Position() { X = offset.X + animation.Offset.X, Y = offset.Y + animation.Offset.Y };
@@ -1184,7 +1182,7 @@ namespace FashionSense.Framework.Managers
             var size = AppearanceHelpers.GetModelSize(model);
             Rectangle sourceRectangle = new Rectangle(model.StartingPosition.X, model.StartingPosition.Y, size.Width, size.Length);
 
-            var animation = GetAnimationByModel(model, appearanceTypeToAnimationModels);
+            var animation = AppearanceHelpers.GetAnimationByModel(model, appearanceTypeToAnimationModels);
             if (animation is null)
             {
                 return sourceRectangle;

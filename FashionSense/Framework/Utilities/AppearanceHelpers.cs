@@ -611,7 +611,17 @@ namespace FashionSense.Framework.Utilities
 
         internal static bool ShouldHideWhileSwimmingOrWearingBathingSuit(Farmer who, AppearanceModel model)
         {
-            return (model.HideWhileWearingBathingSuit && who.bathingClothes.Value) || (model.HideWhileSwimming && who.swimming.Value);
+            return ShouldHideWhileWearingBathingSuit(who, model) || ShouldWhileSwimming(who, model);
+        }
+
+        internal static bool ShouldHideWhileWearingBathingSuit(Farmer who, AppearanceModel model)
+        {
+            return model.HideWhileWearingBathingSuit && who.bathingClothes.Value;
+        }
+
+        internal static bool ShouldWhileSwimming(Farmer who, AppearanceModel model)
+        {
+            return model.HideWhileSwimming && who.swimming.Value;
         }
 
         internal static bool ShouldHideLegs(Farmer who, int facingDirection)
@@ -704,7 +714,7 @@ namespace FashionSense.Framework.Utilities
             }
 
             // Get the farmer's FarmerSprite.currentSingleAnimation via reflection
-            int currentSingleAnimation = FashionSense.modHelper.Reflection.GetField<int>(who.FarmerSprite, "currentSingleAnimation").GetValue();
+            int currentSingleAnimation = who.FarmerSprite.currentSingleAnimation;
 
             bool isValid = AreConditionsValid(animationModel.Conditions, currentSingleAnimation, who, model, animations, iterator, probe);
 
@@ -792,6 +802,10 @@ namespace FashionSense.Framework.Utilities
                 else if (condition.Name is Condition.Type.IsRunning)
                 {
                     passedCheck = condition.IsValid(FashionSense.conditionData.IsRunning(who));
+                }
+                else if (condition.Name is Condition.Type.IsMoving)
+                {
+                    passedCheck = condition.IsValid(FashionSense.conditionData.IsPlayerMoving(who));
                 }
                 else if (condition.Name is Condition.Type.IsEating)
                 {
@@ -907,7 +921,16 @@ namespace FashionSense.Framework.Utilities
                 }
                 else if (condition.Name is Condition.Type.CurrentFarmerFrame)
                 {
-                    passedCheck = condition.IsValid(who.FarmerSprite.CurrentFrame);
+                    int currentFarmerFrame = who.FarmerSprite.CurrentFrame;
+                    if (FashionSense.conditionData.AreBathingClothesOverridden(who))
+                    {
+                        // Handle bathing clothes override
+                        passedCheck = condition.IsValid(currentFarmerFrame - 108) || condition.IsValid(currentFarmerFrame);
+                    }
+                    else
+                    {
+                        passedCheck = condition.IsValid(currentFarmerFrame);
+                    }
                 }
                 else if (condition.Name is Condition.Type.RandomChance)
                 {
@@ -1243,6 +1266,16 @@ namespace FashionSense.Framework.Utilities
             }
 
             return farmerRenderer.heightOffset.Value;
+        }
+
+        public static AnimationModel GetAnimationByModel(AppearanceModel model, Dictionary<AppearanceModel, AnimationModel> appearanceTypeToAnimationModels)
+        {
+            if (model is not null && appearanceTypeToAnimationModels.TryGetValue(model, out var animation) is true && animation is not null)
+            {
+                return animation;
+            }
+
+            return null;
         }
     }
 }

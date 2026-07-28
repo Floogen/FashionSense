@@ -1,4 +1,8 @@
-﻿using FashionSense.Framework.Models.Appearances.Generic;
+﻿using FashionSense.Framework.Models.Appearances;
+using FashionSense.Framework.Models.Appearances.Generic;
+using FashionSense.Framework.Models.Appearances.Pants;
+using FashionSense.Framework.Models.Appearances.Shirt;
+using FashionSense.Framework.Models.Appearances.Shoes;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -12,6 +16,28 @@ namespace FashionSense.Framework.Utilities
     {
         private Dictionary<Farmer, float> _farmerToMovementDuration = new Dictionary<Farmer, float>();
         private Dictionary<Farmer, float> _farmerToElapsedMilliseconds = new Dictionary<Farmer, float>();
+        private Dictionary<Farmer, bool> _farmerToBathingClothesOverride = new Dictionary<Farmer, bool>();
+
+        internal void SetBathingClothesOverride(Farmer who, List<AppearanceMetadata> models)
+        {
+            bool shouldOverride = false;
+            if (who.bathingClothes.Value is true && models.Any(a => a.Model is not null && a.Model.HideWhileWearingBathingSuit is false && (a.Model is ShirtModel || a.Model is PantsModel || a.Model is ShoesModel)))
+            {
+                shouldOverride = true;
+            }
+
+            _farmerToBathingClothesOverride[who] = shouldOverride;
+        }
+
+        internal bool AreBathingClothesOverridden(Farmer who)
+        {
+            if (_farmerToBathingClothesOverride.ContainsKey(who))
+            {
+                return _farmerToBathingClothesOverride[who];
+            }
+
+            return false;
+        }
 
         internal bool IsMovingFastEnough(Farmer who, long requiredMovementSpeed)
         {
