@@ -37,6 +37,9 @@
         internal const string CURRENT_OUTFIT_ID = "FashionSense.Outfit.CurrentId";
         internal const string MANNEQUIN_OUTFIT_DATA = "FashionSense.Outfit.Mannequin.Data";
 
+        // Favorite related keys
+        internal const string FAVORITES = "FashionSense.Favorites.Collection";
+
         // Etc
         internal const string STARTS_WITH_HAND_MIRROR = "FashionSense.StartsWithHandMirror";
         internal const string INTERNAL_COLOR_OVERRIDE_SHOE_ID = "Override Shoe Color";

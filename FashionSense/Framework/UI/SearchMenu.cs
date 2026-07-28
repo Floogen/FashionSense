@@ -51,6 +51,16 @@ namespace FashionSense.Framework.UI
         private FilterDropDown _searchFilterOptions;
         private ClickableComponent _changeDirectionButton;
 
+        // Favorites
+        // Reuses the vanilla friendship heart icons (Game1.mouseCursors) as the favorite toggle
+        private static readonly Rectangle FilledHeartSourceRect = new Rectangle(211, 428, 7, 6);
+        private static readonly Rectangle EmptyHeartSourceRect = new Rectangle(218, 428, 7, 6);
+        private const float FavoriteIconScale = 3f;
+        private const int FavoritesOnlyFilterOptionIndex = 4;
+
+        private int _cachedFilterOption = -1;
+        private List<Rectangle> _favoriteIconBounds = new List<Rectangle>();
+
         public SearchMenu(Farmer who, string appearanceFilter, HandMirrorMenu callbackMenu) : base(0, 0, 832, 576, showUpperRightCloseButton: true)
         {
             _displayFarmer = who;
@@ -124,6 +134,9 @@ namespace FashionSense.Framework.UI
                         leftNeighborID = c > 0 ? componentId - 1 : 9998
                     });
 
+                    var tileBounds = availableTextures[availableTextures.Count - 1].bounds;
+                    _favoriteIconBounds.Add(new Rectangle(tileBounds.X + 8, tileBounds.Y + 8, (int)(FilledHeartSourceRect.Width * FavoriteIconScale), (int)(FilledHeartSourceRect.Height * FavoriteIconScale)));
+
                     try
                     {
                         var fakeFarmer = _displayFarmer.CreateFakeEventFarmer();
@@ -172,7 +185,7 @@ namespace FashionSense.Framework.UI
             };
 
             // Establish the search options
-            List<string> options = new List<string>() { FashionSense.modHelper.Translation.Get("ui.fashion_sense.search.filter.none"), FashionSense.modHelper.Translation.Get("ui.fashion_sense.search.filter.author"), FashionSense.modHelper.Translation.Get("ui.fashion_sense.search.filter.pack_name"), FashionSense.modHelper.Translation.Get("ui.fashion_sense.search.filter.tags") };
+            List<string> options = new List<string>() { FashionSense.modHelper.Translation.Get("ui.fashion_sense.search.filter.none"), FashionSense.modHelper.Translation.Get("ui.fashion_sense.search.filter.author"), FashionSense.modHelper.Translation.Get("ui.fashion_sense.search.filter.pack_name"), FashionSense.modHelper.Translation.Get("ui.fashion_sense.search.filter.tags"), FashionSense.modHelper.Translation.Get("ui.fashion_sense.search.filter.favorites") };
             _searchFilterOptions = new FilterDropDown("Filter", 0) { dropDownDisplayOptions = options, dropDownOptions = options };
             _searchFilterOptions.bounds = new Rectangle(_searchBox.X + _searchBox.Width + 16, _searchBox.Y - 1, 256, 48);
             _searchFilterOptions.RecalculateBounds();
@@ -274,7 +287,19 @@ namespace FashionSense.Framework.UI
             for (int i = 0; i < availableTextures.Count; i++)
             {
                 var textureIndex = i + _startingRow * _texturesPerRow;
-                if (textureIndex < filteredTextureOptions.Count && availableTextures[i].containsPoint(x, y))
+                if (textureIndex >= filteredTextureOptions.Count)
+                {
+                    continue;
+                }
+
+                if (_favoriteIconBounds[i].Contains(x, y))
+                {
+                    var targetPack = filteredTextureOptions[textureIndex];
+                    _hoverText = FashionSense.favoritesManager.IsFavorite(_displayFarmer, targetPack.PackType, targetPack.Id)
+                        ? FashionSense.modHelper.Translation.Get("ui.fashion_sense.favorite.remove")
+                        : FashionSense.modHelper.Translation.Get("ui.fashion_sense.favorite.add");
+                }
+                else if (availableTextures[i].containsPoint(x, y))
                 {
                     var targetPack = filteredTextureOptions[textureIndex];
 
@@ -301,39 +326,47 @@ namespace FashionSense.Framework.UI
             }
         }
 
+        private void ApplyFilters()
+        {
+            IEnumerable<AppearanceContentPack> results = cachedTextureOptions;
+
+            if (_searchFilterOptions.selectedOption == FavoritesOnlyFilterOptionIndex)
+            {
+                results = results.Where(i => FashionSense.favoritesManager.IsFavorite(_displayFarmer, i.PackType, i.Id));
+            }
+            else if (String.IsNullOrEmpty(_searchBox.Text) is false)
+            {
+                switch (_searchFilterOptions.selectedOption)
+                {
+                    case 0:
+                        results = results.Where(i => i.Name.Contains(_searchBox.Text, StringComparison.OrdinalIgnoreCase));
+                        break;
+                    case 1:
+                        results = results.Where(i => i.Author.Contains(_searchBox.Text, StringComparison.OrdinalIgnoreCase));
+                        break;
+                    case 2:
+                        results = results.Where(i => i.PackName.Contains(_searchBox.Text, StringComparison.OrdinalIgnoreCase));
+                        break;
+                    case 3:
+                        results = results.Where(i => i.HasTag(_searchBox.Text));
+                        break;
+                }
+            }
+
+            _startingRow = 0;
+            filteredTextureOptions = results.ToList();
+            UpdateDisplayFarmers();
+        }
+
         public override void update(GameTime time)
         {
             base.update(time);
 
-            if (_searchBox.Text != _cachedTextBoxValue)
+            if (_searchBox.Text != _cachedTextBoxValue || _searchFilterOptions.selectedOption != _cachedFilterOption)
             {
-                _startingRow = 0;
                 _cachedTextBoxValue = _searchBox.Text;
-
-                if (String.IsNullOrEmpty(_searchBox.Text))
-                {
-                    filteredTextureOptions = cachedTextureOptions;
-                }
-                else
-                {
-                    switch (_searchFilterOptions.selectedOption)
-                    {
-                        case 0:
-                            filteredTextureOptions = cachedTextureOptions.Where(i => i.Name.Contains(_searchBox.Text, StringComparison.OrdinalIgnoreCase)).ToList();
-                            break;
-                        case 1:
-                            filteredTextureOptions = cachedTextureOptions.Where(i => i.Author.Contains(_searchBox.Text, StringComparison.OrdinalIgnoreCase)).ToList();
-                            break;
-                        case 2:
-                            filteredTextureOptions = cachedTextureOptions.Where(i => i.PackName.Contains(_searchBox.Text, StringComparison.OrdinalIgnoreCase)).ToList();
-                            break;
-                        case 3:
-                            filteredTextureOptions = cachedTextureOptions.Where(i => i.HasTag(_searchBox.Text)).ToList();
-                            break;
-                    }
-                }
-
-                UpdateDisplayFarmers();
+                _cachedFilterOption = _searchFilterOptions.selectedOption;
+                ApplyFilters();
             }
         }
 
@@ -343,6 +376,23 @@ namespace FashionSense.Framework.UI
             if (Game1.activeClickableMenu == null)
             {
                 return;
+            }
+
+            for (int i = 0; i < availableTextures.Count; i++)
+            {
+                var textureIndex = i + _startingRow * _texturesPerRow;
+                if (textureIndex < filteredTextureOptions.Count && _favoriteIconBounds[i].Contains(x, y))
+                {
+                    var targetPack = filteredTextureOptions[textureIndex];
+                    FashionSense.favoritesManager.ToggleFavorite(_displayFarmer, targetPack.PackType, targetPack.Id);
+                    Game1.playSound("coin");
+
+                    if (_searchFilterOptions.selectedOption == FavoritesOnlyFilterOptionIndex)
+                    {
+                        ApplyFilters();
+                    }
+                    return;
+                }
             }
 
             for (int i = 0; i < availableTextures.Count; i++)
@@ -490,6 +540,10 @@ namespace FashionSense.Framework.UI
 
                         //fakeFarmer.FarmerRenderer.draw(b, new FarmerSprite.AnimationFrame(0, 0, secondaryArm: false, flip: false), 0, new Rectangle(0, 0, 16, 32), new Vector2(availableTextures[i].bounds.Center.X - 32, availableTextures[i].bounds.Bottom - 160), Vector2.Zero, 0.8f, 2, Color.White, 0f, 1f, fakeFarmer);
                         FarmerRenderer.isDrawingForUI = false;
+
+                        // Favorite toggle icon
+                        var isFavorite = FashionSense.favoritesManager.IsFavorite(_displayFarmer, targetPack.PackType, targetPack.Id);
+                        b.Draw(Game1.mouseCursors, new Vector2(_favoriteIconBounds[i].X, _favoriteIconBounds[i].Y), isFavorite ? FilledHeartSourceRect : EmptyHeartSourceRect, Color.White, 0f, Vector2.Zero, FavoriteIconScale, SpriteEffects.None, 1f);
                     }
                 }
 

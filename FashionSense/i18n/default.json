@@ -43,7 +43,12 @@
   "ui.fashion_sense.search.filter.author": "Author",
   "ui.fashion_sense.search.filter.pack_name": "Pack Name",
   "ui.fashion_sense.search.filter.tags": "Tags",
+  "ui.fashion_sense.search.filter.favorites": "Favorites Only",
   "ui.fashion_sense.search.about": "{0}\n\nAuthor: {1}\nPack: {2}\nTags: {3}",
+
+  // UI - Favorites
+  "ui.fashion_sense.favorite.add": "Add to Favorites",
+  "ui.fashion_sense.favorite.remove": "Remove from Favorites",
 
   // UI - Outfits
   "ui.fashion_sense.title.outfits": "Outfits",
