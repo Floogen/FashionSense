@@ -56,6 +56,7 @@ namespace FashionSense
         internal static ApiManager apiManager;
         internal static AssetManager assetManager;
         internal static ColorManager colorManager;
+        internal static FavoritesManager favoritesManager;
         internal static LayerManager layerManager;
         internal static MessageManager messageManager;
         internal static OutfitManager outfitManager;
@@ -94,6 +95,7 @@ namespace FashionSense
             apiManager = new ApiManager(monitor);
             assetManager = new AssetManager(modHelper);
             colorManager = new ColorManager(monitor);
+            favoritesManager = new FavoritesManager(monitor);
             layerManager = new LayerManager(monitor);
             messageManager = new MessageManager(monitor, modHelper, ModManifest.UniqueID);
             outfitManager = new OutfitManager(monitor);

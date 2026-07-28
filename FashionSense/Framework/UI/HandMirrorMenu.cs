@@ -47,7 +47,7 @@ namespace FashionSense.Framework.UI
         internal const string SLEEVES_OPTION_BUTTON = "SleevesOption";
         internal const string SHOES_OPTION_BUTTON = "ShoesOption";
 
-        internal const string LIMIT_TO_ACCCESSORIES = "LimitedToAccessories";
+        internal const string LIMIT_TO_ACCESSORIES = "LimitedToAccessories";
         internal const string MASK_LAYERS = "MaskLayers";
 
         private ClickableComponent descriptionLabel;
@@ -115,8 +115,8 @@ namespace FashionSense.Framework.UI
                 downNeighborID = -99998
             });
 
-            leftSelectionButtons.Add(new ClickableTextureComponent(LIMIT_TO_ACCCESSORIES, new Rectangle(_portraitBox.X + 8, _portraitBox.Y + yOffset + 60, 48, 48), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 44), 0.5f));
-            rightSelectionButtons.Add(new ClickableTextureComponent(LIMIT_TO_ACCCESSORIES, new Rectangle(_portraitBox.Right - 40, _portraitBox.Y + yOffset + 60, 48, 48), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 33), 0.5f));
+            leftSelectionButtons.Add(new ClickableTextureComponent(LIMIT_TO_ACCESSORIES, new Rectangle(_portraitBox.X + 8, _portraitBox.Y + yOffset + 60, 48, 48), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 44), 0.5f));
+            rightSelectionButtons.Add(new ClickableTextureComponent(LIMIT_TO_ACCESSORIES, new Rectangle(_portraitBox.Right - 40, _portraitBox.Y + yOffset + 60, 48, 48), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 33), 0.5f));
 
             yOffset += 64;
             leftSelectionButtons.Add(new ClickableTextureComponent("Appearance", new Rectangle(_portraitBox.X - 64, _portraitBox.Y + yOffset + 16, 48, 48), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 44), 1f)
@@ -217,8 +217,8 @@ namespace FashionSense.Framework.UI
                 rightNeighborID = 624,
                 downNeighborID = 606
             });
-            labels.Add(new ClickableComponent(new Rectangle(_portraitBox.Right - 100, _portraitBox.Y + yOffset - 32, 1, 1), "Acc. #", LIMIT_TO_ACCCESSORIES));
-            labels.Add(accessorySlotLabel = new ClickableComponent(new Rectangle(_portraitBox.Right - 72, _portraitBox.Y + yOffset - 2, 1, 1), "1", LIMIT_TO_ACCCESSORIES));
+            labels.Add(new ClickableComponent(new Rectangle(_portraitBox.Right - 100, _portraitBox.Y + yOffset - 32, 1, 1), "Acc. #", LIMIT_TO_ACCESSORIES));
+            labels.Add(accessorySlotLabel = new ClickableComponent(new Rectangle(_portraitBox.Right - 72, _portraitBox.Y + yOffset - 2, 1, 1), "1", LIMIT_TO_ACCESSORIES));
 
             #region Start of obsolete option buttons
             /*
@@ -836,7 +836,7 @@ namespace FashionSense.Framework.UI
                     Reset();
                     FashionSense.SetSpriteDirty(Game1.player);
                     break;
-                case LIMIT_TO_ACCCESSORIES:
+                case LIMIT_TO_ACCESSORIES:
                     if (Game1.player.modData.ContainsKey(ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON) && Game1.player.modData[ModDataKeys.UI_HAND_MIRROR_FILTER_BUTTON] == ACCESSORY_FILTER_BUTTON)
                     {
                         currentAccessorySlot = currentAccessorySlot + change < 0 ? 0 : currentAccessorySlot + change;
@@ -1574,7 +1574,7 @@ namespace FashionSense.Framework.UI
             // Draw buttons
             foreach (ClickableTextureComponent leftSelectionButton in leftSelectionButtons)
             {
-                if (leftSelectionButton.name == LIMIT_TO_ACCCESSORIES && GetNameOfEnabledFilter() != ACCESSORY_FILTER_BUTTON)
+                if (leftSelectionButton.name == LIMIT_TO_ACCESSORIES && GetNameOfEnabledFilter() != ACCESSORY_FILTER_BUTTON)
                 {
                     continue;
                 }
@@ -1592,7 +1592,7 @@ namespace FashionSense.Framework.UI
             }
             foreach (ClickableTextureComponent rightSelectionButton in rightSelectionButtons)
             {
-                if (rightSelectionButton.name == LIMIT_TO_ACCCESSORIES && GetNameOfEnabledFilter() != ACCESSORY_FILTER_BUTTON)
+                if (rightSelectionButton.name == LIMIT_TO_ACCESSORIES && GetNameOfEnabledFilter() != ACCESSORY_FILTER_BUTTON)
                 {
                     continue;
                 }
@@ -1789,7 +1789,7 @@ namespace FashionSense.Framework.UI
 
                     colorLabel.name = name;
                 }
-                else if (c.label == LIMIT_TO_ACCCESSORIES)
+                else if (c.label == LIMIT_TO_ACCESSORIES)
                 {
                     if (GetNameOfEnabledFilter() != ACCESSORY_FILTER_BUTTON)
                     {
