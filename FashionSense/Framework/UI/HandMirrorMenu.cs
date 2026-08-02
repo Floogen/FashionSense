@@ -7,6 +7,7 @@ using FashionSense.Framework.Models.Appearances.Pants;
 using FashionSense.Framework.Models.Appearances.Shirt;
 using FashionSense.Framework.Models.Appearances.Shoes;
 using FashionSense.Framework.Models.Appearances.Sleeves;
+using FashionSense.Framework.Interfaces.API;
 using FashionSense.Framework.UI.Components;
 using FashionSense.Framework.Utilities;
 using Microsoft.Xna.Framework;
@@ -1045,6 +1046,8 @@ namespace FashionSense.Framework.UI
                 else
                 {
                     string modDataKey = String.Empty;
+                    IApi.Type? appearanceType = null;
+                    var activeModel = GetActiveModel();
                     switch (GetNameOfEnabledFilter())
                     {
                         case HAIR_FILTER_BUTTON:
@@ -1056,22 +1059,33 @@ namespace FashionSense.Framework.UI
                             return;
                         case HAT_FILTER_BUTTON:
                             modDataKey = ModDataKeys.CUSTOM_HAT_ID;
+                            appearanceType = IApi.Type.Hat;
                             break;
                         case SHIRT_FILTER_BUTTON:
                             modDataKey = ModDataKeys.CUSTOM_SHIRT_ID;
+                            appearanceType = IApi.Type.Shirt;
                             break;
                         case PANTS_FILTER_BUTTON:
                             modDataKey = ModDataKeys.CUSTOM_PANTS_ID;
+                            appearanceType = IApi.Type.Pants;
                             break;
                         case SLEEVES_FILTER_BUTTON:
                             modDataKey = ModDataKeys.CUSTOM_SLEEVES_ID;
+                            appearanceType = IApi.Type.Sleeves;
                             break;
                         case SHOES_FILTER_BUTTON:
                             modDataKey = ModDataKeys.CUSTOM_SHOES_ID;
+                            appearanceType = IApi.Type.Shoes;
                             break;
                         case BODY_FILTER_BUTTON:
                             modDataKey = ModDataKeys.CUSTOM_BODY_ID;
+                            appearanceType = IApi.Type.Player;
                             break;
+                    }
+
+                    if (appearanceType is not null)
+                    {
+                        AppearanceHelpers.ResetAppearanceColors(Game1.player, appearanceType.Value, activeModel);
                     }
 
                     Game1.player.modData[modDataKey] = "None";

@@ -113,13 +113,19 @@ namespace FashionSense.Framework.Models
             // Add manual handling for the "Override Shoe Color" artificial ShoePack
             if (who.modData.ContainsKey(ModDataKeys.CUSTOM_SHOES_ID) && who.modData[ModDataKeys.CUSTOM_SHOES_ID] == ModDataKeys.INTERNAL_COLOR_OVERRIDE_SHOE_ID)
             {
-                AppearanceToMaskColors[IApi.Type.Shoes] = new List<Color>() { FashionSense.colorManager.GetColor(who, AppearanceModel.GetColorKey(IApi.Type.Shoes)) };
+                var shoeColor = FashionSense.colorManager.TryGetColor(who, AppearanceModel.GetColorKey(IApi.Type.Shoes), out var cachedShoeColor)
+                    ? cachedShoeColor
+                    : AppearanceHelpers.DefaultAppearanceColor;
+                AppearanceToMaskColors[IApi.Type.Shoes] = new List<Color>() { shoeColor };
             }
 
             // Add manual handling for the "Override Body Color" artificial ShoePack
             if (who.modData.ContainsKey(ModDataKeys.CUSTOM_BODY_ID) && who.modData[ModDataKeys.CUSTOM_BODY_ID] == ModDataKeys.INTERNAL_COLOR_OVERRIDE_BODY_ID)
             {
-                AppearanceToMaskColors[IApi.Type.Player] = new List<Color>() { FashionSense.colorManager.GetColor(who, AppearanceModel.GetColorKey(IApi.Type.Player)) };
+                var bodyColor = FashionSense.colorManager.TryGetColor(who, AppearanceModel.GetColorKey(IApi.Type.Player), out var cachedBodyColor)
+                    ? cachedBodyColor
+                    : AppearanceHelpers.DefaultAppearanceColor;
+                AppearanceToMaskColors[IApi.Type.Player] = new List<Color>() { bodyColor };
             }
 
             // Set the author's name
