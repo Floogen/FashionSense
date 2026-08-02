@@ -6,7 +6,6 @@
 		<EnableHarmony>true</EnableHarmony>
 		<EnableModZip>false</EnableModZip>
 		<EnableModDeploy>false</EnableModDeploy>
-		<GameModsPath>E:\SteamLibrary\steamapps\common\Stardew Valley\Mods</GameModsPath>
 	</PropertyGroup>
 	<ItemGroup>
 		<Compile Remove="releases\**" />
@@ -46,7 +45,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.1.1" />
+		<PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.4.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -103,23 +102,4 @@
 		</None>
 	</ItemGroup>
 
-	<PropertyGroup>
-		<PostBuildEventDependsOn>
-			$(PostBuildEventDependsOn);
-			PostBuildMacros;
-		</PostBuildEventDependsOn>
-		<PostBuildEvent>
-			powershell -Command "(ls *manifest.json -rec | foreach-object { $f=$_.FullName; (gc -LiteralPath \"$f\") -replace 'REPLACE_ME_WITH_VERSION',  '$(Version)' | sc -LiteralPath \"$f\" })"
-
-			powershell Remove-Item -Path 'C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\releases\latest\FashionSense"' -Recurse -Force
-			xcopy /s /y /i "C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\bin\Debug\$(TargetFramework)" "C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\releases\latest\FashionSense"
-			7z a -tzip "C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\releases\FashionSense-$(Version).zip" "C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\releases\latest\FashionSense"
-
-			powershell Remove-Item -Path '$(GameModsPath)\FashionSense' -Recurse -Exclude "Outfits.json", "Data" -Force
-			powershell Remove-Item -Path '$(GameModsPath)\Fashion Sense Examples' -Recurse -Force
-
-			xcopy /s /y /i "C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\releases\latest\FashionSense" "$(GameModsPath)\FashionSense"
-			xcopy /s /y /i "C:\Users\Floogen\Documents\GitHub Repos\FashionSense\FashionSense\Examples\*" "$(GameModsPath)\Fashion Sense Examples"
-		</PostBuildEvent>
-	</PropertyGroup>
 </Project>
