@@ -22,6 +22,12 @@ namespace FashionSense.Framework.Utilities
 {
     public class AppearanceHelpers
     {
+        internal static readonly Color DefaultAppearanceColor = Color.White;
+        internal const string LOCAL_PACK_DEFAULT_SHORT_SLEEVES_ID = "PeacefulEnd.FashionSense.LocalPack/Sleeves/Default (Short)";
+        internal const string LOCAL_PACK_DEFAULT_TALL_SLEEVES_ID = "PeacefulEnd.FashionSense.LocalPack/Sleeves/Default (Tall)";
+        internal const string LOCAL_PACK_DEFAULT_SHORT_SHOES_ID = "PeacefulEnd.FashionSense.LocalPack/Shoes/Default (Short)";
+        internal const string LOCAL_PACK_DEFAULT_TALL_SHOES_ID = "PeacefulEnd.FashionSense.LocalPack/Shoes/Default (Tall)";
+
         public static List<AppearanceMetadata> GetCurrentlyEquippedModels(Farmer who, int facingDirection)
         {
             // Set up each AppearanceModel
@@ -81,41 +87,168 @@ namespace FashionSense.Framework.Utilities
             }
 
             // Hat pack
-            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_HAT_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<HatContentPack>(who.modData[ModDataKeys.CUSTOM_HAT_ID]) is HatContentPack tPack && tPack != null)
+            if (GetContentPackForType(who, IApi.Type.Hat) is HatContentPack tPack && tPack is not null)
             {
                 var hatModel = tPack.GetHatFromFacingDirection(facingDirection);
                 models.Add(new AppearanceMetadata(hatModel, AppearanceHelpers.GetAllAppearanceColors(who, hatModel)));
             }
 
             // Shirt pack
-            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_SHIRT_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<ShirtContentPack>(who.modData[ModDataKeys.CUSTOM_SHIRT_ID]) is ShirtContentPack sPack && sPack != null)
+            if (GetContentPackForType(who, IApi.Type.Shirt) is ShirtContentPack sPack && sPack is not null)
             {
                 var shirtModel = sPack.GetShirtFromFacingDirection(facingDirection);
                 models.Add(new AppearanceMetadata(shirtModel, AppearanceHelpers.GetAllAppearanceColors(who, shirtModel)));
             }
 
             // Sleeves pack
-            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_SLEEVES_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<SleevesContentPack>(who.modData[ModDataKeys.CUSTOM_SLEEVES_ID]) is SleevesContentPack slPack && slPack != null)
+            if (GetContentPackForType(who, IApi.Type.Sleeves, includeDefaultsForNone: true) is SleevesContentPack slPack && slPack is not null)
             {
                 var slModel = slPack.GetSleevesFromFacingDirection(facingDirection);
                 models.Add(new AppearanceMetadata(slModel, AppearanceHelpers.GetAllAppearanceColors(who, slModel)));
             }
 
             // Shoes pack
-            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_SHOES_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<ShoesContentPack>(who.modData[ModDataKeys.CUSTOM_SHOES_ID]) is ShoesContentPack shPack && shPack != null)
+            if (GetAppearanceIdForType(who, IApi.Type.Shoes) != ModDataKeys.INTERNAL_COLOR_OVERRIDE_SHOE_ID
+                && GetContentPackForType(who, IApi.Type.Shoes, includeDefaultsForNone: true) is ShoesContentPack shPack
+                && shPack is not null)
             {
                 var shModel = shPack.GetShoesFromFacingDirection(facingDirection);
                 models.Add(new AppearanceMetadata(shModel, AppearanceHelpers.GetAllAppearanceColors(who, shModel)));
             }
 
             // Body pack
-            if (who.modData.ContainsKey(ModDataKeys.CUSTOM_BODY_ID) && FashionSense.textureManager.GetSpecificAppearanceModel<BodyContentPack>(who.modData[ModDataKeys.CUSTOM_BODY_ID]) is BodyContentPack bPack && bPack != null)
+            if (GetAppearanceIdForType(who, IApi.Type.Player) != ModDataKeys.INTERNAL_COLOR_OVERRIDE_BODY_ID
+                && GetContentPackForType(who, IApi.Type.Player) is BodyContentPack bPack
+                && bPack is not null)
             {
                 var bModel = bPack.GetBodyFromFacingDirection(facingDirection);
                 models.Add(new AppearanceMetadata(bModel, AppearanceHelpers.GetAllAppearanceColors(who, bModel)));
             }
 
             return models.Where(m => m is not null && m.IsValid()).ToList();
+        }
+
+        internal static AppearanceContentPack GetContentPackForType(Farmer who, IApi.Type type, bool includeDefaultsForNone = false)
+        {
+            string appearanceId = GetAppearanceIdForType(who, type);
+            if (String.IsNullOrEmpty(appearanceId))
+            {
+                return null;
+            }
+
+            AppearanceContentPack contentPack = FashionSense.textureManager.GetSpecificAppearanceModel<AppearanceContentPack>(appearanceId);
+            if (contentPack is not null)
+            {
+                return contentPack;
+            }
+
+            if (includeDefaultsForNone && appearanceId == "None" && TryGetLocalDefaultAppearanceId(who, type, out var fallbackAppearanceId))
+            {
+                return FashionSense.textureManager.GetSpecificAppearanceModel<AppearanceContentPack>(fallbackAppearanceId);
+            }
+
+            return null;
+        }
+
+        internal static AppearanceModel GetAppearanceModelForType(Farmer who, IApi.Type type, int facingDirection, bool includeDefaultsForNone = false)
+        {
+            if (GetContentPackForType(who, type, includeDefaultsForNone) is not AppearanceContentPack contentPack)
+            {
+                return null;
+            }
+
+            return type switch
+            {
+                IApi.Type.Hair => (contentPack as HairContentPack)?.GetHairFromFacingDirection(facingDirection),
+                IApi.Type.Accessory => (contentPack as AccessoryContentPack)?.GetAccessoryFromFacingDirection(facingDirection),
+                IApi.Type.Hat => (contentPack as HatContentPack)?.GetHatFromFacingDirection(facingDirection),
+                IApi.Type.Shirt => (contentPack as ShirtContentPack)?.GetShirtFromFacingDirection(facingDirection),
+                IApi.Type.Pants => (contentPack as PantsContentPack)?.GetPantsFromFacingDirection(facingDirection),
+                IApi.Type.Sleeves => (contentPack as SleevesContentPack)?.GetSleevesFromFacingDirection(facingDirection),
+                IApi.Type.Shoes => (contentPack as ShoesContentPack)?.GetShoesFromFacingDirection(facingDirection),
+                IApi.Type.Player => (contentPack as BodyContentPack)?.GetBodyFromFacingDirection(facingDirection),
+                _ => null
+            };
+        }
+
+        internal static string GetAppearanceIdForType(Farmer who, IApi.Type type)
+        {
+            string modDataKey = type switch
+            {
+                IApi.Type.Hair => ModDataKeys.CUSTOM_HAIR_ID,
+                IApi.Type.Hat => ModDataKeys.CUSTOM_HAT_ID,
+                IApi.Type.Shirt => ModDataKeys.CUSTOM_SHIRT_ID,
+                IApi.Type.Pants => ModDataKeys.CUSTOM_PANTS_ID,
+                IApi.Type.Sleeves => ModDataKeys.CUSTOM_SLEEVES_ID,
+                IApi.Type.Shoes => ModDataKeys.CUSTOM_SHOES_ID,
+                IApi.Type.Player => ModDataKeys.CUSTOM_BODY_ID,
+                _ => null
+            };
+
+            if (String.IsNullOrEmpty(modDataKey) || who.modData.ContainsKey(modDataKey) is false)
+            {
+                return null;
+            }
+
+            return who.modData[modDataKey];
+        }
+
+        internal static bool TryGetLocalDefaultAppearanceId(Farmer who, IApi.Type type, out string appearanceId)
+        {
+            appearanceId = null;
+            if (type is not (IApi.Type.Sleeves or IApi.Type.Shoes))
+            {
+                return false;
+            }
+
+            var bodyId = GetAppearanceIdForType(who, IApi.Type.Player);
+            if (String.IsNullOrEmpty(bodyId))
+            {
+                return false;
+            }
+
+            var isTallBody = bodyId.Contains("Default (Tall)", StringComparison.OrdinalIgnoreCase);
+            var isShortBody = bodyId.Contains("Default (Short)", StringComparison.OrdinalIgnoreCase);
+            if (!isTallBody && !isShortBody)
+            {
+                return false;
+            }
+
+            appearanceId = type switch
+            {
+                IApi.Type.Sleeves when isTallBody => LOCAL_PACK_DEFAULT_TALL_SLEEVES_ID,
+                IApi.Type.Sleeves when isShortBody => LOCAL_PACK_DEFAULT_SHORT_SLEEVES_ID,
+                IApi.Type.Shoes when isTallBody => LOCAL_PACK_DEFAULT_TALL_SHOES_ID,
+                IApi.Type.Shoes when isShortBody => LOCAL_PACK_DEFAULT_SHORT_SHOES_ID,
+                _ => null
+            };
+
+            return String.IsNullOrEmpty(appearanceId) is false;
+        }
+
+        internal static Color GetDefaultColorForMaskLayer(AppearanceModel model, int maskLayerIndex = 0, Color? fallbackColor = null)
+        {
+            if (model?.ColorMaskLayers is not null && model.ColorMaskLayers.Count > maskLayerIndex)
+            {
+                var defaultColor = model.ColorMaskLayers[maskLayerIndex].DefaultColor;
+                if (defaultColor is not null)
+                {
+                    return AppearanceModel.GetColor(defaultColor);
+                }
+            }
+
+            return fallbackColor ?? DefaultAppearanceColor;
+        }
+
+        internal static void ResetAppearanceColors(Farmer who, IApi.Type type, AppearanceModel model = null, int appearanceIndex = 0)
+        {
+            var layerCount = model?.ColorMaskLayers?.Count > 0 ? model.ColorMaskLayers.Count : 1;
+            for (int maskLayerIndex = 0; maskLayerIndex < layerCount; maskLayerIndex++)
+            {
+                var colorKey = AppearanceModel.GetColorKey(type, appearanceIndex, maskLayerIndex);
+                var color = GetDefaultColorForMaskLayer(model, maskLayerIndex);
+                FashionSense.colorManager.SetColor(who, colorKey, color);
+            }
         }
 
         public static void HandleAppearanceAnimation(List<AppearanceModel> models, AppearanceModel model, Farmer who, int facingDirection, ref Dictionary<AppearanceModel, AnimationModel> appearanceTypeToAnimationModels, bool forceUpdate = false)
@@ -651,7 +784,7 @@ namespace FashionSense.Framework.Utilities
         {
             if (model is null)
             {
-                return new List<Color>() { who.hairstyleColor.Value };
+                return new List<Color>() { DefaultAppearanceColor };
             }
             else if (DrawPatch.GetOutdatedColorValue(who, model, appearanceIndex) is not null)
             {
@@ -659,7 +792,7 @@ namespace FashionSense.Framework.Utilities
             }
             else if (model.ColorMaskLayers.Count == 0)
             {
-                return new List<Color>() { FashionSense.colorManager.GetColor(who, model.GetColorKey(appearanceIndex, 0)) };
+                return new List<Color>() { GetAppearanceColorByLayer(model, who, appearanceIndex, 0) };
             }
 
             List<Color> colors = new List<Color>();
@@ -672,8 +805,11 @@ namespace FashionSense.Framework.Utilities
                 }
                 else if (model.ColorMaskLayers[x].DefaultColor is not null)
                 {
-                    var c = model.ColorMaskLayers[x].DefaultColor;
-                    colors.Add(new Color(c[0], c[1], c[2], c.Length > 3 ? c[3] : 255));
+                    colors.Add(GetDefaultColorForMaskLayer(model, x));
+                }
+                else
+                {
+                    colors.Add(DefaultAppearanceColor);
                 }
             }
 
@@ -684,10 +820,16 @@ namespace FashionSense.Framework.Utilities
         {
             if (model is null)
             {
-                return Color.White;
+                return DefaultAppearanceColor;
             }
 
-            return FashionSense.colorManager.GetColor(who, model.GetColorKey(appearanceIndex, maskLayerIndex));
+            var colorKey = model.GetColorKey(appearanceIndex, maskLayerIndex);
+            if (who.modData.ContainsKey(colorKey))
+            {
+                return FashionSense.colorManager.GetColor(who, colorKey);
+            }
+
+            return GetDefaultColorForMaskLayer(model, maskLayerIndex);
         }
 
         public static void SetAppearanceColorForLayer(AppearanceModel model, Farmer who, Color color, int appearanceIndex = 0, int maskLayerIndex = 0)

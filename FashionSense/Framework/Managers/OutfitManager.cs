@@ -186,6 +186,31 @@ namespace FashionSense.Framework.Managers
 
         public void ClearOutfit(Farmer who)
         {
+            if (AppearanceHelpers.GetAppearanceModelForType(who, IApi.Type.Hat, who.FacingDirection) is AppearanceModel hatModel)
+            {
+                AppearanceHelpers.ResetAppearanceColors(who, IApi.Type.Hat, hatModel);
+            }
+            if (AppearanceHelpers.GetAppearanceModelForType(who, IApi.Type.Shirt, who.FacingDirection) is AppearanceModel shirtModel)
+            {
+                AppearanceHelpers.ResetAppearanceColors(who, IApi.Type.Shirt, shirtModel);
+            }
+            if (AppearanceHelpers.GetAppearanceModelForType(who, IApi.Type.Pants, who.FacingDirection) is AppearanceModel pantsModel)
+            {
+                AppearanceHelpers.ResetAppearanceColors(who, IApi.Type.Pants, pantsModel);
+            }
+            if (AppearanceHelpers.GetAppearanceModelForType(who, IApi.Type.Sleeves, who.FacingDirection, includeDefaultsForNone: true) is AppearanceModel sleevesModel)
+            {
+                AppearanceHelpers.ResetAppearanceColors(who, IApi.Type.Sleeves, sleevesModel);
+            }
+            if (AppearanceHelpers.GetAppearanceModelForType(who, IApi.Type.Shoes, who.FacingDirection, includeDefaultsForNone: true) is AppearanceModel shoesModel)
+            {
+                AppearanceHelpers.ResetAppearanceColors(who, IApi.Type.Shoes, shoesModel);
+            }
+            if (AppearanceHelpers.GetAppearanceModelForType(who, IApi.Type.Player, who.FacingDirection) is AppearanceModel bodyModel)
+            {
+                AppearanceHelpers.ResetAppearanceColors(who, IApi.Type.Player, bodyModel);
+            }
+
             who.modData[ModDataKeys.CUSTOM_HAIR_ID] = "None";
             who.modData[ModDataKeys.CUSTOM_HAT_ID] = "None";
             who.modData[ModDataKeys.CUSTOM_SHIRT_ID] = "None";

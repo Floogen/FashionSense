@@ -1743,7 +1743,12 @@ namespace FashionSense
             }
             else if (Game1.player.modData.ContainsKey(actualColorKey) is false)
             {
-                Game1.player.modData[actualColorKey] = Game1.player.hairstyleColor.Value.PackedValue.ToString();
+                var activeModel = AppearanceHelpers.GetAppearanceModelForType(Game1.player, type, Game1.player.FacingDirection, includeDefaultsForNone: true);
+                var defaultColor = type is IApi.Type.Hair
+                    ? Game1.player.hairstyleColor.Value
+                    : AppearanceHelpers.GetDefaultColorForMaskLayer(activeModel, appearanceIndex);
+
+                Game1.player.modData[actualColorKey] = defaultColor.PackedValue.ToString();
             }
 
             colorManager.SetColor(Game1.player, actualColorKey, Game1.player.modData[actualColorKey]);

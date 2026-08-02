@@ -203,7 +203,7 @@ namespace FashionSense.Framework.Patches.Renderer
             }
             else
             {
-                var shirtColor = FashionSense.colorManager.GetColor(who, AppearanceModel.GetColorKey(IApi.Type.Shirt));
+                var shirtColor = AppearanceHelpers.GetAppearanceColorByLayer(shirtModel, who);
                 if (shirtModel.DisableGrayscale)
                 {
                     shirtColor = Color.White;

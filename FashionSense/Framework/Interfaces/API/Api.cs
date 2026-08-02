@@ -614,7 +614,8 @@ namespace FashionSense.Framework.Interfaces.API
                 return new KeyValuePair<bool, Color>(false, Color.White);
             }
 
-            return new KeyValuePair<bool, Color>(true, FashionSense.colorManager.GetColor(target, AppearanceModel.GetColorKey(appearanceType)));
+            var appearanceModel = AppearanceHelpers.GetAppearanceModelForType(target, appearanceType, target.FacingDirection, includeDefaultsForNone: true);
+            return new KeyValuePair<bool, Color>(true, AppearanceHelpers.GetAppearanceColorByLayer(appearanceModel, target));
         }
 
         public KeyValuePair<bool, IRawTextureData> GetAppearanceTexture(IApi.Type appearanceType, string targetPackId, string targetAppearanceName, bool getOriginalTexture = false)

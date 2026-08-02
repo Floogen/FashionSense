@@ -23,18 +23,24 @@ namespace FashionSense.Framework.Managers
 
         internal Color GetColor(Farmer who, string colorKey)
         {
-            Color colorValue = who.hairstyleColor.Value;
+            return TryGetColor(who, colorKey, out var colorValue) ? colorValue : who.hairstyleColor.Value;
+        }
+
+        internal bool TryGetColor(Farmer who, string colorKey, out Color colorValue)
+        {
+            colorValue = default;
             if (_farmerToColorIdToColorValue.ContainsKey(who) is true && _farmerToColorIdToColorValue[who].ContainsKey(colorKey) is true)
             {
                 colorValue = _farmerToColorIdToColorValue[who][colorKey];
+                return true;
             }
             else if (who.modData.ContainsKey(colorKey))
             {
                 SetColor(who, colorKey, who.modData[colorKey]);
-                return GetColor(who, colorKey);
+                return TryGetColor(who, colorKey, out colorValue);
             }
 
-            return colorValue;
+            return false;
         }
 
         internal void SetColor(Farmer who, string colorKey, Color colorValue)
